@@ -173,13 +173,9 @@ source metadata, completion status, and export metadata. The index updates as ea
 failed clips retain their error message while the remaining clips continue. Use `--download-only`
 to inventory inputs or `--videos running forest` to process selected clips. Published clip lengths
 vary: running has 206 frames and forest has 294; the full source timeline is retained.
-After a CUDA out-of-memory error, the batch retries long-side resolutions 392, 336, and 280
-(default 504), using smaller corrector batches. It retains every source frame and records each
-attempt in `inference_res*.log` and `batch.json`. Reduced-resolution caches have separate
-`window_res*` directories; successful default-resolution results are reused. Each viewer and
-the gallery report the processing grid, and `plotly.json` records its resolution and corrector
-batch. To select these settings manually, `demo_video.py` accepts `--process-res` and
-`--corrector-batch`.
+The batch defaults to full-resolution automatic offloading. Legacy resolution retries require explicit opt-in.
+
+See [bounded inference and offloading](docs/offloading.md) for modes, budgets, storage and recovery.
 
 ## Training
 

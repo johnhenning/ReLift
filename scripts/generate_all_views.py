@@ -25,6 +25,7 @@ import numpy as np
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 from relift.config import paths
+from relift.storage import TrajectoryStore
 from scripts.download_demo_inputs import catalog, fetch_input, sha256
 
 
@@ -38,10 +39,12 @@ def save_json(path, data):
     temp.replace(path)
 
 
-def complete_result(output, source):
+def complete_result(output, source, process_resolution=None):
     """Never reuse a short window or an HTML export of different trajectory data."""
+    output = Path(output)
     arrays, manifest, page = output / "tracks.npz", output / "plotly.json", output / "trajectories.html"
-    if not all(p.is_file() for p in (arrays, manifest, page)):
+    store_manifest = output / "tracks.store/manifest.json"
+    if not manifest.is_file() or not page.is_file() or not (arrays.is_file() or store_manifest.is_file()):
         return None
     metadata = json.loads(manifest.read_text())
     if metadata.get("frames") != source["frames"] or metadata.get("requested_frames") != 0:
@@ -50,11 +53,45 @@ def complete_result(output, source):
         return None
     if not metadata.get("finite") or metadata.get("temporal_sampling") != "none":
         return None
-    if metadata.get("source_sha256") != sha256(arrays):
+    if process_resolution is not None and metadata.get("process_resolution") != process_resolution:
+        return None
+    exported_source = metadata.get("source", "tracks.npz")
+    if exported_source == "tracks.store/manifest.json":
+        try:
+            store = TrajectoryStore.open(output)
+            store.verify()
+            if (store.shape[0] != source["frames"] or store.metadata.get("requested_frames") != 0
+                    or not np.isclose(store.metadata.get("source_fps", 0), source["fps"])):
+                return None
+            if process_resolution is not None and store.metadata.get("process_resolution") != process_resolution:
+                return None
+            if source.get("sha256") is not None and store.metadata.get("input_sha256") != source["sha256"]:
+                return None
+        except (ValueError, OSError, KeyError):
+            return None
+        arrays = store_manifest
+    elif exported_source != "tracks.npz":
+        return None
+    if not arrays.is_file() or metadata.get("source_sha256") != sha256(arrays):
         return None
     if metadata.get("html_bytes") != page.stat().st_size:
         return None
     return metadata
+
+
+def dense_result_ready(output, source, process_resolution=504):
+    """Check complete dense data even when a viewer still needs to be exported."""
+    try:
+        store = TrajectoryStore.open(output)
+        if store.manifest is not None:
+            store.verify()
+            if source.get("sha256") is not None and store.metadata.get("input_sha256") != source["sha256"]:
+                return False
+        return (store.shape[0] == source["frames"] and store.metadata.get("requested_frames") == 0
+                and np.isclose(store.metadata.get("source_fps", 0), source["fps"])
+                and store.metadata.get("process_resolution", max(store.shape[1:3])) == process_resolution)
+    except (ValueError, OSError, KeyError):
+        return False
 
 
 def run_logged(script, arguments, log):
@@ -75,7 +112,7 @@ def run_logged(script, arguments, log):
 
 
 def infer_with_memory_retries(video, output, record):
-    """Keep every frame, retrying smaller spatial grids after a CUDA OOM only."""
+    """Explicit legacy opt-in only: reduce spatial grids after CUDA OOM."""
     record["inference_attempts"] = []
     for resolution, batch in ((504, 8), (392, 4), (336, 4), (280, 2)):
         log = output / f"inference_res{resolution}.log"
@@ -96,6 +133,29 @@ def infer_with_memory_retries(video, output, record):
                 raise
             print(f"GPU memory retry: {output.name}, long side {resolution}; retaining all frames", flush=True)
     raise RuntimeError("CUDA memory exhausted at every configured spatial resolution; see inference_res*.log")
+
+
+def infer_full_resolution(video, output, record, args):
+    """Offload storage/placement, retaining the full source timeline and 504 grid."""
+    log = output / f"inference_{args.offload}_res504.log"
+    attempt = dict(resolution=504, corrector_batch=8, offload=args.offload, log=log.name, started_at=now())
+    record["inference_attempts"] = [attempt]
+    arguments = [video, "--num_frames", 0, "--geometry", "da3", "--out", output, "--no_video",
+                 "--process-res", 504, "--corrector-batch", 8, "--offload", args.offload,
+                 "--ram-budget-gb", args.ram_budget_gb, "--vram-budget-gb", args.vram_budget_gb,
+                 "--scratch-budget-gb", args.scratch_budget_gb]
+    if args.scratch_dir:
+        arguments += ["--scratch-dir", args.scratch_dir]
+    try:
+        run_logged("demo_video.py", arguments, log)
+        attempt.update(status="complete", finished_at=now())
+        record["processing_resolution"] = 504
+    except RuntimeError:
+        attempt.update(status="failed", finished_at=now())
+        raise
+    finally:
+        if log.exists():
+            (output / "inference.log").write_text(log.read_text())
 
 
 def write_index(root, state):
@@ -125,7 +185,7 @@ th,td{text-align:left;padding:12px;border-bottom:1px solid #dce2ea;vertical-alig
 .error{color:#a82222}.table-wrap{overflow-x:auto}th{white-space:nowrap}@media(max-width:600px){main{padding:12px}img{width:80px;height:64px}th,td{padding:8px}}</style>
 </head><body><main><h1>ReLift · interactive demo gallery</h1>
 <p>__COUNT__ completed videos. Every viewer contains all source frames, synchronized raw/ReLift 3D views, playback, frame scrubbing, and clickable complete trajectories.</p>
-<p>Plots sample reference pixels for browser performance. The saved tracks.npz files keep dense trajectories. Source clips are the published demonstration videos.</p>
+<p>Plots sample reference pixels for browser performance. Saved tracks.store directories or legacy tracks.npz files keep dense trajectories. Source clips are the published demonstration videos.</p>
 <div class="table-wrap"><table><thead><tr><th>Input</th><th>Scene</th><th>Frames</th><th>Duration</th><th>Dense tracks</th><th>Interactive view</th></tr></thead><tbody>__ROWS__</tbody></table></div>
 <p>Generated by scripts/generate_all_views.py. Detailed progress and provenance are in batch.json; each output directory contains inference.log, plotly.log, and plotly.json.</p>
 </main></body></html>'''
@@ -156,7 +216,17 @@ def main():
     ap.add_argument("--videos", nargs="+", choices=tuple(catalog()), help="default: all catalog videos")
     ap.add_argument("--download-only", action="store_true")
     ap.add_argument("--status", action="store_true", help="print saved progress without downloading or running models")
+    ap.add_argument("--offload", choices=["none", "streamed", "ram", "disk", "auto"], default="auto")
+    ap.add_argument("--scratch-dir", type=Path)
+    ap.add_argument("--ram-budget-gb", type=float, default=18)
+    ap.add_argument("--vram-budget-gb", type=float, default=20)
+    ap.add_argument("--scratch-budget-gb", type=float, default=64)
+    ap.add_argument("--allow-resolution-retry", action="store_true", help="explicit legacy opt-in; only with --offload none")
     args = ap.parse_args()
+    if min(args.ram_budget_gb, args.vram_budget_gb, args.scratch_budget_gb) <= 0:
+        ap.error("memory and scratch budgets must be positive")
+    if args.allow_resolution_retry and args.offload != "none":
+        ap.error("--allow-resolution-retry is only supported with --offload none")
     root = args.output_root.resolve()
     root.mkdir(parents=True, exist_ok=True)
     names = args.videos or list(catalog())
@@ -195,7 +265,8 @@ def main():
         output = root / name
         try:
             source = record["source"]
-            metadata = complete_result(output, source)
+            required_resolution = None if args.allow_resolution_retry else 504
+            metadata = complete_result(output, source, required_resolution)
             if metadata:
                 record.update(status="complete", result=metadata, reused=True)
                 print(f"REUSE {name}: {metadata['frames']} full-length frames", flush=True)
@@ -203,17 +274,16 @@ def main():
                 record.update(status="running", stage="inference", started_at=now())
                 write_index(root, state)
                 # Existing complete dense arrays can be re-exported without GPU work.
-                arrays = output / "tracks.npz"
-                dense_ready = False
-                if arrays.exists():
-                    with np.load(arrays) as z:
-                        dense_ready = (len(z["xyz"]) == source["frames"] and int(z["requested_frames"]) == 0)
+                dense_ready = dense_result_ready(output, source)
                 if not dense_ready:
-                    infer_with_memory_retries(inputs[name], output, record)
+                    if args.allow_resolution_retry:
+                        infer_with_memory_retries(inputs[name], output, record)
+                    else:
+                        infer_full_resolution(inputs[name], output, record, args)
                 record["stage"] = "plotly"
                 write_index(root, state)
                 run_logged("plotly_demo.py", [output], output / "plotly.log")
-                metadata = complete_result(output, source)
+                metadata = complete_result(output, source, required_resolution)
                 if metadata is None:
                     raise ValueError("export does not match the full source frame count or trajectory checksum")
                 record.update(status="complete", result=metadata, finished_at=now(), reused=False)

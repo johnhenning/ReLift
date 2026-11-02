@@ -4,15 +4,15 @@
     uv run python scripts/plotly_demo.py outputs/demo-full/cartwheel outputs/demo-full/basketball
 
 Every temporal frame is included. Only reference pixels are sampled for browser
-performance; tracks.npz remains dense. Click a point to inspect its complete path.
+performance; the mapped store or legacy NPZ remains dense. Click a point to inspect its complete path.
 The saved HTML works offline and needs no Python server.
 """
 import argparse
 import base64
-import hashlib
 import html
 import json
 from pathlib import Path
+import sys
 
 import numpy as np
 import plotly
@@ -20,6 +20,8 @@ import plotly.graph_objects as go
 import plotly.io as pio
 
 HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE.parent))
+from relift.storage import TrajectoryStore, file_sha256
 
 
 def sample_grid(height, width, max_points):
@@ -38,25 +40,28 @@ def encoded(array, dtype):
 
 
 def prepare_data(source, max_points=2500, trajectory_count=60, fps_override=None):
-    with np.load(source) as archive:
-        dense = archive["xyz"]
-        shape = dense.shape
-        if len(shape) != 4 or shape[-1] != 3 or min(shape[:3]) < 1:
-            raise ValueError(f"Expected nonempty (T,H,W,3) trajectories, got {shape}")
-        total, height, width, _ = shape
-        pixels = sample_grid(height, width, max_points)
-        rows, cols = pixels.T
-        finite = bool(np.isfinite(dense).all())
-        if not finite:
-            raise ValueError("Dense corrected trajectories contain nonfinite positions")
-        corrected = dense[:, rows, cols].astype(np.float32)
-        raw = archive["lift"][:, rows, cols].astype(np.float32)
-        observed = archive["observed"][:, rows, cols].astype(np.uint8)
-        rgb = archive["images"][0, rows, cols]
-        fps = float(fps_override if fps_override is not None else archive["source_fps"] if "source_fps" in archive else 15)
-        requested = int(archive["requested_frames"]) if "requested_frames" in archive else None
-        process_resolution = int(archive["process_resolution"]) if "process_resolution" in archive else max(height, width)
-        corrector_batch = int(archive["corrector_batch"]) if "corrector_batch" in archive else None
+    store = source if isinstance(source, TrajectoryStore) else TrajectoryStore.open(source)
+    shape = store.shape
+    if len(shape) != 4 or shape[-1] != 3 or min(shape[:3]) < 1:
+        raise ValueError(f"Expected nonempty (T,H,W,3) trajectories, got {shape}")
+    if store.manifest is not None:
+        store.verify()
+    finite = bool(store.finite())
+    if not finite:
+        raise ValueError("Dense trajectories contain nonfinite positions")
+    total, height, width, _ = shape
+    pixels = sample_grid(height, width, max_points)
+    rows, cols = pixels.T
+    sampled = store.sample(rows * width + cols)
+    corrected = sampled["xyz"].astype(np.float32, copy=False)
+    raw = sampled["lift"].astype(np.float32)
+    observed = sampled["observed"].astype(np.uint8)
+    rgb = store.array("images")[0, rows, cols]
+    metadata = store.metadata
+    fps = float(fps_override if fps_override is not None else metadata.get("source_fps", 15))
+    requested = int(metadata["requested_frames"]) if "requested_frames" in metadata else None
+    process_resolution = int(metadata.get("process_resolution", max(height, width)))
+    corrector_batch = int(metadata["corrector_batch"]) if metadata.get("corrector_batch") is not None else None
     if not np.isfinite(fps) or fps <= 0:
         raise ValueError("fps must be positive and finite")
     if not np.isfinite(corrected).all() or not np.isfinite(raw).all():
@@ -120,8 +125,9 @@ def make_figure(name, payload, raw, corrected, colors):
 
 def export_viewer(directory, max_points=2500, trajectory_count=60, fps_override=None):
     directory = Path(directory)
-    source = directory / "tracks.npz"
-    payload, raw, corrected, colors = prepare_data(source, max_points, trajectory_count, fps_override)
+    store = TrajectoryStore.open(directory)
+    source = store.root / "manifest.json" if store.manifest is not None else directory / "tracks.npz"
+    payload, raw, corrected, colors = prepare_data(store, max_points, trajectory_count, fps_override)
     figure = make_figure(directory.name, payload, raw, corrected, colors)
     fragment = pio.to_html(figure, full_html=False, include_plotlyjs=True, div_id="trajectory-plot",
                            config=dict(responsive=True, displaylogo=False, scrollZoom=True),
@@ -133,12 +139,10 @@ def export_viewer(directory, max_points=2500, trajectory_count=60, fps_override=
     page = page.replace("__VIEWER_JS__", (HERE / "plotly_viewer.js").read_text())
     output = directory / "trajectories.html"
     output.write_text(page, encoding="utf-8")
-    digest = hashlib.sha256()
-    with source.open("rb") as stream:
-        for block in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(block)
     metadata = dict(generator="scripts/plotly_demo.py", plotly_version=plotly.__version__,
-                    source="tracks.npz", source_sha256=digest.hexdigest(), frames=payload["frames"],
+                    source=str(source.relative_to(directory)), source_sha256=file_sha256(source), frames=payload["frames"],
+                    storage="mapped-track-shards" if store.manifest is not None else "npz",
+                    input_sha256=store.metadata.get("input_sha256"),
                     source_fps=payload["fps"], requested_frames=payload["requested_frames"],
                     dense_trajectories=payload["dense_points"], displayed_trajectories=payload["points"],
                     finite=payload["finite"], duration_seconds=payload["frames"] / payload["fps"],
