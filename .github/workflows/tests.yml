@@ -23,4 +23,6 @@ jobs:
           uv pip check
       - name: CPU unit tests
         run: uv run --no-sync pytest tests --ignore=tests/gpu -q
+      - name: Plotly viewer control tests
+        run: node tests/plotly_viewer.test.cjs
       # The GPU checks (tests/gpu) need CUDA, local weights and a WorldTrack clip; run them by hand (README.md).

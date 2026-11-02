@@ -18,6 +18,7 @@ Writes into DIR (default ``<outputs_root>/demo/<video name>/``):
                  poses (T,4,4) camera-from-world relative to frame 0; intrinsics (T,3,3)
     tracks.mp4   a sub-grid of the pixels projected into every frame with the geometry model's cameras: the lift on
                  the left, the corrected tracks on the right; filled dot = observed by the tracker, ring = filled in
+                 (playback uses the source video's FPS; image directories default to 15 FPS).
 
 84 frames is the window length the corrector was trained and evaluated with; longer clips run as one window but are
 outside the published setting (``--num_frames 0`` takes the whole clip).
@@ -96,6 +97,8 @@ def prepare_window(frames, out, geometry, wpath, pc, device):
         del g
         torch.cuda.empty_cache()
     images = np.load(frames_f)["images"]
+    if len(images) != len(frames):
+        raise ValueError(f"Cached window has {len(images)} frames, input has {len(frames)}; choose a fresh --out directory")
     H, W = images.shape[1:3]
     if not os.path.exists(tr_f):
         from relift.providers.alltracker import AllTrackerProvider
@@ -168,15 +171,27 @@ def main():
     ap.add_argument("--checkpoints_root", default=None)
     ap.add_argument("--config", default=str(REPO / "configs" / "eval" / "table1.yaml"), help="corrector settings (group, batch, seed)")
     ap.add_argument("--providers_config", default=str(REPO / "configs" / "providers.yaml"))
+    ap.add_argument("--process-res", type=int, help="override DA3's long-side resolution (default 504); retains all temporal frames")
+    ap.add_argument("--corrector-batch", type=int, help="override the number of trajectory groups per corrector forward pass")
     ap.add_argument("--stride", type=int, default=12, help="pixel stride of the points drawn in tracks.mp4")
     ap.add_argument("--no_video", action="store_true")
     ap.add_argument("--device", default="cuda")
     a = ap.parse_args()
+    if a.num_frames < 0:
+        ap.error("--num_frames must be nonnegative")
+    if a.process_res is not None and (a.process_res < 28 or a.process_res % 14):
+        ap.error("--process-res must be a multiple of 14 and at least 28")
+    if a.corrector_batch is not None and a.corrector_batch < 1:
+        ap.error("--corrector-batch must be positive")
     if not a.device.startswith("cuda"):
         raise SystemExit("CUDA is required: the published numbers correspond to the CUDA path")
     P = paths()
     cfg = yaml.safe_load(open(a.config))
     pc = yaml.safe_load(open(a.providers_config))
+    if a.process_res is not None:
+        pc["da3"]["process_res"] = a.process_res
+    if a.corrector_batch is not None:
+        cfg["corrector"]["batch"] = a.corrector_batch
     wc = yaml.safe_load(open(REPO / "configs" / "weights.yaml"))
     ck_root = a.checkpoints_root or str(P["checkpoints_root"])
     wpath = {n: weight_path(wc, n, ck_root) for n in wc}
@@ -187,8 +202,16 @@ def main():
 
     frames = read_frames(a.video, a.num_frames)
     T = len(frames)
+    source_fps = 15.0
+    if not os.path.isdir(a.video):
+        cap = cv2.VideoCapture(a.video)
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        cap.release()
+        if np.isfinite(fps) and fps > 0:
+            source_fps = float(fps)
     print(f"{a.video}: {T} frames of {frames.shape[2]}x{frames.shape[1]} -> {out}", flush=True)
-    window = os.path.join(out, "window")
+    resolution = pc["da3"]["process_res"]
+    window = os.path.join(out, "window" if resolution == 504 else f"window_res{resolution}")
     images = prepare_window(frames, window, a.geometry, wpath, pc, a.device)
     del frames
 
@@ -211,9 +234,11 @@ def main():
     poses = poses @ np.linalg.inv(poses[0])                                   # camera-from-(frame-0 camera)
     xyz, lift, observed = xyz.float().cpu().numpy(), lift.float().cpu().numpy(), observed.cpu().numpy()
     np.savez(os.path.join(out, "tracks.npz"), xyz=xyz.astype(np.float32), lift=lift.astype(np.float16), observed=observed,
-             images=images, poses=poses, intrinsics=K, geometry=a.geometry, checkpoint_step=info["step"])
+             images=images, poses=poses, intrinsics=K, geometry=a.geometry, checkpoint_step=info["step"],
+             source_fps=source_fps, source_frames=T, requested_frames=a.num_frames,
+             process_resolution=resolution, corrector_batch=C["batch"])
     if not a.no_video:
-        write_video(os.path.join(out, "tracks.mp4"), images, lift, xyz, observed, poses, K, a.stride)
+        write_video(os.path.join(out, "tracks.mp4"), images, lift, xyz, observed, poses, K, a.stride, fps=source_fps)
     print(f"DEMO_DONE: {out}/tracks.npz" + ("" if a.no_video else f", {out}/tracks.mp4"), flush=True)
 
 
