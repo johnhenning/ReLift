@@ -1,0 +1,69 @@
+[
+  {
+    "name": "alltracker",
+    "repo": "aharley/alltracker",
+    "revision": "c1ed462b7cfe9b4c6d07d8880ae5ed103b0848e0",
+    "sha256": "fb470e38e6e7e37589693197de4ef598beb17a61b202fe30926179e230cc9419",
+    "packages": {
+      "nets": "relift_frontends/alltracker/nets",
+      "utils": "relift_frontends/alltracker/utils"
+    }
+  },
+  {
+    "name": "cowtracker",
+    "repo": "facebookresearch/cowtracker",
+    "revision": "1454f20045d3b514e5b8417907152677f3dba621",
+    "sha256": "e775de7403c41bd3e89c253a603a0592e9b1173e920c6d9a3687b9b85e89081a",
+    "packages": {
+      "cowtracker": "cowtracker"
+    }
+  },
+  {
+    "name": "rc4",
+    "repo": "Luo-Yihang/4RC",
+    "revision": "a08ca0a5394c7c5f6a2a3423223cb98f85f84e6a",
+    "sha256": "100c31ac192eaa1c26e6f13437dc9fe0abce09b5cdc4c2dc459e881abd55fcbe",
+    "packages": {
+      "arc": "arc",
+      "eval/track": "relift_frontends/rc4_eval"
+    }
+  },
+  {
+    "name": "da3",
+    "repo": "ByteDance-Seed/Depth-Anything-3",
+    "revision": "41736238f5bced4debf3f2a12375d2466874866d",
+    "sha256": "879bc625ef0db2ed3e0e6f77bcbf1e9fc4e6f02f8fec09298bf937623ff4f21a",
+    "packages": {
+      "src/depth_anything_3": "depth_anything_3"
+    }
+  },
+  {
+    "name": "vggt-omega",
+    "repo": "facebookresearch/vggt-omega",
+    "revision": "39a0cb8af88554f15ddcb5354cd52bde588fa014",
+    "sha256": "1c4c0d6180828dc0b4ca677c1d64617048e6bd0b9147582becae1e90911decc5",
+    "packages": {
+      "vggt_omega": "vggt_omega"
+    }
+  },
+  {
+    "name": "cowtracker-vggt",
+    "repo": "facebookresearch/vggt",
+    "revision": "44b3afbd1869d8bde4894dd8ea1e293112dd5eba",
+    "sha256": "b49758de6f71ec53c43df599fed012e901023bfb213b89ebcd885f1208b5765b",
+    "packages": {
+      "vggt": "cowtracker/thirdparty/vggt/vggt"
+    },
+    "license_file": "LICENSE.txt"
+  },
+  {
+    "name": "cowtracker-depth-anything-v2",
+    "repo": "DepthAnything/Depth-Anything-V2",
+    "revision": "e5a2732d3ea2cddc081d7bfd708fc0bf09f812f1",
+    "sha256": "fb0326cf4e6e7ba2119b8e8b99359e02e1cb5c57a56c4a98e945844123609464",
+    "packages": {
+      "depth_anything_v2": "cowtracker/thirdparty/DepthAnythingV2/depth_anything_v2",
+      "metric_depth": "cowtracker/thirdparty/DepthAnythingV2/metric_depth"
+    }
+  }
+]

@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-SCAN = ["relift", "scripts", "configs", "tests", "README.md", "environment.yml", "pyproject.toml"]
+SCAN = ["relift", "scripts", "configs", "tests", "README.md", ".python-version", "pyproject.toml", "packages", "docs"]
 FORBIDDEN = [r"/home/\w", r"/datasets/", r"/tmp/claude", r"rds_phase0", r"\bassafsin\b", r"maroun\.kh", r"sbatch", r"SLURM",
              r"squeue", r"densetrack3d", r"PYTHONNOUSERSITE", r"espresso", r"nlp-pro6000", r"miniconda3"]
 

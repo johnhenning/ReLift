@@ -46,17 +46,24 @@ and completes the lifted trajectories. One released checkpoint serves every trac
 ## Setup
 
 ```
-git clone --recurse-submodules https://github.com/ReLift3D/ReLift.git
+git clone https://github.com/johnhenning/ReLift.git
 cd ReLift
-bash scripts/setup.sh                  # conda environment "relift" + the five front ends (submodules)
-conda activate relift
-python scripts/download_weights.py     # all weights into checkpoints/, md5-checked
+bash scripts/setup.sh                  # uv environment .venv + all five front ends as Python dependencies
+uv run python scripts/download_weights.py     # all weights into checkpoints/, md5-checked
 ```
 
-Requires Linux, conda and a CUDA GPU (24 GB; CoWTracker needs 48 GB). VGGT-Omega's weights are **gated** on
-Hugging Face: request access on https://huggingface.co/facebook/VGGT-Omega, then `hf auth login` (or set
+Requires Linux, [uv](https://docs.astral.sh/uv/getting-started/installation/) and a CUDA GPU (24 GB; CoWTracker needs 48 GB). VGGT-Omega's weights are **gated** on
+Hugging Face: request access on https://huggingface.co/facebook/VGGT-Omega, then `uv run hf auth login` (or set
 `HF_TOKEN`) and rerun the download. VGGT-Omega, CoWTracker, 4RC and the Depth Anything 3 checkpoint are released under
 non-commercial licences.
+
+uv installs Python 3.10 automatically when needed. Runtime versions live in `pyproject.toml`,
+with transitive dependencies pinned in `uv.lock`; PyTorch and torchvision use the CUDA 12.8 index.
+Run commands with `uv run` (no activation needed), or `source .venv/bin/activate` to use plain `python`.
+Rerun `bash scripts/setup.sh` to sync the locked environment; after intentional dependency changes, run
+`uv lock` and commit both `pyproject.toml` and `uv.lock`. Set `UV_PROJECT_ENVIRONMENT` to use a custom
+environment directory, or `UV_CACHE_DIR` to relocate downloads. Run CPU tests with
+`uv run --extra dev pytest tests --ignore=tests/gpu -q`.
 
 ## Demo
 
@@ -118,7 +125,7 @@ Every GPU script takes `--shard i --nshards n` and skips finished clips.
 | `scripts/` | Every entry point: setup, downloads, demo, data preparation, training, inference, scoring |
 | `configs/` | Paths, provider settings, weight sources with pinned revisions and md5s, the training recipe |
 | `manifests/` | The WorldTrack file ids and md5s used by `download_worldtrack.py` |
-| `third_party/` | The five front ends, as git submodules — no third-party code is vendored into this repository |
+| `packages/frontends/` | Python wheel packaging for the five pinned front ends; sources are downloaded and checksum-verified at build time |
 | `tests/` | CPU unit tests (run in CI) and GPU tests that need weights and a clip |
 
 Data, caches, weights and outputs live outside version control, under the roots in `configs/paths.yaml`; override
@@ -126,8 +133,8 @@ any of them with `RELIFT_<KEY>` (e.g. `RELIFT_DATA_ROOT=/mnt/big/relift_data`) o
 
 ## Licence
 
-Our code is MIT (`LICENSE`); the front ends under `third_party/` keep their own licences, and four of the five
-are non-commercial — see [`third_party/README.md`](third_party/README.md).
+Our code is MIT (`LICENSE`); the front-end Python dependencies keep their own licences, and four of the five
+are non-commercial — see [`docs/frontend-dependencies.md`](docs/frontend-dependencies.md).
 `configs/weights.yaml` records the licence, source and md5 of every weight the pipeline downloads.
 
 ## Citation

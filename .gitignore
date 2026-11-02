@@ -33,3 +33,12 @@ dist/
 # editor and tooling directories
 .vscode/
 .idea/
+
+# uv project environment
+.venv/
+
+# dependency wheel build output
+packages/frontends/.hatch/
+
+# Additional downloaded demo inputs (the bundled cartwheel remains tracked)
+/assets/demo/*.mp4

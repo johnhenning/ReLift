@@ -8,12 +8,11 @@ track field at the scored query pixels; must be about 0: the same map)."""
 import numpy as np
 import torch
 
-from ..vendor import front_ends, rc4_eval
+from ..vendor import rc4_eval
 
 
 class RC4Provider:
     def __init__(self, weights, device="cuda", size=512, patch_size=14, crop=False, square_ok=True):
-        front_ends()
         rc4_eval()
         from arc.models.arc import Arc
         self.device = device

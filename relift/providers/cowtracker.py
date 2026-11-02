@@ -15,7 +15,6 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from ..vendor import front_ends
 
 MULT = 112                      # lcm of the ViT patch (14) and the side ResNet's stride (16)
 ASPECT_TOL = math.log(1.15)
@@ -79,7 +78,6 @@ def _install_sdpa_attention():
 
 class CoWTrackerProvider:
     def __init__(self, weights, device="cuda", dtype="fp16", attention="sdpa"):
-        front_ends()
         assert attention == "sdpa", "only the published attention path is supported"
         _install_sdpa_attention()
         from cowtracker import CoWTrackerWindowed

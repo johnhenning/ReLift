@@ -4,12 +4,10 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from ..vendor import front_ends
 
 
 class VGGTOmegaProvider:
     def __init__(self, weights, device="cuda", resolution=512, patch=16):
-        front_ends()
         from vggt_omega.models import VGGTOmega
         self.device, self.res, self.patch = torch.device(device), resolution, patch
         self.model = VGGTOmega().to(self.device).eval()

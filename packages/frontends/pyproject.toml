@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling==1.30.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "relift-frontends"
+version = "0.1.0"
+description = "Packaging adapter for ReLift's pinned upstream inference modules"
+requires-python = ">=3.10"
+# ReLift pins these versions; upstream application/training extras are intentionally excluded.
+dependencies = [
+    "torch", "torchvision", "numpy", "opencv-python-headless", "pillow",
+    "scipy", "tqdm", "pyyaml", "matplotlib", "huggingface_hub", "safetensors",
+    "einops", "imageio", "omegaconf", "transformers", "trimesh", "timm",
+    "natsort", "requests", "addict", "plyfile", "pycolmap", "evo", "moviepy==1.0.3",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/relift_frontends"]
+
+[tool.hatch.build.targets.wheel.hooks.custom]
+path = "hatch_build.py"
+
+[tool.hatch.build.targets.sdist]
+include = ["pyproject.toml", "hatch_build.py", "upstreams.json", "src/"]
+
+[tool.uv]
+cache-keys = [{ file = "pyproject.toml" }, { file = "hatch_build.py" }, { file = "upstreams.json" }, { file = "src/**" }]
