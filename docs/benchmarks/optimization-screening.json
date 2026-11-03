@@ -1,0 +1,295 @@
+[
+  {
+    "experiment": "depth-cache",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization/depth-cache/control/trial-01/trial.json",
+      "outputs/experiments/optimization/depth-cache/control/trial-02/trial.json",
+      "outputs/experiments/optimization/depth-cache/control/trial-03/trial.json",
+      "outputs/experiments/optimization/depth-cache/control/trial-04/trial.json",
+      "outputs/experiments/optimization/depth-cache/control/trial-05/trial.json"
+    ],
+    "options": {},
+    "wall_median": 19.53360703701037,
+    "wall_min": 16.666840068995953,
+    "wall_max": 19.846681672002887,
+    "sampled_peak_process_tree_rss_bytes": 1678479360,
+    "sampled_peak_process_tree_pss_bytes": 1668493312,
+    "sampled_peak_gpu_device_used_bytes": 4172218368,
+    "process_tree_read_bytes": 28672,
+    "process_tree_write_bytes": 416534528,
+    "phase_medians": {
+      "model_load": 0.1744963389937766,
+      "correction": 17.535437815997284
+    },
+    "sampled_output_peak_allocated_bytes": 570441728
+  },
+  {
+    "experiment": "depth-cache",
+    "variant": "depth-cache",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization/depth-cache/depth-cache/trial-01/trial.json",
+      "outputs/experiments/optimization/depth-cache/depth-cache/trial-02/trial.json",
+      "outputs/experiments/optimization/depth-cache/depth-cache/trial-03/trial.json",
+      "outputs/experiments/optimization/depth-cache/depth-cache/trial-04/trial.json",
+      "outputs/experiments/optimization/depth-cache/depth-cache/trial-05/trial.json"
+    ],
+    "options": {
+      "depth_cache_mb": 256
+    },
+    "wall_median": 20.526776591010275,
+    "wall_min": 19.2292138680059,
+    "wall_max": 24.214342138002394,
+    "sampled_peak_process_tree_rss_bytes": 1673154560,
+    "sampled_peak_process_tree_pss_bytes": 1663152128,
+    "sampled_peak_gpu_device_used_bytes": 4220452864,
+    "process_tree_read_bytes": 843776,
+    "process_tree_write_bytes": 416538624,
+    "phase_medians": {
+      "model_load": 0.17247789600514807,
+      "correction": 18.53059546800796
+    },
+    "sampled_output_peak_allocated_bytes": 570441728
+  },
+  {
+    "experiment": "profile",
+    "variant": "diagnostic",
+    "n": 1,
+    "attempts": 1,
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": true,
+    "trial_records": [
+      "outputs/experiments/optimization/profile/diagnostic/trial-01/trial.json"
+    ],
+    "options": {
+      "profile": true
+    },
+    "wall_median": 13.878503690008074,
+    "wall_min": 13.878503690008074,
+    "wall_max": 13.878503690008074,
+    "sampled_peak_process_tree_rss_bytes": 1850032128,
+    "sampled_peak_process_tree_pss_bytes": 1840053248,
+    "sampled_peak_gpu_device_used_bytes": 4186243072,
+    "process_tree_read_bytes": 4583424,
+    "process_tree_write_bytes": 422109184,
+    "phase_medians": {
+      "model_load": 0.17928454099455848,
+      "correction": 11.507188018003944
+    },
+    "sampled_output_peak_allocated_bytes": 575950848
+  },
+  {
+    "experiment": "provider-copies",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization/provider-copies/control/trial-01/trial.json",
+      "outputs/experiments/optimization/provider-copies/control/trial-02/trial.json",
+      "outputs/experiments/optimization/provider-copies/control/trial-03/trial.json",
+      "outputs/experiments/optimization/provider-copies/control/trial-04/trial.json",
+      "outputs/experiments/optimization/provider-copies/control/trial-05/trial.json"
+    ],
+    "options": {},
+    "wall_median": 8.580786440012162,
+    "wall_min": 8.490462937988923,
+    "wall_max": 8.678399475000333,
+    "sampled_peak_process_tree_rss_bytes": 1814237184,
+    "sampled_peak_process_tree_pss_bytes": 1804423168,
+    "sampled_peak_gpu_device_used_bytes": 6084886528,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 189677568,
+    "phase_medians": {
+      "input_load": 0.01675679399340879,
+      "provider_load": 1.4205864499963354,
+      "provider_forward": 4.5059872639976675,
+      "serialize": 0.16054335499939043
+    },
+    "sampled_output_peak_allocated_bytes": 343797760
+  },
+  {
+    "experiment": "provider-copies",
+    "variant": "no-redundant-copy",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization/provider-copies/no-redundant-copy/trial-01/trial.json",
+      "outputs/experiments/optimization/provider-copies/no-redundant-copy/trial-02/trial.json",
+      "outputs/experiments/optimization/provider-copies/no-redundant-copy/trial-03/trial.json",
+      "outputs/experiments/optimization/provider-copies/no-redundant-copy/trial-04/trial.json",
+      "outputs/experiments/optimization/provider-copies/no-redundant-copy/trial-05/trial.json"
+    ],
+    "options": {
+      "copy_outputs": false
+    },
+    "wall_median": 8.491834957007086,
+    "wall_min": 8.428151790008997,
+    "wall_max": 8.552101282999502,
+    "sampled_peak_process_tree_rss_bytes": 1811652608,
+    "sampled_peak_process_tree_pss_bytes": 1801999360,
+    "sampled_peak_gpu_device_used_bytes": 6084362240,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 189677568,
+    "phase_medians": {
+      "input_load": 0.016805965002276935,
+      "provider_load": 1.4234282670076936,
+      "provider_forward": 4.489010546007194,
+      "serialize": 0.15711449200171046
+    },
+    "sampled_output_peak_allocated_bytes": 343797760
+  },
+  {
+    "experiment": "tracker-initialization",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization/tracker-initialization/control/trial-01/trial.json",
+      "outputs/experiments/optimization/tracker-initialization/control/trial-02/trial.json",
+      "outputs/experiments/optimization/tracker-initialization/control/trial-03/trial.json",
+      "outputs/experiments/optimization/tracker-initialization/control/trial-04/trial.json",
+      "outputs/experiments/optimization/tracker-initialization/control/trial-05/trial.json"
+    ],
+    "options": {},
+    "wall_median": 8.514673515004688,
+    "wall_min": 8.454425705989706,
+    "wall_max": 8.58451996500662,
+    "sampled_peak_process_tree_rss_bytes": 1796239360,
+    "sampled_peak_process_tree_pss_bytes": 1786106880,
+    "sampled_peak_gpu_device_used_bytes": 6086918144,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 189677568,
+    "phase_medians": {
+      "input_load": 0.016790793000836857,
+      "provider_load": 1.4058307910017902,
+      "provider_forward": 4.511306665997836,
+      "serialize": 0.15872959399712272
+    },
+    "sampled_output_peak_allocated_bytes": 343797760
+  },
+  {
+    "experiment": "tracker-initialization",
+    "variant": "skip-pretrained",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization/tracker-initialization/skip-pretrained/trial-01/trial.json",
+      "outputs/experiments/optimization/tracker-initialization/skip-pretrained/trial-02/trial.json",
+      "outputs/experiments/optimization/tracker-initialization/skip-pretrained/trial-03/trial.json",
+      "outputs/experiments/optimization/tracker-initialization/skip-pretrained/trial-04/trial.json",
+      "outputs/experiments/optimization/tracker-initialization/skip-pretrained/trial-05/trial.json"
+    ],
+    "options": {
+      "init_weights": false
+    },
+    "wall_median": 8.146477622009115,
+    "wall_min": 8.073118394007906,
+    "wall_max": 8.246941874996992,
+    "sampled_peak_process_tree_rss_bytes": 1793830912,
+    "sampled_peak_process_tree_pss_bytes": 1783932928,
+    "sampled_peak_gpu_device_used_bytes": 6086918144,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 189677568,
+    "phase_medians": {
+      "input_load": 0.016857612994499505,
+      "provider_load": 1.0659451499959687,
+      "provider_forward": 4.524907175989938,
+      "serialize": 0.15925716000492685
+    },
+    "sampled_output_peak_allocated_bytes": 343797760
+  },
+  {
+    "experiment": "write-hashing",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization/write-hashing/control/trial-01/trial.json",
+      "outputs/experiments/optimization/write-hashing/control/trial-02/trial.json",
+      "outputs/experiments/optimization/write-hashing/control/trial-03/trial.json",
+      "outputs/experiments/optimization/write-hashing/control/trial-04/trial.json",
+      "outputs/experiments/optimization/write-hashing/control/trial-05/trial.json"
+    ],
+    "options": {},
+    "wall_median": 20.034018051999738,
+    "wall_min": 19.324586991991964,
+    "wall_max": 20.61619113800407,
+    "sampled_peak_process_tree_rss_bytes": 1679286272,
+    "sampled_peak_process_tree_pss_bytes": 1669246976,
+    "sampled_peak_gpu_device_used_bytes": 4172611584,
+    "process_tree_read_bytes": 16384,
+    "process_tree_write_bytes": 416534528,
+    "phase_medians": {
+      "model_load": 0.17731813999125734,
+      "correction": 17.981729336999706
+    },
+    "sampled_output_peak_allocated_bytes": 570441728
+  },
+  {
+    "experiment": "write-hashing",
+    "variant": "hash-on-write",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization/write-hashing/hash-on-write/trial-01/trial.json",
+      "outputs/experiments/optimization/write-hashing/hash-on-write/trial-02/trial.json",
+      "outputs/experiments/optimization/write-hashing/hash-on-write/trial-03/trial.json",
+      "outputs/experiments/optimization/write-hashing/hash-on-write/trial-04/trial.json",
+      "outputs/experiments/optimization/write-hashing/hash-on-write/trial-05/trial.json"
+    ],
+    "options": {
+      "hash_writes": true
+    },
+    "wall_median": 18.577681437003775,
+    "wall_min": 18.3518669759942,
+    "wall_max": 18.772846804000437,
+    "sampled_peak_process_tree_rss_bytes": 1683554304,
+    "sampled_peak_process_tree_pss_bytes": 1673736192,
+    "sampled_peak_gpu_device_used_bytes": 4172611584,
+    "process_tree_read_bytes": 12288,
+    "process_tree_write_bytes": 416538624,
+    "phase_medians": {
+      "model_load": 0.1778956839989405,
+      "correction": 16.49773223399825
+    },
+    "sampled_output_peak_allocated_bytes": 570441728
+  }
+]

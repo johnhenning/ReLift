@@ -39,6 +39,17 @@ def test_selected_rays_keep_full_grid_rounding_and_camera_coordinates(tmp_path):
         torch.testing.assert_close(selected, expected, rtol=0, atol=0)
 
 
+def test_depth_cache_is_bounded_and_keeps_selected_ray_values(tmp_path):
+    prepared_window(tmp_path)
+    uncached = MappedObservations(tmp_path, "cpu")
+    cached = MappedObservations(tmp_path, "cpu", depth_cache_mb=1)
+    too_small = MappedObservations(tmp_path, "cpu", depth_cache_mb=.00001)
+    assert cached.depth_cuda is not None and too_small.depth_cuda is None
+    ids = np.array([0, 2, 8, 14])
+    for expected, actual in zip(uncached.rays(ids), cached.rays(ids)):
+        torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+
+
 @pytest.mark.filterwarnings("ignore:CUDA is not available")
 def test_streamed_corrector_matches_dense_for_ordinary_pixels_and_raw_export(tmp_path):
     T, H, W = prepared_window(tmp_path)

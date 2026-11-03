@@ -1,0 +1,48 @@
+{
+  "scene": "swing-tire",
+  "input": "cache/demo_inputs/swing-tire.mp4",
+  "prepared_window": "outputs/benchmarks/offload-primary/swing-tire/ram/trial-01/output/window",
+  "process_res": 504,
+  "output_root": "outputs/experiments/optimization",
+  "experiments": {
+    "write-hashing": {
+      "task": "correction",
+      "repeats": 5,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/offload-reference", "options": {}},
+        {"name": "hash-on-write", "source": "outputs/experiments/sources/write-hashing", "options": {"hash_writes": true}}
+      ]
+    },
+    "provider-copies": {
+      "task": "alltracker",
+      "repeats": 5,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/offload-reference", "options": {}},
+        {"name": "no-redundant-copy", "source": "outputs/experiments/sources/provider-copies", "options": {"copy_outputs": false}}
+      ]
+    },
+    "tracker-initialization": {
+      "task": "alltracker",
+      "repeats": 5,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/offload-reference", "options": {}},
+        {"name": "skip-pretrained", "source": "outputs/experiments/sources/tracker-initialization", "options": {"init_weights": false}}
+      ]
+    },
+    "depth-cache": {
+      "task": "correction",
+      "repeats": 5,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/offload-reference", "options": {}},
+        {"name": "depth-cache", "source": "outputs/experiments/sources/depth-cache", "options": {"depth_cache_mb": 256}}
+      ]
+    },
+    "profile": {
+      "task": "correction",
+      "repeats": 1,
+      "variants": [
+        {"name": "diagnostic", "source": "outputs/experiments/offload-reference", "options": {"profile": true}}
+      ]
+    }
+  }
+}

@@ -7,11 +7,12 @@ from ..vendor import front_ends
 
 
 class AllTrackerProvider:
-    def __init__(self, weights, device="cuda", window=16, iters=4):
+    def __init__(self, weights, device="cuda", window=16, iters=4, init_weights=True, copy_outputs=True):
         front_ends()
         from nets.alltracker import Net
         self.device, self.iters = torch.device(device), iters
-        net = Net(window)
+        net = Net(window, init_weights=init_weights)
+        self.copy_outputs = copy_outputs
         state = torch.load(weights, map_location="cpu")
         net.load_state_dict(state["model"], strict=True)
         self.net = net.eval().to(self.device)
@@ -31,5 +32,6 @@ class AllTrackerProvider:
             flows[:, 0] = 0.0
             traj = (flows + grid).permute(0, 1, 3, 4, 2)[0]                                   # (T,H,W,2)
             visconf = visconf.permute(0, 1, 3, 4, 2)[0]                                       # (T,H,W,2)
-        return (traj.cpu().numpy().astype(np.float32), visconf[..., 0].cpu().numpy().astype(np.float32),
-                visconf[..., 1].cpu().numpy().astype(np.float32))
+        return (traj.cpu().numpy().astype(np.float32, copy=self.copy_outputs),
+                visconf[..., 0].cpu().numpy().astype(np.float32, copy=self.copy_outputs),
+                visconf[..., 1].cpu().numpy().astype(np.float32, copy=self.copy_outputs))

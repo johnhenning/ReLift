@@ -4,7 +4,7 @@ import json
 import numpy as np
 import pytest
 
-from relift.storage import TrajectoryStore, mapped_archive, read_frames_mapped
+from relift.storage import TrajectoryStore, mapped_archive, read_frames_mapped, atomic_npy, file_sha256
 
 
 def fixture_arrays():
@@ -14,6 +14,22 @@ def fixture_arrays():
                 images=np.arange(T * H * W * 3, dtype=np.uint8).reshape(T, H, W, 3),
                 poses=np.tile(np.eye(4, dtype=np.float32), (T, 1, 1)),
                 intrinsics=np.tile(np.eye(3, dtype=np.float32), (T, 1, 1)))
+
+
+@pytest.mark.parametrize("transpose", [False, True])
+def test_hash_during_write_matches_exact_archive_bytes_and_detects_later_corruption(tmp_path, transpose):
+    data = np.arange(120, dtype=np.float32).reshape(10, 12)
+    if transpose:
+        data = data.T
+    baseline, candidate = tmp_path / "baseline.npy", tmp_path / "candidate.npy"
+    atomic_npy(baseline, data)
+    digest = atomic_npy(candidate, data, hash_write=True)
+    assert baseline.read_bytes() == candidate.read_bytes()
+    assert digest == file_sha256(candidate)
+    with candidate.open("r+b") as stream:
+        stream.seek(-1, 2)
+        stream.write(b"x")
+    assert digest != file_sha256(candidate)
 
 
 def write_store(root, arrays):

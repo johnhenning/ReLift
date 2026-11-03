@@ -16,7 +16,7 @@ from .storage import TrajectoryStore, file_sha256, mapped_archive
 class MappedObservations:
     """CUDA ray construction for selected original pixels, retaining baseline math."""
 
-    def __init__(self, window_dir, device="cuda", depth_file="da3_depth_data.npz", tracks_file="alltracker_tracks.npz"):
+    def __init__(self, window_dir, device="cuda", depth_file="da3_depth_data.npz", tracks_file="alltracker_tracks.npz", depth_cache_mb=0):
         window = Path(window_dir)
         self.depth_source, self.track_source = window / depth_file, window / tracks_file
         depth = mapped_archive(self.depth_source)
@@ -26,6 +26,11 @@ class MappedObservations:
         if self.tracks.shape[:3] != self.depth.shape or self.visibility.shape != self.depth.shape:
             raise ValueError("Geometry and tracker frames/grids do not match")
         self.device = torch.device(device)
+        self.depth_cuda = None
+        needed = self.T * self.H * self.W * 4
+        if depth_cache_mb > 0 and needed <= depth_cache_mb * 2**20:
+            if self.device.type != "cuda" or torch.cuda.mem_get_info(self.device)[0] > needed + 512 * 2**20:
+                self.depth_cuda = torch.as_tensor(np.array(self.depth), dtype=torch.float32, device=self.device)
         self.poses_cpu, self.intrinsics_cpu = depth["poses"], depth["intrinsics"]
         self.poses = torch.as_tensor(np.array(self.poses_cpu), dtype=torch.float32, device=self.device)
         self.K = torch.as_tensor(np.array(self.intrinsics_cpu), dtype=torch.float32, device=self.device)
@@ -43,7 +48,7 @@ class MappedObservations:
         ids = np.asarray(pixel_ids, dtype=np.int64)
         rows, cols = np.divmod(ids, self.W)
         times = slice(None) if frame is None else slice(frame, frame + 1)
-        coords = torch.as_tensor(np.array(self.tracks[times, rows, cols]), dtype=torch.float32, device=self.device)
+        coords = self._transfer(self.tracks[times, rows, cols])
         K, Rwc, origin = self.K[times], self.Rwc[times], self.origin[times]
         T, count = coords.shape[:2]
         # Only image-depth slices enter CUDA. grid_sample still uses original full H/W.
@@ -54,7 +59,8 @@ class MappedObservations:
         offset = 0 if frame is None else frame
         for t in range(0, T, 16):
             length = min(16, T - t)
-            depth = torch.as_tensor(np.array(self.depth[offset + t:offset + t + length]), dtype=torch.float32, device=self.device)
+            depth = (self.depth_cuda[offset + t:offset + t + length] if self.depth_cuda is not None else
+                     self._transfer(self.depth[offset + t:offset + t + length]))
             z = F.grid_sample(depth[:, None], norm[t:t + length].reshape(length, count, 1, 2), mode="nearest",
                               padding_mode="border", align_corners=True)[:, 0, :, 0]
             sampled.append(z)
@@ -65,8 +71,17 @@ class MappedObservations:
         dcam = F.normalize(torch.stack([xc, yc, torch.ones_like(xc)], dim=-1), dim=-1)
         direction = torch.einsum("tij,tnj->tni", Rwc, dcam)
         distance = z * torch.sqrt(xc * xc + yc * yc + 1.0)
-        vis = torch.as_tensor(np.array(self.visibility[times, rows, cols]), dtype=torch.float32, device=self.device)
+        vis = self._transfer(self.visibility[times, rows, cols])
         return origin, torch.nan_to_num(direction), torch.nan_to_num(distance), torch.nan_to_num(vis)
+
+    def _transfer(self, values):
+        array = np.array(values)
+        hosts = getattr(self, "_pinned_inputs", None)
+        if hosts is None:
+            return torch.as_tensor(array, dtype=torch.float32, device=self.device)
+        host = torch.from_numpy(array).pin_memory()
+        hosts.append(host)
+        return host.to(device=self.device, dtype=torch.float32, non_blocking=True)
 
 
 def _batch_plan(valid, group, batch, seed, device):
@@ -85,7 +100,7 @@ def _batch_plan(valid, group, batch, seed, device):
 @torch.no_grad()
 def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8, seed=0,
                    device="cuda", depth_file="da3_depth_data.npz", tracks_file="alltracker_tracks.npz",
-                   ram_budget_gb=18, vram_budget_gb=20, scratch_budget_gb=64):
+                   ram_budget_gb=18, vram_budget_gb=20, scratch_budget_gb=64, depth_cache_mb=0, hash_writes=False):
     """Correct every source pixel using full timelines and atomic mapped result shards.
 
     ``metadata`` must identify the checkpoint/settings for safe resume. The output
@@ -95,7 +110,7 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
     if min(group, batch) < 1:
         raise ValueError("group and batch must be positive")
     dev = torch.device(device)
-    obs_source = MappedObservations(window_dir, dev, depth_file, tracks_file)
+    obs_source = MappedObservations(window_dir, dev, depth_file, tracks_file, depth_cache_mb=depth_cache_mb)
     T, H, W = obs_source.T, obs_source.H, obs_source.W
     total = H * W
     # Only the reference frame needs all points for the exact clip-wide median.
@@ -134,8 +149,10 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
                       device=str(dev), torch_version=torch.__version__, numpy_version=np.__version__,
                       ram_budget_gb=ram_budget_gb, vram_budget_gb=vram_budget_gb,
                       scratch_budget_gb=scratch_budget_gb)
+    provenance.update(depth_cache_mb=depth_cache_mb, depth_cache_bytes=obs_source.depth_cuda.numel() * 4 if obs_source.depth_cuda is not None else 0,
+                      hash_writes=hash_writes)
     store = TrajectoryStore.create(output_dir, (T, H, W, 3), provenance, order,
-                                   dict(images=images, poses=poses, intrinsics=np.asarray(obs_source.intrinsics_cpu)), repeated_ids)
+                                   dict(images=images, poses=poses, intrinsics=np.asarray(obs_source.intrinsics_cpu)), repeated_ids, hash_writes=hash_writes)
     if store.manifest["state"] == "complete":
         return store
     # Shared source matrices and one depth image remain small. The active corrector
