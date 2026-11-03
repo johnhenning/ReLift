@@ -25,4 +25,8 @@ jobs:
         run: uv run --no-sync pytest tests --ignore=tests/gpu -q
       - name: Plotly viewer control tests
         run: node tests/plotly_viewer.test.cjs
+      - name: Architecture component code links
+        run: |
+          uv run --no-sync python scripts/build_architecture_view.py
+          node --test docs/architecture-view.test.cjs
       # The GPU checks (tests/gpu) need CUDA, local weights and a WorldTrack clip; run them by hand (README.md).

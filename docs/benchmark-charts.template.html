@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Benchmark comparisons</title>
+<style>
+body { margin: 0; background: #f8fafc; color: #202e40; font: 16px/1.6 system-ui,sans-serif; }
+main { max-width: 1500px; padding: 28px; margin: auto; }
+h1,h2,h3 { line-height: 1.25; } a { color: #245c96; text-underline-offset: 3px; }
+header,section { margin-bottom: 44px; } .chart-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; }
+.chart-grid > div { min-width: 0; } .notes { max-width: 105ch; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #edf1f6; padding: 16px; }
+summary { cursor: pointer; } article { max-width: 1100px; border-top: 1px solid #cbd3de; padding-top: 24px; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; } th,td { border-bottom: 1px solid #cbd3de; padding: 10px; text-align: left; vertical-align: top; }
+@media(max-width:900px) { .chart-grid { grid-template-columns: 1fr; } main { padding: 16px; } }
+</style></head><body><main>
+<header><h1>Benchmark comparisons</h1><nav aria-label="Workloads">__NAV__</nav>
+<p class="notes">Bars show medians of successful runs; dots show individual trials; whiskers show observed min–max, not confidence intervals.
+Labels show completed/attempted trials. OOMs are capacity outcomes and have no successful-runtime bar. Measurements are grouped by matching recorded workload and implementation version.</p>
+<p class="notes">Host RAM is sampled process-tree RSS, not total system memory. GPU memory is sampled total device use, including desktop use.
+Timed physical disk I/O is distinct from saved dense-output allocation, inventoried when these charts were generated. That allocation excludes shared checkpoints, decoded/provider/mapped caches and cleaned offload scratch.
+Peak temporary disk space was not recorded. Warm OS caches can make physical reads appear small.</p>
+<p><a href="comparison.csv">CSV</a> · <a href="comparison.json">Measurements, definitions and provenance</a></p></header>
+__CHARTS__
+<article>__ANALYSIS__</article>
+<footer>Generated from explicit benchmark records by scripts/build_benchmark_charts.py. Plotly and chart data are embedded; no server or network is required to view the charts.</footer>
+</main></body></html>

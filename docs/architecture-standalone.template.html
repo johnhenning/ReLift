@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; font-src data:; connect-src 'none'; base-uri 'none'; object-src 'none'">
+  <title>ReLift architecture explorer</title>
+  <style>__STANDALONE_CSS__</style>
+</head>
+<body>
+  <header class="page-header">
+    <div><p class="eyebrow">ReLift · code and architecture</p><h1>From video to repaired 3D motion</h1></div>
+    <nav aria-label="Viewer sections"><a href="#pipeline">Pipeline</a><a href="#walkthrough">Walkthrough</a><a href="#source-files">Source files</a></nav>
+  </header>
+  <main>
+    <section id="pipeline" aria-label="Interactive component diagram">
+      <p class="intro">Select a component to inspect its inputs, outputs and current implementation.</p>
+      __COMPONENT_EXPLORER__
+    </section>
+    <section id="walkthrough" class="walkthrough-layout" aria-label="Architecture walkthrough">
+      <aside><h2>In this walkthrough</h2><nav aria-label="Walkthrough contents">__CONTENTS__</nav></aside>
+      <article class="prose">__WALKTHROUGH__</article>
+    </section>
+    <section id="source-files" class="source-browser" aria-labelledby="source-heading">
+      <h2 id="source-heading">Source files</h2>
+      <label for="relift-file-select">File from this checkout</label>
+      <select id="relift-file-select">__SOURCE_OPTIONS__</select>
+      <p id="relift-file-location" aria-live="polite"></p>
+      <pre class="full-source"><code id="relift-file-code"></code></pre>
+    </section>
+    <footer><p>Self-contained snapshot of the architecture document and referenced source files. Rebuild after changing the checkout.</p><details><summary>Mermaid license</summary><pre>__MERMAID_LICENSE__</pre></details></footer>
+  </main>
+  <script id="relift-source-files" type="application/json">__SOURCE_FILES__</script>
+  <script>__MERMAID_BUNDLE__</script>
+  <script>__STANDALONE_JS__</script>
+</body>
+</html>

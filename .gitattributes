@@ -1,0 +1,3 @@
+# Preserve pinned upstream bytes and keep generated bundles out of the main review.
+docs/vendor/** linguist-vendored -whitespace
+docs/architecture-view.html linguist-generated -whitespace

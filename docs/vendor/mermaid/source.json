@@ -1,0 +1,16 @@
+{
+  "package": "mermaid",
+  "version": "11.12.0",
+  "files": {
+    "mermaid.min.js": {
+      "url": "https://cdn.jsdelivr.net/npm/mermaid@11.12.0/dist/mermaid.min.js",
+      "sha256": "07e37dfa97b337ccc85365d57eddf99b9706f09db3b59b260d0333b23b343c4b",
+      "bytes": 2748992
+    },
+    "LICENSE": {
+      "url": "https://cdn.jsdelivr.net/npm/mermaid@11.12.0/LICENSE",
+      "sha256": "ec9fb67dcb25eccc416ed56e1aab819222c805a2a4bfe4cb19e7556bf2ffde80",
+      "bytes": 1089
+    }
+  }
+}

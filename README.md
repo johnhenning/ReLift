@@ -173,9 +173,52 @@ source metadata, completion status, and export metadata. The index updates as ea
 failed clips retain their error message while the remaining clips continue. Use `--download-only`
 to inventory inputs or `--videos running forest` to process selected clips. Published clip lengths
 vary: running has 206 frames and forest has 294; the full source timeline is retained.
-The batch defaults to full-resolution automatic offloading. Legacy resolution retries require explicit opt-in.
+The batch defaults to `--offload auto`, preserves the full 504 processing resolution and all
+source frames, and selects streamed correction, RAM paging or disk paging from conservative
+memory estimates. Legacy spatial retries require explicit `--offload none --allow-resolution-retry`.
+Each viewer and the gallery report the processing grid; `plotly.json` records resolution and batch.
 
-See [bounded inference and offloading](docs/offloading.md) for modes, budgets, storage and recovery.
+For explicit offload control:
+
+```bash
+uv run python scripts/demo_video.py cache/demo_inputs/running.mp4 --num_frames 0 \
+    --offload ram --no_video --out outputs/running-offload
+uv run python scripts/plotly_demo.py outputs/running-offload
+```
+
+`none` retains the legacy dense CUDA path and NPZ output. `streamed` keeps DA3 on CUDA but
+constructs rays and corrects one full-timeline point batch at a time. `ram` also pages inactive
+DA3 blocks and retained features to CPU; `disk` maps those cold tensors from SSD. All three
+write `tracks.store/manifest.json` and track-major NPY shards. `--export-npz` adds a compatibility
+archive. Plotly reads either format, selecting display pixels without materializing all trajectories.
+
+Budgets default to `--vram-budget-gb 20 --ram-budget-gb 18 --scratch-budget-gb 64` (GiB).
+These guide placement and bounded allocations, rather than imposing OS limits on process RSS or
+GPU reservations. Disk mapping still uses RAM through the OS page cache. Use `--scratch-dir` to
+choose the cold-tensor SSD location. Model arithmetic, precision, complete temporal context,
+group size, seed and reference pixel identities are preserved. Padded duplicate points use a
+deterministic first occurrence instead of the legacy CUDA scatter's undefined write order.
+
+The [design](docs/memory-offload-design.md), [benchmark results](docs/offload-benchmark-results.md)
+and [performance investigation](docs/performance-opportunities.md) document the tradeoffs.
+Reproducible measurement and comparison scripts are `scripts/benchmark_offload.py` and
+`scripts/compare_offload.py`; the runnable original is frozen under `outputs/benchmarks/baseline-source`.
+The [standalone architecture viewer](docs/architecture-view.html) combines the interactive diagram,
+the [walkthrough](docs/architecture.md) and embedded source files in one offline HTML document.
+Rebuild it with `uv run python scripts/build_architecture_view.py` after `uv sync --extra dev`.
+
+For [benchmark comparison charts](outputs/benchmark-charts/index.html) and the
+[next optimization experiments](docs/performance-opportunities.md):
+
+```bash
+uv run python scripts/build_benchmark_charts.py \
+  --benchmark-roots outputs/benchmarks/offload-primary outputs/benchmarks/offload-ablations outputs/benchmarks/offload-capacity \
+  --analysis docs/performance-opportunities.md --out-dir outputs/benchmark-charts
+```
+
+This reads saved trials and inventories canonical dense-output files without rerunning inference.
+It writes an offline Plotly viewer, PNG/SVG figures, CSV and JSON provenance. Timed physical disk I/O
+and final output allocation are separate metrics; peak temporary scratch was not recorded.
 
 ## Training
 

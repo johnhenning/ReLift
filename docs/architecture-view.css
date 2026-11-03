@@ -1,0 +1,21 @@
+#relift-architecture { color: var(--foreground); }
+#relift-architecture .arch-flow { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: calc(var(--font-size-base) * 3); row-gap: calc(var(--font-size-base) * 1.35); position: relative; margin-top: calc(var(--font-size-base) * 1.5); }
+#relift-architecture .arch-slot { position: relative; min-width: 0; }
+#relift-architecture .arch-wide { grid-column: 1 / -1; justify-self: center; }
+#relift-architecture .arch-connectors { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+#relift-architecture .arch-connectors path { fill: none; stroke: var(--border); stroke-width: 1.25; }
+#relift-architecture .arch-connectors path[data-active="true"] { stroke: var(--viz-series-1); stroke-width: 2; }
+#relift-architecture .arch-connectors polygon { fill: var(--muted-foreground); }
+#relift-architecture .arch-internals, #relift-architecture .arch-offload, #relift-architecture .arch-source { margin-top: calc(var(--font-size-base) * 1); }
+#relift-architecture .arch-internals .viz-row, #relift-architecture .arch-offload-nodes { margin-top: calc(var(--font-size-base) * .5); }
+#relift-architecture .arch-io { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(var(--font-size-base) * 1); margin: calc(var(--font-size-base) * .75) 0; }
+#relift-architecture .arch-io dt { font-weight: 500; }
+#relift-architecture .arch-io dd { margin: 0; overflow-wrap: anywhere; }
+#relift-architecture .arch-location { margin: calc(var(--font-size-base) * .75) 0 calc(var(--font-size-base) * .5); overflow-wrap: anywhere; }
+#relift-architecture pre { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; color: var(--foreground); }
+#relift-architecture pre code { white-space: inherit; }
+#relift-architecture #relift-selected-purpose { margin-top: calc(var(--font-size-base) * .25); }
+@media (max-width: 480px) {
+  #relift-architecture .arch-flow { column-gap: calc(var(--font-size-base) * 1.25); }
+  #relift-architecture .arch-io { grid-template-columns: 1fr; }
+}

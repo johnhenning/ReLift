@@ -39,7 +39,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = ["pytest", "markdown-it-py==4.2.0"]
 
 [tool.setuptools.packages.find]
 include = ["relift*"]
