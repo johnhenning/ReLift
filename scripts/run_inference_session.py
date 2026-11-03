@@ -2,7 +2,7 @@
 """Run multiple full clips through an explicitly owned composable session.
 
 uv run python scripts/run_inference_session.py CLIP1 CLIP2 --out outputs/session \
-    --opt reuse_da3=true --opt hash_writes=true
+    --profile reuse-da3
 """
 
 from __future__ import annotations
@@ -14,6 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from relift.configuration import load_configuration
 from relift.optimization import InferenceSession, OptimizationConfig
 from scripts.demo_video import main as infer
 
@@ -24,11 +25,25 @@ def main() -> None:
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--optimizations", type=Path)
     parser.add_argument("--opt", action="append", default=[])
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--profile")
+    group.add_argument("--inference-config", type=Path)
     parser.add_argument("--native-build", type=Path)
-    parser.add_argument("--offload", choices=("ram", "disk", "streamed"), default="ram")
+    parser.add_argument("--offload", choices=("ram", "disk", "streamed"))
     args = parser.parse_args()
-    settings = OptimizationConfig.read(args.optimizations, args.opt)
-    with InferenceSession(settings, native_build=args.native_build) as session:
+    structured = args.profile is not None or args.inference_config is not None
+    if structured and (args.optimizations or args.opt):
+        parser.error("Choose a component profile/config or legacy optimization flags")
+    selection = (
+        load_configuration(profile=args.profile, path=args.inference_config) if structured else None
+    )
+    settings = (
+        selection.config.optimizations()
+        if selection
+        else OptimizationConfig.read(args.optimizations, args.opt)
+    )
+    offload = args.offload or (selection.config.memory.offload if selection else "ram")
+    with InferenceSession(selection or settings, native_build=args.native_build) as session:
         for index, video in enumerate(args.videos):
             import random
 
@@ -47,7 +62,7 @@ def main() -> None:
                     "--num_frames",
                     "0",
                     "--offload",
-                    args.offload,
+                    offload,
                     "--scratch-dir",
                     str(args.out / "scratch"),
                     "--no_video",

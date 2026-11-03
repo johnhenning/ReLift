@@ -47,9 +47,17 @@ def run_variant(
     directory = ROOT / spec["output_root"] / name / variant["name"] / f"trial-{repeat:02}"
     record = directory / "trial.json"
     options = variant.get("options", {})
+    from relift.configuration import experiment_configuration
+
+    selection = experiment_configuration(options, ROOT, source / "configs/inference")
+    configuration = selection.as_dict() if selection else None
     if record.exists() and resume:
         previous = json.loads(record.read_text())
-        if previous.get("options") != options or previous.get("source") != str(source):
+        if (
+            previous.get("options") != options
+            or previous.get("source") != str(source)
+            or previous.get("configuration") != configuration
+        ):
             raise ValueError(f"Changed trial settings: {record}")
         return
     if directory.exists():
@@ -104,7 +112,9 @@ def run_variant(
         TORCHINDUCTOR_CACHE_DIR=str(output / "compiler-cache"),
         TRITON_CACHE_DIR=str(output / "triton-cache"),
     )
-    native_build = options.get("native_build")
+    native_build = options.get("native_build") or (
+        selection.config.runtime.native_build if selection else None
+    )
     build_record = None
     if native_build:
         build_root = (ROOT / native_build).resolve()
@@ -162,6 +172,7 @@ def run_variant(
         mode=variant["name"],
         source=str(source),
         options=options,
+        configuration=configuration,
         task=definition["task"],
         diagnostic=bool(options.get("profile")),
         repeat=repeat,

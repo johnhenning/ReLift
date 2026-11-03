@@ -6,15 +6,22 @@ import json
 import os
 import runpy
 import sys
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from relift.configuration import ConfigurationSelection
 
 
-def run(args: Any, options: dict[str, Any]) -> Any:
+def run(
+    args: Any, options: dict[str, Any], configuration: ConfigurationSelection | None = None
+) -> Any:
     from relift.storage import TrajectoryStore
 
     video = (args.root / options.pop("video")).resolve()
     optimizations = options.pop("optimizations", None)
-    offload = options.pop("offload", "ram")
+    offload = options.pop(
+        "offload", configuration.config.memory.offload if configuration else "ram"
+    )
     if options:
         raise ValueError(f"Unknown pipeline options: {options}")
     output = args.output.resolve()
@@ -30,7 +37,11 @@ def run(args: Any, options: dict[str, Any]) -> Any:
         "--process-res",
         "504",
         "--corrector-batch",
-        str((optimizations or {}).get("corrector_batch", 8)),
+        str(
+            configuration.config.correction.batch
+            if configuration
+            else (optimizations or {}).get("corrector_batch", 8)
+        ),
         "--checkpoints_root",
         str(args.root / "checkpoints"),
         "--out",
@@ -47,7 +58,16 @@ def run(args: Any, options: dict[str, Any]) -> Any:
     if os.environ.get("RELIFT_NATIVE_BUILD") and optimizations is not None:
         sys.argv += ["--native-build", os.environ["RELIFT_NATIVE_BUILD"]]
     try:
-        runpy.run_path(str(script), run_name="__main__")
+        if configuration is None:
+            runpy.run_path(str(script), run_name="__main__")
+        else:
+            from relift.optimization import InferenceSession
+
+            namespace = runpy.run_path(str(script), run_name="relift_demo_trial")
+            with InferenceSession(
+                configuration, native_build=os.environ.get("RELIFT_NATIVE_BUILD")
+            ) as session:
+                namespace["main"](sys.argv[1:], session=session)
     finally:
         sys.argv = previous
     metrics = json.loads((output / "metrics.json").read_text())
@@ -55,6 +75,7 @@ def run(args: Any, options: dict[str, Any]) -> Any:
     return dict(
         task="pipeline",
         phases=metrics["stages"],
+        configuration=metrics["settings"].get("configuration"),
         shape=store.shape,
         finite=store.finite(),
         observation_cache=json.loads((output / "observation-cache.json").read_text())

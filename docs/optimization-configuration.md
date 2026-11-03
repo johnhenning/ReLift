@@ -1,7 +1,7 @@
 # Composable inference optimizations
 
-`OptimizationConfig` is the shared validated configuration for demos, sessions and
-new experiment variants. Unspecified fields retain the currently accepted defaults.
+`InferenceConfig` groups public configuration by component. `OptimizationConfig`
+is the validated flat execution contract retained for compatibility. Unspecified fields retain the currently accepted defaults.
 Unknown fields, invalid backend names and incorrectly typed values fail before use.
 The resolved settings and injected component fingerprints are recorded in metrics
 and trajectory-store provenance; changed settings invalidate resume.
@@ -54,68 +54,105 @@ Python/C++ CPU gathering strategies, and conflicting choices are rejected.
 `(tracks, visibility, device, budget_mb)` returning an owner with `active`,
 `gather(pixel_ids, frame=None)`, `metrics` and `close()`.
 
-## CLI configuration
+## Component profiles
 
-Build a native helper outside timed inference:
-
-```bash
-uv run python scripts/build_native.py --out outputs/native/gather
-uv run python scripts/demo_video.py cache/demo_inputs/swing-tire.mp4 \
-  --num_frames 0 --offload ram --no_video --out outputs/gather-example \
-  --optimizations configs/optimizations/gather-cpp.json \
-  --native-build outputs/native/gather
-```
-
-Compose independent settings with a JSON file or repeated `--opt key=JSON_VALUE`:
+Use one named profile or TOML file instead of individual optimization flags:
 
 ```bash
+uv run python scripts/demo_video.py --profile observation-cache --print-config
 uv run python scripts/demo_video.py cache/demo_inputs/swing-tire.mp4 \
-  --num_frames 0 --offload ram --no_video --out outputs/combination-example \
-  --opt gather='"python"' --opt hash_writes=true --opt depth_cache_mb=256
+  --num_frames 0 --profile observation-cache --no_video --out outputs/profile-example
 ```
 
-These examples describe test configurations, not measured improvements. Keep fresh
-output directories and compare the exact settings against a matching control. The
-older `--corrector-batch` flag takes precedence over the config's batch value and
-the resolved value is persisted. Model/input settings and memory budgets retain
-their existing arguments; optimization selection does not change them implicitly.
+`--print-config` resolves settings and source-file SHA256 fingerprints without
+requiring a video or GPU. `--profile` selects a file in `configs/inference/`;
+`--inference-config FILE.toml` selects a custom file. Choose one. Legacy JSON
+`--optimizations` and `--opt` arguments remain supported for archived commands,
+but cannot be combined with the grouped interface.
 
-The experiment runner accepts the same dictionary under each variant's
-`options.optimizations`, plus `options.native_build` for a native binary. Its
-pipeline task accepts `options.offload` so RAM/disk comparisons can remain separate.
-Use these dictionaries to enumerate a combination matrix; this does not require
-a separate code patch for every combination. Three-arm runs rotate execution order.
+A custom file can inherit a named profile or a TOML path relative to itself:
 
-Packing and writing can be selected independently: `shards-packing-only.json`
-uses native packing with the current writer; `shards-writer-only.json` selects the
-native writer with current packing/validation. The existing `shards="cpp"`
-shortcut keeps its combined behavior when `shard_writer` is null.
+```toml
+extends = "ram"
 
-Generate a full Cartesian matrix without starting inference:
+[observations]
+cache_mb = 128
+prefetch = false
+
+[rays]
+backend = "current"
+
+[storage]
+packing = "current"
+hash_writes = true
+```
+
+Tables merge by field, so changing rays keeps inherited observation settings.
+Unknown tables/fields, incorrect types, inheritance cycles, invalid backends and
+incompatible settings fail before inference. A profile records every inherited
+file's content hash. Relative runtime native-build and scratch paths use the
+working directory, while inheritance paths use the declaring file's directory.
+A changed source file invalidates store resume even if its effective values match.
+
+| Component | Fields |
+|---|---|
+| `memory` | `offload`, `ram_gb`, `vram_gb`, `scratch_gb`, `scratch_dir` |
+| `observations` | `gather`, `cache_mb`, `depth_cache_mb`, `prefetch` |
+| `rays` | `backend` |
+| `correction` | `batch`, `padding_batch`, `compile` |
+| `storage` | `packing`, `writer`, `hash_writes` |
+| `da3` | `weights`, `features`, `reuse` |
+| `tracker` | `init_weights`, `copy_outputs` |
+| `runtime` | `native_build` |
+
+The flat field table above describes the corresponding engine switches and their
+constraints. Every earlier optimization is mapped to a component. `schema_version`
+is currently `1`. TOML omits optional fields to keep defaults; writer omission
+inherits the packing backend, and padding-batch omission retains existing grouping.
+
+Built-in profiles are `ram`, `disk`, `observation-cache`, `cached-rays`,
+`cuda-cached-rays` and `reuse-da3`. Experimental combinations remain opt-in;
+profiles do not imply that all combinations improve performance or pass every
+numerical gate. Native profiles require a separately built binary, configured by
+`[runtime] native_build = "outputs/native/BUILD"` or `--native-build PATH`.
+Explicit CLI memory budgets, offload, scratch, native build and corrector batch
+may override a profile; the effective values are recorded in metrics and stores.
+Model/checkpoint, input and output arguments remain separate from engine selection.
+`--config` retains the existing evaluation YAML meaning; component TOML uses
+`--inference-config`.
+
+## Reproducible experiment matrices
+
+The experiment runner accepts `options.inference_profile`,
+`options.inference_config` or an inline grouped `options.configuration`. It records
+resolved component values and file fingerprints in each trial. Changed profile
+contents are rejected by `--resume`. The existing diagnostic `options.profile`
+boolean retains its profiling meaning. Legacy `options.optimizations` remains
+available for historical experiment specs.
+
+Use a JSON grid with dotted component fields:
+
+```json
+{"observations.cache_mb": [0, 128], "storage.hash_writes": [true, false]}
+```
 
 ```bash
 uv run python scripts/optimization_matrix.py \
-  --source outputs/experiments/native-composable-source \
-  --grid configs/optimizations/example-grid.json \
-  --out outputs/combination-matrix.json \
-  --output-root outputs/experiments/combination-matrix
+  --source FROZEN_SOURCE --profile ram \
+  --grid configs/inference/example-grid.json --mode one-at-a-time \
+  --out outputs/profile-matrix.json --output-root outputs/experiments/profile-matrix
 uv run python scripts/run_optimization_experiments.py \
-  --spec outputs/combination-matrix.json --experiment matrix
+  --spec outputs/profile-matrix.json --experiment matrix
 ```
 
-The grid's keys are optimization settings and its lists are values to combine.
-The example expands to eight variants and five repeats each; inspect the generated
-spec before running it. Supply `--native-build` when the selected grid needs it.
-Use `--mode one-at-a-time` to generate the control and one changed setting per
-variant; the default `cartesian` mode generates combinations. Freeze the current
-source with `freeze_benchmark_baseline.py` before generating a new matrix so its
-configuration schema matches the engine being tested.
-
-Choose the task to match the component: `correction` reuses prepared geometry and
-does not measure tracker/DA3 switches; `pipeline` runs full single-clip inference;
-`da3-configured` isolates geometry and accepts `--offload` and multiple `--clips`.
-Use multiple clips to test reuse. Set `padding_batch=8` when varying execution batch
-size while keeping the reference padding groups fixed. Trials report their scope.
+`one-at-a-time` includes the control and each independent change; `cartesian`
+generates combinations. Inspect the generated spec before running it. Freeze the
+source before generating a matrix, and keep fresh output roots. `correction`
+reuses prepared geometry and cannot measure provider switches; `pipeline` runs a
+full clip; `da3-configured` isolates geometry and supports multiple `--clips` to
+measure reuse. Profiles should use RAM/disk offload for provider tasks. Set
+`correction.padding_batch = 8` when varying execution batch size while retaining
+reference padding groups. CLI generation still supports legacy flat JSON grids.
 
 ## Dependency injection
 
@@ -128,17 +165,18 @@ configured backend. Each supplied override requires a stable fingerprint identif
 its implementation and relevant settings. There is no module-wide registry mutation.
 
 ```python
-from relift.optimization import InferenceComponents, InferenceSession, OptimizationConfig
+from relift.configuration import load_configuration
+from relift.optimization import InferenceComponents, InferenceSession
 
 components = InferenceComponents(
     gather_factory=my_gather_factory,
     tracker_factory=my_tracker_factory,
     fingerprints=(("gather_factory", "gather-v1"), ("tracker_factory", "tracker-v2")),
 )
-settings = OptimizationConfig(hash_writes=True, depth_cache_mb=0)
-with InferenceSession(settings, components) as session:
+selection = load_configuration(profile="ram")
+with InferenceSession(selection, components) as session:
     # Pass session=session to scripts.demo_video.main(argv, session=session).
-    # Direct correction accepts optimizations=settings, components=components.
+    # Direct correction accepts optimizations=selection.config.optimizations(), components=components.
     pass
 ```
 
@@ -159,7 +197,7 @@ for numerical comparisons.
 ```bash
 uv run python scripts/run_inference_session.py \
   cache/demo_inputs/swing-tire.mp4 cache/demo_inputs/swing.mp4 \
-  --out outputs/session-example --opt reuse_da3=true
+  --out outputs/session-example --profile reuse-da3
 ```
 
 The session owns the reusable DA3 provider, parks it on CPU between stages/clips and

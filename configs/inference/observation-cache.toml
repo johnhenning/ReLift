@@ -1,0 +1,3 @@
+extends = "ram"
+[observations]
+cache_mb = 128

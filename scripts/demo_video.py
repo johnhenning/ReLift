@@ -27,6 +27,7 @@ outside the published evaluation setting (``--num_frames 0`` takes the whole cli
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import sys
 import time
@@ -289,7 +290,7 @@ def main(argv: Any = None, session: Any = None) -> None:
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    ap.add_argument("video", help="a video file or a directory of image frames")
+    ap.add_argument("video", nargs="?", help="a video file or a directory of image frames")
     ap.add_argument("--out", default=None, help="default <outputs_root>/demo/<video name>")
     ap.add_argument(
         "--num_frames", type=int, default=84, help="frames taken from the start (0 = all)"
@@ -322,12 +323,10 @@ def main(argv: Any = None, session: Any = None) -> None:
     )
     ap.add_argument("--no_video", action="store_true")
     ap.add_argument("--device", default="cuda")
-    ap.add_argument(
-        "--offload", choices=["none", "streamed", "ram", "disk", "auto"], default="none"
-    )
-    ap.add_argument("--ram-budget-gb", type=float, default=18)
-    ap.add_argument("--vram-budget-gb", type=float, default=20)
-    ap.add_argument("--scratch-budget-gb", type=float, default=64)
+    ap.add_argument("--offload", choices=["none", "streamed", "ram", "disk", "auto"], default=None)
+    ap.add_argument("--ram-budget-gb", type=float)
+    ap.add_argument("--vram-budget-gb", type=float)
+    ap.add_argument("--scratch-budget-gb", type=float)
     ap.add_argument("--scratch-dir", default=None)
     ap.add_argument(
         "--export-npz",
@@ -348,19 +347,98 @@ def main(argv: Any = None, session: Any = None) -> None:
         default=[],
         help="override one optimization: key=JSON_VALUE (repeatable)",
     )
+    selection_group = ap.add_mutually_exclusive_group()
+    selection_group.add_argument("--profile", help="named TOML inference profile")
+    selection_group.add_argument(
+        "--inference-config", type=Path, help="component TOML configuration"
+    )
+    ap.add_argument(
+        "--print-config", action="store_true", help="print resolved settings without inference"
+    )
     ap.add_argument("--native-build", help="explicit verified optional native build directory")
     a = ap.parse_args(argv)
+    from dataclasses import replace
+
+    from relift.configuration import (
+        ConfigurationSelection,
+        InferenceConfig,
+        Memory,
+        load_configuration,
+    )
     from relift.optimization import InferenceSession, OptimizationConfig
 
-    settings = OptimizationConfig.read(a.optimizations, a.opt)
+    structured = a.profile is not None or a.inference_config is not None
+    if structured and (a.optimizations or a.opt):
+        ap.error("Choose a component profile/config or legacy optimization flags")
+    selection = (
+        load_configuration(profile=a.profile, path=a.inference_config) if structured else None
+    )
+    if selection is None and session is not None:
+        selection = session.configuration
+    settings = (
+        selection.config.optimizations()
+        if selection
+        else OptimizationConfig.read(a.optimizations, a.opt)
+    )
+    if session is not None and not structured and not (a.optimizations or a.opt):
+        settings = session.config
+    base_memory = selection.config.memory if selection else Memory()
+    memory = replace(
+        base_memory,
+        **{
+            key: value
+            for key, value in dict(
+                offload=a.offload,
+                ram_gb=a.ram_budget_gb,
+                vram_gb=a.vram_budget_gb,
+                scratch_gb=a.scratch_budget_gb,
+                scratch_dir=a.scratch_dir,
+            ).items()
+            if value is not None
+        },
+    )
+    a.offload, a.ram_budget_gb, a.vram_budget_gb, a.scratch_budget_gb, a.scratch_dir = (
+        memory.offload,
+        memory.ram_gb,
+        memory.vram_gb,
+        memory.scratch_gb,
+        memory.scratch_dir,
+    )
+    configured = InferenceConfig.from_optimizations(
+        settings,
+        memory,
+        a.native_build or (selection.config.runtime.native_build if selection else None),
+    )
+    if a.corrector_batch is not None:
+        configured = replace(
+            configured, correction=replace(configured.correction, batch=a.corrector_batch)
+        )
+    elif (
+        a.print_config
+        and not (structured or selection or a.optimizations or a.opt)
+        and settings.corrector_batch == 8
+    ):
+        corrector = yaml.safe_load(Path(a.config).read_text())["corrector"]
+        configured = replace(
+            configured, correction=replace(configured.correction, batch=corrector["batch"])
+        )
+    resolved_selection = ConfigurationSelection(configured, selection.sources if selection else ())
+    if a.print_config:
+        print(json.dumps(resolved_selection.as_dict(), indent=2))
+        return
+    if a.video is None:
+        ap.error("video is required unless --print-config is used")
     if session is None:
-        with InferenceSession(settings, native_build=a.native_build) as owned:
+        with InferenceSession(
+            resolved_selection if structured or selection else configured.optimizations(),
+            native_build=configured.runtime.native_build,
+        ) as owned:
             # Parse once more inside the owned lifecycle; injected sessions follow
             # the exact same path and are never silently replaced.
             return main(argv, session=owned)
-    if (a.optimizations or a.opt) and session.config != settings:
+    if (structured or a.optimizations or a.opt) and session.config != configured.optimizations():
         raise ValueError("Session settings differ from CLI optimization settings")
-    settings = session.config
+    settings = configured.optimizations()
     if a.offload != "auto":
         settings.validate_mode(a.offload)
     if not all(
@@ -382,11 +460,15 @@ def main(argv: Any = None, session: Any = None) -> None:
         pc["da3"]["process_res"] = a.process_res
     if a.corrector_batch is not None:
         cfg["corrector"]["batch"] = a.corrector_batch
-    elif a.optimizations or a.opt or session.config.corrector_batch != 8:
+    elif structured or selection or a.optimizations or a.opt or settings.corrector_batch != 8:
         cfg["corrector"]["batch"] = settings.corrector_batch
-    from dataclasses import replace
-
     settings = replace(settings, corrector_batch=cfg["corrector"]["batch"])
+    configured = replace(
+        configured, correction=replace(configured.correction, batch=settings.corrector_batch)
+    )
+    resolved_configuration = ConfigurationSelection(
+        configured, resolved_selection.sources
+    ).as_dict()
     wc = yaml.safe_load(open(REPO / "configs" / "weights.yaml"))
     ck_root = a.checkpoints_root or str(P["checkpoints_root"])
     wpath = {n: weight_path(wc, n, ck_root) for n in wc}
@@ -404,6 +486,7 @@ def main(argv: Any = None, session: Any = None) -> None:
             vram_budget_gb=a.vram_budget_gb,
             scratch_budget_gb=a.scratch_budget_gb,
             optimizations=settings.as_dict(),
+            configuration=resolved_configuration,
             components=session.components.describe(),
         ),
     )
@@ -471,6 +554,7 @@ def main(argv: Any = None, session: Any = None) -> None:
 
         metadata = dict(
             geometry=a.geometry,
+            configuration=resolved_configuration,
             checkpoint_step=info["step"],
             checkpoint_sha256=file_sha256(ckpt),
             source_fps=source_fps,

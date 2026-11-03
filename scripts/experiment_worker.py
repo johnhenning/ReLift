@@ -175,10 +175,21 @@ def main() -> None:
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     phases = Phases()
+    configuration = None
+    if any(key in options for key in ("inference_profile", "inference_config", "configuration")):
+        from relift.configuration import experiment_configuration
+
+        configuration = experiment_configuration(options, args.root)
+        for key in ("inference_profile", "inference_config", "configuration"):
+            options.pop(key, None)
+    if configuration is not None and args.task not in ("pipeline", "correction", "da3-configured"):
+        raise ValueError(
+            "Grouped configuration applies to correction, pipeline or da3-configured tasks"
+        )
     if args.task == "pipeline":
         from pipeline_experiment import run
 
-        result = run(args, options)
+        result = run(args, options, configuration=configuration)
         save(output / "result.json", result)
         print(json.dumps(dict(shape=result["shape"], finite=result["finite"])), flush=True)
         return
@@ -192,7 +203,7 @@ def main() -> None:
     if args.task == "da3-configured":
         from configured_depth_experiment import run
 
-        result = run(args, options, phases)
+        result = run(args, options, phases, configuration=configuration)
         save(output / "result.json", result)
         print(json.dumps(result["counters"]), flush=True)
         return
@@ -257,14 +268,22 @@ def main() -> None:
         diagnostic.__enter__()
     try:
         with phases.stage("correction"), lookahead if lookahead else nullcontext():
+            if configuration is not None:
+                options["optimizations"] = configuration.config.optimizations().as_dict()
+                options.setdefault("ram_budget_gb", configuration.config.memory.ram_gb)
+                options.setdefault("vram_budget_gb", configuration.config.memory.vram_gb)
+                options.setdefault("scratch_budget_gb", configuration.config.memory.scratch_gb)
             optimization_values = options.pop("optimizations", None)
             if optimization_values is not None:
                 from relift.optimization import InferenceComponents, OptimizationConfig
 
                 options["optimizations"] = OptimizationConfig.from_dict(optimization_values)
                 components = InferenceComponents()
-                if os.environ.get("RELIFT_NATIVE_BUILD"):
-                    components = components.with_native_build(os.environ["RELIFT_NATIVE_BUILD"])
+                native_build = os.environ.get("RELIFT_NATIVE_BUILD") or (
+                    configuration.config.runtime.native_build if configuration else None
+                )
+                if native_build:
+                    components = components.with_native_build(native_build)
                 options["components"] = components
             store = stream_correct(
                 output / "window",
@@ -273,6 +292,7 @@ def main() -> None:
                 dict(
                     checkpoint_sha256=file_sha256(args.root / "checkpoints/released_checkpoint.pt"),
                     checkpoint_step=info["step"],
+                    **({"configuration": configuration.as_dict()} if configuration else {}),
                 ),
                 group=1024,
                 batch=options.pop("batch", 8),
@@ -297,6 +317,7 @@ def main() -> None:
             phases=phases.results,
             shape=store.shape,
             execution=execution,
+            configuration=configuration.as_dict() if configuration else None,
             observation_cache=json.loads((output / "observation-cache.json").read_text())
             if (output / "observation-cache.json").exists()
             else None,

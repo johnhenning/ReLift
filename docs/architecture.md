@@ -182,6 +182,8 @@ The [offload design and benchmark plan](memory-offload-design.md) defines the me
 | Concern | Source |
 |---|---|
 | Single-video orchestration and serialization | [scripts/demo_video.py](../scripts/demo_video.py) |
+| Component profiles and configuration inheritance | [relift/configuration.py](../relift/configuration.py) |
+| Session ownership and dependency injection | [relift/optimization.py](../relift/optimization.py) |
 | Geometry and tracker adapters | [relift/providers](../relift/providers) |
 | CUDA ray construction and camera conversion | [relift/rays.py](../relift/rays.py) |
 | Interpolation, normalization and feature construction | [relift/features.py](../relift/features.py) |

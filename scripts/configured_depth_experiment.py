@@ -4,24 +4,38 @@ from __future__ import annotations
 
 import gc
 import os
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from relift.configuration import ConfigurationSelection
 
 import numpy as np
 import torch
 from provider_reuse_experiment import frames, reset_seed
 
 
-def run(args: Any, options: dict[str, Any], phases: Any) -> Any:
+def run(
+    args: Any,
+    options: dict[str, Any],
+    phases: Any,
+    configuration: ConfigurationSelection | None = None,
+) -> Any:
     from relift.optimization import InferenceSession, OptimizationConfig
     from relift.storage import file_sha256
 
-    settings = OptimizationConfig.from_dict(options.pop("optimizations", {}))
+    settings = (
+        configuration.config.optimizations()
+        if configuration
+        else OptimizationConfig.from_dict(options.pop("optimizations", {}))
+    )
     clips = options.pop("clips")
-    mode = options.pop("offload", "ram")
+    mode = options.pop("offload", configuration.config.memory.offload if configuration else "ram")
     if options or mode not in ("ram", "disk") or not clips:
         raise ValueError("Expected clips, RAM/disk mode and optimization settings")
     artifacts, shapes, inputs, counters = {}, {}, {}, []
-    with InferenceSession(settings, native_build=os.environ.get("RELIFT_NATIVE_BUILD")) as session:
+    with InferenceSession(
+        configuration or settings, native_build=os.environ.get("RELIFT_NATIVE_BUILD")
+    ) as session:
         for index, filename in enumerate(clips):
             path = (args.root / filename).resolve()
             inputs[filename] = file_sha256(path)
@@ -34,8 +48,10 @@ def run(args: Any, options: dict[str, Any], phases: Any) -> Any:
                     "cuda",
                     offload=mode,
                     scratch_dir=args.output / "scratch",
-                    ram_budget_gb=18,
-                    scratch_budget_gb=64,
+                    ram_budget_gb=configuration.config.memory.ram_gb if configuration else 18,
+                    scratch_budget_gb=configuration.config.memory.scratch_gb
+                    if configuration
+                    else 64,
                 )
             try:
                 reset_seed()
@@ -70,6 +86,7 @@ def run(args: Any, options: dict[str, Any], phases: Any) -> Any:
         shapes=shapes,
         input_sha256=inputs,
         optimizations=settings.as_dict(),
+        configuration=configuration.as_dict() if configuration else None,
         counters=counters,
         scope="Full-clip DA3 decode, construction, archive preparation, forward, serialization and cleanup; excludes tracking/correction.",
     )

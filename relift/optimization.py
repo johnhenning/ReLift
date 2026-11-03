@@ -8,7 +8,10 @@ from collections.abc import Callable
 from dataclasses import asdict, dataclass, fields, replace
 from functools import partial
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from .configuration import ConfigurationSelection, InferenceConfig
 
 import torch
 
@@ -179,11 +182,21 @@ class InferenceSession:
 
     def __init__(
         self,
-        config: OptimizationConfig | None = None,
+        config: OptimizationConfig | InferenceConfig | ConfigurationSelection | None = None,
         components: InferenceComponents | None = None,
         native_build: str | Path | None = None,
     ) -> None:
-        self.config = config or OptimizationConfig()
+        from .configuration import ConfigurationSelection, InferenceConfig
+
+        self.configuration: ConfigurationSelection | None = None
+        if isinstance(config, InferenceConfig):
+            config = ConfigurationSelection(config)
+        if isinstance(config, ConfigurationSelection):
+            self.configuration = config
+            native_build = native_build or config.config.runtime.native_build
+            self.config = config.config.optimizations()
+        else:
+            self.config = config or OptimizationConfig()
         self.components = components or InferenceComponents()
         if native_build:
             self.components = self.components.with_native_build(native_build)

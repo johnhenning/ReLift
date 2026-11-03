@@ -1,0 +1,18 @@
+{
+  "scene": "swing-tire", "input": "cache/demo_inputs/swing-tire.mp4",
+  "prepared_window": "outputs/benchmarks/offload-primary/swing-tire/ram/trial-01/output/window",
+  "process_res": 504, "output_root": "outputs/experiments/configuration-validation",
+  "experiments": {
+    "defaults": {"task": "correction", "repeats": 1, "variants": [
+      {"name": "control", "source": "outputs/experiments/quality-source", "options": {"optimizations": {}}},
+      {"name": "profile", "source": "outputs/experiments/configuration-source", "options": {"inference_profile": "ram"}}
+    ]},
+    "cache": {"task": "correction", "repeats": 1, "variants": [
+      {"name": "control", "source": "outputs/experiments/quality-source", "options": {"optimizations": {"observation_cache_mb": 128}}},
+      {"name": "profile", "source": "outputs/experiments/configuration-source", "options": {"inference_profile": "observation-cache"}}
+    ]},
+    "pipeline": {"task": "pipeline", "repeats": 1, "variants": [
+      {"name": "profile", "source": "outputs/experiments/configuration-source", "options": {"video": "cache/demo_inputs/swing-tire.mp4", "inference_profile": "observation-cache"}}
+    ]}
+  }
+}

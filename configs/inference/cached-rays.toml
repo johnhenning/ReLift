@@ -1,0 +1,3 @@
+extends = "observation-cache"
+[observations]
+depth_cache_mb = 256
