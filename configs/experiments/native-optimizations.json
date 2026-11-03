@@ -152,6 +152,38 @@
           }
         }
       ]
+    },
+    "cuda-rays": {
+      "task": "correction",
+      "repeats": 5,
+      "variants": [
+        {
+          "name": "control",
+          "source": "outputs/experiments/native-rays-source",
+          "options": {
+            "optimizations": {}
+          }
+        },
+        {
+          "name": "python",
+          "source": "outputs/experiments/native-rays-source",
+          "options": {
+            "optimizations": {
+              "rays": "python"
+            }
+          }
+        },
+        {
+          "name": "cuda",
+          "source": "outputs/experiments/native-rays-source",
+          "options": {
+            "optimizations": {
+              "rays": "cuda"
+            },
+            "native_build": "outputs/native/rays"
+          }
+        }
+      ]
     }
   }
 }

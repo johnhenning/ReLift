@@ -19,7 +19,7 @@
     "options": {
       "optimizations": {}
     },
-    "source_fingerprint": "a7e134994e7ccc6c9fbce9ee8f20bc10d0462e48d8ecdce913e6387274626341",
+    "source_fingerprint": "f7307c070e03636537821f2423a7b92e2c46fb624fe279a297fbc5860a9284c7",
     "environment": {
       "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
       "executable": ".venv/bin/python",
@@ -70,7 +70,7 @@
       },
       "native_build": "outputs/native/gather"
     },
-    "source_fingerprint": "5081da58dece27f98f4baafa15af644f266eb4d25c9374ead5b97d3c95da0988",
+    "source_fingerprint": "c3053c75393209c3f11aa06e5ee18e4b3e9c5d753df530c47875511da27e97d9",
     "environment": {
       "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
       "executable": ".venv/bin/python",
@@ -120,7 +120,7 @@
         "gather": "python"
       }
     },
-    "source_fingerprint": "6e73787eb411cd0ac7dad1bed0833d5ce049bf884e1ea525e04c433c51ad4dae",
+    "source_fingerprint": "45262f561b38fe5c40637783bddfad5efe7c45195b8e66bbaac1d7b65d9f9c22",
     "environment": {
       "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
       "executable": ".venv/bin/python",
@@ -165,7 +165,7 @@
       "video": "cache/demo_inputs/swing-tire.mp4",
       "optimizations": {}
     },
-    "source_fingerprint": "acbc09879c434492f8402b2de692ecd2e5f37ab01484667d5c487150480c1b16",
+    "source_fingerprint": "6920c007f60d81ee735de3700c7973e03c9b5a3ce84fa740ab603f109e1781f3",
     "environment": {
       "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
       "executable": ".venv/bin/python",
@@ -212,7 +212,7 @@
     "options": {
       "video": "cache/demo_inputs/swing-tire.mp4"
     },
-    "source_fingerprint": "c5185bff189a8f28011827b11ff723b3baf3a529a9099ea6bfae71f63c1084de",
+    "source_fingerprint": "696e6cf2fde42a68ce656bb889a02f938601dbc459f41f92199efaba723a077f",
     "environment": {
       "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
       "executable": ".venv/bin/python",
@@ -261,7 +261,7 @@
       "outputs/experiments/native-optimizations/cpu-gather/control/trial-05/trial.json"
     ],
     "options": {},
-    "source_fingerprint": "1f6ca4d1aaf04bb232522cde343417c205332d29c517a196d14892d9a1fc0c8f",
+    "source_fingerprint": "cf33797279cfd3d09b62667b98d7fe42908f8ac3707e385998dbcdca0b200c21",
     "environment": {
       "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
       "executable": ".venv/bin/python",
@@ -310,7 +310,7 @@
       "gather_backend": "cpp",
       "native_build": "outputs/native/gather"
     },
-    "source_fingerprint": "dd4d63f233d10262dad5a031993096b3a9408eb6cd9d639e2356b3d6cb33f798",
+    "source_fingerprint": "e1a59a349f96fd38e18f65aa30462299080570c73d2780310281e6f3e99c71d5",
     "environment": {
       "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
       "executable": ".venv/bin/python",
@@ -358,7 +358,7 @@
     "options": {
       "gather_backend": "python"
     },
-    "source_fingerprint": "8ef8e6775140b37ae0fd4ec0d217ce8a836342be169d140fe4a4e6bf9e6ba53a",
+    "source_fingerprint": "0a8da699cd2cbee0baa80f60452ac56ef84a7891f5fb926e7814162f7e679e51",
     "environment": {
       "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
       "executable": ".venv/bin/python",
@@ -387,6 +387,155 @@
     "sampled_output_peak_allocated_bytes": 570441728
   },
   {
+    "experiment": "cuda-rays",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/cuda-rays/control/trial-01/trial.json",
+      "outputs/experiments/native-optimizations/cuda-rays/control/trial-02/trial.json",
+      "outputs/experiments/native-optimizations/cuda-rays/control/trial-03/trial.json",
+      "outputs/experiments/native-optimizations/cuda-rays/control/trial-04/trial.json",
+      "outputs/experiments/native-optimizations/cuda-rays/control/trial-05/trial.json"
+    ],
+    "options": {
+      "optimizations": {}
+    },
+    "source_fingerprint": "c439936081a2672c1c19a0d5a62b5240de105ae4c86b3cee3e94994b3a33384a",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 17.410703625006136,
+    "wall_min": 16.610930826995173,
+    "wall_max": 19.16782296600286,
+    "sampled_peak_process_tree_rss_bytes": 1650581504,
+    "sampled_peak_process_tree_pss_bytes": 1640163328,
+    "sampled_peak_gpu_device_used_bytes": 4167958528,
+    "process_tree_read_bytes": 28266496,
+    "process_tree_write_bytes": 416604160,
+    "phase_medians": {
+      "model_load": 0.16336043798946775,
+      "correction": 15.345538016990758
+    },
+    "process_rss_highwater_bytes": 1650651136,
+    "sampled_output_peak_allocated_bytes": 570445824
+  },
+  {
+    "experiment": "cuda-rays",
+    "variant": "cuda",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-01/trial.json",
+      "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-02/trial.json",
+      "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-03/trial.json",
+      "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-04/trial.json",
+      "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-05/trial.json"
+    ],
+    "options": {
+      "optimizations": {
+        "rays": "cuda"
+      },
+      "native_build": "outputs/native/rays"
+    },
+    "source_fingerprint": "6857734c7e73ff54999354613a303ea651d6fc430d3e54ee8230abcc6dc80cd4",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "fail",
+    "wall_median": 19.1485428790038,
+    "wall_min": 17.64805806700315,
+    "wall_max": 20.896143097997992,
+    "sampled_peak_process_tree_rss_bytes": 1699536896,
+    "sampled_peak_process_tree_pss_bytes": 1687975936,
+    "sampled_peak_gpu_device_used_bytes": 4167958528,
+    "process_tree_read_bytes": 761856,
+    "process_tree_write_bytes": 416604160,
+    "phase_medians": {
+      "model_load": 0.1649374539993005,
+      "correction": 17.114362874999642
+    },
+    "process_rss_highwater_bytes": 1699536896,
+    "sampled_output_peak_allocated_bytes": 570445824
+  },
+  {
+    "experiment": "cuda-rays",
+    "variant": "python",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/cuda-rays/python/trial-01/trial.json",
+      "outputs/experiments/native-optimizations/cuda-rays/python/trial-02/trial.json",
+      "outputs/experiments/native-optimizations/cuda-rays/python/trial-03/trial.json",
+      "outputs/experiments/native-optimizations/cuda-rays/python/trial-04/trial.json",
+      "outputs/experiments/native-optimizations/cuda-rays/python/trial-05/trial.json"
+    ],
+    "options": {
+      "optimizations": {
+        "rays": "python"
+      }
+    },
+    "source_fingerprint": "12275c20d546b9f0a09331b04f55be161384622ca5e9e6696244c87a5e41b258",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 16.664306432998274,
+    "wall_min": 16.538968006992945,
+    "wall_max": 18.514575644003344,
+    "sampled_peak_process_tree_rss_bytes": 1643085824,
+    "sampled_peak_process_tree_pss_bytes": 1632900096,
+    "sampled_peak_gpu_device_used_bytes": 4188930048,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 416604160,
+    "phase_medians": {
+      "model_load": 0.1634740849985974,
+      "correction": 14.771967608990963
+    },
+    "process_rss_highwater_bytes": 1643085824,
+    "sampled_output_peak_allocated_bytes": 570445824
+  },
+  {
     "experiment": "shard-writer",
     "variant": "control",
     "n": 5,
@@ -406,7 +555,7 @@
     "options": {
       "optimizations": {}
     },
-    "source_fingerprint": "e90e8448aae748fc3c1502327008a76fedeb54ec72bc96c26861fc3dcf3cb1dd",
+    "source_fingerprint": "0f7f5e8b70720926049274c65e1b5426823978d24c91ae2bdb29f200d4c831ec",
     "environment": {
       "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
       "executable": ".venv/bin/python",
@@ -457,7 +606,7 @@
       },
       "native_build": "outputs/native/shards"
     },
-    "source_fingerprint": "53e302ba9bc36c98f9d9a1322fc33cdbe31bab15f07375d9d9f7d4bd25da0958",
+    "source_fingerprint": "0541f9117975993c33596d4d2c019a2ad6d332c05eb93bb912ce70499aa104c2",
     "environment": {
       "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
       "executable": ".venv/bin/python",
@@ -507,7 +656,7 @@
         "shards": "python"
       }
     },
-    "source_fingerprint": "985124e99401b59381fc6238e429113d7a93bc4b18fd222f294c3719c0191916",
+    "source_fingerprint": "6eec3f20d63ea5a648fb79f06be95654bbec64368fb6912bf7b5387fdcc5a041",
     "environment": {
       "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
       "executable": ".venv/bin/python",
@@ -553,7 +702,7 @@
       "outputs/experiments/native-optimizations/updated-baseline-correction/control/trial-05/trial.json"
     ],
     "options": {},
-    "source_fingerprint": "2b18b2a11ab58750fff569ba7916b1570da53602b07261401c3e738de86f5356",
+    "source_fingerprint": "152e039bfe7f73eefe976e8b5854542fd2067ab8fc2da4e61c1a7014e059cc7b",
     "environment": {
       "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
       "executable": ".venv/bin/python",
@@ -601,7 +750,7 @@
     "options": {
       "video": "cache/demo_inputs/swing-tire.mp4"
     },
-    "source_fingerprint": "b4dc38ba6fcecdfc7f553804d82ec2d2161584c40263493b7c49eee7dc77c90d",
+    "source_fingerprint": "233e3cfc3f2561f2d6ebf7f7e38a2141e9a2a3a4cb97abc1b666b397273527a1",
     "environment": {
       "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
       "executable": ".venv/bin/python",
@@ -648,7 +797,7 @@
     "options": {
       "profile": true
     },
-    "source_fingerprint": "21c7f0a66995e2378f20388f2330d94a634045f46383a3c6dc1ea322e2ba1038",
+    "source_fingerprint": "79055503f598954c0d19ccacdb70b143e1e446b593f4f1ed1ba022ad65db2e10",
     "environment": {
       "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
       "executable": ".venv/bin/python",

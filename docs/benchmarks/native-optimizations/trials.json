@@ -5430,6 +5430,2731 @@
     }
   },
   {
+    "experiment": "cuda-rays",
+    "mode": "control",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {}
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 1,
+    "status": "complete",
+    "started_at": "2026-11-03T03:24:24.279323+00:00",
+    "wall_seconds": 16.610930826995173,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/control/trial-01/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/control/trial-01/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/control/trial-01/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1640148992,
+      "sampled_peak_process_tree_pss_bytes": 1630024704,
+      "sampled_peak_process_tree_anonymous_bytes": 1053556736,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 0,
+      "process_tree_write_bytes": 416731136,
+      "process_tree_rchar": 1091133474,
+      "process_tree_wchar": 416410384,
+      "process_tree_minor_faults": 406015,
+      "process_tree_major_faults": 0,
+      "process_tree_cpu_seconds": 12.78,
+      "sample_count": 119,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180481,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180481,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 53248,
+      "pswpout_bytes": 4595712
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.1659789640107192,
+          "process_rss_highwater_bytes": 761229312,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.611457049992168,
+          "process_rss_highwater_bytes": 1640148992,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:24:40.457004+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {}
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.1659789640107192,
+          "process_rss_highwater_bytes": 761229312,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.611457049992168,
+          "process_rss_highwater_bytes": 1640148992,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "cuda-rays",
+    "mode": "control",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {}
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 2,
+    "status": "complete",
+    "started_at": "2026-11-03T03:25:49.975782+00:00",
+    "wall_seconds": 16.88279243199213,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/control/trial-02/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/control/trial-02/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/control/trial-02/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1648979968,
+      "sampled_peak_process_tree_pss_bytes": 1638577152,
+      "sampled_peak_process_tree_anonymous_bytes": 1062416384,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 110116864,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091173403,
+      "process_tree_wchar": 416307322,
+      "process_tree_minor_faults": 391350,
+      "process_tree_major_faults": 6,
+      "process_tree_cpu_seconds": 12.48,
+      "sample_count": 120,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180482,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180482,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 45056,
+      "pswpout_bytes": 23027712
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16298983099113684,
+          "process_rss_highwater_bytes": 760446976,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.925207742999191,
+          "process_rss_highwater_bytes": 1649000448,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:26:06.372621+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {}
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16298983099113684,
+          "process_rss_highwater_bytes": 760446976,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.925207742999191,
+          "process_rss_highwater_bytes": 1649000448,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "cuda-rays",
+    "mode": "control",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {}
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 3,
+    "status": "complete",
+    "started_at": "2026-11-03T03:26:27.889352+00:00",
+    "wall_seconds": 17.410703625006136,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/control/trial-03/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/control/trial-03/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/control/trial-03/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1663004672,
+      "sampled_peak_process_tree_pss_bytes": 1652818944,
+      "sampled_peak_process_tree_anonymous_bytes": 1075974144,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 28266496,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091173601,
+      "process_tree_wchar": 416307322,
+      "process_tree_minor_faults": 393345,
+      "process_tree_major_faults": 116,
+      "process_tree_cpu_seconds": 12.58,
+      "sample_count": 123,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180482,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180482,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 31797248,
+      "pswpout_bytes": 8544256
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16291125401039608,
+          "process_rss_highwater_bytes": 760143872,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 15.345538016990758,
+          "process_rss_highwater_bytes": 1663004672,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:26:44.817103+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {}
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16291125401039608,
+          "process_rss_highwater_bytes": 760143872,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 15.345538016990758,
+          "process_rss_highwater_bytes": 1663004672,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "cuda-rays",
+    "mode": "control",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {}
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 4,
+    "status": "complete",
+    "started_at": "2026-11-03T03:27:02.107911+00:00",
+    "wall_seconds": 19.16782296600286,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/control/trial-04/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/control/trial-04/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/control/trial-04/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1663631360,
+      "sampled_peak_process_tree_pss_bytes": 1653582848,
+      "sampled_peak_process_tree_anonymous_bytes": 1076736000,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 1835008,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091173696,
+      "process_tree_wchar": 416307320,
+      "process_tree_minor_faults": 393098,
+      "process_tree_major_faults": 8,
+      "process_tree_cpu_seconds": 12.44,
+      "sample_count": 133,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180481,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180481,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 90112,
+      "pswpout_bytes": 0
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.1654537430003984,
+          "process_rss_highwater_bytes": 759791616,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 17.231611126000644,
+          "process_rss_highwater_bytes": 1663631360,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:27:20.768074+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {}
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.1654537430003984,
+          "process_rss_highwater_bytes": 759791616,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 17.231611126000644,
+          "process_rss_highwater_bytes": 1663631360,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "cuda-rays",
+    "mode": "control",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {}
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 5,
+    "status": "complete",
+    "started_at": "2026-11-03T03:28:36.068869+00:00",
+    "wall_seconds": 18.472476258990355,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/control/trial-05/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/control/trial-05/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/control/trial-05/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1650581504,
+      "sampled_peak_process_tree_pss_bytes": 1640163328,
+      "sampled_peak_process_tree_anonymous_bytes": 1064435712,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 126918656,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091173354,
+      "process_tree_wchar": 416307320,
+      "process_tree_minor_faults": 391185,
+      "process_tree_major_faults": 425,
+      "process_tree_cpu_seconds": 12.76,
+      "sample_count": 129,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180481,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180481,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 774144,
+      "pswpout_bytes": 82915328
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16336043798946775,
+          "process_rss_highwater_bytes": 759853056,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.54057332299999,
+          "process_rss_highwater_bytes": 1650651136,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:28:54.033580+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {}
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16336043798946775,
+          "process_rss_highwater_bytes": 759853056,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.54057332299999,
+          "process_rss_highwater_bytes": 1650651136,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "cuda-rays",
+    "mode": "cuda",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {
+        "rays": "cuda"
+      },
+      "native_build": "outputs/native/rays"
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 1,
+    "status": "complete",
+    "started_at": "2026-11-03T03:24:57.580054+00:00",
+    "wall_seconds": 17.899866068008123,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-01/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"rays\": \"cuda\"}, \"native_build\": \"outputs/native/rays\"}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-01/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-01/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": {
+      "command": [
+        "g++-13",
+        "-O3",
+        "-std=c++17",
+        "-shared",
+        "-fPIC",
+        "-fno-fast-math",
+        "-I/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/include/python3.13",
+        "-I.venv/lib/python3.13/site-packages/torch/include",
+        "native/cpu.cpp",
+        "-o",
+        "outputs/native/rays/_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+        "-lcrypto",
+        "-DRELIFT_WITH_CUDA",
+        "outputs/native/rays/rays.o",
+        "-lcudart"
+      ],
+      "compiler": "g++-13 (Ubuntu 13.4.0-10ubuntu1) 13.4.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "torch": "2.11.0+cu128",
+      "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+      "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+      "sources": {
+        "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+        "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+      },
+      "binary": "_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+      "binary_sha256": "33c7a71e9afa1c3098bb21cc626d37524c6efd143047bdf58a83f35d7719cf42",
+      "build_seconds": 8.419617308987654,
+      "cuda_command": [
+        "nvcc",
+        "-O3",
+        "-std=c++17",
+        "-ccbin",
+        "g++-13",
+        "-Xcompiler",
+        "-fPIC",
+        "--fmad=false",
+        "--prec-div=true",
+        "--prec-sqrt=true",
+        "-arch=sm_86",
+        "-c",
+        "native/rays.cu",
+        "-o",
+        "outputs/native/rays/rays.o"
+      ],
+      "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2024 NVIDIA Corporation\nBuilt on Thu_Mar_28_02:18:24_PDT_2024\nCuda compilation tools, release 12.4, V12.4.131\nBuild cuda_12.4.r12.4/compiler.34097967_0\n",
+      "arch": "sm_86"
+    },
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1689976832,
+      "sampled_peak_process_tree_pss_bytes": 1678553088,
+      "sampled_peak_process_tree_anonymous_bytes": 1059340288,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 761856,
+      "process_tree_write_bytes": 416608256,
+      "process_tree_rchar": 1116428651,
+      "process_tree_wchar": 416311416,
+      "process_tree_minor_faults": 408920,
+      "process_tree_major_faults": 6,
+      "process_tree_cpu_seconds": 13.1,
+      "sample_count": 129,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180574,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180574,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 4096,
+      "pswpout_bytes": 6467584
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16499048299738206,
+          "process_rss_highwater_bytes": 760983552,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 15.844976375999977,
+          "process_rss_highwater_bytes": 1689976832,
+          "cuda_allocated_peak_bytes": 2072099328,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:25:14.911067+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "rays": "cuda"
+        },
+        "native_build": "outputs/native/rays"
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16499048299738206,
+          "process_rss_highwater_bytes": 760983552,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 15.844976375999977,
+          "process_rss_highwater_bytes": 1689976832,
+          "cuda_allocated_peak_bytes": 2072099328,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "cuda-rays",
+    "mode": "cuda",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {
+        "rays": "cuda"
+      },
+      "native_build": "outputs/native/rays"
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 2,
+    "status": "complete",
+    "started_at": "2026-11-03T03:25:32.276091+00:00",
+    "wall_seconds": 17.64805806700315,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-02/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"rays\": \"cuda\"}, \"native_build\": \"outputs/native/rays\"}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-02/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-02/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": {
+      "command": [
+        "g++-13",
+        "-O3",
+        "-std=c++17",
+        "-shared",
+        "-fPIC",
+        "-fno-fast-math",
+        "-I/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/include/python3.13",
+        "-I.venv/lib/python3.13/site-packages/torch/include",
+        "native/cpu.cpp",
+        "-o",
+        "outputs/native/rays/_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+        "-lcrypto",
+        "-DRELIFT_WITH_CUDA",
+        "outputs/native/rays/rays.o",
+        "-lcudart"
+      ],
+      "compiler": "g++-13 (Ubuntu 13.4.0-10ubuntu1) 13.4.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "torch": "2.11.0+cu128",
+      "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+      "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+      "sources": {
+        "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+        "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+      },
+      "binary": "_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+      "binary_sha256": "33c7a71e9afa1c3098bb21cc626d37524c6efd143047bdf58a83f35d7719cf42",
+      "build_seconds": 8.419617308987654,
+      "cuda_command": [
+        "nvcc",
+        "-O3",
+        "-std=c++17",
+        "-ccbin",
+        "g++-13",
+        "-Xcompiler",
+        "-fPIC",
+        "--fmad=false",
+        "--prec-div=true",
+        "--prec-sqrt=true",
+        "-arch=sm_86",
+        "-c",
+        "native/rays.cu",
+        "-o",
+        "outputs/native/rays/rays.o"
+      ],
+      "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2024 NVIDIA Corporation\nBuilt on Thu_Mar_28_02:18:24_PDT_2024\nCuda compilation tools, release 12.4, V12.4.131\nBuild cuda_12.4.r12.4/compiler.34097967_0\n",
+      "arch": "sm_86"
+    },
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1697415168,
+      "sampled_peak_process_tree_pss_bytes": 1685725184,
+      "sampled_peak_process_tree_anonymous_bytes": 1066684416,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 487424,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1116429869,
+      "process_tree_wchar": 416309160,
+      "process_tree_minor_faults": 392899,
+      "process_tree_major_faults": 5,
+      "process_tree_cpu_seconds": 13.06,
+      "sample_count": 126,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180573,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180573,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 24576,
+      "pswpout_bytes": 0
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.1649374539993005,
+          "process_rss_highwater_bytes": 760422400,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 15.641043288007495,
+          "process_rss_highwater_bytes": 1697415168,
+          "cuda_allocated_peak_bytes": 2072099328,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:25:49.352607+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "rays": "cuda"
+        },
+        "native_build": "outputs/native/rays"
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.1649374539993005,
+          "process_rss_highwater_bytes": 760422400,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 15.641043288007495,
+          "process_rss_highwater_bytes": 1697415168,
+          "cuda_allocated_peak_bytes": 2072099328,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "cuda-rays",
+    "mode": "cuda",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {
+        "rays": "cuda"
+      },
+      "native_build": "outputs/native/rays"
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 3,
+    "status": "complete",
+    "started_at": "2026-11-03T03:26:06.906549+00:00",
+    "wall_seconds": 20.896143097997992,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-03/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"rays\": \"cuda\"}, \"native_build\": \"outputs/native/rays\"}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-03/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-03/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": {
+      "command": [
+        "g++-13",
+        "-O3",
+        "-std=c++17",
+        "-shared",
+        "-fPIC",
+        "-fno-fast-math",
+        "-I/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/include/python3.13",
+        "-I.venv/lib/python3.13/site-packages/torch/include",
+        "native/cpu.cpp",
+        "-o",
+        "outputs/native/rays/_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+        "-lcrypto",
+        "-DRELIFT_WITH_CUDA",
+        "outputs/native/rays/rays.o",
+        "-lcudart"
+      ],
+      "compiler": "g++-13 (Ubuntu 13.4.0-10ubuntu1) 13.4.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "torch": "2.11.0+cu128",
+      "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+      "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+      "sources": {
+        "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+        "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+      },
+      "binary": "_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+      "binary_sha256": "33c7a71e9afa1c3098bb21cc626d37524c6efd143047bdf58a83f35d7719cf42",
+      "build_seconds": 8.419617308987654,
+      "cuda_command": [
+        "nvcc",
+        "-O3",
+        "-std=c++17",
+        "-ccbin",
+        "g++-13",
+        "-Xcompiler",
+        "-fPIC",
+        "--fmad=false",
+        "--prec-div=true",
+        "--prec-sqrt=true",
+        "-arch=sm_86",
+        "-c",
+        "native/rays.cu",
+        "-o",
+        "outputs/native/rays/rays.o"
+      ],
+      "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2024 NVIDIA Corporation\nBuilt on Thu_Mar_28_02:18:24_PDT_2024\nCuda compilation tools, release 12.4, V12.4.131\nBuild cuda_12.4.r12.4/compiler.34097967_0\n",
+      "arch": "sm_86"
+    },
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1699536896,
+      "sampled_peak_process_tree_pss_bytes": 1687975936,
+      "sampled_peak_process_tree_anonymous_bytes": 1069068288,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 1077248,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1116429819,
+      "process_tree_wchar": 416309160,
+      "process_tree_minor_faults": 393167,
+      "process_tree_major_faults": 11,
+      "process_tree_cpu_seconds": 13.0,
+      "sample_count": 147,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180573,
+      "allocated_bytes": 570449920
+    },
+    "final_output_size": {
+      "logical_bytes": 570180573,
+      "allocated_bytes": 570449920
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 10530816,
+      "pswpout_bytes": 34340864
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.1632786300033331,
+          "process_rss_highwater_bytes": 760356864,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 18.385758244010503,
+          "process_rss_highwater_bytes": 1699536896,
+          "cuda_allocated_peak_bytes": 2072099328,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:26:27.228103+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "rays": "cuda"
+        },
+        "native_build": "outputs/native/rays"
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.1632786300033331,
+          "process_rss_highwater_bytes": 760356864,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 18.385758244010503,
+          "process_rss_highwater_bytes": 1699536896,
+          "cuda_allocated_peak_bytes": 2072099328,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "cuda-rays",
+    "mode": "cuda",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {
+        "rays": "cuda"
+      },
+      "native_build": "outputs/native/rays"
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 4,
+    "status": "complete",
+    "started_at": "2026-11-03T03:27:39.957885+00:00",
+    "wall_seconds": 19.1485428790038,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-04/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"rays\": \"cuda\"}, \"native_build\": \"outputs/native/rays\"}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-04/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-04/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": {
+      "command": [
+        "g++-13",
+        "-O3",
+        "-std=c++17",
+        "-shared",
+        "-fPIC",
+        "-fno-fast-math",
+        "-I/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/include/python3.13",
+        "-I.venv/lib/python3.13/site-packages/torch/include",
+        "native/cpu.cpp",
+        "-o",
+        "outputs/native/rays/_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+        "-lcrypto",
+        "-DRELIFT_WITH_CUDA",
+        "outputs/native/rays/rays.o",
+        "-lcudart"
+      ],
+      "compiler": "g++-13 (Ubuntu 13.4.0-10ubuntu1) 13.4.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "torch": "2.11.0+cu128",
+      "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+      "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+      "sources": {
+        "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+        "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+      },
+      "binary": "_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+      "binary_sha256": "33c7a71e9afa1c3098bb21cc626d37524c6efd143047bdf58a83f35d7719cf42",
+      "build_seconds": 8.419617308987654,
+      "cuda_command": [
+        "nvcc",
+        "-O3",
+        "-std=c++17",
+        "-ccbin",
+        "g++-13",
+        "-Xcompiler",
+        "-fPIC",
+        "--fmad=false",
+        "--prec-div=true",
+        "--prec-sqrt=true",
+        "-arch=sm_86",
+        "-c",
+        "native/rays.cu",
+        "-o",
+        "outputs/native/rays/rays.o"
+      ],
+      "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2024 NVIDIA Corporation\nBuilt on Thu_Mar_28_02:18:24_PDT_2024\nCuda compilation tools, release 12.4, V12.4.131\nBuild cuda_12.4.r12.4/compiler.34097967_0\n",
+      "arch": "sm_86"
+    },
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1703784448,
+      "sampled_peak_process_tree_pss_bytes": 1692294144,
+      "sampled_peak_process_tree_anonymous_bytes": 1073410048,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 1609728,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1116429917,
+      "process_tree_wchar": 416309160,
+      "process_tree_minor_faults": 393416,
+      "process_tree_major_faults": 3,
+      "process_tree_cpu_seconds": 13.26,
+      "sample_count": 133,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180573,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180573,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 466944,
+      "pswpout_bytes": 7847936
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.1631587540032342,
+          "process_rss_highwater_bytes": 760143872,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 17.114362874999642,
+          "process_rss_highwater_bytes": 1703784448,
+          "cuda_allocated_peak_bytes": 2072099328,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:27:58.511920+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "rays": "cuda"
+        },
+        "native_build": "outputs/native/rays"
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.1631587540032342,
+          "process_rss_highwater_bytes": 760143872,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 17.114362874999642,
+          "process_rss_highwater_bytes": 1703784448,
+          "cuda_allocated_peak_bytes": 2072099328,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "cuda-rays",
+    "mode": "cuda",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {
+        "rays": "cuda"
+      },
+      "native_build": "outputs/native/rays"
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 5,
+    "status": "complete",
+    "started_at": "2026-11-03T03:28:15.825948+00:00",
+    "wall_seconds": 20.170675237008254,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-05/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"rays\": \"cuda\"}, \"native_build\": \"outputs/native/rays\"}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-05/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/cuda/trial-05/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": {
+      "command": [
+        "g++-13",
+        "-O3",
+        "-std=c++17",
+        "-shared",
+        "-fPIC",
+        "-fno-fast-math",
+        "-I/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/include/python3.13",
+        "-I.venv/lib/python3.13/site-packages/torch/include",
+        "native/cpu.cpp",
+        "-o",
+        "outputs/native/rays/_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+        "-lcrypto",
+        "-DRELIFT_WITH_CUDA",
+        "outputs/native/rays/rays.o",
+        "-lcudart"
+      ],
+      "compiler": "g++-13 (Ubuntu 13.4.0-10ubuntu1) 13.4.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "torch": "2.11.0+cu128",
+      "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+      "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+      "sources": {
+        "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+        "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+      },
+      "binary": "_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+      "binary_sha256": "33c7a71e9afa1c3098bb21cc626d37524c6efd143047bdf58a83f35d7719cf42",
+      "build_seconds": 8.419617308987654,
+      "cuda_command": [
+        "nvcc",
+        "-O3",
+        "-std=c++17",
+        "-ccbin",
+        "g++-13",
+        "-Xcompiler",
+        "-fPIC",
+        "--fmad=false",
+        "--prec-div=true",
+        "--prec-sqrt=true",
+        "-arch=sm_86",
+        "-c",
+        "native/rays.cu",
+        "-o",
+        "outputs/native/rays/rays.o"
+      ],
+      "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2024 NVIDIA Corporation\nBuilt on Thu_Mar_28_02:18:24_PDT_2024\nCuda compilation tools, release 12.4, V12.4.131\nBuild cuda_12.4.r12.4/compiler.34097967_0\n",
+      "arch": "sm_86"
+    },
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1716711424,
+      "sampled_peak_process_tree_pss_bytes": 1704982528,
+      "sampled_peak_process_tree_anonymous_bytes": 1085202432,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 4096,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1116429721,
+      "process_tree_wchar": 416309162,
+      "process_tree_minor_faults": 396806,
+      "process_tree_major_faults": 0,
+      "process_tree_cpu_seconds": 13.33,
+      "sample_count": 141,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180574,
+      "allocated_bytes": 570449920
+    },
+    "final_output_size": {
+      "logical_bytes": 570180574,
+      "allocated_bytes": 570449920
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 401408,
+      "pswpout_bytes": 19079168
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16543813500902615,
+          "process_rss_highwater_bytes": 759947264,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 18.112633447002736,
+          "process_rss_highwater_bytes": 1716711424,
+          "cuda_allocated_peak_bytes": 2072099328,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:28:35.398544+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "rays": "cuda"
+        },
+        "native_build": "outputs/native/rays"
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16543813500902615,
+          "process_rss_highwater_bytes": 759947264,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 18.112633447002736,
+          "process_rss_highwater_bytes": 1716711424,
+          "cuda_allocated_peak_bytes": 2072099328,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "cuda-rays",
+    "mode": "python",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {
+        "rays": "python"
+      }
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 1,
+    "status": "complete",
+    "started_at": "2026-11-03T03:24:40.954639+00:00",
+    "wall_seconds": 16.538968006992945,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/python/trial-01/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"rays\": \"python\"}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/python/trial-01/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/python/trial-01/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1641996288,
+      "sampled_peak_process_tree_pss_bytes": 1631924224,
+      "sampled_peak_process_tree_anonymous_bytes": 1055469568,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4188930048,
+      "process_tree_read_bytes": 65536,
+      "process_tree_write_bytes": 416612352,
+      "process_tree_rchar": 1091176443,
+      "process_tree_wchar": 416313663,
+      "process_tree_minor_faults": 387863,
+      "process_tree_major_faults": 2,
+      "process_tree_cpu_seconds": 12.7,
+      "sample_count": 118,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180480,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180480,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 0,
+      "pswpout_bytes": 2998272
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.1634740849985974,
+          "process_rss_highwater_bytes": 760438784,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.612835877996986,
+          "process_rss_highwater_bytes": 1641996288,
+          "cuda_allocated_peak_bytes": 2073291264,
+          "cuda_reserved_peak_bytes": 2856321024
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:24:57.001369+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "rays": "python"
+        }
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.1634740849985974,
+          "process_rss_highwater_bytes": 760438784,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.612835877996986,
+          "process_rss_highwater_bytes": 1641996288,
+          "cuda_allocated_peak_bytes": 2073291264,
+          "cuda_reserved_peak_bytes": 2856321024
+        }
+      }
+    }
+  },
+  {
+    "experiment": "cuda-rays",
+    "mode": "python",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {
+        "rays": "python"
+      }
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 2,
+    "status": "complete",
+    "started_at": "2026-11-03T03:25:15.535128+00:00",
+    "wall_seconds": 16.688307882999652,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/python/trial-02/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"rays\": \"python\"}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/python/trial-02/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/python/trial-02/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1641996288,
+      "sampled_peak_process_tree_pss_bytes": 1631925248,
+      "sampled_peak_process_tree_anonymous_bytes": 1055838208,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4188930048,
+      "process_tree_read_bytes": 0,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091179877,
+      "process_tree_wchar": 416307300,
+      "process_tree_minor_faults": 388996,
+      "process_tree_major_faults": 0,
+      "process_tree_cpu_seconds": 12.5,
+      "sample_count": 119,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570197260,
+      "allocated_bytes": 570462208
+    },
+    "final_output_size": {
+      "logical_bytes": 570180480,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 61440,
+      "pswpout_bytes": 1257472
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.1619423160009319,
+          "process_rss_highwater_bytes": 760242176,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.771967608990963,
+          "process_rss_highwater_bytes": 1641996288,
+          "cuda_allocated_peak_bytes": 2073291264,
+          "cuda_reserved_peak_bytes": 2856321024
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:25:31.806835+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "rays": "python"
+        }
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.1619423160009319,
+          "process_rss_highwater_bytes": 760242176,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.771967608990963,
+          "process_rss_highwater_bytes": 1641996288,
+          "cuda_allocated_peak_bytes": 2073291264,
+          "cuda_reserved_peak_bytes": 2856321024
+        }
+      }
+    }
+  },
+  {
+    "experiment": "cuda-rays",
+    "mode": "python",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {
+        "rays": "python"
+      }
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 3,
+    "status": "complete",
+    "started_at": "2026-11-03T03:26:45.389134+00:00",
+    "wall_seconds": 16.664306432998274,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/python/trial-03/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"rays\": \"python\"}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/python/trial-03/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/python/trial-03/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1653362688,
+      "sampled_peak_process_tree_pss_bytes": 1642979328,
+      "sampled_peak_process_tree_anonymous_bytes": 1066565632,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4188930048,
+      "process_tree_read_bytes": 0,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091180170,
+      "process_tree_wchar": 416307302,
+      "process_tree_minor_faults": 391314,
+      "process_tree_major_faults": 0,
+      "process_tree_cpu_seconds": 12.48,
+      "sample_count": 118,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570197260,
+      "allocated_bytes": 570462208
+    },
+    "final_output_size": {
+      "logical_bytes": 570180481,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 172032,
+      "pswpout_bytes": 4464640
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16283834900241345,
+          "process_rss_highwater_bytes": 760221696,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.778008100009174,
+          "process_rss_highwater_bytes": 1653362688,
+          "cuda_allocated_peak_bytes": 2073291264,
+          "cuda_reserved_peak_bytes": 2856321024
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:27:01.629663+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "rays": "python"
+        }
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16283834900241345,
+          "process_rss_highwater_bytes": 760221696,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.778008100009174,
+          "process_rss_highwater_bytes": 1653362688,
+          "cuda_allocated_peak_bytes": 2073291264,
+          "cuda_reserved_peak_bytes": 2856321024
+        }
+      }
+    }
+  },
+  {
+    "experiment": "cuda-rays",
+    "mode": "python",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {
+        "rays": "python"
+      }
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 4,
+    "status": "complete",
+    "started_at": "2026-11-03T03:27:21.360553+00:00",
+    "wall_seconds": 18.514575644003344,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/python/trial-04/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"rays\": \"python\"}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/python/trial-04/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/python/trial-04/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1643085824,
+      "sampled_peak_process_tree_pss_bytes": 1632900096,
+      "sampled_peak_process_tree_anonymous_bytes": 1057034240,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4188930048,
+      "process_tree_read_bytes": 847872,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091180074,
+      "process_tree_wchar": 416307300,
+      "process_tree_minor_faults": 388256,
+      "process_tree_major_faults": 6,
+      "process_tree_cpu_seconds": 12.4,
+      "sample_count": 128,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180480,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180480,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 245760,
+      "pswpout_bytes": 5570560
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16514175399788655,
+          "process_rss_highwater_bytes": 759672832,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.56620708000264,
+          "process_rss_highwater_bytes": 1643085824,
+          "cuda_allocated_peak_bytes": 2073291264,
+          "cuda_reserved_peak_bytes": 2856321024
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:27:39.414904+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "rays": "python"
+        }
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16514175399788655,
+          "process_rss_highwater_bytes": 759672832,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.56620708000264,
+          "process_rss_highwater_bytes": 1643085824,
+          "cuda_allocated_peak_bytes": 2073291264,
+          "cuda_reserved_peak_bytes": 2856321024
+        }
+      }
+    }
+  },
+  {
+    "experiment": "cuda-rays",
+    "mode": "python",
+    "source": "outputs/experiments/native-rays-source",
+    "options": {
+      "optimizations": {
+        "rays": "python"
+      }
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 5,
+    "status": "complete",
+    "started_at": "2026-11-03T03:27:59.170563+00:00",
+    "wall_seconds": 16.565848860991537,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-rays-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/cuda-rays/python/trial-05/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"rays\": \"python\"}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/cuda-rays/python/trial-05/output",
+    "log": "outputs/experiments/native-optimizations/cuda-rays/python/trial-05/run.log",
+    "returncode": 0,
+    "scenario": "cuda-rays_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/cuda_rays.py": "97ff6b4764e020d41a52c3949b45018401f6250dc69e68af3dce31bff0f30f79",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "62094564cf4044be4334dd0cfd87d29cae894379c263d10c57df3d51c8ba0ebd",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "58e5f9d83506e0c58719636ca03c5b2e3cc692398ff79096a04f34931c65b2fc",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1655062528,
+      "sampled_peak_process_tree_pss_bytes": 1644945408,
+      "sampled_peak_process_tree_anonymous_bytes": 1068548096,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4188930048,
+      "process_tree_read_bytes": 0,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091180224,
+      "process_tree_wchar": 416307300,
+      "process_tree_minor_faults": 391092,
+      "process_tree_major_faults": 0,
+      "process_tree_cpu_seconds": 12.75,
+      "sample_count": 118,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180480,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180480,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 262144,
+      "pswpout_bytes": 6565888
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.1721221699990565,
+          "process_rss_highwater_bytes": 759738368,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.656821942000533,
+          "process_rss_highwater_bytes": 1655062528,
+          "cuda_allocated_peak_bytes": 2073291264,
+          "cuda_reserved_peak_bytes": 2856321024
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-rays-source",
+      "started_at": "2026-11-03T03:28:15.296994+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "rays": "python"
+        }
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.1721221699990565,
+          "process_rss_highwater_bytes": 759738368,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.656821942000533,
+          "process_rss_highwater_bytes": 1655062528,
+          "cuda_allocated_peak_bytes": 2073291264,
+          "cuda_reserved_peak_bytes": 2856321024
+        }
+      }
+    }
+  },
+  {
     "experiment": "shard-writer",
     "mode": "control",
     "source": "outputs/experiments/native-shards-source",

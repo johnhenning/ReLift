@@ -13,6 +13,10 @@
 #include <system_error>
 namespace py = pybind11;
 
+#ifdef RELIFT_WITH_CUDA
+void launch_rays(uintptr_t,uintptr_t,uintptr_t,uintptr_t,uintptr_t,uintptr_t,int,int,int,int,uintptr_t);
+#endif
+
 static float read_float(const char* p, ssize_t size) {
     if (size == 4) { float v; std::memcpy(&v, p, 4); return v; }
     c10::Half v; std::memcpy(&v, p, 2); return static_cast<float>(v);
@@ -118,4 +122,7 @@ PYBIND11_MODULE(_relift_cpu, module) {
                py::arg("ids").noconvert(), py::arg("coords").noconvert(), py::arg("vis").noconvert());
     module.def("pack_finite", &pack_finite, py::arg("array").noconvert());
     module.def("write_payload", &write_payload, py::arg("fd"), py::arg("header"), py::arg("array").noconvert(), py::arg("hash"));
+#ifdef RELIFT_WITH_CUDA
+    module.def("launch_rays", &launch_rays);
+#endif
 }

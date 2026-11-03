@@ -18,7 +18,7 @@ from .storage import TrajectoryStore, file_sha256, mapped_archive
 class MappedObservations:
     """CUDA ray construction for selected original pixels, retaining baseline math."""
 
-    def __init__(self, window_dir, device="cuda", depth_file="da3_depth_data.npz", tracks_file="alltracker_tracks.npz", depth_cache_mb=0, gather_backend="current", components=None):
+    def __init__(self, window_dir, device="cuda", depth_file="da3_depth_data.npz", tracks_file="alltracker_tracks.npz", depth_cache_mb=0, gather_backend="current", components=None, ray_backend="current"):
         window = Path(window_dir)
         self.depth_source, self.track_source = window / depth_file, window / tracks_file
         depth = mapped_archive(self.depth_source)
@@ -28,6 +28,14 @@ class MappedObservations:
         if self.tracks.shape[:3] != self.depth.shape or self.visibility.shape != self.depth.shape:
             raise ValueError("Geometry and tracker frames/grids do not match")
         self.device = torch.device(device)
+        self.ray_builder = components.ray_builder if components else None
+        if self.ray_builder is None and ray_backend == "cuda":
+            from .cuda_rays import make_ray_builder
+            from .native_backend import load_cpu
+            self.ray_builder = make_ray_builder(components.native_loader() if components and components.native_loader else load_cpu())
+        elif self.ray_builder is None and ray_backend == "python":
+            from .cuda_rays import torch_ray_builder
+            self.ray_builder = torch_ray_builder
         self.gather = None
         if components is not None and components.gather_factory is not None:
             self.gather = components.gather_factory()
@@ -68,24 +76,32 @@ class MappedObservations:
         T, count = coords.shape[:2]
         # Only image-depth slices enter CUDA. grid_sample still uses original full H/W.
         # Small frame blocks limit source-image memory and transfer call overhead.
-        norm = torch.stack([2.0 * coords[..., 0] / max(self.W - 1, 1) - 1.0,
+        norm = (torch.stack([2.0 * coords[..., 0] / max(self.W - 1, 1) - 1.0,
                             2.0 * coords[..., 1] / max(self.H - 1, 1) - 1.0], -1)
-        sampled = []
+                if self.ray_builder is None else None)
+        sampled, built_directions, built_distances = [], [], []
         offset = 0 if frame is None else frame
         for t in range(0, T, 16):
             length = min(16, T - t)
             depth = (self.depth_cuda[offset + t:offset + t + length] if self.depth_cuda is not None else
                      self._transfer(self.depth[offset + t:offset + t + length]))
-            z = F.grid_sample(depth[:, None], norm[t:t + length].reshape(length, count, 1, 2), mode="nearest",
-                              padding_mode="border", align_corners=True)[:, 0, :, 0]
-            sampled.append(z)
-        z = torch.cat(sampled)
-        fx, fy = K[:, 0, 0, None], K[:, 1, 1, None]
-        cx, cy = K[:, 0, 2, None], K[:, 1, 2, None]
-        xc, yc = (coords[..., 0] - cx) / fx, (coords[..., 1] - cy) / fy
-        dcam = F.normalize(torch.stack([xc, yc, torch.ones_like(xc)], dim=-1), dim=-1)
-        direction = torch.einsum("tij,tnj->tni", Rwc, dcam)
-        distance = z * torch.sqrt(xc * xc + yc * yc + 1.0)
+            if self.ray_builder is None:
+                z = F.grid_sample(depth[:, None], norm[t:t + length].reshape(length, count, 1, 2), mode="nearest",
+                                  padding_mode="border", align_corners=True)[:, 0, :, 0]
+                sampled.append(z)
+            else:
+                d,r = self.ray_builder(coords[t:t+length],depth,K[t:t+length],Rwc[t:t+length])
+                built_directions.append(d); built_distances.append(r)
+        if self.ray_builder is None:
+            z = torch.cat(sampled)
+            fx, fy = K[:, 0, 0, None], K[:, 1, 1, None]
+            cx, cy = K[:, 0, 2, None], K[:, 1, 2, None]
+            xc, yc = (coords[..., 0] - cx) / fx, (coords[..., 1] - cy) / fy
+            dcam = F.normalize(torch.stack([xc, yc, torch.ones_like(xc)], dim=-1), dim=-1)
+            direction = torch.einsum("tij,tnj->tni", Rwc, dcam)
+            distance = z * torch.sqrt(xc * xc + yc * yc + 1.0)
+        else:
+            direction,distance = torch.cat(built_directions),torch.cat(built_distances)
         vis = (self._transfer(self.visibility[times, rows, cols]) if gathered_vis is None else
                torch.as_tensor(gathered_vis, dtype=torch.float32, device=self.device))
         return origin, torch.nan_to_num(direction), torch.nan_to_num(distance), torch.nan_to_num(vis)
@@ -150,8 +166,6 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
     from .optimization import OptimizationConfig, InferenceComponents
     components = components or InferenceComponents()
     if optimizations is not None:
-        if optimizations.rays != "current":
-            raise NotImplementedError("Ray backends arrive in a later layer")
         batch, padding_batch = optimizations.corrector_batch, optimizations.padding_batch
         gather_backend = optimizations.gather
         depth_cache_mb, hash_writes = optimizations.depth_cache_mb, optimizations.hash_writes
@@ -162,7 +176,8 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
     if padding_batch is not None and padding_batch < 1:
         raise ValueError("padding_batch must be positive")
     dev = torch.device(device)
-    obs_source = MappedObservations(window_dir, dev, depth_file, tracks_file, depth_cache_mb=depth_cache_mb, gather_backend=gather_backend, components=components)
+    obs_source = MappedObservations(window_dir, dev, depth_file, tracks_file, depth_cache_mb=depth_cache_mb, gather_backend=gather_backend, components=components,
+                                    ray_backend=optimizations.rays if optimizations else "current")
     T, H, W = obs_source.T, obs_source.H, obs_source.W
     total = H * W
     # Only the reference frame needs all points for the exact clip-wide median.

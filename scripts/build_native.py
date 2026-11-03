@@ -22,6 +22,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--cxx", default="g++")
+    parser.add_argument("--cuda", action="store_true")
+    parser.add_argument("--nvcc", default="nvcc")
+    parser.add_argument("--arch", default="sm_86")
     args = parser.parse_args()
     if args.out.exists():
         raise FileExistsError(f"Refusing to overwrite native build: {args.out}")
@@ -33,6 +36,14 @@ def main():
                "-I" + sysconfig.get_path("include"), "-I" + str(Path(torch.__file__).parent / "include"),
                str(source), "-o", str(binary), "-lcrypto"]
     start = time.perf_counter()
+    cuda_command = None
+    if args.cuda:
+        obj = args.out.resolve()/"rays.o"
+        cuda_command = [args.nvcc,"-O3","-std=c++17","-ccbin",args.cxx,"-Xcompiler","-fPIC",
+                        "--fmad=false","--prec-div=true","--prec-sqrt=true","-arch="+args.arch,
+                        "-c",str(ROOT/"native/rays.cu"),"-o",str(obj)]
+        subprocess.run(cuda_command,check=True)
+        command += ["-DRELIFT_WITH_CUDA",str(obj),"-lcudart"]
     subprocess.run(command, check=True)
     record = dict(command=command, compiler=subprocess.check_output([args.cxx, "--version"], text=True),
                   python=sys.version, torch=torch.__version__, platform=platform.platform(),
@@ -40,6 +51,9 @@ def main():
                   sources={"native/cpu.cpp": hashlib.sha256(source.read_bytes()).hexdigest()},
                   binary=binary.name, binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),
                   build_seconds=time.perf_counter()-start)
+    if args.cuda:
+        record.update(cuda_command=cuda_command,nvcc=subprocess.check_output([args.nvcc,"--version"],text=True),arch=args.arch)
+        record["sources"]["native/rays.cu"] = hashlib.sha256((ROOT/"native/rays.cu").read_bytes()).hexdigest()
     (args.out / "build.json").write_text(json.dumps(record, indent=2)+"\n")
     print(args.out / "build.json")
 
