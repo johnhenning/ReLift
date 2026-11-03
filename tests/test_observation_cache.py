@@ -74,3 +74,15 @@ def test_partial_cache_installation_releases_owned_tensor(monkeypatch):
     with pytest.raises(RuntimeError,match='allocation failed'):
         cache.__init__(np.ones((2,3,5,2),np.float16),np.ones((2,3,5),np.float16),'cpu',1)
     assert cache.coords is None and cache.visibility is None and cache.closed
+
+
+def test_disabled_cache_keeps_legacy_source_conversion(tmp_path):
+    T,H,W=prepared_window(tmp_path)
+    path=tmp_path/'alltracker_tracks.npz'
+    with np.load(path) as archive: arrays={key:archive[key].astype(np.float64) for key in archive.files}
+    np.savez(path,**arrays)
+    source=MappedObservations(tmp_path,'cpu')
+    assert not source.observation_cache.active
+    assert source.rays(np.array([0,3,14]))[1].dtype==torch.float32
+    with pytest.raises(TypeError,match='float16/float32'):
+        MappedObservations(tmp_path,'cpu',observation_cache_mb=1)

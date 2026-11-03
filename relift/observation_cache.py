@@ -17,8 +17,6 @@ class ObservationCache:
             raise ValueError('observation cache budget must be finite and nonnegative')
         if tracks.ndim!=4 or tracks.shape[-1]!=2 or visibility.shape!=tracks.shape[:3] or min(tracks.shape[:3])<1:
             raise ValueError('observation cache shapes differ')
-        if any(value.dtype not in (np.float16,np.float32) for value in (tracks,visibility)):
-            raise TypeError('observation cache supports float16/float32 sources')
         self.device=torch.device(device)
         self.T,self.H,self.W=tracks.shape[:3]
         self.coords=self.visibility=None
@@ -28,6 +26,8 @@ class ObservationCache:
                            upload_bytes=0,upload_calls=0,gather_calls=0,pixel_id_upload_bytes=0,
                            source_dtypes=[str(tracks.dtype),str(visibility.dtype)],device=str(self.device))
         if budget_mb==0: return
+        if any(value.dtype not in (np.float16,np.float32) for value in (tracks,visibility)):
+            raise TypeError('observation cache supports float16/float32 sources')
         if self._metrics['required_bytes']>self._metrics['budget_bytes']:
             self._metrics['state']='budget_declined'
             return

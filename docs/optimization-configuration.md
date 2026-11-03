@@ -18,6 +18,7 @@ and trajectory-store provenance; changed settings invalidate resume.
 | `tracker_copy_outputs` | `false` | Return float32 views; `true` restores copies |
 | `hash_writes` | `true` | Hash NPY bytes during writes; `false` uses the subsequent initial read |
 | `depth_cache_mb` | `0` | Bounded persistent CUDA depth cache; zero disables it |
+| `observation_cache_mb` | `0` | Original-dtype tracker coordinates/visibility cached on-device; replaces CPU gathering when it fits |
 | `prefetch` | `false` | One-batch ray lookahead with explicit ownership and cleanup |
 | `corrector_batch` | `8` | Number of independent groups per model call |
 | `padding_batch` | `null` | Fix padded-group membership independently of execution batch size |
@@ -40,6 +41,18 @@ uploads, performs the original PyTorch rotation once over the timeline, and uses
 a validated eager native launch to avoid registered-operator first-dispatch cost.
 Select it with `--opt rays='"cuda_timeline"'` or
 `configs/optimizations/rays-cuda-timeline.json`; a `--cuda` native build is required.
+
+The [observation-cache experiment](native-optimization-experiments/05-observation-cache.md)
+uses existing PyTorch gathering on immutable resident tensors. Select
+`--opt observation_cache_mb=128` independently or combine it with depth caching,
+prefetch and a ray backend. The cache records whether it is active or declined
+for budget/headroom, along with resident and uploaded bytes. Its budget covers
+retained tracker tensors; depth and active batches have separate allocations.
+Select `gather="current"` with a positive cache budget: the cache replaces the
+Python/C++ CPU gathering strategies, and conflicting choices are rejected.
+`InferenceComponents.observation_cache_factory` accepts a fingerprinted factory
+`(tracks, visibility, device, budget_mb)` returning an owner with `active`,
+`gather(pixel_ids, frame=None)`, `metrics` and `close()`.
 
 ## CLI configuration
 

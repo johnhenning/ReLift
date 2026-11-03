@@ -1,0 +1,45 @@
+{
+  "scene": "swing-tire",
+  "input": "cache/demo_inputs/swing-tire.mp4",
+  "prepared_window": "outputs/benchmarks/offload-primary/swing-tire/ram/trial-01/output/window",
+  "process_res": 504,
+  "output_root": "outputs/experiments/observation-cache",
+  "experiments": {
+    "correction": {
+      "task": "correction", "repeats": 5,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/observation-cache-source", "options": {"optimizations": {}}},
+        {"name": "cached", "source": "outputs/experiments/observation-cache-source", "options": {"optimizations": {"observation_cache_mb": 128}}}
+      ]
+    },
+    "pipeline": {
+      "task": "pipeline", "repeats": 5,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/observation-cache-source", "options": {"video": "cache/demo_inputs/swing-tire.mp4", "optimizations": {}}},
+        {"name": "cached", "source": "outputs/experiments/observation-cache-source", "options": {"video": "cache/demo_inputs/swing-tire.mp4", "optimizations": {"observation_cache_mb": 128}}}
+      ]
+    },
+    "combinations": {
+      "task": "correction", "repeats": 1,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/observation-cache-source", "options": {"optimizations": {}}},
+        {"name": "cached-depth", "source": "outputs/experiments/observation-cache-source", "options": {"optimizations": {"observation_cache_mb": 128, "depth_cache_mb": 256}}},
+        {"name": "cached-depth-eager", "source": "outputs/experiments/observation-cache-source", "options": {"optimizations": {"observation_cache_mb": 128, "depth_cache_mb": 256, "rays": "cuda_timeline"}, "native_build": "outputs/native/da3-final"}}
+      ]
+    },
+    "default-validation": {
+      "task": "correction", "repeats": 1,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/observation-cache-before-source", "options": {"optimizations": {}}},
+        {"name": "configured-default", "source": "outputs/experiments/observation-cache-source", "options": {"optimizations": {}}}
+      ]
+    },
+    "diagnostic": {
+      "task": "correction", "repeats": 1,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/observation-cache-source", "options": {"profile": true, "optimizations": {}}},
+        {"name": "cached", "source": "outputs/experiments/observation-cache-source", "options": {"profile": true, "optimizations": {"observation_cache_mb": 128}}}
+      ]
+    }
+  }
+}
