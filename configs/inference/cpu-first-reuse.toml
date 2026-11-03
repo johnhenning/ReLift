@@ -1,0 +1,4 @@
+extends = "reuse-da3"
+
+[da3]
+startup = "cpu-first"

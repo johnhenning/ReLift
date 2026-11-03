@@ -14,6 +14,7 @@ from .configuration import (
     OptimizationRecord,
 )
 from .runtime import (
+    DA3StartupMetrics,
     MetricsDocument,
     ObservationCacheMetrics,
     PhaseMetrics,
@@ -148,6 +149,7 @@ class ExperimentOptions(TypedDict, total=False):
 class ExperimentResult(TypedDict):
     task: str
     phases: Mapping[str, PhaseMetrics | StageMetrics]
+    startup: NotRequired[list[DA3StartupMetrics]]
     shape: NotRequired[tuple[int, ...]]
     execution: NotRequired[ExecutionMetrics]
     configuration: NotRequired[ConfigurationSelectionRecord | None]

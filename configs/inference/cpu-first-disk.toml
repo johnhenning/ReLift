@@ -1,0 +1,4 @@
+extends = "disk"
+
+[da3]
+startup = "cpu-first"

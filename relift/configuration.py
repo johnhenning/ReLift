@@ -91,6 +91,7 @@ class DA3(Section):
     weights: str = "current"
     features: str = "current"
     reuse: bool = False
+    startup: str = "current"
 
 
 @dataclass(frozen=True)
@@ -140,6 +141,7 @@ class InferenceConfig:
             commit_backend=self.storage.commits,
             da3_weights=self.da3.weights,
             da3_features=self.da3.features,
+            da3_startup=self.da3.startup,
             reuse_da3=self.da3.reuse,
             tracker_init_weights=self.tracker.init_weights,
             tracker_copy_outputs=self.tracker.copy_outputs,
@@ -173,7 +175,10 @@ class InferenceConfig:
                 commits=self.storage.commits,
             ),
             da3=DA3Record(
-                weights=self.da3.weights, features=self.da3.features, reuse=self.da3.reuse
+                weights=self.da3.weights,
+                features=self.da3.features,
+                reuse=self.da3.reuse,
+                startup=self.da3.startup,
             ),
             tracker=TrackerRecord(
                 init_weights=self.tracker.init_weights, copy_outputs=self.tracker.copy_outputs
@@ -229,7 +234,12 @@ class InferenceConfig:
                 settings.hash_writes,
                 settings.commit_backend,
             ),
-            da3=DA3(settings.da3_weights, settings.da3_features, settings.reuse_da3),
+            da3=DA3(
+                settings.da3_weights,
+                settings.da3_features,
+                settings.reuse_da3,
+                settings.da3_startup,
+            ),
             tracker=Tracker(settings.tracker_init_weights, settings.tracker_copy_outputs),
             runtime=Runtime(native_build),
         )

@@ -28,6 +28,7 @@ class OptimizationConfig:
     rays: str = "current"
     da3_weights: str = "current"
     da3_features: str = "current"
+    da3_startup: str = "current"
     tracker_init_weights: bool = False
     tracker_copy_outputs: bool = False
     hash_writes: bool = True
@@ -48,6 +49,7 @@ class OptimizationConfig:
             rays=("current", "python", "cuda", "cuda_timeline"),
             da3_weights=("current", "python", "cpp"),
             da3_features=("current", "python", "cpp"),
+            da3_startup=("current", "cpu-first"),
         ).items():
             if getattr(self, key) not in choices:
                 raise ValueError(f"{key} must be one of {choices}")
@@ -102,6 +104,7 @@ class OptimizationConfig:
             rays=self.rays,
             da3_weights=self.da3_weights,
             da3_features=self.da3_features,
+            da3_startup=self.da3_startup,
             tracker_init_weights=self.tracker_init_weights,
             tracker_copy_outputs=self.tracker_copy_outputs,
             hash_writes=self.hash_writes,
@@ -121,6 +124,8 @@ class OptimizationConfig:
             raise ValueError("Packed DA3 weights require RAM or disk offload")
         if self.da3_features != "current" and mode != "disk":
             raise ValueError("Feature archives require disk offload")
+        if self.da3_startup != "current" and mode not in ("ram", "disk"):
+            raise ValueError("CPU-first DA3 startup requires RAM or disk offload")
         if mode == "none":
             default = dict(OptimizationConfig().as_dict())
             stream_fields = (

@@ -1,0 +1,54 @@
+{
+  "scene": "swing-tire",
+  "input": "cache/demo_inputs/swing-tire.mp4",
+  "process_res": 504,
+  "output_root": "outputs/experiments/da3-startup",
+  "experiments": {
+    "baseline-da3": {
+      "task": "da3-configured",
+      "repeats": 1,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/da3-startup-baseline-source", "options": {"inference_profile": "ram", "clips": ["cache/demo_inputs/swing-tire.mp4"]}}
+      ]
+    },
+    "baseline-pipeline": {
+      "task": "pipeline",
+      "repeats": 1,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/da3-startup-baseline-source", "options": {"inference_profile": "ram", "video": "cache/demo_inputs/swing-tire.mp4"}}
+      ]
+    },
+    "screening": {"task": "da3-configured", "repeats": 1, "variants": [
+      {"name": "control", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "ram", "clips": ["cache/demo_inputs/swing-tire.mp4"]}},
+      {"name": "cpu-first", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "cpu-first-da3", "clips": ["cache/demo_inputs/swing-tire.mp4"]}}
+    ]},
+    "da3": {"task": "da3-configured", "repeats": 5, "variants": [
+      {"name": "control", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "ram", "clips": ["cache/demo_inputs/swing-tire.mp4"]}},
+      {"name": "cpu-first", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "cpu-first-da3", "clips": ["cache/demo_inputs/swing-tire.mp4"]}}
+    ]},
+    "pipeline": {"task": "pipeline", "repeats": 5, "variants": [
+      {"name": "control", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "ram", "video": "cache/demo_inputs/swing-tire.mp4"}},
+      {"name": "cpu-first", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "cpu-first-da3", "video": "cache/demo_inputs/swing-tire.mp4"}}
+    ]},
+    "composition": {"task": "pipeline", "repeats": 1, "variants": [
+      {"name": "control", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "background-cached", "video": "cache/demo_inputs/swing-tire.mp4"}},
+      {"name": "cpu-first", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "cpu-first-combined", "video": "cache/demo_inputs/swing-tire.mp4"}}
+    ]},
+    "disk": {"task": "da3-configured", "repeats": 1, "variants": [
+      {"name": "control", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "disk", "clips": ["cache/demo_inputs/swing-tire.mp4"]}},
+      {"name": "cpu-first", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "cpu-first-disk", "clips": ["cache/demo_inputs/swing-tire.mp4"]}}
+    ]},
+    "reuse": {"task": "da3-configured", "repeats": 1, "variants": [
+      {"name": "control", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "reuse-da3", "clips": ["cache/demo_inputs/swing-tire.mp4", "cache/demo_inputs/swing.mp4"]}},
+      {"name": "cpu-first", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "cpu-first-reuse", "clips": ["cache/demo_inputs/swing-tire.mp4", "cache/demo_inputs/swing.mp4"]}}
+    ]},
+    "running": {"task": "da3-configured", "repeats": 1, "timeout_seconds": 1800, "variants": [
+      {"name": "control", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "ram", "clips": ["cache/demo_inputs/running.mp4"]}},
+      {"name": "cpu-first", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "cpu-first-da3", "clips": ["cache/demo_inputs/running.mp4"]}}
+    ]},
+    "forest": {"task": "da3-configured", "repeats": 1, "timeout_seconds": 1800, "variants": [
+      {"name": "control", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "ram", "clips": ["cache/demo_inputs/forest.mp4"]}},
+      {"name": "cpu-first", "source": "outputs/experiments/da3-startup-source", "options": {"inference_profile": "cpu-first-da3", "clips": ["cache/demo_inputs/forest.mp4"]}}
+    ]}
+  }
+}

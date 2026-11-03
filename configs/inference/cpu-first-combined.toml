@@ -1,0 +1,4 @@
+extends = "background-cached"
+
+[da3]
+startup = "cpu-first"
