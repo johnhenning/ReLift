@@ -8,7 +8,7 @@ from pathlib import Path
 from statistics import median
 
 
-def summarize(root):
+def summarize(root, roles=None):
     groups = defaultdict(list)
     for path in sorted(root.rglob("trial.json")):
         record = json.loads(path.read_text())
@@ -18,6 +18,7 @@ def summarize(root):
     for (experiment, mode, signature), records in groups.items():
         good = [r for _, r in records if r["status"] == "complete"]
         row = dict(experiment=experiment, variant=mode, n=len(good), attempts=len(records),
+                   measurement_role=(roles or {}).get(experiment,"benchmark"),
                    statuses=dict(Counter(r["status"] for _, r in records)),
                    diagnostic=any(r.get("diagnostic") for _, r in records),
                    trial_records=[str(path) for path, _ in records], options=records[0][1]["options"],
@@ -51,8 +52,9 @@ def summarize(root):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root", type=Path)
+    parser.add_argument("--roles", type=Path, help="Separate technical classification of benchmark, screening and validation groups")
     args = parser.parse_args()
-    rows = summarize(args.root)
+    rows = summarize(args.root,json.loads(args.roles.read_text()) if args.roles else None)
     (args.root / "summary.json").write_text(json.dumps(rows, indent=2) + "\n")
     lines = ["# Optimization experiment measurements", "", "Diagnostic profiles are separate from unprofiled measurements. Stage medians do not include process startup; process medians do. Failures contribute no successful timing.", "",
              "| Experiment | Variant | Completed | Quality gate | Process seconds median [min,max] | Stage median seconds | Sampled GPU GiB | Sampled RSS GiB | Physical writes GiB |", "|---|---|---:|---|---|---|---:|---:|---:|"]

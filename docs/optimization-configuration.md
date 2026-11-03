@@ -9,7 +9,7 @@ and trajectory-store provenance; changed settings invalidate resume.
 | Setting | Default | Experiment controlled |
 |---|---|---|
 | `gather` | `current` | `current`, reusable-buffer `python`, native `cpp` gathering |
-| `shards` | `current` | `current`, `python`, `cpp` shard packing; later stack layer |
+| `shards` | `current` | `current`, `python`, `cpp` shard packing and optional native writing |
 | `rays` | `current` | `current`, fused `cuda`; later stack layer |
 | `da3_weights` | `current` | `current`, packed `python`, packed `cpp`; later stack layer |
 | `da3_features` | `current` | `current`, archived `python`, archived `cpp`; later stack layer |

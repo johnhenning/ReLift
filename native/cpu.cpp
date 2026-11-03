@@ -5,6 +5,12 @@
 #include <c10/util/Half.h>
 #include <cstring>
 #include <stdexcept>
+#include <openssl/evp.h>
+#include <unistd.h>
+#include <cerrno>
+#include <memory>
+#include <cmath>
+#include <system_error>
 namespace py = pybind11;
 
 static float read_float(const char* p, ssize_t size) {
@@ -43,7 +49,73 @@ void gather(py::array tracks, py::array visibility,
     }
 }
 
+py::tuple pack_finite(py::array value) {
+    auto input = value.request();
+    const auto kind = py::str(value.dtype()).cast<std::string>();
+    if (kind != "float16" && kind != "float32" && kind != "bool")
+        throw py::value_error("packer supports float16, float32 and bool");
+    bool fortran = (value.flags() & py::array::f_style) && !(value.flags() & py::array::c_style);
+    std::vector<ssize_t> strides(input.ndim);
+    ssize_t stride = input.itemsize;
+    for (ssize_t i=0; i<input.ndim; ++i) {
+        ssize_t dim = fortran ? i : input.ndim-1-i;
+        strides[dim] = stride; stride *= input.shape[dim];
+    }
+    py::array output(value.dtype(), input.shape, strides);
+    auto destination = output.request(true);
+    bool finite = true;
+    {
+        py::gil_scoped_release unlock;
+        auto src = static_cast<const char*>(input.ptr);
+        auto dst = static_cast<char*>(destination.ptr);
+        for (ssize_t index=0; index<input.size; ++index) {
+            ssize_t remainder=index, offset=0;
+            for (ssize_t i=0; i<input.ndim; ++i) {
+                ssize_t dim = fortran ? i : input.ndim-1-i;
+                offset += (remainder % input.shape[dim])*input.strides[dim];
+                remainder /= input.shape[dim];
+            }
+            std::memcpy(dst+index*input.itemsize, src+offset, input.itemsize);
+            if (kind != "bool") finite &= std::isfinite(read_float(src+offset,input.itemsize));
+        }
+    }
+    return py::make_tuple(output, finite);
+}
+
+// Header generation, flush/fsync, rename and manifest publication remain Python.
+// Hash exactly the bytes accepted by write(2); retry short writes and EINTR.
+std::string write_payload(int fd, const std::string& header, py::array value, bool hash) {
+    auto input = value.request();
+    if (!(value.flags() & (py::array::c_style | py::array::f_style)) || value.dtype().has_fields() || value.dtype().kind() == 'O')
+        throw py::value_error("native payload requires a contiguous numeric array");
+    std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)> context(EVP_MD_CTX_new(), EVP_MD_CTX_free);
+    if (hash && (!context || EVP_DigestInit_ex(context.get(),EVP_sha256(),nullptr)!=1))
+        throw std::runtime_error("SHA256 initialization failed");
+    unsigned char digest[EVP_MAX_MD_SIZE]; unsigned int length=0;
+    {
+        py::gil_scoped_release unlock;
+        auto write_all = [&](const char* data, size_t size) {
+            while (size) {
+                auto sent = ::write(fd,data,std::min(size,size_t(1<<20)));
+                if (sent<0 && errno==EINTR) continue;
+                if (sent<=0) throw std::system_error(sent<0 ? errno : EIO,std::generic_category(),"native NPY write");
+                if (hash && EVP_DigestUpdate(context.get(),data,sent)!=1) throw std::runtime_error("SHA256 update failed");
+                data+=sent; size-=sent;
+            }
+        };
+        write_all(header.data(),header.size());
+        write_all(static_cast<const char*>(input.ptr),input.size*input.itemsize);
+        if (hash && EVP_DigestFinal_ex(context.get(),digest,&length)!=1) throw std::runtime_error("SHA256 finalization failed");
+    }
+    static const char hex[]="0123456789abcdef";
+    std::string result;
+    for (unsigned int i=0;i<length;++i) { result+=hex[digest[i]>>4]; result+=hex[digest[i]&15]; }
+    return result;
+}
+
 PYBIND11_MODULE(_relift_cpu, module) {
     module.def("gather", &gather, py::arg("tracks").noconvert(), py::arg("visibility").noconvert(),
                py::arg("ids").noconvert(), py::arg("coords").noconvert(), py::arg("vis").noconvert());
+    module.def("pack_finite", &pack_finite, py::arg("array").noconvert());
+    module.def("write_payload", &write_payload, py::arg("fd"), py::arg("header"), py::arg("array").noconvert(), py::arg("hash"));
 }

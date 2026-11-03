@@ -41,10 +41,12 @@ def main():
         records.append(dict(path=str(source), sha256=hashlib.sha256(source.read_bytes()).hexdigest(), rows=rows))
         groups = defaultdict(list)
         for row in rows:
-            if not row.get("diagnostic"):
+            if not row.get("diagnostic") and row.get("measurement_role") != "validation":
                 groups[row["experiment"]].append(row)
         for name, group in groups.items():
             title = f"{name} · {source.parent.name}"
+            if any(row.get("measurement_role") == "screening" for row in group):
+                title += " · exploratory screening"
             identity = hashlib.sha256(title.encode()).hexdigest()[:10]
             counts = Counter(row["variant"] for row in group)
             labels = [f"{row['variant']}" + (f" · {row['source_fingerprint'][:6]}" if counts[row["variant"]] > 1 else "") + (f" · gate {row['quality']}" if row.get("quality") else "") + f" ({row['n']}/{row['attempts']})" for row in group]

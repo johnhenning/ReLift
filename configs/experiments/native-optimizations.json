@@ -120,6 +120,38 @@
           }
         }
       ]
+    },
+    "shard-writer": {
+      "task": "correction",
+      "repeats": 5,
+      "variants": [
+        {
+          "name": "control",
+          "source": "outputs/experiments/native-shards-source",
+          "options": {
+            "optimizations": {}
+          }
+        },
+        {
+          "name": "python",
+          "source": "outputs/experiments/native-shards-source",
+          "options": {
+            "optimizations": {
+              "shards": "python"
+            }
+          }
+        },
+        {
+          "name": "cpp",
+          "source": "outputs/experiments/native-shards-source",
+          "options": {
+            "optimizations": {
+              "shards": "cpp"
+            },
+            "native_build": "outputs/native/shards"
+          }
+        }
+      ]
     }
   }
 }

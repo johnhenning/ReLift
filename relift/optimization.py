@@ -74,6 +74,7 @@ class InferenceComponents:
     gather_factory: Callable | None = None
     ray_builder: Callable | None = None
     shard_packer: Callable | None = None
+    npy_writer: Callable | None = None
     pager_factory: Callable | None = None
     depth_provider_factory: Callable | None = None
     tracker_factory: Callable | None = None

@@ -69,16 +69,20 @@ class _HashingWriter:
         return getattr(self.stream, name)
 
 
-def atomic_npy(path, array, hash_write=False):
+def atomic_npy(path, array, hash_write=False, payload_writer=None):
     path = Path(path)
     temp = path.with_suffix(path.suffix + ".tmp")
     with temp.open("wb") as stream:
         writer = _HashingWriter(stream) if hash_write else stream
-        np.save(writer, array, allow_pickle=False)
+        if payload_writer is None:
+            np.save(writer, array, allow_pickle=False)
+            digest = writer.hash.hexdigest() if hash_write else None
+        else:
+            digest = payload_writer(stream, array, hash_write)
         stream.flush()
         os.fsync(stream.fileno())
     temp.replace(path)
-    return writer.hash.hexdigest() if hash_write else None
+    return digest
 
 
 def mapped_archive(source, cache=None):
@@ -206,6 +210,7 @@ class TrajectoryStore:
 
     def __init__(self, path, *, allow_incomplete=False):
         self._hash_writes = False
+        self._packer, self._payload_writer = None, None
         path = Path(path)
         self._legacy = None
         if path.name == "manifest.json" and path.is_file():
@@ -241,7 +246,7 @@ class TrajectoryStore:
         return cls(path, **kwargs)
 
     @classmethod
-    def create(cls, output_dir, shape, metadata, pixel_ids, arrays, repeated_pixel_ids=(), hash_writes=False):
+    def create(cls, output_dir, shape, metadata, pixel_ids, arrays, repeated_pixel_ids=(), hash_writes=False, packer=None, payload_writer=None):
         root = Path(output_dir) / "tracks.store"
         root.mkdir(parents=True, exist_ok=True)
         shape = tuple(map(int, shape))
@@ -259,6 +264,7 @@ class TrajectoryStore:
                 raise ValueError("Store provenance/grouping changed; choose a fresh output directory")
             store.verify(complete=False)
             store._hash_writes = hash_writes
+            store._packer, store._payload_writer = packer, payload_writer
             return store
         atomic_npy(root / "pixel_ids.npy", order)
         (root / "shards").mkdir(exist_ok=True)
@@ -275,6 +281,7 @@ class TrajectoryStore:
         atomic_json(existing, manifest)
         store = cls(root, allow_incomplete=True)
         store._hash_writes = hash_writes
+        store._packer, store._payload_writer = packer, payload_writer
         return store
 
     def has_shard(self, start, stop):
@@ -296,11 +303,15 @@ class TrajectoryStore:
             expected = (count, self.shape[0]) + (() if name == "observed" else (3,))
             if value.shape != expected:
                 raise ValueError(f"{name}: expected {expected}, got {value.shape}")
-            if name != "observed" and not np.isfinite(value).all():
+            if self._packer:
+                value, finite = self._packer(name, value)
+            else:
+                finite = name == "observed" or np.isfinite(value).all()
+            if not finite:
                 raise ValueError(f"{name}: nonfinite values cannot be committed")
             relative = f"shards/{start:09d}-{stop:09d}.{name}.npy"
             target = self.root / relative
-            digest = atomic_npy(target, value, hash_write=self._hash_writes)
+            digest = atomic_npy(target, value, hash_write=self._hash_writes, payload_writer=self._payload_writer)
             files[name] = dict(file=relative, sha256=digest if digest is not None else file_sha256(target))
         self.manifest["shards"].append(dict(start=start, stop=stop, arrays=files))
         self.manifest["shards"].sort(key=lambda s: s["start"])

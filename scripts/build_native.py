@@ -31,11 +31,12 @@ def main():
     # pybind11 headers ship in the pinned torch wheel; no extra runtime dependency.
     command = [args.cxx, "-O3", "-std=c++17", "-shared", "-fPIC", "-fno-fast-math",
                "-I" + sysconfig.get_path("include"), "-I" + str(Path(torch.__file__).parent / "include"),
-               str(source), "-o", str(binary)]
+               str(source), "-o", str(binary), "-lcrypto"]
     start = time.perf_counter()
     subprocess.run(command, check=True)
     record = dict(command=command, compiler=subprocess.check_output([args.cxx, "--version"], text=True),
                   python=sys.version, torch=torch.__version__, platform=platform.platform(),
+                  openssl=subprocess.check_output(["openssl","version"],text=True).strip(),
                   sources={"native/cpu.cpp": hashlib.sha256(source.read_bytes()).hexdigest()},
                   binary=binary.name, binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),
                   build_seconds=time.perf_counter()-start)

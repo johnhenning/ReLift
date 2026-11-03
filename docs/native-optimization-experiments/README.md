@@ -1,10 +1,12 @@
 # Native optimization experiment proposals
 
-These are proposals for four separate experiments. No native implementation or new performance measurement is included. Run them one at a time, checking correctness and results before proceeding.
+These are the review proposals for four separate experiments. Run them one at a time, checking correctness and results before proceeding. Implementation updates are recorded separately below.
 
 Implementation updates: [updated baseline](updated-baseline-results.md),
 [gathering screening](01-cpu-batch-gathering-results.md) and
 [shared configuration and dependency injection](../optimization-configuration.md).
+The [shard packing/writing result](02-shard-packing-and-writing-results.md) records
+the second experiment without changing the original proposal.
 The proposals below remain the original review plans; result documents record
 actual implementation and measurements separately.
 

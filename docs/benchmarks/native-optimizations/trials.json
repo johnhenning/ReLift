@@ -5430,6 +5430,2586 @@
     }
   },
   {
+    "experiment": "shard-writer",
+    "mode": "control",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {}
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 1,
+    "status": "complete",
+    "started_at": "2026-11-03T03:15:28.699004+00:00",
+    "wall_seconds": 16.678958660006174,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/control/trial-01/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/control/trial-01/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/control/trial-01/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1649025024,
+      "sampled_peak_process_tree_pss_bytes": 1638910976,
+      "sampled_peak_process_tree_anonymous_bytes": 1062309888,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 4096,
+      "process_tree_write_bytes": 416731136,
+      "process_tree_rchar": 1091127217,
+      "process_tree_wchar": 416407531,
+      "process_tree_minor_faults": 408090,
+      "process_tree_major_faults": 0,
+      "process_tree_cpu_seconds": 12.56,
+      "sample_count": 119,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180394,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180394,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 20480,
+      "pswpout_bytes": 0
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16711586101155262,
+          "process_rss_highwater_bytes": 761131008,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.657340516001568,
+          "process_rss_highwater_bytes": 1649025024,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:15:44.918611+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {}
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16711586101155262,
+          "process_rss_highwater_bytes": 761131008,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.657340516001568,
+          "process_rss_highwater_bytes": 1649025024,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "shard-writer",
+    "mode": "control",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {}
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 2,
+    "status": "complete",
+    "started_at": "2026-11-03T03:17:01.796873+00:00",
+    "wall_seconds": 18.22475139099697,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/control/trial-02/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/control/trial-02/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/control/trial-02/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1649266688,
+      "sampled_peak_process_tree_pss_bytes": 1639102464,
+      "sampled_peak_process_tree_anonymous_bytes": 1063088128,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 4096,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091167729,
+      "process_tree_wchar": 416305524,
+      "process_tree_minor_faults": 390220,
+      "process_tree_major_faults": 0,
+      "process_tree_cpu_seconds": 12.41,
+      "sample_count": 127,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180394,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180394,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 45056,
+      "pswpout_bytes": 0
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16331735999847297,
+          "process_rss_highwater_bytes": 760467456,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.334889810997993,
+          "process_rss_highwater_bytes": 1649266688,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:17:19.583242+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {}
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16331735999847297,
+          "process_rss_highwater_bytes": 760467456,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.334889810997993,
+          "process_rss_highwater_bytes": 1649266688,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "shard-writer",
+    "mode": "control",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {}
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 3,
+    "status": "complete",
+    "started_at": "2026-11-03T03:17:39.876922+00:00",
+    "wall_seconds": 18.3841876929946,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/control/trial-03/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/control/trial-03/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/control/trial-03/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1649238016,
+      "sampled_peak_process_tree_pss_bytes": 1639112704,
+      "sampled_peak_process_tree_anonymous_bytes": 1063100416,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 843776,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091167290,
+      "process_tree_wchar": 416305524,
+      "process_tree_minor_faults": 389737,
+      "process_tree_major_faults": 6,
+      "process_tree_cpu_seconds": 12.51,
+      "sample_count": 130,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180394,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180394,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 36864,
+      "pswpout_bytes": 0
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16212154499953613,
+          "process_rss_highwater_bytes": 760504320,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.505076361005194,
+          "process_rss_highwater_bytes": 1649238016,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:17:57.816787+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {}
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16212154499953613,
+          "process_rss_highwater_bytes": 760504320,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.505076361005194,
+          "process_rss_highwater_bytes": 1649238016,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "shard-writer",
+    "mode": "control",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {}
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 4,
+    "status": "complete",
+    "started_at": "2026-11-03T03:18:16.766584+00:00",
+    "wall_seconds": 16.5587198860012,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/control/trial-04/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/control/trial-04/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/control/trial-04/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1647697920,
+      "sampled_peak_process_tree_pss_bytes": 1637414912,
+      "sampled_peak_process_tree_anonymous_bytes": 1060868096,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 884736,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091167534,
+      "process_tree_wchar": 416305524,
+      "process_tree_minor_faults": 389168,
+      "process_tree_major_faults": 6,
+      "process_tree_cpu_seconds": 12.49,
+      "sample_count": 118,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180394,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180394,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 28672,
+      "pswpout_bytes": 0
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16402164800092578,
+          "process_rss_highwater_bytes": 760537088,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.693791466997936,
+          "process_rss_highwater_bytes": 1647697920,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:18:32.890735+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {}
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16402164800092578,
+          "process_rss_highwater_bytes": 760537088,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 14.693791466997936,
+          "process_rss_highwater_bytes": 1647697920,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "shard-writer",
+    "mode": "control",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {}
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 5,
+    "status": "complete",
+    "started_at": "2026-11-03T03:19:50.029659+00:00",
+    "wall_seconds": 18.846110418002354,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/control/trial-05/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/control/trial-05/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/control/trial-05/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1649319936,
+      "sampled_peak_process_tree_pss_bytes": 1639158784,
+      "sampled_peak_process_tree_anonymous_bytes": 1062862848,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 0,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091167531,
+      "process_tree_wchar": 416305522,
+      "process_tree_minor_faults": 389676,
+      "process_tree_major_faults": 0,
+      "process_tree_cpu_seconds": 12.34,
+      "sample_count": 130,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180393,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180393,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 2035712,
+      "pswpout_bytes": 3317760
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.1655214979982702,
+          "process_rss_highwater_bytes": 760520704,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.950996296000085,
+          "process_rss_highwater_bytes": 1649319936,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:20:08.421903+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {}
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.1655214979982702,
+          "process_rss_highwater_bytes": 760520704,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.950996296000085,
+          "process_rss_highwater_bytes": 1649319936,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "shard-writer",
+    "mode": "cpp",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {
+        "shards": "cpp"
+      },
+      "native_build": "outputs/native/shards"
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 1,
+    "status": "complete",
+    "started_at": "2026-11-03T03:16:03.406202+00:00",
+    "wall_seconds": 19.830526143996394,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/cpp/trial-01/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"shards\": \"cpp\"}, \"native_build\": \"outputs/native/shards\"}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/cpp/trial-01/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/cpp/trial-01/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": {
+      "command": [
+        "g++-13",
+        "-O3",
+        "-std=c++17",
+        "-shared",
+        "-fPIC",
+        "-fno-fast-math",
+        "-I/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/include/python3.13",
+        "-I.venv/lib/python3.13/site-packages/torch/include",
+        "native/cpu.cpp",
+        "-o",
+        "outputs/native/shards/_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+        "-lcrypto"
+      ],
+      "compiler": "g++-13 (Ubuntu 13.4.0-10ubuntu1) 13.4.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "torch": "2.11.0+cu128",
+      "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+      "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+      "sources": {
+        "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+      },
+      "binary": "_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+      "binary_sha256": "e4bbb50435d5b5df4ee2b2d42d2ad67b11c6db4ce7057170bbeeb4fe15104436",
+      "build_seconds": 4.88319972800673
+    },
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1657966592,
+      "sampled_peak_process_tree_pss_bytes": 1646778368,
+      "sampled_peak_process_tree_anonymous_bytes": 1066082304,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 2007040,
+      "process_tree_write_bytes": 416608256,
+      "process_tree_rchar": 1091440426,
+      "process_tree_wchar": 416309600,
+      "process_tree_minor_faults": 282749,
+      "process_tree_major_faults": 6,
+      "process_tree_cpu_seconds": 13.92,
+      "sample_count": 143,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180485,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180485,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 20480,
+      "pswpout_bytes": 0
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16330742300488055,
+          "process_rss_highwater_bytes": 760434688,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 17.881236788991373,
+          "process_rss_highwater_bytes": 1657966592,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:16:22.783982+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "shards": "cpp"
+        },
+        "native_build": "outputs/native/shards"
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16330742300488055,
+          "process_rss_highwater_bytes": 760434688,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 17.881236788991373,
+          "process_rss_highwater_bytes": 1657966592,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "shard-writer",
+    "mode": "cpp",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {
+        "shards": "cpp"
+      },
+      "native_build": "outputs/native/shards"
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 2,
+    "status": "complete",
+    "started_at": "2026-11-03T03:16:41.866976+00:00",
+    "wall_seconds": 19.84328585199546,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/cpp/trial-02/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"shards\": \"cpp\"}, \"native_build\": \"outputs/native/shards\"}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/cpp/trial-02/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/cpp/trial-02/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": {
+      "command": [
+        "g++-13",
+        "-O3",
+        "-std=c++17",
+        "-shared",
+        "-fPIC",
+        "-fno-fast-math",
+        "-I/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/include/python3.13",
+        "-I.venv/lib/python3.13/site-packages/torch/include",
+        "native/cpu.cpp",
+        "-o",
+        "outputs/native/shards/_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+        "-lcrypto"
+      ],
+      "compiler": "g++-13 (Ubuntu 13.4.0-10ubuntu1) 13.4.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "torch": "2.11.0+cu128",
+      "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+      "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+      "sources": {
+        "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+      },
+      "binary": "_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+      "binary_sha256": "e4bbb50435d5b5df4ee2b2d42d2ad67b11c6db4ce7057170bbeeb4fe15104436",
+      "build_seconds": 4.88319972800673
+    },
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1638490112,
+      "sampled_peak_process_tree_pss_bytes": 1624440832,
+      "sampled_peak_process_tree_anonymous_bytes": 1047945216,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 413696,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091441153,
+      "process_tree_wchar": 416307344,
+      "process_tree_minor_faults": 277796,
+      "process_tree_major_faults": 1,
+      "process_tree_cpu_seconds": 13.84,
+      "sample_count": 143,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180485,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180485,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 73728,
+      "pswpout_bytes": 0
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16208914801245555,
+          "process_rss_highwater_bytes": 760545280,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 17.874915930005955,
+          "process_rss_highwater_bytes": 1638490112,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:17:01.209583+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "shards": "cpp"
+        },
+        "native_build": "outputs/native/shards"
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16208914801245555,
+          "process_rss_highwater_bytes": 760545280,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 17.874915930005955,
+          "process_rss_highwater_bytes": 1638490112,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "shard-writer",
+    "mode": "cpp",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {
+        "shards": "cpp"
+      },
+      "native_build": "outputs/native/shards"
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 3,
+    "status": "complete",
+    "started_at": "2026-11-03T03:17:20.107147+00:00",
+    "wall_seconds": 19.684997062999173,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/cpp/trial-03/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"shards\": \"cpp\"}, \"native_build\": \"outputs/native/shards\"}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/cpp/trial-03/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/cpp/trial-03/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": {
+      "command": [
+        "g++-13",
+        "-O3",
+        "-std=c++17",
+        "-shared",
+        "-fPIC",
+        "-fno-fast-math",
+        "-I/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/include/python3.13",
+        "-I.venv/lib/python3.13/site-packages/torch/include",
+        "native/cpu.cpp",
+        "-o",
+        "outputs/native/shards/_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+        "-lcrypto"
+      ],
+      "compiler": "g++-13 (Ubuntu 13.4.0-10ubuntu1) 13.4.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "torch": "2.11.0+cu128",
+      "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+      "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+      "sources": {
+        "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+      },
+      "binary": "_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+      "binary_sha256": "e4bbb50435d5b5df4ee2b2d42d2ad67b11c6db4ce7057170bbeeb4fe15104436",
+      "build_seconds": 4.88319972800673
+    },
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1643294720,
+      "sampled_peak_process_tree_pss_bytes": 1629736960,
+      "sampled_peak_process_tree_anonymous_bytes": 1050025984,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 0,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091441250,
+      "process_tree_wchar": 416307342,
+      "process_tree_minor_faults": 278819,
+      "process_tree_major_faults": 0,
+      "process_tree_cpu_seconds": 13.72,
+      "sample_count": 142,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180484,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180484,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 217088,
+      "pswpout_bytes": 0
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.1623360979865538,
+          "process_rss_highwater_bytes": 760373248,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 17.763809740004945,
+          "process_rss_highwater_bytes": 1640673280,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:17:39.312356+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "shards": "cpp"
+        },
+        "native_build": "outputs/native/shards"
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.1623360979865538,
+          "process_rss_highwater_bytes": 760373248,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 17.763809740004945,
+          "process_rss_highwater_bytes": 1640673280,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "shard-writer",
+    "mode": "cpp",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {
+        "shards": "cpp"
+      },
+      "native_build": "outputs/native/shards"
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 4,
+    "status": "complete",
+    "started_at": "2026-11-03T03:18:50.815600+00:00",
+    "wall_seconds": 21.217183804008528,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/cpp/trial-04/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"shards\": \"cpp\"}, \"native_build\": \"outputs/native/shards\"}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/cpp/trial-04/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/cpp/trial-04/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": {
+      "command": [
+        "g++-13",
+        "-O3",
+        "-std=c++17",
+        "-shared",
+        "-fPIC",
+        "-fno-fast-math",
+        "-I/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/include/python3.13",
+        "-I.venv/lib/python3.13/site-packages/torch/include",
+        "native/cpu.cpp",
+        "-o",
+        "outputs/native/shards/_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+        "-lcrypto"
+      ],
+      "compiler": "g++-13 (Ubuntu 13.4.0-10ubuntu1) 13.4.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "torch": "2.11.0+cu128",
+      "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+      "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+      "sources": {
+        "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+      },
+      "binary": "_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+      "binary_sha256": "e4bbb50435d5b5df4ee2b2d42d2ad67b11c6db4ce7057170bbeeb4fe15104436",
+      "build_seconds": 4.88319972800673
+    },
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1642205184,
+      "sampled_peak_process_tree_pss_bytes": 1628309504,
+      "sampled_peak_process_tree_anonymous_bytes": 1051271168,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 27185152,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091441202,
+      "process_tree_wchar": 416307344,
+      "process_tree_minor_faults": 279027,
+      "process_tree_major_faults": 111,
+      "process_tree_cpu_seconds": 13.87,
+      "sample_count": 152,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180485,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180485,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 4096,
+      "pswpout_bytes": 0
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.18331560300430283,
+          "process_rss_highwater_bytes": 760238080,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 18.120465996005805,
+          "process_rss_highwater_bytes": 1642205184,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:19:11.586438+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "shards": "cpp"
+        },
+        "native_build": "outputs/native/shards"
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.18331560300430283,
+          "process_rss_highwater_bytes": 760238080,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 18.120465996005805,
+          "process_rss_highwater_bytes": 1642205184,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "shard-writer",
+    "mode": "cpp",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {
+        "shards": "cpp"
+      },
+      "native_build": "outputs/native/shards"
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 5,
+    "status": "complete",
+    "started_at": "2026-11-03T03:19:31.883612+00:00",
+    "wall_seconds": 18.09988853998948,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/cpp/trial-05/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"shards\": \"cpp\"}, \"native_build\": \"outputs/native/shards\"}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/cpp/trial-05/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/cpp/trial-05/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": {
+      "command": [
+        "g++-13",
+        "-O3",
+        "-std=c++17",
+        "-shared",
+        "-fPIC",
+        "-fno-fast-math",
+        "-I/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/include/python3.13",
+        "-I.venv/lib/python3.13/site-packages/torch/include",
+        "native/cpu.cpp",
+        "-o",
+        "outputs/native/shards/_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+        "-lcrypto"
+      ],
+      "compiler": "g++-13 (Ubuntu 13.4.0-10ubuntu1) 13.4.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "torch": "2.11.0+cu128",
+      "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+      "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+      "sources": {
+        "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+      },
+      "binary": "_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+      "binary_sha256": "e4bbb50435d5b5df4ee2b2d42d2ad67b11c6db4ce7057170bbeeb4fe15104436",
+      "build_seconds": 4.88319972800673
+    },
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1657212928,
+      "sampled_peak_process_tree_pss_bytes": 1643253760,
+      "sampled_peak_process_tree_anonymous_bytes": 1065136128,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 2011136,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091441252,
+      "process_tree_wchar": 416307342,
+      "process_tree_minor_faults": 282563,
+      "process_tree_major_faults": 6,
+      "process_tree_cpu_seconds": 13.84,
+      "sample_count": 131,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180484,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180484,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 905216,
+      "pswpout_bytes": 6770688
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16532735800137743,
+          "process_rss_highwater_bytes": 760410112,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.26277873000072,
+          "process_rss_highwater_bytes": 1657212928,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:19:49.573474+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "shards": "cpp"
+        },
+        "native_build": "outputs/native/shards"
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16532735800137743,
+          "process_rss_highwater_bytes": 760410112,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.26277873000072,
+          "process_rss_highwater_bytes": 1657212928,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "shard-writer",
+    "mode": "python",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {
+        "shards": "python"
+      }
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 1,
+    "status": "complete",
+    "started_at": "2026-11-03T03:15:45.441496+00:00",
+    "wall_seconds": 17.916462837994914,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/python/trial-01/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"shards\": \"python\"}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/python/trial-01/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/python/trial-01/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1642098688,
+      "sampled_peak_process_tree_pss_bytes": 1631974400,
+      "sampled_peak_process_tree_anonymous_bytes": 1055842304,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 0,
+      "process_tree_write_bytes": 416608256,
+      "process_tree_rchar": 1091168883,
+      "process_tree_wchar": 416308003,
+      "process_tree_minor_faults": 359021,
+      "process_tree_major_faults": 0,
+      "process_tree_cpu_seconds": 12.59,
+      "sample_count": 126,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180393,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180393,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 65536,
+      "pswpout_bytes": 0
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.15968231500301044,
+          "process_rss_highwater_bytes": 760336384,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.025304152004537,
+          "process_rss_highwater_bytes": 1642098688,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:16:02.929679+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "shards": "python"
+        }
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.15968231500301044,
+          "process_rss_highwater_bytes": 760336384,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.025304152004537,
+          "process_rss_highwater_bytes": 1642098688,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "shard-writer",
+    "mode": "python",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {
+        "shards": "python"
+      }
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 2,
+    "status": "complete",
+    "started_at": "2026-11-03T03:16:23.304866+00:00",
+    "wall_seconds": 18.474713103001704,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/python/trial-02/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"shards\": \"python\"}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/python/trial-02/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/python/trial-02/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1654685696,
+      "sampled_peak_process_tree_pss_bytes": 1644581888,
+      "sampled_peak_process_tree_anonymous_bytes": 1067982848,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 868352,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091169898,
+      "process_tree_wchar": 416305504,
+      "process_tree_minor_faults": 362542,
+      "process_tree_major_faults": 6,
+      "process_tree_cpu_seconds": 12.59,
+      "sample_count": 130,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180393,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180393,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 36864,
+      "pswpout_bytes": 0
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16223942299257033,
+          "process_rss_highwater_bytes": 760315904,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.491370566000114,
+          "process_rss_highwater_bytes": 1654685696,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:16:41.293638+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "shards": "python"
+        }
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16223942299257033,
+          "process_rss_highwater_bytes": 760315904,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.491370566000114,
+          "process_rss_highwater_bytes": 1654685696,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "shard-writer",
+    "mode": "python",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {
+        "shards": "python"
+      }
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 3,
+    "status": "complete",
+    "started_at": "2026-11-03T03:17:58.311803+00:00",
+    "wall_seconds": 18.387655819999054,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/python/trial-03/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"shards\": \"python\"}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/python/trial-03/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/python/trial-03/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1649311744,
+      "sampled_peak_process_tree_pss_bytes": 1639134208,
+      "sampled_peak_process_tree_anonymous_bytes": 1062797312,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 8192,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091170095,
+      "process_tree_wchar": 416305502,
+      "process_tree_minor_faults": 360753,
+      "process_tree_major_faults": 0,
+      "process_tree_cpu_seconds": 12.52,
+      "sample_count": 129,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180392,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180392,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 24576,
+      "pswpout_bytes": 0
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.1637618980021216,
+          "process_rss_highwater_bytes": 760451072,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.459544053010177,
+          "process_rss_highwater_bytes": 1649311744,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:18:16.252061+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "shards": "python"
+        }
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.1637618980021216,
+          "process_rss_highwater_bytes": 760451072,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 16.459544053010177,
+          "process_rss_highwater_bytes": 1649311744,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "shard-writer",
+    "mode": "python",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {
+        "shards": "python"
+      }
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 4,
+    "status": "complete",
+    "started_at": "2026-11-03T03:18:33.381864+00:00",
+    "wall_seconds": 17.384039557000506,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/python/trial-04/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"shards\": \"python\"}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/python/trial-04/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/python/trial-04/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1649197056,
+      "sampled_peak_process_tree_pss_bytes": 1638907904,
+      "sampled_peak_process_tree_anonymous_bytes": 1062846464,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 81068032,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091169897,
+      "process_tree_wchar": 416305504,
+      "process_tree_minor_faults": 361412,
+      "process_tree_major_faults": 1,
+      "process_tree_cpu_seconds": 12.51,
+      "sample_count": 124,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570180393,
+      "allocated_bytes": 570445824
+    },
+    "final_output_size": {
+      "logical_bytes": 570180393,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 139264,
+      "pswpout_bytes": 81780736
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16195560799678788,
+          "process_rss_highwater_bytes": 760475648,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 15.065593637991697,
+          "process_rss_highwater_bytes": 1649197056,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:18:49.894206+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "shards": "python"
+        }
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16195560799678788,
+          "process_rss_highwater_bytes": 760475648,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 15.065593637991697,
+          "process_rss_highwater_bytes": 1649197056,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
+    "experiment": "shard-writer",
+    "mode": "python",
+    "source": "outputs/experiments/native-shards-source",
+    "options": {
+      "optimizations": {
+        "shards": "python"
+      }
+    },
+    "task": "correction",
+    "diagnostic": false,
+    "repeat": 5,
+    "status": "complete",
+    "started_at": "2026-11-03T03:19:12.081632+00:00",
+    "wall_seconds": 19.7439926849911,
+    "command": [
+      ".venv/bin/python",
+      "scripts/experiment_worker.py",
+      "--source",
+      "outputs/experiments/native-shards-source",
+      "--root",
+      "/home/johnhenning/projects/relift",
+      "--output",
+      "outputs/experiments/native-optimizations/shard-writer/python/trial-05/output",
+      "--task",
+      "correction",
+      "--options",
+      "{\"optimizations\": {\"shards\": \"python\"}}"
+    ],
+    "output": "outputs/experiments/native-optimizations/shard-writer/python/trial-05/output",
+    "log": "outputs/experiments/native-optimizations/shard-writer/python/trial-05/run.log",
+    "returncode": 0,
+    "scenario": "shard-writer_correction_process",
+    "scene": "swing-tire",
+    "input_sha256": "8593a951cdd3d99ccfe1372849579eccf9422765e186b9aaf36eaf70d6e039a2",
+    "num_frames": 0,
+    "process_res": 504,
+    "corrector_batch": 8,
+    "seed": 0,
+    "code_hashes": {
+      "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+      "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+      "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+      "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+      "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+      "relift/da3_offload.py": "252895b8aba8c0a3b5647d01fe0c1f39815fc748640b728a65b6a72015644bce",
+      "relift/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "relift/eval/scoring.py": "48374d97bbca346a140f345659291c4cf8cb73227ba2005ddb930d0b3cae0c17",
+      "relift/eval/tables.py": "6702701aec83eb0992f2f0211a775b82f588fb765e1d04e8e9dc736cd5c8fca8",
+      "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+      "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+      "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+      "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+      "relift/optimization.py": "14c8ffcd19ec6402f62b3e458aa66cbef31f853320410280db81d522ff18ea92",
+      "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+      "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+      "relift/providers/__init__.py": "f908e591c3a11fda4d95c269ac06c8613d62ae5a6cfa6f506dd9f5270ef75f2f",
+      "relift/providers/alltracker.py": "c0f23c9e028f6078e2da994e0c5fa6c7cf50c1c5ca0bf82ccaeb5280af3c580b",
+      "relift/providers/cowtracker.py": "5007032601e171e6fabdc56c14d994ff0acfc35dcfe3c2b9c81cb3e1fe9efadd",
+      "relift/providers/da3.py": "4f0755231496a99e246bea1d8999f6abfe461b2752da33c130b1d56e01e8eb20",
+      "relift/providers/rc4.py": "ad4106769f5a73ee2da4bac7af83424784ef751170aaf16d845c3af28b35ab12",
+      "relift/providers/vggt_omega.py": "f447e39004f700e509ccb04f35d58628df0afd20442939709de2b274b92b9e72",
+      "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+      "relift/shard_packing.py": "9a00caf0f13e63f19d92f89e581b8f37b01928fddd73e189f97563481dd33f19",
+      "relift/storage.py": "31d908cc31882c5646d966d76cc5a33e242ec44b10569a3c33cfb394a892bae0",
+      "relift/streaming.py": "92b607572f469555e98494804b07b32dd29b6e8292fdc99768ba2c889a36f610",
+      "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+      "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+      "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc",
+      "native/cpu.cpp": "7dd8e14de29a839fcfecddf558eb23a2dc8cd5ddb35ab055bd5a2e1f4795ced3"
+    },
+    "native_build": null,
+    "lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648",
+    "wrapper_sha256": "b6238d5e653ce8b750502d8dfce17a995ff328c83593334828f8cfe516aaf3ff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "telemetry": {
+      "sampled_peak_process_tree_rss_bytes": 1649475584,
+      "sampled_peak_process_tree_pss_bytes": 1639136256,
+      "sampled_peak_process_tree_anonymous_bytes": 1062838272,
+      "sampled_peak_process_tree_swap_bytes": 0,
+      "sampled_peak_gpu_device_used_bytes": 4167958528,
+      "process_tree_read_bytes": 4096,
+      "process_tree_write_bytes": 416604160,
+      "process_tree_rchar": 1091169800,
+      "process_tree_wchar": 416305504,
+      "process_tree_minor_faults": 361287,
+      "process_tree_major_faults": 0,
+      "process_tree_cpu_seconds": 12.43,
+      "sample_count": 137,
+      "gpu_sampling_error": null,
+      "sampling_limits": "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    },
+    "telemetry_interval_seconds": 0.1,
+    "sampled_output_peak": {
+      "logical_bytes": 570197707,
+      "allocated_bytes": 570462208
+    },
+    "final_output_size": {
+      "logical_bytes": 570180393,
+      "allocated_bytes": 570445824
+    },
+    "system_swap_deltas": {
+      "pswpin_bytes": 73728,
+      "pswpout_bytes": 31105024
+    },
+    "result": {
+      "task": "correction",
+      "phases": {
+        "model_load": {
+          "seconds": 0.16308806800225284,
+          "process_rss_highwater_bytes": 760598528,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 17.869561137995333,
+          "process_rss_highwater_bytes": 1649475584,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      },
+      "shape": [
+        84,
+        280,
+        504,
+        3
+      ],
+      "execution": {},
+      "finite": true,
+      "source": "outputs/experiments/native-shards-source",
+      "started_at": "2026-11-03T03:19:31.392038+00:00"
+    },
+    "metrics": {
+      "settings": {
+        "optimizations": {
+          "shards": "python"
+        }
+      },
+      "stages": {
+        "model_load": {
+          "seconds": 0.16308806800225284,
+          "process_rss_highwater_bytes": 760598528,
+          "cuda_allocated_peak_bytes": 155717632,
+          "cuda_reserved_peak_bytes": 171966464
+        },
+        "correction": {
+          "seconds": 17.869561137995333,
+          "process_rss_highwater_bytes": 1649475584,
+          "cuda_allocated_peak_bytes": 2070839296,
+          "cuda_reserved_peak_bytes": 2835349504
+        }
+      }
+    }
+  },
+  {
     "experiment": "updated-baseline-correction",
     "mode": "control",
     "source": "outputs/experiments/native-baseline-source",

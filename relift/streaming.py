@@ -150,8 +150,8 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
     from .optimization import OptimizationConfig, InferenceComponents
     components = components or InferenceComponents()
     if optimizations is not None:
-        if optimizations.rays != "current" or optimizations.shards != "current":
-            raise NotImplementedError("This stack layer implements gathering; ray/shard backends arrive in later layers")
+        if optimizations.rays != "current":
+            raise NotImplementedError("Ray backends arrive in a later layer")
         batch, padding_batch = optimizations.corrector_batch, optimizations.padding_batch
         gather_backend = optimizations.gather
         depth_cache_mb, hash_writes = optimizations.depth_cache_mb, optimizations.hash_writes
@@ -207,8 +207,17 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
     if optimizations is not None:
         provenance["implementation_hashes"] = {str(p.relative_to(Path(__file__).parent)): file_sha256(p)
             for p in sorted(Path(__file__).parent.rglob("*.py"))}
+    packer, payload_writer = components.shard_packer, components.npy_writer
+    if optimizations and optimizations.shards != "current":
+        from .shard_packing import ShardPacker
+        native = components.native_loader() if optimizations.shards == "cpp" and components.native_loader else None
+        selected_packer = ShardPacker(optimizations.shards, native=native)
+        packer = packer or selected_packer
+        if optimizations.shards == "cpp":
+            payload_writer = payload_writer or selected_packer.write
     store = TrajectoryStore.create(output_dir, (T, H, W, 3), provenance, order,
-                                   dict(images=images, poses=poses, intrinsics=np.asarray(obs_source.intrinsics_cpu)), repeated_ids, hash_writes=hash_writes)
+                                   dict(images=images, poses=poses, intrinsics=np.asarray(obs_source.intrinsics_cpu)), repeated_ids,
+                                   hash_writes=hash_writes, packer=packer, payload_writer=payload_writer)
     if store.manifest["state"] == "complete":
         return store
     scheduler = None

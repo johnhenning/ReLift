@@ -34,15 +34,20 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("layer", type=int, choices=range(1,5))
     parser.add_argument("--refresh", action="store_true")
+    parser.add_argument("--source", type=Path, default=ROOT, help="Immutable layer source; defaults to current workspace")
     args = parser.parse_args()
     expected = BRANCHES[args.layer if args.refresh else args.layer-1]
     if git("branch", "--show-current") != expected or git("status", "--porcelain"):
         raise ValueError(f"Expected clean isolated branch {expected}")
     if not args.refresh:
         git("checkout", "-b", BRANCHES[args.layer])
-    files = subprocess.check_output(["git", "ls-files", "--cached", "--others", "--exclude-standard"], cwd=ROOT, text=True).splitlines()
+    source_root = args.source.resolve()
+    if source_root != ROOT:
+        files = sorted(json.loads((source_root / "snapshot.json").read_text())["files"])
+    else:
+        files = subprocess.check_output(["git", "ls-files", "--cached", "--others", "--exclude-standard"], cwd=ROOT, text=True).splitlines()
     for filename in files:
-        source = ROOT / filename
+        source = source_root / filename
         if not source.is_file() or source.suffix in (".mp4", ".so"):
             continue
         target = DEST / filename
@@ -51,6 +56,15 @@ def main():
             target.write_text(source.read_text().replace("https://github.com/ReLift3D/ReLift.git", "https://github.com/johnhenning/ReLift.git"))
         else:
             shutil.copy2(source, target)
+    results = ["01-cpu-batch-gathering-results.md", "02-shard-packing-and-writing-results.md",
+               "03-cuda-ray-construction-results.md", "04-da3-archive-and-block-loading-results.md"]
+    for filename in ("scripts/prepare_native_pr.py", "configs/experiments/native-optimizations.json",
+                     "configs/experiments/native-measurement-roles.json", "scripts/build_optimization_charts.py",
+                     "scripts/summarize_optimization_experiments.py", "docs/optimization-configuration.md",
+                     "docs/native-optimization-experiments/README.md",
+                     "docs/native-optimization-experiments/"+results[args.layer-1]):
+        if (ROOT / filename).is_file():
+            shutil.copy2(ROOT / filename, DEST / filename)
     campaign = ROOT / "outputs/experiments/native-optimizations"
     evidence = DEST / "docs/benchmarks/native-optimizations"
     evidence.mkdir(parents=True, exist_ok=True)
