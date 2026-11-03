@@ -15,6 +15,7 @@ namespace py = pybind11;
 
 #ifdef RELIFT_WITH_CUDA
 void launch_rays(uintptr_t,uintptr_t,uintptr_t,uintptr_t,uintptr_t,uintptr_t,int,int,int,int,uintptr_t);
+void launch_camera_rays(uintptr_t,uintptr_t,uintptr_t,uintptr_t,uintptr_t,int,int,int,int,uintptr_t);
 #endif
 
 static float read_float(const char* p, ssize_t size) {
@@ -124,5 +125,6 @@ PYBIND11_MODULE(_relift_cpu, module) {
     module.def("write_payload", &write_payload, py::arg("fd"), py::arg("header"), py::arg("array").noconvert(), py::arg("hash"));
 #ifdef RELIFT_WITH_CUDA
     module.def("launch_rays", &launch_rays);
+    module.def("launch_camera_rays", &launch_camera_rays);
 #endif
 }

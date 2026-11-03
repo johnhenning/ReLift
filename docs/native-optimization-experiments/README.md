@@ -7,8 +7,9 @@ Implementation updates: [updated baseline](updated-baseline-results.md),
 [shared configuration and dependency injection](../optimization-configuration.md).
 The [shard packing/writing result](02-shard-packing-and-writing-results.md) records
 the second experiment without changing the original proposal.
-The [ray construction result](03-cuda-ray-construction-results.md) includes a failed
-CUDA numerical gate; the new backend remains disabled.
+The [ray construction result](03-cuda-ray-construction-results.md) includes the
+initial failed CUDA gate; the [bug audit](cuda-ray-audit.md) records the fixes and
+passing corrected comparison. The new backend remains disabled by default.
 The proposals below remain the original review plans; result documents record
 actual implementation and measurements separately.
 

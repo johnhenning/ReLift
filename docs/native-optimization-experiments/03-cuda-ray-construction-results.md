@@ -1,5 +1,10 @@
 # Ray construction results
 
+This document records the initial screening. The subsequent [bug audit and corrected
+measurements](cuda-ray-audit.md) identify direction arithmetic and operator-validation
+bugs. The corrected partial-fusion path passes full-output parity and stays opt-in
+because it is slower than its matching control.
+
 The third experiment adds a blocked eager PyTorch ray builder and a registered
 custom CUDA operator. Both retain the same 16-frame depth uploads, full timeline,
 point groups, dtype and visibility handling. The current ray path remains default.
@@ -16,8 +21,8 @@ All five blocked-PyTorch outputs are bitwise equal to the first control for ordi
 XYZ, repeated XYZ and raw lift. Every fused-CUDA output fails the strict full-output
 gate. The first checked candidate has maximum normalized errors of **0.053855** for
 ordinary XYZ, **0.025436** for repeated XYZ and **0.004285** for raw lift. The allowed
-maximum is 0.0001. The numerical cause has not been isolated; small local kernel
-differences cannot be assumed harmless to the complete corrector.
+maximum is 0.0001. The numerical cause was not isolated during this initial screen;
+the linked audit subsequently identifies and corrects it.
 
 Three CUDA edge/stream tests and six gathering/composition checks pass, covering
 nearest ties, borders, degenerate image dimensions, NaN/Inf coordinates, float32

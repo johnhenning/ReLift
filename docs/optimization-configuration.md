@@ -10,7 +10,7 @@ and trajectory-store provenance; changed settings invalidate resume.
 |---|---|---|
 | `gather` | `current` | `current`, reusable-buffer `python`, native `cpp` gathering |
 | `shards` | `current` | `current`, `python`, `cpp` shard packing and optional native writing |
-| `rays` | `current` | `current`, blocked `python`, experimental fused `cuda` |
+| `rays` | `current` | `current`, blocked `python`, CUDA preparation with PyTorch rotation |
 | `da3_weights` | `current` | `current`, packed `python`, packed `cpp`; later stack layer |
 | `da3_features` | `current` | `current`, archived `python`, archived `cpp`; later stack layer |
 | `tracker_init_weights` | `false` | Skip discarded pretrained initialization; `true` restores old initialization |
@@ -29,8 +29,9 @@ not accepted defaults. Batch and precision effects must pass quality checks for
 each combination. New backends are optional and cannot silently fall back when a
 build is absent. A backend from a later stack layer fails explicitly until installed.
 
-The fused CUDA ray experiment also fails the full-output numerical gate and is
-explicitly experimental. Its local edge tests do not establish trajectory parity.
+The original fully fused CUDA ray prototype failed the full-output gate. The
+corrected preparation path retains PyTorch rotation and passes the recorded full
+comparison, but remains experimental because it is slower. See the ray bug audit.
 
 ## CLI configuration
 

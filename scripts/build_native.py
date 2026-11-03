@@ -25,11 +25,13 @@ def main():
     parser.add_argument("--cuda", action="store_true")
     parser.add_argument("--nvcc", default="nvcc")
     parser.add_argument("--arch", default="sm_86")
+    parser.add_argument("--source", type=Path, default=ROOT, help="Compile an explicit immutable source snapshot")
     args = parser.parse_args()
     if args.out.exists():
         raise FileExistsError(f"Refusing to overwrite native build: {args.out}")
     args.out.mkdir(parents=True)
-    source = ROOT / "native/cpu.cpp"
+    source_root = args.source.resolve()
+    source = source_root / "native/cpu.cpp"
     binary = args.out.resolve() / ("_relift_cpu" + sysconfig.get_config_var("EXT_SUFFIX"))
     # pybind11 headers ship in the pinned torch wheel; no extra runtime dependency.
     command = [args.cxx, "-O3", "-std=c++17", "-shared", "-fPIC", "-fno-fast-math",
@@ -41,7 +43,7 @@ def main():
         obj = args.out.resolve()/"rays.o"
         cuda_command = [args.nvcc,"-O3","-std=c++17","-ccbin",args.cxx,"-Xcompiler","-fPIC",
                         "--fmad=false","--prec-div=true","--prec-sqrt=true","-arch="+args.arch,
-                        "-c",str(ROOT/"native/rays.cu"),"-o",str(obj)]
+                        "-c",str(source_root/"native/rays.cu"),"-o",str(obj)]
         subprocess.run(cuda_command,check=True)
         command += ["-DRELIFT_WITH_CUDA",str(obj),"-lcudart"]
     subprocess.run(command, check=True)
@@ -53,7 +55,7 @@ def main():
                   build_seconds=time.perf_counter()-start)
     if args.cuda:
         record.update(cuda_command=cuda_command,nvcc=subprocess.check_output([args.nvcc,"--version"],text=True),arch=args.arch)
-        record["sources"]["native/rays.cu"] = hashlib.sha256((ROOT/"native/rays.cu").read_bytes()).hexdigest()
+        record["sources"]["native/rays.cu"] = hashlib.sha256((source_root/"native/rays.cu").read_bytes()).hexdigest()
     (args.out / "build.json").write_text(json.dumps(record, indent=2)+"\n")
     print(args.out / "build.json")
 

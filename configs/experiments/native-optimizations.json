@@ -184,6 +184,29 @@
           }
         }
       ]
+    },
+    "cuda-rays-corrected": {
+      "task": "correction",
+      "repeats": 5,
+      "variants": [
+        {
+          "name": "control",
+          "source": "outputs/experiments/native-rays-compatible-source",
+          "options": {
+            "optimizations": {}
+          }
+        },
+        {
+          "name": "cuda",
+          "source": "outputs/experiments/native-rays-compatible-source",
+          "options": {
+            "optimizations": {
+              "rays": "cuda"
+            },
+            "native_build": "outputs/native/rays-compatible"
+          }
+        }
+      ]
     }
   }
 }

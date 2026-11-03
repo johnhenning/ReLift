@@ -65,11 +65,16 @@ def main():
                      "docs/native-optimization-experiments/"+results[args.layer-1]):
         if (ROOT / filename).is_file():
             shutil.copy2(ROOT / filename, DEST / filename)
+    if args.layer >= 3:
+        for filename in ("docs/native-optimization-experiments/cuda-ray-audit.md", "scripts/run_source_tests.py"):
+            shutil.copy2(ROOT/filename,DEST/filename)
     campaign = ROOT / "outputs/experiments/native-optimizations"
     evidence = DEST / "docs/benchmarks/native-optimizations"
     evidence.mkdir(parents=True, exist_ok=True)
     for filename in ("summary.json", "environment.json"):
         (evidence / filename).write_text(json.dumps(portable(json.loads((campaign / filename).read_text())), indent=2)+"\n")
+    for path in campaign.glob("ray-audit*.json"):
+        (evidence/path.name).write_text(json.dumps(portable(json.loads(path.read_text())),indent=2)+"\n")
     trials = [portable(json.loads(p.read_text())) for p in sorted(campaign.rglob("trial.json"))]
     (evidence / "trials.json").write_text(json.dumps(trials, indent=2)+"\n")
     quality = {str(p.relative_to(campaign)): portable(json.loads(p.read_text())) for p in sorted(campaign.rglob("quality.json"))}

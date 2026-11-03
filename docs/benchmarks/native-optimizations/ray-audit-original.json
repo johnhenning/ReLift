@@ -1,0 +1,69 @@
+{
+  "source": "outputs/experiments/native-rays-source",
+  "build": {
+    "command": [
+      "g++-13",
+      "-O3",
+      "-std=c++17",
+      "-shared",
+      "-fPIC",
+      "-fno-fast-math",
+      "-I/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/include/python3.13",
+      "-I.venv/lib/python3.13/site-packages/torch/include",
+      "native/cpu.cpp",
+      "-o",
+      "outputs/native/rays/_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+      "-lcrypto",
+      "-DRELIFT_WITH_CUDA",
+      "outputs/native/rays/rays.o",
+      "-lcudart"
+    ],
+    "compiler": "g++-13 (Ubuntu 13.4.0-10ubuntu1) 13.4.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+    "torch": "2.11.0+cu128",
+    "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+    "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+    "sources": {
+      "native/cpu.cpp": "5dbc60311645cae793913c7ada4bc081444c88cb38b15489c5fc3286b1a635b8",
+      "native/rays.cu": "50c87a86e9fc6bad68df85f8f3e086439248359a36e9f4d523d0464edddfdd3f"
+    },
+    "binary": "_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+    "binary_sha256": "33c7a71e9afa1c3098bb21cc626d37524c6efd143047bdf58a83f35d7719cf42",
+    "build_seconds": 8.419617308987654,
+    "cuda_command": [
+      "nvcc",
+      "-O3",
+      "-std=c++17",
+      "-ccbin",
+      "g++-13",
+      "-Xcompiler",
+      "-fPIC",
+      "--fmad=false",
+      "--prec-div=true",
+      "--prec-sqrt=true",
+      "-arch=sm_86",
+      "-c",
+      "native/rays.cu",
+      "-o",
+      "outputs/native/rays/rays.o"
+    ],
+    "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2024 NVIDIA Corporation\nBuilt on Thu_Mar_28_02:18:24_PDT_2024\nCuda compilation tools, release 12.4, V12.4.131\nBuild cuda_12.4.r12.4/compiler.34097967_0\n",
+    "arch": "sm_86"
+  },
+  "shape": [
+    84,
+    280,
+    504
+  ],
+  "totals": {
+    "points": 11854080,
+    "nearest_mismatches": 0,
+    "direction_components_different": 9970170,
+    "max_direction_absolute_error": 1.7881393432617188e-07,
+    "max_range_absolute_error": 0.0,
+    "range_values_different": 0
+  },
+  "nearest_examples": [],
+  "tracker_sha256": "325ec7994d3eb3e6a662fe02cfea2dd19f047cba00accd7af3db405d92f6b066",
+  "script_sha256": "8a8716c363f72516610beebd4f79b22607fd7c33efc3e6ee2c499b48eb8e3647"
+}

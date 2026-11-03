@@ -44,3 +44,12 @@ def test_boundaries_ties_nonfinite_and_stream(H,W):
         torch.testing.assert_close(a,b,rtol=1e-6,atol=1e-6)
     with pytest.raises(ValueError):
         build(coords.half(),depth,K,rotation)
+    with pytest.raises(ValueError,match="float32"):
+        build.operator(coords.half(),depth,K,rotation)
+    with pytest.raises(ValueError,match="shapes"):
+        build.operator(coords[:,:,:1],depth,K,rotation)
+    # Direct operator calls must handle strides safely, rather than bypassing
+    # normalization in the convenience wrapper and reading the wrong addresses.
+    strided=torch.stack([coords,coords],-1)[...,0]
+    direct=build.operator(strided,depth,K,rotation)
+    for a,b in zip(direct,actual): torch.testing.assert_close(a,b,rtol=0,atol=0)
