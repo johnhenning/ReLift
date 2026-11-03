@@ -1,0 +1,3 @@
+extends = "background-cached"
+[observations]
+prefetch = true

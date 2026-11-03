@@ -76,6 +76,9 @@ def run(
         task="pipeline",
         phases=metrics["stages"],
         configuration=metrics["settings"].get("configuration"),
+        shard_commits=json.loads((output / "shard-commits.json").read_text())
+        if (output / "shard-commits.json").exists()
+        else None,
         shape=store.shape,
         finite=store.finite(),
         observation_cache=json.loads((output / "observation-cache.json").read_text())

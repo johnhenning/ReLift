@@ -357,7 +357,13 @@ def stream_correct(
     free = shutil.disk_usage(output_dir).free
     if stored_bytes > scratch_budget_gb * 2**30 or stored_bytes > free * 0.9:
         raise MemoryError("Trajectory store would exceed scratch budget or available disk space")
-    batch_bytes = min(total, group * batch) * T * 64
+    commit_backend = optimizations.commit_backend if optimizations else "sync"
+    # Reserve a second conservative staging workspace for a pending writer, including
+    # packing/finite-check temporaries. This is a local target, not an RSS limit.
+    pending_workspace = (
+        commit_backend == "threaded" or components.shard_committer_factory is not None
+    )
+    batch_bytes = min(total, group * batch) * T * 64 * (2 if pending_workspace else 1)
     if batch_bytes > ram_budget_gb * 2**30:
         raise MemoryError("Trajectory staging batch exceeds RAM budget; lower corrector batch")
     poses = np.asarray(obs_source.poses_cpu, dtype=np.float32)
@@ -432,6 +438,16 @@ def stream_correct(
     assert store.manifest is not None
     if store.manifest["state"] == "complete":
         return store
+    from .shard_commits import BoundedShardCommitter
+
+    # Snapshot verified resume coverage before the single writer owns the manifest.
+    # The main thread never reads a manifest while a background commit can mutate it.
+    committed = frozenset((s["start"], s["stop"]) for s in store.manifest["shards"])
+    committer = resources.enter_context(
+        components.shard_committer_factory(store)
+        if components.shard_committer_factory
+        else BoundedShardCommitter(store, commit_backend)
+    )
     scheduler = None
     if optimizations is not None and optimizations.prefetch:
         from .prefetch import PrefetchedRays
@@ -442,7 +458,7 @@ def stream_correct(
     for start in range(0, len(valid_ids), group * batch):
         original, selected = _selected_ids(valid_ids, start, group, batch, padding_batch)
         stop = start + len(original)
-        if store.has_shard(start, stop):
+        if (start, stop) in committed:
             continue
         nb = max(1, (len(original) + group - 1) // group)
         origin, direction, distance, vis = (
@@ -468,7 +484,7 @@ def stream_correct(
                 following_original, following = _selected_ids(
                     valid_ids, following_start, group, batch, padding_batch
                 )
-                if not store.has_shard(following_start, following_start + len(following_original)):
+                if (following_start, following_start + len(following_original)) not in committed:
                     scheduler.schedule(following)
                     break
         result = torch.nan_to_num(result.permute(1, 0, 2, 3).reshape(T, -1, 3))[:, : len(original)]
@@ -478,7 +494,7 @@ def stream_correct(
             .reshape(T, -1, 3)[:, : len(original)]
         )
         observed_export = unpadded_observed.permute(1, 0, 2).reshape(T, -1)[:, : len(original)]
-        store.write_shard(
+        committer.submit(
             start,
             xyz=result.permute(1, 0, 2).float().cpu().numpy(),
             lift=raw.permute(1, 0, 2).float().cpu().numpy().astype(np.float16),
@@ -508,7 +524,7 @@ def stream_correct(
     for offset in range(0, len(invalid_ids), group * batch):
         ids = invalid_ids[offset : offset + group * batch]
         start = len(valid_ids) + offset
-        if store.has_shard(start, start + len(ids)):
+        if (start, start + len(ids)) in committed:
             continue
         origin, d, r, vis = obs_source.rays(ids)
         observed = (vis > VIS_GATE) & (r > 0)
@@ -516,17 +532,19 @@ def stream_correct(
         xyz = torch.nan_to_num(origin[:, None, :] + d * r[..., None])
         Y = xyz * observed[..., None]
         raw = interp_init(Y[None], observed[None])[0][0]
-        store.write_shard(
+        committer.submit(
             start,
             xyz=xyz.permute(1, 0, 2).float().cpu().numpy(),
             lift=raw.permute(1, 0, 2).float().cpu().numpy().astype(np.float16),
             observed=observed.T.cpu().numpy(),
         )
         del origin, d, r, vis, observed, xyz, Y, raw
+    committer.drain()
     result = store.finish()
     # Runtime counters are measurements, not resume identity: keep the manifest's
     # construction-time placement record stable across repeat/resume calls.
     from .storage import atomic_json
 
     atomic_json(output_dir / "observation-cache.json", obs_source.observation_cache.metrics)
+    atomic_json(output_dir / "shard-commits.json", committer.metrics)
     return result

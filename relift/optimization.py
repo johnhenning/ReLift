@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .configuration import ConfigurationSelection, InferenceConfig
+    from .shard_commits import ShardCommitter, ShardSink
 
 import torch
 
@@ -21,6 +22,7 @@ class OptimizationConfig:
     gather: str = "current"
     shards: str = "current"
     shard_writer: str | None = None
+    commit_backend: str = "sync"
     rays: str = "current"
     da3_weights: str = "current"
     da3_features: str = "current"
@@ -40,6 +42,7 @@ class OptimizationConfig:
             gather=("current", "python", "cpp"),
             shards=("current", "python", "cpp"),
             shard_writer=(None, "current", "cpp"),
+            commit_backend=("sync", "threaded"),
             rays=("current", "python", "cuda", "cuda_timeline"),
             da3_weights=("current", "python", "cpp"),
             da3_features=("current", "python", "cpp"),
@@ -103,6 +106,7 @@ class OptimizationConfig:
             stream_fields = (
                 "gather",
                 "shards",
+                "commit_backend",
                 "rays",
                 "hash_writes",
                 "depth_cache_mb",
@@ -132,6 +136,7 @@ class InferenceComponents:
     observation_cache_factory: Callable | None = None
     ray_builder: Callable | None = None
     shard_packer: Callable | None = None
+    shard_committer_factory: Callable[[ShardSink], ShardCommitter] | None = None
     npy_writer: Callable | None = None
     pager_factory: Callable | None = None
     cold_storage_factory: Callable | None = None

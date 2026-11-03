@@ -318,6 +318,9 @@ def main() -> None:
             shape=store.shape,
             execution=execution,
             configuration=configuration.as_dict() if configuration else None,
+            shard_commits=json.loads((output / "shard-commits.json").read_text())
+            if (output / "shard-commits.json").exists()
+            else None,
             observation_cache=json.loads((output / "observation-cache.json").read_text())
             if (output / "observation-cache.json").exists()
             else None,

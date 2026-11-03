@@ -1,0 +1,25 @@
+{
+  "scene": "swing-tire", "input": "cache/demo_inputs/swing-tire.mp4",
+  "prepared_window": "outputs/benchmarks/offload-primary/swing-tire/ram/trial-01/output/window",
+  "process_res": 504, "output_root": "outputs/experiments/background-commits",
+  "experiments": {
+    "correction": {"task": "correction", "repeats": 5, "variants": [
+      {"name": "control", "source": "outputs/experiments/background-commits-source", "options": {"inference_profile": "ram"}},
+      {"name": "threaded", "source": "outputs/experiments/background-commits-source", "options": {"inference_profile": "background-commits"}}
+    ]},
+    "pipeline": {"task": "pipeline", "repeats": 5, "variants": [
+      {"name": "control", "source": "outputs/experiments/background-commits-source", "options": {"video": "cache/demo_inputs/swing-tire.mp4", "inference_profile": "ram"}},
+      {"name": "threaded", "source": "outputs/experiments/background-commits-source", "options": {"video": "cache/demo_inputs/swing-tire.mp4", "inference_profile": "background-commits"}}
+    ]},
+    "combinations": {"task": "correction", "repeats": 1, "variants": [
+      {"name": "control", "source": "outputs/experiments/background-commits-source", "options": {"inference_profile": "ram"}},
+      {"name": "cached", "source": "outputs/experiments/background-commits-source", "options": {"inference_profile": "background-cached"}},
+      {"name": "prefetched", "source": "outputs/experiments/background-commits-source", "options": {"inference_profile": "background-prefetch"}},
+      {"name": "native", "source": "outputs/experiments/background-commits-source", "options": {"inference_profile": "background-native", "native_build": "outputs/native/da3-final"}}
+    ]},
+    "defaults": {"task": "correction", "repeats": 1, "variants": [
+      {"name": "control", "source": "outputs/experiments/configuration-source", "options": {"inference_profile": "ram"}},
+      {"name": "configured-default", "source": "outputs/experiments/background-commits-source", "options": {"inference_profile": "ram"}}
+    ]}
+  }
+}

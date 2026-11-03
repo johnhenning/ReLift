@@ -69,6 +69,7 @@ class Storage(Section):
     packing: str = "current"
     writer: str | None = None
     hash_writes: bool = True
+    commits: str = "sync"
 
 
 @dataclass(frozen=True)
@@ -122,6 +123,7 @@ class InferenceConfig:
             shards=self.storage.packing,
             shard_writer=self.storage.writer,
             hash_writes=self.storage.hash_writes,
+            commit_backend=self.storage.commits,
             da3_weights=self.da3.weights,
             da3_features=self.da3.features,
             reuse_da3=self.da3.reuse,
@@ -173,7 +175,12 @@ class InferenceConfig:
             correction=Correction(
                 settings.corrector_batch, settings.padding_batch, settings.compile_corrector
             ),
-            storage=Storage(settings.shards, settings.shard_writer, settings.hash_writes),
+            storage=Storage(
+                settings.shards,
+                settings.shard_writer,
+                settings.hash_writes,
+                settings.commit_backend,
+            ),
             da3=DA3(settings.da3_weights, settings.da3_features, settings.reuse_da3),
             tracker=Tracker(settings.tracker_init_weights, settings.tracker_copy_outputs),
             runtime=Runtime(native_build),
