@@ -4,7 +4,7 @@ import os
 import pytest
 import torch
 
-from relift.cuda_rays import make_ray_builder,torch_ray_builder
+from relift.cuda_rays import make_ray_builder,torch_ray_builder,TimelineRayBuilder
 from relift.native_backend import load_cpu
 
 pytestmark=[pytest.mark.gpu,pytest.mark.skipif(not torch.cuda.is_available(),reason="CUDA required")]
@@ -12,7 +12,8 @@ pytestmark=[pytest.mark.gpu,pytest.mark.skipif(not torch.cuda.is_available(),rea
 
 @pytest.mark.parametrize("count",[1,7,8192])
 @pytest.mark.parametrize("strided_rotation",[False,True])
-def test_exact_ray_arithmetic_for_nontrivial_intrinsics_and_rotation(count,strided_rotation):
+@pytest.mark.parametrize("factory",[make_ray_builder,TimelineRayBuilder])
+def test_exact_ray_arithmetic_for_nontrivial_intrinsics_and_rotation(count,strided_rotation,factory):
     if not os.environ.get("RELIFT_NATIVE_BUILD"): pytest.skip("explicit native build required")
     native=load_cpu()
     if not hasattr(native,"launch_rays"): pytest.skip("CUDA build required")
@@ -23,5 +24,5 @@ def test_exact_ray_arithmetic_for_nontrivial_intrinsics_and_rotation(count,strid
     rotation=torch.linalg.qr(torch.randn((3,3,3),generator=generator,device="cuda"))[0]
     rotation=rotation.transpose(-1,-2) if strided_rotation else rotation.contiguous()
     expected=torch_ray_builder(coords,depth,K,rotation)
-    actual=make_ray_builder(native)(coords,depth,K,rotation)
+    actual=factory(native)(coords,depth,K,rotation)
     for a,b in zip(actual,expected): torch.testing.assert_close(a,b,rtol=0,atol=0)

@@ -29,10 +29,11 @@ class MappedObservations:
             raise ValueError("Geometry and tracker frames/grids do not match")
         self.device = torch.device(device)
         self.ray_builder = components.ray_builder if components else None
-        if self.ray_builder is None and ray_backend == "cuda":
-            from .cuda_rays import make_ray_builder
+        if self.ray_builder is None and ray_backend in ("cuda", "cuda_timeline"):
+            from .cuda_rays import make_ray_builder, TimelineRayBuilder
             from .native_backend import load_cpu
-            self.ray_builder = make_ray_builder(components.native_loader() if components and components.native_loader else load_cpu())
+            factory = TimelineRayBuilder if ray_backend == "cuda_timeline" else make_ray_builder
+            self.ray_builder = factory(components.native_loader() if components and components.native_loader else load_cpu())
         elif self.ray_builder is None and ray_backend == "python":
             from .cuda_rays import torch_ray_builder
             self.ray_builder = torch_ray_builder
@@ -74,6 +75,11 @@ class MappedObservations:
             coords = torch.as_tensor(coords_cpu, dtype=torch.float32, device=self.device)
         K, Rwc, origin = self.K[times], self.Rwc[times], self.origin[times]
         T, count = coords.shape[:2]
+        camera_builder = getattr(self.ray_builder, "camera", None)
+        if camera_builder is not None:
+            # Advanced indexing can produce time-strided coordinates. Copy once
+            # for the full timeline instead of once per 16-frame native call.
+            coords = coords.contiguous()
         # Only image-depth slices enter CUDA. grid_sample still uses original full H/W.
         # Small frame blocks limit source-image memory and transfer call overhead.
         norm = (torch.stack([2.0 * coords[..., 0] / max(self.W - 1, 1) - 1.0,
@@ -81,8 +87,9 @@ class MappedObservations:
                 if self.ray_builder is None else None)
         sampled, built_directions, built_distances = [], [], []
         offset = 0 if frame is None else frame
-        for t in range(0, T, 16):
-            length = min(16, T - t)
+        frame_block = T if camera_builder is not None and self.depth_cuda is not None else 16
+        for t in range(0, T, frame_block):
+            length = min(frame_block, T - t)
             depth = (self.depth_cuda[offset + t:offset + t + length] if self.depth_cuda is not None else
                      self._transfer(self.depth[offset + t:offset + t + length]))
             if self.ray_builder is None:
@@ -90,7 +97,10 @@ class MappedObservations:
                                   padding_mode="border", align_corners=True)[:, 0, :, 0]
                 sampled.append(z)
             else:
-                d,r = self.ray_builder(coords[t:t+length],depth,K[t:t+length],Rwc[t:t+length])
+                if camera_builder is not None:
+                    d,r = camera_builder(coords[t:t+length],depth,K[t:t+length])
+                else:
+                    d,r = self.ray_builder(coords[t:t+length],depth,K[t:t+length],Rwc[t:t+length])
                 built_directions.append(d); built_distances.append(r)
         if self.ray_builder is None:
             z = torch.cat(sampled)
@@ -102,6 +112,8 @@ class MappedObservations:
             distance = z * torch.sqrt(xc * xc + yc * yc + 1.0)
         else:
             direction,distance = torch.cat(built_directions),torch.cat(built_distances)
+            if camera_builder is not None:
+                direction = self.ray_builder.rotate(Rwc, direction)
         vis = (self._transfer(self.visibility[times, rows, cols]) if gathered_vis is None else
                torch.as_tensor(gathered_vis, dtype=torch.float32, device=self.device))
         return origin, torch.nan_to_num(direction), torch.nan_to_num(distance), torch.nan_to_num(vis)

@@ -4,7 +4,7 @@ import pytest
 import torch
 import torch.nn.functional as F
 
-from relift.cuda_rays import make_ray_builder
+from relift.cuda_rays import make_ray_builder,TimelineRayBuilder
 from relift.native_backend import load_cpu
 
 pytestmark = [pytest.mark.gpu, pytest.mark.skipif(not torch.cuda.is_available(),reason="CUDA required")]
@@ -21,13 +21,14 @@ def reference(coords,depth,K,rotation):
 
 
 @pytest.mark.parametrize("H,W",[(1,1),(5,7),(280,504)])
-def test_boundaries_ties_nonfinite_and_stream(H,W):
+@pytest.mark.parametrize("factory",[make_ray_builder,TimelineRayBuilder])
+def test_boundaries_ties_nonfinite_and_stream(H,W,factory):
     if not os.environ.get("RELIFT_NATIVE_BUILD"):
         pytest.skip("explicit CUDA build required")
     native=load_cpu()
     if not hasattr(native,"launch_rays"):
         pytest.skip("CPU-only build")
-    build=make_ray_builder(native)
+    build=factory(native)
     values=[[-1,-1],[0,0],[.5,.5],[1.5,1.5],[W-1,H-1],[W+3,H+3],
             [float("nan"),0],[float("inf"),2],[-float("inf"),2]]
     coords=torch.tensor([values]*3,dtype=torch.float32,device="cuda")
@@ -44,26 +45,34 @@ def test_boundaries_ties_nonfinite_and_stream(H,W):
         torch.testing.assert_close(a,b,rtol=1e-6,atol=1e-6)
     with pytest.raises(ValueError):
         build(coords.half(),depth,K,rotation)
+    operator=build.camera if isinstance(build,TimelineRayBuilder) else build.operator
+    arguments=(depth,K) if isinstance(build,TimelineRayBuilder) else (depth,K,rotation)
     with pytest.raises(ValueError,match="float32"):
-        build.operator(coords.half(),depth,K,rotation)
+        operator(coords.half(),*arguments)
     with pytest.raises(ValueError,match="shapes"):
-        build.operator(coords[:,:,:1],depth,K,rotation)
+        operator(coords[:,:,:1],*arguments)
     # Direct operator calls must handle strides safely, rather than bypassing
     # normalization in the convenience wrapper and reading the wrong addresses.
     strided=torch.stack([coords,coords],-1)[...,0]
-    direct=build.operator(strided,depth,K,rotation)
+    if isinstance(build,TimelineRayBuilder):
+        camera,distance=build.camera(strided,depth,K)
+        direct=torch.nan_to_num(build.rotate(rotation,camera)),distance
+    else:
+        direct=build.operator(strided,depth,K,rotation)
     for a,b in zip(direct,actual): torch.testing.assert_close(a,b,rtol=0,atol=0)
 
 
-def test_direct_operator_rejects_inexact_large_pixel_bounds_without_allocation():
+@pytest.mark.parametrize("factory",[make_ray_builder,TimelineRayBuilder])
+def test_direct_operator_rejects_inexact_large_pixel_bounds_without_allocation(factory):
     if not os.environ.get("RELIFT_NATIVE_BUILD"): pytest.skip("explicit CUDA build required")
     native=load_cpu()
     if not hasattr(native,"launch_camera_rays"): pytest.skip("corrected CUDA build required")
-    build=make_ray_builder(native)
+    build=factory(native)
     from torch._subclasses.fake_tensor import FakeTensorMode
     with FakeTensorMode():
         coords=torch.empty((1,1,2),device="cuda")
         depth=torch.empty((1,1,2**24+4),device="cuda")
         K=torch.empty((1,3,3),device="cuda")
         with pytest.raises(ValueError,match="pixel-index"):
-            build.operator(coords,depth,K,K)
+            if isinstance(build,TimelineRayBuilder): build.camera(coords,depth,K)
+            else: build.operator(coords,depth,K,K)

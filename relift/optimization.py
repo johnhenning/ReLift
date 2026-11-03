@@ -29,7 +29,7 @@ class OptimizationConfig:
     def __post_init__(self):
         for key, choices in dict(gather=("current","python","cpp"), shards=("current","python","cpp"),
                                  shard_writer=(None,"current","cpp"),
-                                 rays=("current","python","cuda"), da3_weights=("current","python","cpp"),
+                                 rays=("current","python","cuda","cuda_timeline"), da3_weights=("current","python","cpp"),
                                  da3_features=("current","python","cpp")).items():
             if getattr(self,key) not in choices:
                 raise ValueError(f"{key} must be one of {choices}")

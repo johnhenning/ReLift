@@ -3,6 +3,29 @@ import torch
 import torch.nn.functional as F
 
 
+def _validate(coords, depth, K, rotation=None):
+    values=(coords,depth,K) if rotation is None else (coords,depth,K,rotation)
+    if any(v.device != coords.device or v.dtype != torch.float32 or not v.is_cuda for v in values):
+        raise ValueError("CUDA rays require float32 tensors on the same CUDA device")
+    if coords.ndim != 3 or coords.shape[-1] != 2 or depth.ndim != 3:
+        raise ValueError("CUDA ray input shapes differ")
+    T,N,_=coords.shape
+    H,W=depth.shape[1:]
+    if H>2**24 or W>2**24:
+        raise ValueError("CUDA rays require image dimensions within exact float32 pixel-index range")
+    if (T<1 or H<1 or W<1 or max(T,N,H,W)>2**31-1 or depth.shape[0]!=T or K.shape!=(T,3,3)
+            or (rotation is not None and rotation.shape!=(T,3,3))):
+        raise ValueError("CUDA ray input shapes differ")
+    if any(v.requires_grad for v in values):
+        raise ValueError("CUDA rays are inference-only")
+
+
+def _identity(native):
+    import hashlib
+    from pathlib import Path
+    return hashlib.sha256(Path(native.__file__).read_bytes()+Path(__file__).read_bytes()).hexdigest()[:16]
+
+
 def torch_ray_builder(coords,depth,K,rotation):
     H,W = depth.shape[1:]
     norm = torch.stack([2*coords[...,0]/max(W-1,1)-1,2*coords[...,1]/max(H-1,1)-1],-1)
@@ -19,26 +42,10 @@ def make_ray_builder(native):
 
     # Registration is local to this factory: no global backend selection is
     # changed. The unique operator name includes the selected binary identity.
-    import hashlib
-    from pathlib import Path
-    identity = hashlib.sha256(Path(native.__file__).read_bytes()+Path(__file__).read_bytes()).hexdigest()[:16]
+    identity = _identity(native)
     name = "relift_native::rays_"+identity
     def validate(coords,depth,K,rotation):
-        values=(coords,depth,K,rotation)
-        if any(v.device != coords.device or v.dtype != torch.float32 or not v.is_cuda for v in values):
-            raise ValueError("CUDA rays require float32 tensors on the same CUDA device")
-        if coords.ndim != 3 or coords.shape[-1] != 2 or depth.ndim != 3:
-            raise ValueError("CUDA ray input shapes differ")
-        T,N,_=coords.shape
-        H,W=depth.shape[1:]
-        # Beyond this limit float32(W-1) can round to W; a clipped coordinate
-        # could then become an out-of-bounds raw pointer index in the kernel.
-        if H>2**24 or W>2**24:
-            raise ValueError("CUDA rays require image dimensions within exact float32 pixel-index range")
-        if T<1 or H<1 or W<1 or max(T,N,H,W)>2**31-1 or depth.shape[0]!=T or K.shape!=(T,3,3) or rotation.shape!=(T,3,3):
-            raise ValueError("CUDA ray input shapes differ")
-        if any(v.requires_grad for v in values):
-            raise ValueError("CUDA rays are inference-only")
+        _validate(coords,depth,K,rotation)
     try:
         operator = getattr(torch.ops.relift_native,"rays_"+identity)
     except AttributeError:
@@ -69,3 +76,48 @@ def make_ray_builder(native):
         return operator(coords,depth,K,rotation)
     build.operator=operator
     return build
+
+
+class TimelineRayBuilder:
+    """Fuse camera math per depth block, then rotate the original full timeline.
+
+    ``camera`` returns unsanitized camera directions: cleaning them before matrix
+    multiplication changes NaN/Inf behavior. ``rotate`` retains the original
+    einsum and its output layout. MappedObservations performs final sanitization.
+    The four-argument callable remains compatible with injected ray builders.
+    """
+    def __init__(self,native):
+        if not hasattr(native,"launch_camera_rays"):
+            raise RuntimeError("Selected CUDA rays require a --cuda native build")
+        name="camera_"+_identity(native)
+        try:
+            operator=getattr(torch.ops.relift_native,name)
+        except AttributeError:
+            @torch.library.custom_op("relift_native::"+name,mutates_args=(),device_types="cuda")
+            def operator(coords:torch.Tensor,depth:torch.Tensor,K:torch.Tensor)->tuple[torch.Tensor,torch.Tensor]:
+                _validate(coords,depth,K)
+                coords,depth,K=(value.contiguous() for value in (coords,depth,K))
+                T,N,_=coords.shape
+                H,W=depth.shape[1:]
+                camera=coords.new_empty((T,N,3))
+                distance=coords.new_empty((T,N))
+                with torch.cuda.device(coords.device):
+                    native.launch_camera_rays(coords.data_ptr(),depth.data_ptr(),K.data_ptr(),
+                                              camera.data_ptr(),distance.data_ptr(),T,N,H,W,
+                                              torch.cuda.current_stream(coords.device).cuda_stream)
+                return camera,distance
+
+            @operator.register_fake
+            def fake(coords,depth,K):
+                _validate(coords,depth,K)
+                return coords.new_empty((*coords.shape[:2],3)),coords.new_empty(coords.shape[:2])
+        self.camera=operator
+
+    @staticmethod
+    def rotate(rotation,camera):
+        return torch.einsum("tij,tnj->tni",rotation,camera)
+
+    def __call__(self,coords,depth,K,rotation):
+        _validate(coords,depth,K,rotation)
+        camera,distance=self.camera(coords,depth,K)
+        return torch.nan_to_num(self.rotate(rotation,camera)),distance

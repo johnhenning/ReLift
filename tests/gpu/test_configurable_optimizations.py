@@ -50,13 +50,14 @@ def test_combinations_preserve_outputs_and_restore_no_globals(tmp_path,gather,pr
 
 @pytest.mark.parametrize("writer",["current","cpp"])
 @pytest.mark.parametrize("packing",["current","cpp"])
-def test_native_components_compose_with_independent_writer(tmp_path,writer,packing):
+@pytest.mark.parametrize("rays",["cuda","cuda_timeline"])
+def test_native_components_compose_with_independent_writer(tmp_path,writer,packing,rays):
     if not os.environ.get("RELIFT_NATIVE_BUILD"): pytest.skip("explicit native build required")
     count=window(tmp_path/"window")
     torch.manual_seed(7)
     model=Corrector(dim=16,depth=1,heads=2,chunk=4).eval().cuda()
     reference=stream_correct(tmp_path/"window",tmp_path/"reference",model,{},group=4,batch=2)
-    settings=OptimizationConfig(gather="cpp",shards=packing,shard_writer=writer,rays="cuda",prefetch=True,
+    settings=OptimizationConfig(gather="cpp",shards=packing,shard_writer=writer,rays=rays,prefetch=True,
                                 depth_cache_mb=0 if writer == "cpp" else 1,hash_writes=False,corrector_batch=2)
     actual=stream_correct(tmp_path/"window",tmp_path/"candidate",model,{},group=4,optimizations=settings)
     for key,value in reference.sample(np.arange(count)).items():
