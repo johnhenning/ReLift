@@ -1,0 +1,5 @@
+{
+  "gather": ["current", "python"],
+  "hash_writes": [true, false],
+  "depth_cache_mb": [0, 256]
+}

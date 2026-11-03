@@ -86,7 +86,7 @@ def savez(path, **arrays):
 
 
 def prepare_window(frames, out, geometry, wpath, pc, device, offload="none", scratch_dir="cache/offload", metrics=None,
-                   ram_budget_gb=18, scratch_budget_gb=64):
+                   ram_budget_gb=18, scratch_budget_gb=64, session=None):
     """Geometry, DA3's frames and AllTracker's tracks into ``out`` (files already present are kept)."""
     os.makedirs(out, exist_ok=True)
     da3_f, frames_f, tr_f = os.path.join(out, depth_file("da3")), os.path.join(out, "da3_frames.npz"), os.path.join(out, tracks_file("alltracker"))
@@ -94,7 +94,8 @@ def prepare_window(frames, out, geometry, wpath, pc, device, offload="none", scr
         from relift.providers.da3 import DepthAnything3Provider
         t0 = time.perf_counter()
         with metrics.stage("da3") if metrics else nullcontext() as stage:
-            provider = DepthAnything3Provider(wpath["da3"], device, offload=offload, scratch_dir=scratch_dir,
+            factory = session.depth if session else DepthAnything3Provider
+            provider = factory(wpath["da3"], device, offload=offload, scratch_dir=scratch_dir,
                                                ram_budget_gb=ram_budget_gb, scratch_budget_gb=scratch_budget_gb,
                                                **{k: v for k, v in pc["da3"].items() if k != "decoder"})
             try:
@@ -104,7 +105,10 @@ def prepare_window(frames, out, geometry, wpath, pc, device, offload="none", scr
                     stage.update(cold_tensor_bytes_written=provider.pager.storage.bytes_written,
                                  peak_retained_cpu_tensor_bytes=provider.pager.storage.peak_retained_cpu_bytes,
                                  weight_host_to_device_bytes=provider.pager.transferred_weight_bytes)
-                provider.close()
+                if session:
+                    session.release_depth(provider)
+                else:
+                    provider.close()
                 del provider
             savez(da3_f, depth=g["depth"].astype(np.float16), poses=g["poses"], intrinsics=g["intrinsics"])
             savez(frames_f, images=g["images"])
@@ -120,7 +124,9 @@ def prepare_window(frames, out, geometry, wpath, pc, device, offload="none", scr
         from relift.providers.alltracker import AllTrackerProvider
         t0 = time.perf_counter()
         with metrics.stage("alltracker") if metrics else nullcontext():
-            tr, vis, conf = AllTrackerProvider(wpath["alltracker"], device, pc["alltracker"]["window"], pc["alltracker"]["iters"]).run(images)
+            factory = session.components.tracker_factory if session and session.components.tracker_factory else AllTrackerProvider
+            options = dict(init_weights=session.config.tracker_init_weights, copy_outputs=session.config.tracker_copy_outputs) if session else {}
+            tr, vis, conf = factory(wpath["alltracker"], device, pc["alltracker"]["window"], pc["alltracker"]["iters"], **options).run(images)
             savez(tr_f, tracks_2d=tr.astype(np.float16), visibility=vis.astype(np.float16), confidence=conf.astype(np.float16))
         note(os.path.join(out, "provenance.json"), "alltracker", device)
         print(f"alltracker: {time.perf_counter() - t0:.0f}s", flush=True)
@@ -178,7 +184,7 @@ def write_video(path, images, lift, xyz, observed, poses, K, stride, fps=15, up=
     wr.release()
 
 
-def main():
+def main(argv=None, session=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("video", help="a video file or a directory of image frames")
     ap.add_argument("--out", default=None, help="default <outputs_root>/demo/<video name>")
@@ -200,7 +206,20 @@ def main():
     ap.add_argument("--scratch-dir", default=None)
     ap.add_argument("--export-npz", action="store_true", help="also export compatibility tracks.npz from a mapped store")
     ap.add_argument("--prepared-window", help="reuse an explicitly chosen prepared window for stage-isolated correction")
-    a = ap.parse_args()
+    ap.add_argument("--optimizations", help="JSON optimization settings; unspecified fields retain current defaults")
+    ap.add_argument("--opt", action="append", default=[], help="override one optimization: key=JSON_VALUE (repeatable)")
+    ap.add_argument("--native-build", help="explicit verified optional native build directory")
+    a = ap.parse_args(argv)
+    from relift.optimization import OptimizationConfig, InferenceSession
+    settings = OptimizationConfig.read(a.optimizations, a.opt)
+    if session is None:
+        with InferenceSession(settings, native_build=a.native_build) as owned:
+            # Parse once more inside the owned lifecycle; injected sessions follow
+            # the exact same path and are never silently replaced.
+            return main(argv, session=owned)
+    if (a.optimizations or a.opt) and session.config != settings:
+        raise ValueError("Session settings differ from CLI optimization settings")
+    settings = session.config
     if not all(np.isfinite(x) and x > 0 for x in (a.ram_budget_gb, a.vram_budget_gb, a.scratch_budget_gb)):
         ap.error("memory and scratch budgets must be positive and finite")
     if a.num_frames < 0:
@@ -218,6 +237,10 @@ def main():
         pc["da3"]["process_res"] = a.process_res
     if a.corrector_batch is not None:
         cfg["corrector"]["batch"] = a.corrector_batch
+    elif a.optimizations or a.opt or session.config.corrector_batch != 8:
+        cfg["corrector"]["batch"] = settings.corrector_batch
+    from dataclasses import replace
+    settings = replace(settings, corrector_batch=cfg["corrector"]["batch"])
     wc = yaml.safe_load(open(REPO / "configs" / "weights.yaml"))
     ck_root = a.checkpoints_root or str(P["checkpoints_root"])
     wpath = {n: weight_path(wc, n, ck_root) for n in wc}
@@ -227,7 +250,8 @@ def main():
     os.makedirs(out, exist_ok=True)
     metrics = Metrics(out, dict(offload_requested=a.offload, process_resolution=pc["da3"]["process_res"],
                                corrector_batch=cfg["corrector"]["batch"], ram_budget_gb=a.ram_budget_gb,
-                               vram_budget_gb=a.vram_budget_gb, scratch_budget_gb=a.scratch_budget_gb))
+                               vram_budget_gb=a.vram_budget_gb, scratch_budget_gb=a.scratch_budget_gb,
+                               optimizations=settings.as_dict(), components=session.components.describe()))
     with metrics.stage("decode", cuda=False):
         if a.offload == "none":
             frames = read_frames(a.video, a.num_frames)
@@ -257,11 +281,12 @@ def main():
     window = a.prepared_window or os.path.join(out, "window" if resolution == 504 else f"window_res{resolution}")
     images = prepare_window(frames, window, a.geometry, wpath, pc, a.device,
                             offload=resolved, scratch_dir=a.scratch_dir or str(P["cache_root"] / "offload"), metrics=metrics,
-                            ram_budget_gb=a.ram_budget_gb, scratch_budget_gb=a.scratch_budget_gb)
+                            ram_budget_gb=a.ram_budget_gb, scratch_budget_gb=a.scratch_budget_gb, session=session)
     del frames
 
     with metrics.stage("corrector_load"):
-        model, info = load(ckpt, a.device)
+        loader = session.components.corrector_loader or load
+        model, info = loader(ckpt, a.device)
     C = cfg["corrector"]
     df = depth_file(a.geometry)
     if resolved in ("streamed", "ram", "disk"):
@@ -275,7 +300,8 @@ def main():
         with metrics.stage("corrector_stream"):
             store = stream_correct(window, out, model, metadata, group=C["group"], batch=C["batch"], seed=C["seed"],
                                    device=a.device, depth_file=df, ram_budget_gb=a.ram_budget_gb,
-                                   vram_budget_gb=a.vram_budget_gb, scratch_budget_gb=a.scratch_budget_gb)
+                                   vram_budget_gb=a.vram_budget_gb, scratch_budget_gb=a.scratch_budget_gb,
+                                   optimizations=settings, components=session.components)
         if a.export_npz or not a.no_video:
             with metrics.stage("export_npz", cuda=False):
                 store.export_npz(Path(out) / "tracks.npz")

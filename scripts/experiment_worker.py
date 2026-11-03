@@ -12,9 +12,11 @@ from datetime import datetime, timezone
 import functools
 import hashlib
 import json
+import os
 from pathlib import Path
 import pstats
 import random
+import resource
 import sys
 import time
 
@@ -40,6 +42,7 @@ class Phases:
         finally:
             torch.cuda.synchronize()
             self.results[name] = dict(seconds=time.perf_counter() - started,
+                                      process_rss_highwater_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
                                       cuda_allocated_peak_bytes=torch.cuda.max_memory_allocated(),
                                       cuda_reserved_peak_bytes=torch.cuda.max_memory_reserved())
 
@@ -128,6 +131,7 @@ def main():
     torch.manual_seed(0)
     torch.cuda.manual_seed_all(0)
     options = json.loads(args.options)
+    options.pop("native_build", None)  # runner supplies the verified build through the environment
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     phases = Phases()
@@ -188,6 +192,14 @@ def main():
         diagnostic.__enter__()
     try:
         with phases.stage("correction"), lookahead if lookahead else nullcontext():
+            optimization_values = options.pop("optimizations", None)
+            if optimization_values is not None:
+                from relift.optimization import OptimizationConfig, InferenceComponents
+                options["optimizations"] = OptimizationConfig.from_dict(optimization_values)
+                components = InferenceComponents()
+                if os.environ.get("RELIFT_NATIVE_BUILD"):
+                    components = components.with_native_build(os.environ["RELIFT_NATIVE_BUILD"])
+                options["components"] = components
             store = stream_correct(output / "window", output, model,
                 dict(checkpoint_sha256=file_sha256(args.root / "checkpoints/released_checkpoint.pt"), checkpoint_step=info["step"]),
                 group=1024, batch=options.pop("batch", 8), seed=0, **options)

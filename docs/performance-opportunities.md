@@ -2,6 +2,8 @@
 
 Status: The individual screening experiments below have been measured. See the [experiment log](optimization-experiment-log.md) for results, failed numerical gates and keep/discard decisions. Combined full-pipeline confirmation is recorded separately from isolated stage measurements.
 
+The next proposed campaign tests [four potential C++/CUDA optimizations](native-optimization-experiments/README.md), each with its own design, Python comparison, correctness gate and benchmark plan. These proposals are separate from the completed experiments below.
+
 The original plan below investigates streamed-path overhead, redundant setup, transfer overlap and model reuse. Offloading addresses capacity and can make a run slower. Each optimization is measured separately from the [offload comparison](offload-benchmark-analysis.md) so its effect is identifiable.
 
 ## What the new comparison changes

@@ -9,6 +9,58 @@ import numpy as np
 import torch
 
 
+class PrefetchedRays:
+    """Bounded injected ray source; no module or class methods are replaced."""
+    def __init__(self, reader):
+        if reader.device.type != "cuda":
+            raise ValueError("Prefetch requires a CUDA reader")
+        self.reader, self.pending, self.ids = reader, None, None
+        self.stream = torch.cuda.Stream(device=reader.device)
+        self.stream.wait_stream(torch.cuda.current_stream(reader.device))
+        self.executor = ThreadPoolExecutor(max_workers=1)
+        self.peak_pinned_bytes = 0
+
+    def __enter__(self):
+        return self
+
+    def schedule(self, ids):
+        if self.pending is not None:
+            raise RuntimeError("Prefetch exceeded its one-batch bound")
+        self.ids = np.array(ids, copy=True)
+        self.pending = self.executor.submit(self._prepare, self.ids)
+
+    def _prepare(self, ids):
+        hosts = []
+        self.reader._pinned_inputs = hosts
+        try:
+            with torch.cuda.stream(self.stream):
+                result = self.reader.rays(ids)
+            self.stream.synchronize()
+            self.peak_pinned_bytes = max(self.peak_pinned_bytes, sum(t.numel()*t.element_size() for t in hosts))
+            return result
+        finally:
+            self.stream.synchronize()
+            self.reader._pinned_inputs = None
+
+    def rays(self, ids):
+        if self.pending is None:
+            return self.reader.rays(ids)
+        if not np.array_equal(ids, self.ids):
+            raise RuntimeError("Prefetch selection differs from execution plan")
+        result = self.pending.result()
+        self.pending = None
+        for tensor in result:
+            tensor.record_stream(torch.cuda.current_stream(self.reader.device))
+        return result
+
+    def __exit__(self, *error):
+        try:
+            self.executor.shutdown(wait=True)
+            self.stream.synchronize()
+        finally:
+            self.reader._pinned_inputs = None
+
+
 class RayLookahead:
     def __init__(self, group=1024, batch=8, seed=0):
         self.group, self.batch, self.seed = group, batch, seed

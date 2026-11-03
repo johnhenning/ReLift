@@ -2,12 +2,15 @@
 import json
 import runpy
 import sys
+import os
 
 
 def run(args, options):
     from relift.storage import TrajectoryStore
 
     video = (args.root / options.pop("video")).resolve()
+    optimizations = options.pop("optimizations", None)
+    offload = options.pop("offload", "ram")
     if options:
         raise ValueError(f"Unknown pipeline options: {options}")
     output = args.output.resolve()
@@ -17,7 +20,12 @@ def run(args, options):
     previous = sys.argv
     sys.argv = [str(script), str(video), "--num_frames", "0", "--process-res", "504",
                 "--corrector-batch", "8", "--checkpoints_root", str(args.root / "checkpoints"),
-                "--out", str(output), "--offload", "ram", "--scratch-dir", str(output / "scratch"), "--no_video"]
+                "--out", str(output), "--offload", offload, "--scratch-dir", str(output / "scratch"), "--no_video"]
+    if optimizations is not None:
+        for key, value in optimizations.items():
+            sys.argv += ["--opt", f"{key}={json.dumps(value)}"]
+    if os.environ.get("RELIFT_NATIVE_BUILD") and optimizations is not None:
+        sys.argv += ["--native-build", os.environ["RELIFT_NATIVE_BUILD"]]
     try:
         runpy.run_path(str(script), run_name="__main__")
     finally:

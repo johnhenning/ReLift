@@ -1,0 +1,519 @@
+[
+  {
+    "experiment": "composable-gather",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/composable-gather/control/trial-01/trial.json",
+      "outputs/experiments/native-optimizations/composable-gather/control/trial-02/trial.json",
+      "outputs/experiments/native-optimizations/composable-gather/control/trial-03/trial.json",
+      "outputs/experiments/native-optimizations/composable-gather/control/trial-04/trial.json",
+      "outputs/experiments/native-optimizations/composable-gather/control/trial-05/trial.json"
+    ],
+    "options": {
+      "optimizations": {}
+    },
+    "source_fingerprint": "a7e134994e7ccc6c9fbce9ee8f20bc10d0462e48d8ecdce913e6387274626341",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 16.78094187300303,
+    "wall_min": 16.57514789699053,
+    "wall_max": 19.636115340006654,
+    "sampled_peak_process_tree_rss_bytes": 1648918528,
+    "sampled_peak_process_tree_pss_bytes": 1638744064,
+    "sampled_peak_gpu_device_used_bytes": 4167958528,
+    "process_tree_read_bytes": 4096,
+    "process_tree_write_bytes": 416604160,
+    "phase_medians": {
+      "model_load": 0.1646135419869097,
+      "correction": 14.847098933008965
+    },
+    "process_rss_highwater_bytes": 1648918528,
+    "sampled_output_peak_allocated_bytes": 570445824
+  },
+  {
+    "experiment": "composable-gather",
+    "variant": "cpp",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/composable-gather/cpp/trial-01/trial.json",
+      "outputs/experiments/native-optimizations/composable-gather/cpp/trial-02/trial.json",
+      "outputs/experiments/native-optimizations/composable-gather/cpp/trial-03/trial.json",
+      "outputs/experiments/native-optimizations/composable-gather/cpp/trial-04/trial.json",
+      "outputs/experiments/native-optimizations/composable-gather/cpp/trial-05/trial.json"
+    ],
+    "options": {
+      "optimizations": {
+        "gather": "cpp"
+      },
+      "native_build": "outputs/native/gather"
+    },
+    "source_fingerprint": "5081da58dece27f98f4baafa15af644f266eb4d25c9374ead5b97d3c95da0988",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 18.373025017004693,
+    "wall_min": 16.676290025003254,
+    "wall_max": 18.646580586995697,
+    "sampled_peak_process_tree_rss_bytes": 1650716672,
+    "sampled_peak_process_tree_pss_bytes": 1640356864,
+    "sampled_peak_gpu_device_used_bytes": 4167958528,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 416604160,
+    "phase_medians": {
+      "model_load": 0.16635994899843354,
+      "correction": 16.434127560001798
+    },
+    "process_rss_highwater_bytes": 1650716672,
+    "sampled_output_peak_allocated_bytes": 570445824
+  },
+  {
+    "experiment": "composable-gather",
+    "variant": "python",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/composable-gather/python/trial-01/trial.json",
+      "outputs/experiments/native-optimizations/composable-gather/python/trial-02/trial.json",
+      "outputs/experiments/native-optimizations/composable-gather/python/trial-03/trial.json",
+      "outputs/experiments/native-optimizations/composable-gather/python/trial-04/trial.json",
+      "outputs/experiments/native-optimizations/composable-gather/python/trial-05/trial.json"
+    ],
+    "options": {
+      "optimizations": {
+        "gather": "python"
+      }
+    },
+    "source_fingerprint": "6e73787eb411cd0ac7dad1bed0833d5ce049bf884e1ea525e04c433c51ad4dae",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 17.954123403003905,
+    "wall_min": 16.86784160901152,
+    "wall_max": 18.18770631600637,
+    "sampled_peak_process_tree_rss_bytes": 1652338688,
+    "sampled_peak_process_tree_pss_bytes": 1642073088,
+    "sampled_peak_gpu_device_used_bytes": 4167958528,
+    "process_tree_read_bytes": 4096,
+    "process_tree_write_bytes": 416604160,
+    "phase_medians": {
+      "model_load": 0.16620086299371906,
+      "correction": 16.040646242006915
+    },
+    "process_rss_highwater_bytes": 1652338688,
+    "sampled_output_peak_allocated_bytes": 570445824
+  },
+  {
+    "experiment": "composable-pipeline",
+    "variant": "configured-default",
+    "n": 1,
+    "attempts": 1,
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/composable-pipeline/configured-default/trial-01/trial.json"
+    ],
+    "options": {
+      "video": "cache/demo_inputs/swing-tire.mp4",
+      "optimizations": {}
+    },
+    "source_fingerprint": "acbc09879c434492f8402b2de692ecd2e5f37ab01484667d5c487150480c1b16",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 67.40437927900348,
+    "wall_min": 67.40437927900348,
+    "wall_max": 67.40437927900348,
+    "sampled_peak_process_tree_rss_bytes": 14540046336,
+    "sampled_peak_process_tree_pss_bytes": 14535711744,
+    "sampled_peak_gpu_device_used_bytes": 13317832704,
+    "process_tree_read_bytes": 3253293056,
+    "process_tree_write_bytes": 628908032,
+    "phase_medians": {
+      "decode": 0.999580641000648,
+      "da3": 45.07554348099802,
+      "alltracker": 4.340365725001902,
+      "corrector_load": 0.15206046000821516,
+      "corrector_stream": 13.561998811012018
+    },
+    "process_rss_highwater_bytes": 14550892544,
+    "sampled_output_peak_allocated_bytes": 628514816
+  },
+  {
+    "experiment": "composable-pipeline",
+    "variant": "control",
+    "n": 1,
+    "attempts": 1,
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/composable-pipeline/control/trial-01/trial.json"
+    ],
+    "options": {
+      "video": "cache/demo_inputs/swing-tire.mp4"
+    },
+    "source_fingerprint": "c5185bff189a8f28011827b11ff723b3baf3a529a9099ea6bfae71f63c1084de",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": null,
+    "wall_median": 58.33850298600737,
+    "wall_min": 58.33850298600737,
+    "wall_max": 58.33850298600737,
+    "sampled_peak_process_tree_rss_bytes": 11582713856,
+    "sampled_peak_process_tree_pss_bytes": 11704168448,
+    "sampled_peak_gpu_device_used_bytes": 13317832704,
+    "process_tree_read_bytes": 32784384,
+    "process_tree_write_bytes": 628793344,
+    "phase_medians": {
+      "decode": 1.00983613099379,
+      "da3": 35.68635708799411,
+      "alltracker": 4.3154272319952725,
+      "corrector_load": 0.167871452998952,
+      "corrector_stream": 13.522308961008093
+    },
+    "process_rss_highwater_bytes": 14551281664,
+    "sampled_output_peak_allocated_bytes": 628510720
+  },
+  {
+    "experiment": "cpu-gather",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/cpu-gather/control/trial-01/trial.json",
+      "outputs/experiments/native-optimizations/cpu-gather/control/trial-02/trial.json",
+      "outputs/experiments/native-optimizations/cpu-gather/control/trial-03/trial.json",
+      "outputs/experiments/native-optimizations/cpu-gather/control/trial-04/trial.json",
+      "outputs/experiments/native-optimizations/cpu-gather/control/trial-05/trial.json"
+    ],
+    "options": {},
+    "source_fingerprint": "1f6ca4d1aaf04bb232522cde343417c205332d29c517a196d14892d9a1fc0c8f",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 18.41497663600603,
+    "wall_min": 16.684594310005195,
+    "wall_max": 20.08250362399849,
+    "sampled_peak_process_tree_rss_bytes": 1655451648,
+    "sampled_peak_process_tree_pss_bytes": 1645143040,
+    "sampled_peak_gpu_device_used_bytes": 4167958528,
+    "process_tree_read_bytes": 905216,
+    "process_tree_write_bytes": 416538624,
+    "phase_medians": {
+      "model_load": 0.1670889400120359,
+      "correction": 16.483064075000584
+    },
+    "process_rss_highwater_bytes": 1655451648,
+    "sampled_output_peak_allocated_bytes": 570441728
+  },
+  {
+    "experiment": "cpu-gather",
+    "variant": "cpp",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/cpu-gather/cpp/trial-01/trial.json",
+      "outputs/experiments/native-optimizations/cpu-gather/cpp/trial-02/trial.json",
+      "outputs/experiments/native-optimizations/cpu-gather/cpp/trial-03/trial.json",
+      "outputs/experiments/native-optimizations/cpu-gather/cpp/trial-04/trial.json",
+      "outputs/experiments/native-optimizations/cpu-gather/cpp/trial-05/trial.json"
+    ],
+    "options": {
+      "gather_backend": "cpp",
+      "native_build": "outputs/native/gather"
+    },
+    "source_fingerprint": "dd4d63f233d10262dad5a031993096b3a9408eb6cd9d639e2356b3d6cb33f798",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 18.44640469799924,
+    "wall_min": 16.952039002004312,
+    "wall_max": 19.740636325004743,
+    "sampled_peak_process_tree_rss_bytes": 1652686848,
+    "sampled_peak_process_tree_pss_bytes": 1642482688,
+    "sampled_peak_gpu_device_used_bytes": 4167958528,
+    "process_tree_read_bytes": 454656,
+    "process_tree_write_bytes": 416538624,
+    "phase_medians": {
+      "model_load": 0.16669212900160346,
+      "correction": 16.511463585993624
+    },
+    "process_rss_highwater_bytes": 1652686848,
+    "sampled_output_peak_allocated_bytes": 570441728
+  },
+  {
+    "experiment": "cpu-gather",
+    "variant": "python",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/cpu-gather/python/trial-01/trial.json",
+      "outputs/experiments/native-optimizations/cpu-gather/python/trial-02/trial.json",
+      "outputs/experiments/native-optimizations/cpu-gather/python/trial-03/trial.json",
+      "outputs/experiments/native-optimizations/cpu-gather/python/trial-04/trial.json",
+      "outputs/experiments/native-optimizations/cpu-gather/python/trial-05/trial.json"
+    ],
+    "options": {
+      "gather_backend": "python"
+    },
+    "source_fingerprint": "8ef8e6775140b37ae0fd4ec0d217ce8a836342be169d140fe4a4e6bf9e6ba53a",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 18.279054947997793,
+    "wall_min": 17.035465667999233,
+    "wall_max": 18.79491358899395,
+    "sampled_peak_process_tree_rss_bytes": 1651417088,
+    "sampled_peak_process_tree_pss_bytes": 1641097216,
+    "sampled_peak_gpu_device_used_bytes": 4167958528,
+    "process_tree_read_bytes": 4096,
+    "process_tree_write_bytes": 416538624,
+    "phase_medians": {
+      "model_load": 0.17024224699707702,
+      "correction": 16.3335245650087
+    },
+    "process_rss_highwater_bytes": 1651417088,
+    "sampled_output_peak_allocated_bytes": 570441728
+  },
+  {
+    "experiment": "updated-baseline-correction",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/updated-baseline-correction/control/trial-01/trial.json",
+      "outputs/experiments/native-optimizations/updated-baseline-correction/control/trial-02/trial.json",
+      "outputs/experiments/native-optimizations/updated-baseline-correction/control/trial-03/trial.json",
+      "outputs/experiments/native-optimizations/updated-baseline-correction/control/trial-04/trial.json",
+      "outputs/experiments/native-optimizations/updated-baseline-correction/control/trial-05/trial.json"
+    ],
+    "options": {},
+    "source_fingerprint": "2b18b2a11ab58750fff569ba7916b1570da53602b07261401c3e738de86f5356",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 10.900910380994901,
+    "wall_min": 10.793092282008729,
+    "wall_max": 11.118727876993944,
+    "sampled_peak_process_tree_rss_bytes": 1650003968,
+    "sampled_peak_process_tree_pss_bytes": 1639819264,
+    "sampled_peak_gpu_device_used_bytes": 4165861376,
+    "process_tree_read_bytes": 880640,
+    "process_tree_write_bytes": 416538624,
+    "phase_medians": {
+      "model_load": 0.16695487299875822,
+      "correction": 8.938266329001635
+    },
+    "process_rss_highwater_bytes": null,
+    "sampled_output_peak_allocated_bytes": 570441728
+  },
+  {
+    "experiment": "updated-baseline-pipeline",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/updated-baseline-pipeline/control/trial-01/trial.json",
+      "outputs/experiments/native-optimizations/updated-baseline-pipeline/control/trial-02/trial.json",
+      "outputs/experiments/native-optimizations/updated-baseline-pipeline/control/trial-03/trial.json",
+      "outputs/experiments/native-optimizations/updated-baseline-pipeline/control/trial-04/trial.json",
+      "outputs/experiments/native-optimizations/updated-baseline-pipeline/control/trial-05/trial.json"
+    ],
+    "options": {
+      "video": "cache/demo_inputs/swing-tire.mp4"
+    },
+    "source_fingerprint": "b4dc38ba6fcecdfc7f553804d82ec2d2161584c40263493b7c49eee7dc77c90d",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 50.81116385399946,
+    "wall_min": 50.47966794700187,
+    "wall_max": 51.3345288940036,
+    "sampled_peak_process_tree_rss_bytes": 12008800256,
+    "sampled_peak_process_tree_pss_bytes": 12645005312,
+    "sampled_peak_gpu_device_used_bytes": 13315735552,
+    "process_tree_read_bytes": 1089536,
+    "process_tree_write_bytes": 628793344,
+    "phase_medians": {
+      "decode": 0.39170335499511566,
+      "da3": 34.88251763199514,
+      "alltracker": 4.167174784000963,
+      "corrector_load": 0.1644782710063737,
+      "corrector_stream": 8.121877905010479
+    },
+    "process_rss_highwater_bytes": 14552551424,
+    "sampled_output_peak_allocated_bytes": 628510720
+  },
+  {
+    "experiment": "updated-baseline-profile",
+    "variant": "control",
+    "n": 1,
+    "attempts": 1,
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": true,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/updated-baseline-profile/control/trial-01/trial.json"
+    ],
+    "options": {
+      "profile": true
+    },
+    "source_fingerprint": "21c7f0a66995e2378f20388f2330d94a634045f46383a3c6dc1ea322e2ba1038",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": null,
+    "wall_median": 13.484927768004127,
+    "wall_min": 13.484927768004127,
+    "wall_max": 13.484927768004127,
+    "sampled_peak_process_tree_rss_bytes": 1795694592,
+    "sampled_peak_process_tree_pss_bytes": 1785499648,
+    "sampled_peak_gpu_device_used_bytes": 4180541440,
+    "process_tree_read_bytes": 4583424,
+    "process_tree_write_bytes": 422006784,
+    "phase_medians": {
+      "model_load": 0.17036136399838142,
+      "correction": 10.891488979992573
+    },
+    "process_rss_highwater_bytes": null,
+    "sampled_output_peak_allocated_bytes": 575909888
+  }
+]

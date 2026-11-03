@@ -130,6 +130,7 @@ class DA3Pager:
         self.device = torch.device(device)
         self.storage = ColdStorage(mode, scratch_dir, ram_budget_gb, scratch_budget_gb)
         self.handles, self.originals, self.weights = [], [], []
+        self.buffer_owners = set()
         self.transferred_weight_bytes = 0
         model.to(device)
         model.device = self.device
@@ -164,6 +165,7 @@ class DA3Pager:
                     cpu = self.storage.put(value)
                     module._buffers[name] = cpu
                     buffers.append((module, name, cpu))
+                    self.buffer_owners.add((id(module), name))
         self.weights.append(weights)
         def before(module, inputs):
             for parameter, cpu in weights:

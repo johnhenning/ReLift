@@ -5,13 +5,17 @@ import torch
 class DepthAnything3Provider:
     def __init__(self, weights, device="cuda", process_res=504, process_res_method="upper_bound_resize",
                  ref_view_strategy="saddle_balanced", offload="none", scratch_dir="cache/offload",
-                 ram_budget_gb=18, scratch_budget_gb=64):
+                 ram_budget_gb=18, scratch_budget_gb=64, optimizations=None, components=None):
         from depth_anything_3.api import DepthAnything3
+        if optimizations and (optimizations.da3_weights != "current" or optimizations.da3_features != "current"):
+            raise NotImplementedError("Packed DA3 backends arrive in a later stack layer")
         self.model = DepthAnything3.from_pretrained(weights).to(device)
+        self.device = torch.device(device)
         self.pager = None
         if offload in ("ram", "disk"):
             from ..da3_offload import DA3Pager
-            self.pager = DA3Pager(self.model, mode=offload, device=device, scratch_dir=scratch_dir,
+            factory = components.pager_factory if components and components.pager_factory else DA3Pager
+            self.pager = factory(self.model, mode=offload, device=device, scratch_dir=scratch_dir,
                                  ram_budget_gb=ram_budget_gb, scratch_budget_gb=scratch_budget_gb)
         self.kw = dict(process_res=process_res, process_res_method=process_res_method, ref_view_strategy=ref_view_strategy)
 
@@ -33,3 +37,19 @@ class DepthAnything3Provider:
             self.pager.close()
             self.pager = None
         self.model = None
+
+    def park(self):
+        self.model.to("cpu")
+
+    def activate(self):
+        # Move only modules that are not explicitly paged; cold parameter storage
+        # is restored by block hooks and must retain its CPU/mapped ownership.
+        cold = {id(p) for weights in self.pager.weights for p, _ in weights} if self.pager else set()
+        for parameter in self.model.parameters():
+            if id(parameter) not in cold:
+                parameter.data = parameter.data.to(self.device)
+        paged_buffers = getattr(self.pager, "buffer_owners", set()) if self.pager else set()
+        for module in self.model.modules():
+            for name, value in module._buffers.items():
+                if value is not None and (id(module), name) not in paged_buffers:
+                    module._buffers[name] = value.to(self.device)

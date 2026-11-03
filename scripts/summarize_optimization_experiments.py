@@ -12,7 +12,7 @@ def summarize(root):
     groups = defaultdict(list)
     for path in sorted(root.rglob("trial.json")):
         record = json.loads(path.read_text())
-        signature = {key: record.get(key) for key in ("code_hashes", "environment", "wrapper_sha256", "options", "task", "input_sha256", "process_res", "seed")}
+        signature = {key: record.get(key) for key in ("code_hashes", "native_build", "environment", "wrapper_sha256", "options", "task", "input_sha256", "process_res", "seed")}
         groups[(record["experiment"], record["mode"], json.dumps(signature, sort_keys=True))].append((path, record))
     rows = []
     for (experiment, mode, signature), records in groups.items():

@@ -1,0 +1,125 @@
+{
+  "scene": "swing-tire",
+  "input": "cache/demo_inputs/swing-tire.mp4",
+  "prepared_window": "outputs/benchmarks/offload-primary/swing-tire/ram/trial-01/output/window",
+  "process_res": 504,
+  "output_root": "outputs/experiments/native-optimizations",
+  "experiments": {
+    "updated-baseline-pipeline": {
+      "task": "pipeline",
+      "repeats": 5,
+      "variants": [
+        {
+          "name": "control",
+          "source": "outputs/experiments/native-baseline-source",
+          "options": {
+            "video": "cache/demo_inputs/swing-tire.mp4"
+          }
+        }
+      ]
+    },
+    "updated-baseline-correction": {
+      "task": "correction",
+      "repeats": 5,
+      "variants": [
+        {
+          "name": "control",
+          "source": "outputs/experiments/native-baseline-source",
+          "options": {}
+        }
+      ]
+    },
+    "updated-baseline-profile": {
+      "task": "correction",
+      "repeats": 1,
+      "variants": [
+        {
+          "name": "control",
+          "source": "outputs/experiments/native-baseline-source",
+          "options": {
+            "profile": true
+          }
+        }
+      ]
+    },
+    "cpu-gather": {
+      "task": "correction",
+      "repeats": 5,
+      "variants": [
+        {
+          "name": "control",
+          "source": "outputs/experiments/native-baseline-source",
+          "options": {}
+        },
+        {
+          "name": "python",
+          "source": "outputs/experiments/native-gather-source",
+          "options": {
+            "gather_backend": "python"
+          }
+        },
+        {
+          "name": "cpp",
+          "source": "outputs/experiments/native-gather-source",
+          "options": {
+            "gather_backend": "cpp",
+            "native_build": "outputs/native/gather"
+          }
+        }
+      ]
+    },
+    "composable-gather": {
+      "task": "correction",
+      "repeats": 5,
+      "variants": [
+        {
+          "name": "control",
+          "source": "outputs/experiments/native-composable-gather-source",
+          "options": {
+            "optimizations": {}
+          }
+        },
+        {
+          "name": "python",
+          "source": "outputs/experiments/native-composable-gather-source",
+          "options": {
+            "optimizations": {
+              "gather": "python"
+            }
+          }
+        },
+        {
+          "name": "cpp",
+          "source": "outputs/experiments/native-composable-gather-source",
+          "options": {
+            "optimizations": {
+              "gather": "cpp"
+            },
+            "native_build": "outputs/native/gather"
+          }
+        }
+      ]
+    },
+    "composable-pipeline": {
+      "task": "pipeline",
+      "repeats": 1,
+      "variants": [
+        {
+          "name": "control",
+          "source": "outputs/experiments/native-baseline-source",
+          "options": {
+            "video": "cache/demo_inputs/swing-tire.mp4"
+          }
+        },
+        {
+          "name": "configured-default",
+          "source": "outputs/experiments/native-composable-gather-source",
+          "options": {
+            "video": "cache/demo_inputs/swing-tire.mp4",
+            "optimizations": {}
+          }
+        }
+      ]
+    }
+  }
+}

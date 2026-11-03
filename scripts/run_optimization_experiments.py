@@ -53,7 +53,8 @@ def run_variant(spec, name, definition, variant, repeat, resume):
     if definition["task"] in ("correction", "alltracker", "compilation"):
         fixture = ROOT / spec["prepared_window"]
         shutil.copytree(fixture, output / "window", ignore=shutil.ignore_patterns(".mapped"))
-    hashes = {str(p.relative_to(source)): sha256(p) for p in sorted((source / "relift").rglob("*.py"))}
+    hashes = {str(p.relative_to(source)): sha256(p) for folder in (source / "relift", source / "native")
+              if folder.exists() for p in sorted(folder.rglob("*")) if p.is_file() and p.suffix in (".py", ".cpp", ".cu", ".h")}
     command = [sys.executable, str(ROOT / "scripts/experiment_worker.py"), "--source", str(source),
                "--root", str(ROOT), "--output", str(output), "--task", definition["task"], "--options", json.dumps(options)]
     wrapper_hash = sha256(ROOT / "scripts/experiment_worker.py")
@@ -65,6 +66,14 @@ def run_variant(spec, name, definition, variant, repeat, resume):
     scratch = output / "scratch"
     environment = dict(os.environ, HF_HUB_OFFLINE="1", HF_HUB_DISABLE_TELEMETRY="1", TORCHINDUCTOR_COMPILE_THREADS="1",
                        MAX_JOBS="1", TORCHINDUCTOR_CACHE_DIR=str(output / "compiler-cache"), TRITON_CACHE_DIR=str(output / "triton-cache"))
+    native_build = options.get("native_build")
+    build_record = None
+    if native_build:
+        build_root = (ROOT / native_build).resolve()
+        build_record = json.loads((build_root / "build.json").read_text())
+        if sha256(build_root / build_record["binary"]) != build_record["binary_sha256"]:
+            raise ValueError("Native binary checksum mismatch")
+        environment["RELIFT_NATIVE_BUILD"] = str(build_root)
     log = directory / "run.log"
     swap_before = swap_counters()
     print(f"START {name}/{variant['name']} repeat {repeat}", flush=True)
@@ -101,7 +110,7 @@ def run_variant(spec, name, definition, variant, repeat, resume):
         wall_seconds=wall, command=command, output=str(output), log=str(log), returncode=returncode,
         scenario=f"{name}_{definition['task']}_process", scene=spec["scene"], input_sha256=sha256(ROOT / spec["input"]),
         num_frames=0, process_res=spec["process_res"], corrector_batch=options.get("batch", 8), seed=0,
-        code_hashes=hashes, lockfile_sha256=sha256(source / "uv.lock"), wrapper_sha256=wrapper_hash, environment=runtime,
+        code_hashes=hashes, native_build=build_record, lockfile_sha256=sha256(source / "uv.lock"), wrapper_sha256=wrapper_hash, environment=runtime,
         telemetry=telemetry.summary(), telemetry_interval_seconds=.1, sampled_output_peak=peaks,
         final_output_size=tree_size(output), system_swap_deltas={key: value - swap_before[key] for key, value in swap_counters().items()}, result=result,
         metrics=dict(settings=options, stages=result["phases"]) if result else None)
@@ -121,7 +130,12 @@ def main():
     spec = json.loads(args.spec.read_text())
     experiment = spec["experiments"][args.experiment]
     for repeat in range(1, experiment.get("repeats", 5) + 1):
-        variants = experiment["variants"] if repeat % 2 else list(reversed(experiment["variants"]))
+        variants = experiment["variants"]
+        if len(variants) > 2:
+            offset = (repeat - 1) % len(variants)
+            variants = variants[offset:] + variants[:offset]
+        elif not repeat % 2:
+            variants = list(reversed(variants))
         for variant in variants:
             run_variant(spec, args.experiment, experiment, variant, repeat, args.resume)
 
