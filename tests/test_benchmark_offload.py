@@ -2,6 +2,7 @@
 from argparse import Namespace
 import json
 from pathlib import Path
+import sys
 
 import numpy as np
 
@@ -10,11 +11,13 @@ from scripts.compare_offload import compare
 from relift.storage import TrajectoryStore
 
 
-def test_commands_use_identical_seed_wrapper_and_fixed_full_resolution(tmp_path):
+def test_commands_use_identical_seed_wrapper_and_fixed_full_resolution(tmp_path, monkeypatch):
+    monkeypatch.setattr(sys, "executable", "/selected/python3.13")
     args = Namespace(baseline=tmp_path / "frozen", num_frames=0, process_res=504, corrector_batch=8,
                      candidate_args=[], seed=17)
     a = build_command("existing", tmp_path / "video.mp4", tmp_path / "a", args)
     b = build_command("ram", tmp_path / "video.mp4", tmp_path / "b", args)
+    assert a[0] == b[0] == "/selected/python3.13"
     assert "benchmark_worker.py" in a[1] and a[:4] == b[:4]
     assert a[3] == "17" and a[4] == str(args.baseline / "scripts/demo_video.py")
     assert "--offload" not in a and b[-2:] == ["--offload", "ram"]

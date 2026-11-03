@@ -191,7 +191,7 @@ def build_command(mode, video, output, args):
         script = args.baseline / "scripts/demo_video.py"
     else:
         script = REPO / "scripts/demo_video.py"
-    command = [str(REPO / ".venv/bin/python"), str(REPO / "scripts/benchmark_worker.py"), "--seed", str(args.seed), str(script), str(video), "--num_frames", str(args.num_frames),
+    command = [sys.executable, str(REPO / "scripts/benchmark_worker.py"), "--seed", str(args.seed), str(script), str(video), "--num_frames", str(args.num_frames),
                "--process-res", str(args.process_res), "--corrector-batch", str(args.corrector_batch),
                "--checkpoints_root", str(REPO / "checkpoints"), "--out", str(output), "--no_video"]
     if mode != "existing":
