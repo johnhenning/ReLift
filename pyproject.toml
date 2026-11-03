@@ -7,25 +7,66 @@ name = "relift"
 version = "0.1.0"
 description = "ReLift: a learned corrector for lifted dense 2-D tracks"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.13"
 license = {text = "MIT"}
+# Published runtime versions, including the five front ends (CUDA 12.8).
 dependencies = [
-    "torch>=2.4",
-    "torchvision",
-    "numpy>=1.26",
-    "opencv-python-headless",
-    "pillow",
-    "scipy",
-    "tqdm",
-    "pyyaml",
-    "matplotlib",          # imported by 4RC's clip loader
-    "huggingface_hub",
-    "safetensors",
-    "einops",
+    "torch==2.11.0",
+    "torchvision==0.26.0",
+    "numpy==2.2.5",
+    "opencv-python-headless==4.13.0.90",
+    "pillow==12.0.0",
+    "scipy==1.15.3",
+    "tqdm==4.67.1",
+    "pyyaml==6.0.3",
+    "matplotlib==3.10.8",
+    "huggingface_hub==1.30.0",
+    "safetensors==0.8.0",
+    "einops==0.8.1",
+    "imageio==2.37.2",
+    "omegaconf==2.3.0",
+    "transformers==5.16.1",
+    "trimesh==4.11.1",
+    "timm==1.0.29",
+    "natsort==8.4.0",
+    "requests==2.34.2",
+    "addict==2.4.0",
+    "plyfile==1.1.5",
+    "pycolmap==4.2.0",
+    "evo==1.37.1",
+    "relift-frontends==0.1.0",
+    "plotly>=7.1.0",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = [
+    "pytest",
+    "markdown-it-py==4.2.0",
+    "ruff==0.17.3",
+    "pyrefly==1.4.0",
+    "hatchling==1.30.0",
+    "types-pyyaml==6.0.12.20261103",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+extend-exclude = ["outputs", "checkpoints", "cache", "./data", "third_party", "docs/vendor", ".venv", ".codex", ".agents"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B", "ANN"]
+# Dynamic checkpoint/provider and JSON boundaries legitimately carry Any.
+ignore = ["ANN401"]
+
+[tool.ruff.lint.per-file-ignores]
+# Scripts pin a selected source before importing it.
+"scripts/**/*.py" = ["E402"]
+
+[tool.pyrefly]
+project-includes = ["relift/**/*.py", "scripts/**/*.py", "tests/**/*.py", "packages/frontends/**/*.py", "stubs/**/*.pyi"]
+project-excludes = ["outputs/**", ".venv/**", "packages/frontends/.hatch/**"]
+python-version = "3.13"
+search-path = ["stubs", ".", "scripts", "tests", "packages/frontends/src"]
 
 [tool.setuptools.packages.find]
 include = ["relift*"]
@@ -33,3 +74,17 @@ include = ["relift*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 markers = ["gpu: needs a CUDA device (and, for some tests, local data or weights)"]
+
+# The demo providers require Linux; keep the lock scoped to the supported platform.
+[tool.uv]
+environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
+torchvision = { index = "pytorch-cu128" }
+relift-frontends = { path = "packages/frontends" }

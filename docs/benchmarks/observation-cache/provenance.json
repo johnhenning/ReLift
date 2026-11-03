@@ -1,0 +1,9 @@
+{
+  "sources": {
+    "outputs/experiments/observation-cache-profile/summary.json": "e1f14cf2a15342c07aa83e24f5dba7f8908b84057286ff55bd082e988c86c644",
+    "configs/experiments/observation-cache-roles.json": "f520d3afac864f5943321404584114f260395b92a6140ff5177173a65fb0a387",
+    "outputs/experiments/observation-cache-running-rays/summary.json": "b8dc9ef071780c4baec1609f09bc5facce5e60c32edd07ce6cf378f7012f7c70",
+    "outputs/experiments/observation-cache-forest-rays/summary.json": "355426e188119b45c78d0cc617da155f0e4fd994d884c7f19bb04bd0c86904af"
+  },
+  "script_sha256": "071bb18312899cb5786f7579de3464f65537402373e1409bdb350c94cbdf756c"
+}

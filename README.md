@@ -46,28 +46,179 @@ and completes the lifted trajectories. One released checkpoint serves every trac
 ## Setup
 
 ```
-git clone --recurse-submodules https://github.com/ReLift3D/ReLift.git
+git clone https://github.com/johnhenning/ReLift.git
 cd ReLift
-bash scripts/setup.sh                  # conda environment "relift" + the five front ends (submodules)
-conda activate relift
-python scripts/download_weights.py     # all weights into checkpoints/, md5-checked
+bash scripts/setup.sh                  # uv environment .venv + all five front ends as Python dependencies
+uv run python scripts/download_weights.py     # all weights into checkpoints/, md5-checked
 ```
 
-Requires Linux, conda and a CUDA GPU (24 GB; CoWTracker needs 48 GB). VGGT-Omega's weights are **gated** on
-Hugging Face: request access on https://huggingface.co/facebook/VGGT-Omega, then `hf auth login` (or set
+Requires Linux, [uv](https://docs.astral.sh/uv/getting-started/installation/) and a CUDA GPU (24 GB; CoWTracker needs 48 GB). VGGT-Omega's weights are **gated** on
+Hugging Face: request access on https://huggingface.co/facebook/VGGT-Omega, then `uv run hf auth login` (or set
 `HF_TOKEN`) and rerun the download. VGGT-Omega, CoWTracker, 4RC and the Depth Anything 3 checkpoint are released under
 non-commercial licences.
+
+uv installs Python 3.13 automatically when needed. Runtime versions live in `pyproject.toml`,
+with transitive dependencies pinned in `uv.lock`; PyTorch and torchvision use the CUDA 12.8 index.
+Run commands with `uv run` (no activation needed), or `source .venv/bin/activate` to use plain `python`.
+Rerun `bash scripts/setup.sh` to sync the locked environment; after intentional dependency changes, run
+`uv lock` and commit both `pyproject.toml` and `uv.lock`. Set `UV_PROJECT_ENVIRONMENT` to use a custom
+environment directory, or `UV_CACHE_DIR` to relocate downloads. Run CPU tests with
+`uv run --extra dev pytest tests --ignore=tests/gpu -q`.
 
 ## Demo
 
 ```
-python scripts/demo_video.py assets/demo/cartwheel.mp4        # any video file or directory of frames
+uv run python scripts/demo_video.py assets/demo/cartwheel.mp4        # any video file or directory of frames
 ```
 
 Runs Depth Anything 3 and AllTracker on the first 84 frames, lifts every pixel of frame 0 and corrects it. Writes
 `outputs/demo/cartwheel/tracks.npz` (`xyz` (T,H,W,3): the 3-D trajectory of every pixel in the frame-0 camera's
 coordinates, plus the raw lift, the observation mask and the cameras) and `tracks.mp4` (raw lift left, ReLift
 right). `--geometry vggto` uses VGGT-Omega instead of Depth Anything 3.
+
+To reproduce both local demos and the previews shown in chat:
+
+```bash
+uv run python scripts/run_demos.py
+```
+
+[`scripts/run_demos.py`](scripts/run_demos.py) downloads only the three default model weights,
+fetches the basketball input from the project page with a SHA256 check, runs the cartwheel and
+basketball clips through `demo_video.py` (84 frames each, DA3 + AllTracker), then renders the results.
+Prepared geometry and tracking windows are reused by `demo_video.py` when present; use
+`--output-root outputs/demo-fresh` for a new run without those cached windows.
+
+To regenerate previews from existing trajectories without inference or downloads:
+
+```bash
+uv run python scripts/run_demos.py --render-only
+# Or render any saved demo directories with adjustable sampling and playback:
+uv run python scripts/render_demo_results.py outputs/demo/cartwheel outputs/demo/basketball \
+    --frame-step 3 --pixel-stride 4 --fps 5 --preview-width 900
+```
+
+[`scripts/render_demo_results.py`](scripts/render_demo_results.py) contains all visualization code.
+It writes `preview.png/gif` from the tracking video and `pointcloud.png/gif/mp4` from `tracks.npz`,
+with the raw lift on the left and corrected tracks on the right. The 3D view uses reference-frame
+RGB colours, every fourth grid pixel, a fixed camera (elevation 12°, azimuth −65°), and shared
+axis limits at the reference frame's 2nd–98th percentiles. Coordinates are displayed as `(x, z, -y)`;
+these are estimated geometry units. Every third frame is played at 5 fps. Each PNG shows the middle
+sampled frame (frame 42 for these 84-frame clips).
+
+`summary.json` reports frame counts, grid sizes, observation coverage, and coordinate finiteness;
+observation coverage is the tracker's visibility fraction, not an accuracy measurement.
+Each demo's `rendering.json` records the input trajectory file's SHA256, rendering settings, sampled
+frame indices, and library versions. The defaults reproduce the previews from the local run;
+neither script changes or restarts other GPU services.
+
+For every source frame and interactive Plotly 3D viewers:
+
+```bash
+uv run python scripts/run_demos.py --num-frames 0 --plotly
+# Rebuild only the interactive viewers from those saved full-length results:
+uv run python scripts/run_demos.py --num-frames 0 --render-only --skip-previews --plotly
+```
+
+Full-length runs default to `outputs/demo-full/`, separate from the 84-frame recipe's cached windows.
+Both supplied cartwheel and basketball videos contain exactly 84 frames (2.8 seconds at 30 FPS and
+7 seconds at 12 FPS respectively); taking every frame therefore gives the same temporal extent as
+the original demos. Longer videos run as one window, outside the corrector's published 84-frame
+setting, and may need more GPU memory. The demo now records the source FPS and writes its comparison
+video at that rate.
+
+[`scripts/plotly_demo.py`](scripts/plotly_demo.py), [`scripts/plotly_viewer.js`](scripts/plotly_viewer.js),
+and [`scripts/plotly_viewer.html`](scripts/plotly_viewer.html) generate `trajectories.html` and a
+`plotly.json` manifest in each output directory. The HTML embeds Plotly and all its data for offline
+viewing. Drag to orbit, scroll to zoom, play/pause or scrub the frame slider, and click any point to
+see its entire path. Cameras stay synchronized between raw and corrected views. Every temporal frame
+is included; a uniform subset of up to 2,500 reference pixels is shown for browser performance,
+with complete paths for 60 representative moving points plus the selected point. The original
+`tracks.npz` keeps trajectories for all 141,120 grid pixels in these runs. Axis ranges use the
+0.5th–99.5th percentiles across both methods and all frames, with padding, to limit depth outliers.
+These are estimated geometry coordinates, not measured metric accuracy.
+Viewer export/temporal-coverage checks run with the Python suite; control-logic checks run with
+`node tests/plotly_viewer.test.cjs` (no browser required). These control tests do not verify WebGL
+rendering or visual layout.
+
+Additional official input clips are selectable from [`assets/demo/catalog.json`](assets/demo/catalog.json):
+
+```bash
+uv run python scripts/run_demos.py --list-videos
+uv run python scripts/download_demo_inputs.py running tennis motocross-bumps
+uv run python scripts/run_demos.py --videos running tennis motocross-bumps --num-frames 0 --plotly
+```
+
+The catalog includes running, swing-tire, swing, spin, forest, tennis, motocross-bumps, drift-turn,
+lady-running, Libby, motorbike, BMX-trees, kangaroo, horse jumping, schoolgirls, and camel in addition
+to the two local demos. Downloads are cached under `cache/demo_inputs/` (with a checksum, frame count,
+FPS, duration, and source URL recorded for each). They are project-page clips; the catalog does not
+claim access to longer original recordings. The bundled cartwheel and existing basketball file stay
+under `assets/demo/`.
+
+To generate every catalog video's full-length interactive view and a gallery:
+
+```bash
+uv run python scripts/generate_all_views.py
+```
+
+[`scripts/generate_all_views.py`](scripts/generate_all_views.py) downloads and inspects inputs,
+runs GPU inference sequentially, and exports each Plotly viewer. Valid completed results are reused;
+rerun the same command to resume after interruption. It checks source frame counts, source FPS,
+trajectory checksums, and viewer sizes before marking a clip complete. Per-clip `inference.log`
+and `plotly.log` capture commands and output. This batch generates dense arrays and interactive
+HTML; it skips the optional comparison MP4 and GIF generation.
+
+Open `outputs/demo-full/index.html` to browse all scenes. `outputs/demo-full/batch.json` records
+source metadata, completion status, and export metadata. The index updates as each clip finishes;
+failed clips retain their error message while the remaining clips continue. Use `--download-only`
+to inventory inputs or `--videos running forest` to process selected clips. Published clip lengths
+vary: running has 206 frames and forest has 294; the full source timeline is retained.
+The batch defaults to `--offload auto`, preserves the full 504 processing resolution and all
+source frames, and selects streamed correction, RAM paging or disk paging from conservative
+memory estimates. Legacy spatial retries require explicit `--offload none --allow-resolution-retry`.
+Each viewer and the gallery report the processing grid; `plotly.json` records resolution and batch.
+
+For explicit offload control:
+
+```bash
+uv run python scripts/demo_video.py cache/demo_inputs/running.mp4 --num_frames 0 \
+    --offload ram --no_video --out outputs/running-offload
+uv run python scripts/plotly_demo.py outputs/running-offload
+```
+
+`none` retains the legacy dense CUDA path and NPZ output. `streamed` keeps DA3 on CUDA but
+constructs rays and corrects one full-timeline point batch at a time. `ram` also pages inactive
+DA3 blocks and retained features to CPU; `disk` maps those cold tensors from SSD. All three
+write `tracks.store/manifest.json` and track-major NPY shards. `--export-npz` adds a compatibility
+archive. Plotly reads either format, selecting display pixels without materializing all trajectories.
+
+Budgets default to `--vram-budget-gb 20 --ram-budget-gb 18 --scratch-budget-gb 64` (GiB).
+These guide placement and bounded allocations, rather than imposing OS limits on process RSS or
+GPU reservations. Disk mapping still uses RAM through the OS page cache. Use `--scratch-dir` to
+choose the cold-tensor SSD location. Model arithmetic, precision, complete temporal context,
+group size, seed and reference pixel identities are preserved. Padded duplicate points use a
+deterministic first occurrence instead of the legacy CUDA scatter's undefined write order.
+
+The [design](docs/memory-offload-design.md), [benchmark results](docs/offload-benchmark-results.md)
+and [performance investigation](docs/performance-opportunities.md) document the tradeoffs.
+Reproducible measurement and comparison scripts are `scripts/benchmark_offload.py` and
+`scripts/compare_offload.py`; the runnable original is frozen under `outputs/benchmarks/baseline-source`.
+The [standalone architecture viewer](docs/architecture-view.html) combines the interactive diagram,
+the [walkthrough](docs/architecture.md) and embedded source files in one offline HTML document.
+Rebuild it with `uv run python scripts/build_architecture_view.py` after `uv sync --extra dev`.
+
+For [benchmark comparison charts](outputs/benchmark-charts/index.html) and the
+[next optimization experiments](docs/performance-opportunities.md):
+
+```bash
+uv run python scripts/build_benchmark_charts.py \
+  --benchmark-roots outputs/benchmarks/offload-primary outputs/benchmarks/offload-ablations outputs/benchmarks/offload-capacity \
+  --analysis docs/performance-opportunities.md --out-dir outputs/benchmark-charts
+```
+
+This reads saved trials and inventories canonical dense-output files without rerunning inference.
+It writes an offline Plotly viewer, PNG/SVG figures, CSV and JSON provenance. Timed physical disk I/O
+and final output allocation are separate metrics; peak temporary scratch was not recorded.
 
 ## Training
 
@@ -78,11 +229,11 @@ Data: the annotation files of the official PointOdyssey training split
 (`train.tar.gz`, from which only `<scene>/anno.npz` is needed), extracted to `data/pointodyssey/train/<scene>/anno.npz`.
 
 ```
-python scripts/prepare_pointodyssey.py --stream 0 &     # training windows -> cache/pointodyssey_windows
-python scripts/prepare_pointodyssey.py --stream 1 &     # (CPU; the three streams run in parallel)
-python scripts/prepare_pointodyssey.py --stream 2 &
-python scripts/train.py --run my_run                    # the released recipe -> outputs/runs/my_run/
-python scripts/export_checkpoint.py outputs/runs/my_run/final.pt checkpoints/my_run.pt
+uv run python scripts/prepare_pointodyssey.py --stream 0 &     # training windows -> cache/pointodyssey_windows
+uv run python scripts/prepare_pointodyssey.py --stream 1 &     # (CPU; the three streams run in parallel)
+uv run python scripts/prepare_pointodyssey.py --stream 2 &
+uv run python scripts/train.py --run my_run                    # the released recipe -> outputs/runs/my_run/
+uv run python scripts/export_checkpoint.py outputs/runs/my_run/final.pt checkpoints/my_run.pt
 ```
 
 </details>
@@ -97,13 +248,13 @@ md5-checked by the first command. Then the front ends, the corrector and the sco
 results table (APD3D, the layout of Table 1 of the paper).
 
 ```
-python scripts/download_worldtrack.py                                                 # -> data/worldtrack/
-python scripts/prepare_worldtrack.py --geometry da3 vggto rc4 --tracker alltracker
-python scripts/prepare_worldtrack.py --geometry --tracker cowtracker                  # own invocation (needs 48 GB);
+uv run python scripts/download_worldtrack.py                                                 # -> data/worldtrack/
+uv run python scripts/prepare_worldtrack.py --geometry da3 vggto rc4 --tracker alltracker
+uv run python scripts/prepare_worldtrack.py --geometry --tracker cowtracker                  # own invocation (needs 48 GB);
                                                                                       # empty --geometry reuses the geometry above
-python scripts/run_corrector.py [--checkpoint checkpoints/my_run.pt]                  # the six tracker / geometry rows
-python scripts/score.py --variants alltracker_da3 alltracker_vggto alltracker_rc4 cowtracker_da3 cowtracker_vggto cowtracker_rc4
-python scripts/make_table1.py
+uv run python scripts/run_corrector.py [--checkpoint checkpoints/my_run.pt]                  # the six tracker / geometry rows
+uv run python scripts/score.py --variants alltracker_da3 alltracker_vggto alltracker_rc4 cowtracker_da3 cowtracker_vggto cowtracker_rc4
+uv run python scripts/make_table1.py
 ```
 
 Every GPU script takes `--shard i --nshards n` and skips finished clips.
@@ -118,7 +269,7 @@ Every GPU script takes `--shard i --nshards n` and skips finished clips.
 | `scripts/` | Every entry point: setup, downloads, demo, data preparation, training, inference, scoring |
 | `configs/` | Paths, provider settings, weight sources with pinned revisions and md5s, the training recipe |
 | `manifests/` | The WorldTrack file ids and md5s used by `download_worldtrack.py` |
-| `third_party/` | The five front ends, as git submodules — no third-party code is vendored into this repository |
+| `packages/frontends/` | Python wheel packaging for the five pinned front ends; sources are downloaded and checksum-verified at build time |
 | `tests/` | CPU unit tests (run in CI) and GPU tests that need weights and a clip |
 
 Data, caches, weights and outputs live outside version control, under the roots in `configs/paths.yaml`; override
@@ -126,8 +277,8 @@ any of them with `RELIFT_<KEY>` (e.g. `RELIFT_DATA_ROOT=/mnt/big/relift_data`) o
 
 ## Licence
 
-Our code is MIT (`LICENSE`); the front ends under `third_party/` keep their own licences, and four of the five
-are non-commercial — see [`third_party/README.md`](third_party/README.md).
+Our code is MIT (`LICENSE`); the front-end Python dependencies keep their own licences, and four of the five
+are non-commercial — see [`docs/frontend-dependencies.md`](docs/frontend-dependencies.md).
 `configs/weights.yaml` records the licence, source and md5 of every weight the pipeline downloads.
 
 ## Citation

@@ -1,0 +1,7 @@
+extends = "cuda-cached-rays"
+[observations]
+prefetch = true
+[storage]
+commits = "threaded"
+packing = "cpp"
+writer = "cpp"

@@ -8,6 +8,7 @@ Reads ``<src>/<scene>/anno.npz`` (the official PointOdyssey training release) an
 (every third scene of the sorted list, each with its own seeded generator); run the three streams, in parallel or one
 after the other, to reproduce it array for array.  --nstreams other than 3 gives a different point sampling.
 """
+
 import argparse
 import os
 import sys
@@ -17,7 +18,9 @@ from relift.config import paths  # noqa: E402
 from relift.data.pointodyssey import build_stream, split  # noqa: E402
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     ap.add_argument("--src", default=None, help="default <data_root>/pointodyssey/train")
     ap.add_argument("--cache", default=None, help="default <cache_root>/pointodyssey_windows")
     ap.add_argument("--stream", type=int, default=0)
@@ -27,7 +30,9 @@ if __name__ == "__main__":
     P = paths()
     src = a.src or P["data_root"] / "pointodyssey" / "train"
     cache = a.cache or P["cache_root"] / "pointodyssey_windows"
-    build_stream(src, cache, a.stream, a.nstreams, rewrite=a.rewrite, log=lambda s: print(s, flush=True))
+    build_stream(
+        src, cache, a.stream, a.nstreams, rewrite=a.rewrite, log=lambda s: print(s, flush=True)
+    )
     train, val = split(cache)
     print(f"cache {cache}: {len(train)} training scenes, {len(val)} validation scenes: {val}")
     print("PREPARE_POINTODYSSEY_DONE")

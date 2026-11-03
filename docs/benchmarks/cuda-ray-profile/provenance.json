@@ -1,0 +1,29 @@
+{
+  "sources": {
+    "profile": {
+      "path": "outputs/experiments/rays-profile-eager/summary.json",
+      "sha256": "7ff9213c52641089ac2b978b3775233fa8e312ae6f5c3d2fd352df3c78b2c76d"
+    },
+    "startup": {
+      "path": "outputs/experiments/rays-startup-eager/summary.json",
+      "sha256": "52643c06eee68e524d30523e306c41bd47c3ef1146e5824453f5d920739b3a07"
+    },
+    "ablation-profile": {
+      "path": "outputs/experiments/rays-profile-balanced/summary.json",
+      "sha256": "a90f80666f999c01a172fef63ba5c74b2dde559f939cac496a3e487922f4b006"
+    },
+    "ablation-startup": {
+      "path": "outputs/experiments/rays-startup-registered/summary.json",
+      "sha256": "2b578daf0425c603b8ccca4ac51f0d7978152393c9cff93fc279d5d63eb4500f"
+    },
+    "rays-timeline-audit.json": {
+      "path": "outputs/experiments/rays-timeline-audit.json",
+      "sha256": "5b5e41b1d946553cf6b17beec894f2f2110ed64cc795898be235402f97b6a4aa"
+    },
+    "rays-timeline-eager-audit.json": {
+      "path": "outputs/experiments/rays-timeline-eager-audit.json",
+      "sha256": "7f8de8d223083081c6282b294612d9af8c83a36e47ec2e1f9695cd9d9e48e8a7"
+    }
+  },
+  "script_sha256": "3c6cb17872a16fe3a8a4237ebf7ccd66f89e3959172baaa1e900b1e85f073bd2"
+}

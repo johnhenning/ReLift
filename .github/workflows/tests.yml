@@ -3,19 +3,29 @@ on:
   push:
   pull_request:
 jobs:
+  quality:
+    name: Python quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-python
+      - name: Ruff formatting
+        run: uv run --no-sync ruff format --check .
+      - name: Ruff lint
+        run: uv run --no-sync ruff check .
+      - name: Pyrefly types
+        run: uv run --no-sync pyrefly check --min-severity warn
   cpu:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-      - name: Install (CPU wheels)
-        run: |
-          pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cpu
-          pip install -e .[dev]
+      - uses: ./.github/actions/setup-python
       - name: CPU unit tests
-        run: pytest tests --ignore=tests/gpu -q
+        run: uv run --no-sync pytest tests --ignore=tests/gpu -q
+      - name: Plotly viewer control tests
+        run: node tests/plotly_viewer.test.cjs
+      - name: Architecture component code links
+        run: |
+          uv run --no-sync python scripts/build_architecture_view.py
+          node --test docs/architecture-view.test.cjs
       # The GPU checks (tests/gpu) need CUDA, local weights and a WorldTrack clip; run them by hand (README.md).

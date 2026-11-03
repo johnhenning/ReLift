@@ -1,0 +1,10 @@
+{
+  "outputs/experiments/native-baseline-source": "4a508ffe1ed22518441903bd8df04b617f6eb049",
+  "outputs/experiments/native-gather-source": "1ffe690a2f1a58d91635e941937944a76596a0c5",
+  "outputs/experiments/native-composable-gather-source": "1ffe690a2f1a58d91635e941937944a76596a0c5",
+  "outputs/experiments/native-shards-source": "57b0335eb6e31c7dd576fa627564ff172659d381",
+  "outputs/experiments/native-rays-source": "ca8a13ca995c463554122837f0809daaeb14c8bb",
+  "outputs/experiments/native-rays-compatible-source": "6bcb037bd46afe95d1c35b26f9fd9751b797af82",
+  "outputs/experiments/native-da3-source": "HEAD",
+  "outputs/experiments/native-composable-source": "HEAD"
+}

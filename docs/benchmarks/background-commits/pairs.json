@@ -1,0 +1,602 @@
+[
+  {
+    "experiment": "correction",
+    "repeat": 1,
+    "control_seconds": 17.01991291399463,
+    "candidate_seconds": 11.979313011019258,
+    "candidate_over_control": 0.7038410285383577,
+    "seconds_saved": 5.040599902975373,
+    "control_phases": {
+      "model_load": {
+        "seconds": 0.16749964500195347,
+        "process_rss_highwater_bytes": 759394304,
+        "cuda_allocated_peak_bytes": 155717632,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "correction": {
+        "seconds": 14.91822225600481,
+        "process_rss_highwater_bytes": 1625878528,
+        "cuda_allocated_peak_bytes": 2070839296,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    },
+    "candidate_phases": {
+      "model_load": {
+        "seconds": 0.16647800002829172,
+        "process_rss_highwater_bytes": 759570432,
+        "cuda_allocated_peak_bytes": 155717632,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "correction": {
+        "seconds": 10.050406727998052,
+        "process_rss_highwater_bytes": 1654517760,
+        "cuda_allocated_peak_bytes": 2070839296,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    }
+  },
+  {
+    "experiment": "correction",
+    "repeat": 2,
+    "control_seconds": 20.896946669003228,
+    "candidate_seconds": 13.883413951989496,
+    "candidate_over_control": 0.6643752396891065,
+    "seconds_saved": 7.013532717013732,
+    "control_phases": {
+      "model_load": {
+        "seconds": 0.16758783400291577,
+        "process_rss_highwater_bytes": 759672832,
+        "cuda_allocated_peak_bytes": 155717632,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "correction": {
+        "seconds": 18.94954860000871,
+        "process_rss_highwater_bytes": 1628200960,
+        "cuda_allocated_peak_bytes": 2070839296,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    },
+    "candidate_phases": {
+      "model_load": {
+        "seconds": 0.16252537199761719,
+        "process_rss_highwater_bytes": 758874112,
+        "cuda_allocated_peak_bytes": 155717632,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "correction": {
+        "seconds": 11.949010111013195,
+        "process_rss_highwater_bytes": 1674952704,
+        "cuda_allocated_peak_bytes": 2070839296,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    }
+  },
+  {
+    "experiment": "correction",
+    "repeat": 3,
+    "control_seconds": 18.753914203000022,
+    "candidate_seconds": 12.060452926991275,
+    "candidate_over_control": 0.6430899062693798,
+    "seconds_saved": 6.6934612760087475,
+    "control_phases": {
+      "model_load": {
+        "seconds": 0.16730236099101603,
+        "process_rss_highwater_bytes": 759320576,
+        "cuda_allocated_peak_bytes": 155717632,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "correction": {
+        "seconds": 16.846312680019764,
+        "process_rss_highwater_bytes": 1657917440,
+        "cuda_allocated_peak_bytes": 2070839296,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    },
+    "candidate_phases": {
+      "model_load": {
+        "seconds": 0.16649656699155457,
+        "process_rss_highwater_bytes": 759386112,
+        "cuda_allocated_peak_bytes": 155717632,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "correction": {
+        "seconds": 10.131590193981538,
+        "process_rss_highwater_bytes": 1655480320,
+        "cuda_allocated_peak_bytes": 2070839296,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    }
+  },
+  {
+    "experiment": "correction",
+    "repeat": 4,
+    "control_seconds": 21.018568800995126,
+    "candidate_seconds": 12.606737066002097,
+    "candidate_over_control": 0.5997904607760558,
+    "seconds_saved": 8.41183173499303,
+    "control_phases": {
+      "model_load": {
+        "seconds": 0.1652541839866899,
+        "process_rss_highwater_bytes": 759111680,
+        "cuda_allocated_peak_bytes": 155717632,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "correction": {
+        "seconds": 19.044346976006636,
+        "process_rss_highwater_bytes": 1633345536,
+        "cuda_allocated_peak_bytes": 2070839296,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    },
+    "candidate_phases": {
+      "model_load": {
+        "seconds": 0.1624085590010509,
+        "process_rss_highwater_bytes": 759513088,
+        "cuda_allocated_peak_bytes": 155717632,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "correction": {
+        "seconds": 10.627244558010716,
+        "process_rss_highwater_bytes": 1665961984,
+        "cuda_allocated_peak_bytes": 2070839296,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    }
+  },
+  {
+    "experiment": "correction",
+    "repeat": 5,
+    "control_seconds": 18.34663932598778,
+    "candidate_seconds": 11.947125284990761,
+    "candidate_over_control": 0.6511887584811138,
+    "seconds_saved": 6.399514040997019,
+    "control_phases": {
+      "model_load": {
+        "seconds": 0.16820878701400943,
+        "process_rss_highwater_bytes": 759263232,
+        "cuda_allocated_peak_bytes": 155717632,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "correction": {
+        "seconds": 16.452966981974896,
+        "process_rss_highwater_bytes": 1633185792,
+        "cuda_allocated_peak_bytes": 2070839296,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    },
+    "candidate_phases": {
+      "model_load": {
+        "seconds": 0.17025580399786122,
+        "process_rss_highwater_bytes": 759513088,
+        "cuda_allocated_peak_bytes": 155717632,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "correction": {
+        "seconds": 9.993599127978086,
+        "process_rss_highwater_bytes": 1655107584,
+        "cuda_allocated_peak_bytes": 2070839296,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    }
+  },
+  {
+    "experiment": "pipeline",
+    "repeat": 1,
+    "control_seconds": 58.040531715989346,
+    "candidate_seconds": 53.80163406900829,
+    "candidate_over_control": 0.9269665952110273,
+    "seconds_saved": 4.238897646981059,
+    "control_phases": {
+      "decode": {
+        "status": "complete",
+        "seconds": 1.0396455639856867,
+        "process_rss_highwater_bytes": 605356032
+      },
+      "da3": {
+        "status": "complete",
+        "cold_tensor_bytes_written": 0,
+        "peak_retained_cpu_tensor_bytes": 9463344128,
+        "weight_host_to_device_bytes": 5743324160,
+        "seconds": 35.594325805985136,
+        "process_rss_highwater_bytes": 14543642624,
+        "cuda_allocated_peak_bytes": 6827321344,
+        "cuda_reserved_peak_bytes": 11978932224
+      },
+      "alltracker": {
+        "status": "complete",
+        "seconds": 4.279886892996728,
+        "process_rss_highwater_bytes": 14543642624,
+        "cuda_allocated_peak_bytes": 3063476224,
+        "cuda_reserved_peak_bytes": 4773117952
+      },
+      "corrector_load": {
+        "status": "complete",
+        "seconds": 0.13620203602476977,
+        "process_rss_highwater_bytes": 14543642624,
+        "cuda_allocated_peak_bytes": 165359616,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "corrector_stream": {
+        "status": "complete",
+        "seconds": 13.960676442016847,
+        "process_rss_highwater_bytes": 14543642624,
+        "cuda_allocated_peak_bytes": 2073145856,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    },
+    "candidate_phases": {
+      "decode": {
+        "status": "complete",
+        "seconds": 1.0222424159874208,
+        "process_rss_highwater_bytes": 606466048
+      },
+      "da3": {
+        "status": "complete",
+        "cold_tensor_bytes_written": 0,
+        "peak_retained_cpu_tensor_bytes": 9463344128,
+        "weight_host_to_device_bytes": 5743324160,
+        "seconds": 35.77933333301917,
+        "process_rss_highwater_bytes": 14544039936,
+        "cuda_allocated_peak_bytes": 6827321344,
+        "cuda_reserved_peak_bytes": 11978932224
+      },
+      "alltracker": {
+        "status": "complete",
+        "seconds": 4.156062669993844,
+        "process_rss_highwater_bytes": 14544039936,
+        "cuda_allocated_peak_bytes": 3063476224,
+        "cuda_reserved_peak_bytes": 4773117952
+      },
+      "corrector_load": {
+        "status": "complete",
+        "seconds": 0.16171901000780053,
+        "process_rss_highwater_bytes": 14544039936,
+        "cuda_allocated_peak_bytes": 165359616,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "corrector_stream": {
+        "status": "complete",
+        "seconds": 9.64344569700188,
+        "process_rss_highwater_bytes": 14544039936,
+        "cuda_allocated_peak_bytes": 2073145856,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    }
+  },
+  {
+    "experiment": "pipeline",
+    "repeat": 2,
+    "control_seconds": 58.09527474801871,
+    "candidate_seconds": 53.45190365301096,
+    "candidate_over_control": 0.9200731709222856,
+    "seconds_saved": 4.643371095007751,
+    "control_phases": {
+      "decode": {
+        "status": "complete",
+        "seconds": 1.0261007609951776,
+        "process_rss_highwater_bytes": 606568448
+      },
+      "da3": {
+        "status": "complete",
+        "cold_tensor_bytes_written": 0,
+        "peak_retained_cpu_tensor_bytes": 9463344128,
+        "weight_host_to_device_bytes": 5743324160,
+        "seconds": 35.771973783994326,
+        "process_rss_highwater_bytes": 14543728640,
+        "cuda_allocated_peak_bytes": 6827321344,
+        "cuda_reserved_peak_bytes": 11978932224
+      },
+      "alltracker": {
+        "status": "complete",
+        "seconds": 4.228241878998233,
+        "process_rss_highwater_bytes": 14543728640,
+        "cuda_allocated_peak_bytes": 3063476224,
+        "cuda_reserved_peak_bytes": 4773117952
+      },
+      "corrector_load": {
+        "status": "complete",
+        "seconds": 0.16503420899971388,
+        "process_rss_highwater_bytes": 14543728640,
+        "cuda_allocated_peak_bytes": 165359616,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "corrector_stream": {
+        "status": "complete",
+        "seconds": 13.861329206993105,
+        "process_rss_highwater_bytes": 14543728640,
+        "cuda_allocated_peak_bytes": 2073145856,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    },
+    "candidate_phases": {
+      "decode": {
+        "status": "complete",
+        "seconds": 0.9913469369930681,
+        "process_rss_highwater_bytes": 606347264
+      },
+      "da3": {
+        "status": "complete",
+        "cold_tensor_bytes_written": 0,
+        "peak_retained_cpu_tensor_bytes": 9463344128,
+        "weight_host_to_device_bytes": 5743324160,
+        "seconds": 35.686358826002106,
+        "process_rss_highwater_bytes": 14543384576,
+        "cuda_allocated_peak_bytes": 6827321344,
+        "cuda_reserved_peak_bytes": 11978932224
+      },
+      "alltracker": {
+        "status": "complete",
+        "seconds": 4.175132444011979,
+        "process_rss_highwater_bytes": 14543384576,
+        "cuda_allocated_peak_bytes": 3063476224,
+        "cuda_reserved_peak_bytes": 4773117952
+      },
+      "corrector_load": {
+        "status": "complete",
+        "seconds": 0.16274296000483446,
+        "process_rss_highwater_bytes": 14543384576,
+        "cuda_allocated_peak_bytes": 165359616,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "corrector_stream": {
+        "status": "complete",
+        "seconds": 9.44313245898229,
+        "process_rss_highwater_bytes": 14543384576,
+        "cuda_allocated_peak_bytes": 2073145856,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    }
+  },
+  {
+    "experiment": "pipeline",
+    "repeat": 3,
+    "control_seconds": 57.857561479992,
+    "candidate_seconds": 53.74526255001547,
+    "candidate_over_control": 0.9289237426399551,
+    "seconds_saved": 4.112298929976532,
+    "control_phases": {
+      "decode": {
+        "status": "complete",
+        "seconds": 0.9262906649964862,
+        "process_rss_highwater_bytes": 605794304
+      },
+      "da3": {
+        "status": "complete",
+        "cold_tensor_bytes_written": 0,
+        "peak_retained_cpu_tensor_bytes": 9463344128,
+        "weight_host_to_device_bytes": 5743324160,
+        "seconds": 35.821126811992144,
+        "process_rss_highwater_bytes": 14543765504,
+        "cuda_allocated_peak_bytes": 6827321344,
+        "cuda_reserved_peak_bytes": 11978932224
+      },
+      "alltracker": {
+        "status": "complete",
+        "seconds": 4.116894687002059,
+        "process_rss_highwater_bytes": 14543765504,
+        "cuda_allocated_peak_bytes": 3063476224,
+        "cuda_reserved_peak_bytes": 4773117952
+      },
+      "corrector_load": {
+        "status": "complete",
+        "seconds": 0.14932873600628227,
+        "process_rss_highwater_bytes": 14543765504,
+        "cuda_allocated_peak_bytes": 165359616,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "corrector_stream": {
+        "status": "complete",
+        "seconds": 13.758426606975263,
+        "process_rss_highwater_bytes": 14543765504,
+        "cuda_allocated_peak_bytes": 2073145856,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    },
+    "candidate_phases": {
+      "decode": {
+        "status": "complete",
+        "seconds": 1.0241231930267531,
+        "process_rss_highwater_bytes": 605835264
+      },
+      "da3": {
+        "status": "complete",
+        "cold_tensor_bytes_written": 0,
+        "peak_retained_cpu_tensor_bytes": 9463344128,
+        "weight_host_to_device_bytes": 5743324160,
+        "seconds": 35.919268585013924,
+        "process_rss_highwater_bytes": 14544105472,
+        "cuda_allocated_peak_bytes": 6827321344,
+        "cuda_reserved_peak_bytes": 11978932224
+      },
+      "alltracker": {
+        "status": "complete",
+        "seconds": 4.079518291982822,
+        "process_rss_highwater_bytes": 14544105472,
+        "cuda_allocated_peak_bytes": 3063476224,
+        "cuda_reserved_peak_bytes": 4773117952
+      },
+      "corrector_load": {
+        "status": "complete",
+        "seconds": 0.155256586993346,
+        "process_rss_highwater_bytes": 14544105472,
+        "cuda_allocated_peak_bytes": 165359616,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "corrector_stream": {
+        "status": "complete",
+        "seconds": 9.520300037023844,
+        "process_rss_highwater_bytes": 14544105472,
+        "cuda_allocated_peak_bytes": 2073145856,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    }
+  },
+  {
+    "experiment": "pipeline",
+    "repeat": 4,
+    "control_seconds": 57.99523691899958,
+    "candidate_seconds": 53.59231519000605,
+    "candidate_over_control": 0.9240813217964265,
+    "seconds_saved": 4.402921728993533,
+    "control_phases": {
+      "decode": {
+        "status": "complete",
+        "seconds": 1.0314749110257253,
+        "process_rss_highwater_bytes": 606433280
+      },
+      "da3": {
+        "status": "complete",
+        "cold_tensor_bytes_written": 0,
+        "peak_retained_cpu_tensor_bytes": 9463344128,
+        "weight_host_to_device_bytes": 5743324160,
+        "seconds": 35.75759777001804,
+        "process_rss_highwater_bytes": 14543863808,
+        "cuda_allocated_peak_bytes": 6827321344,
+        "cuda_reserved_peak_bytes": 11978932224
+      },
+      "alltracker": {
+        "status": "complete",
+        "seconds": 4.133874270017259,
+        "process_rss_highwater_bytes": 14543863808,
+        "cuda_allocated_peak_bytes": 3063476224,
+        "cuda_reserved_peak_bytes": 4773117952
+      },
+      "corrector_load": {
+        "status": "complete",
+        "seconds": 0.1494015810021665,
+        "process_rss_highwater_bytes": 14543863808,
+        "cuda_allocated_peak_bytes": 165359616,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "corrector_stream": {
+        "status": "complete",
+        "seconds": 13.828013250982622,
+        "process_rss_highwater_bytes": 14543863808,
+        "cuda_allocated_peak_bytes": 2073145856,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    },
+    "candidate_phases": {
+      "decode": {
+        "status": "complete",
+        "seconds": 1.0075442210072652,
+        "process_rss_highwater_bytes": 606130176
+      },
+      "da3": {
+        "status": "complete",
+        "cold_tensor_bytes_written": 0,
+        "peak_retained_cpu_tensor_bytes": 9463344128,
+        "weight_host_to_device_bytes": 5743324160,
+        "seconds": 35.70193437198759,
+        "process_rss_highwater_bytes": 14543720448,
+        "cuda_allocated_peak_bytes": 6827321344,
+        "cuda_reserved_peak_bytes": 11978932224
+      },
+      "alltracker": {
+        "status": "complete",
+        "seconds": 4.266299036011333,
+        "process_rss_highwater_bytes": 14543720448,
+        "cuda_allocated_peak_bytes": 3063476224,
+        "cuda_reserved_peak_bytes": 4773117952
+      },
+      "corrector_load": {
+        "status": "complete",
+        "seconds": 0.13431711198063567,
+        "process_rss_highwater_bytes": 14543720448,
+        "cuda_allocated_peak_bytes": 165359616,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "corrector_stream": {
+        "status": "complete",
+        "seconds": 9.42424844900961,
+        "process_rss_highwater_bytes": 14543720448,
+        "cuda_allocated_peak_bytes": 2073145856,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    }
+  },
+  {
+    "experiment": "pipeline",
+    "repeat": 5,
+    "control_seconds": 58.53751957201166,
+    "candidate_seconds": 53.43709829100408,
+    "candidate_over_control": 0.9128691936676074,
+    "seconds_saved": 5.100421281007584,
+    "control_phases": {
+      "decode": {
+        "status": "complete",
+        "seconds": 1.0455518999951892,
+        "process_rss_highwater_bytes": 606404608
+      },
+      "da3": {
+        "status": "complete",
+        "cold_tensor_bytes_written": 0,
+        "peak_retained_cpu_tensor_bytes": 9463344128,
+        "weight_host_to_device_bytes": 5743324160,
+        "seconds": 35.85263294301694,
+        "process_rss_highwater_bytes": 14543806464,
+        "cuda_allocated_peak_bytes": 6827321344,
+        "cuda_reserved_peak_bytes": 11978932224
+      },
+      "alltracker": {
+        "status": "complete",
+        "seconds": 4.206104160984978,
+        "process_rss_highwater_bytes": 14543806464,
+        "cuda_allocated_peak_bytes": 3063476224,
+        "cuda_reserved_peak_bytes": 4773117952
+      },
+      "corrector_load": {
+        "status": "complete",
+        "seconds": 0.16491413800395094,
+        "process_rss_highwater_bytes": 14543806464,
+        "cuda_allocated_peak_bytes": 165359616,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "corrector_stream": {
+        "status": "complete",
+        "seconds": 14.310090949991718,
+        "process_rss_highwater_bytes": 14543806464,
+        "cuda_allocated_peak_bytes": 2073145856,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    },
+    "candidate_phases": {
+      "decode": {
+        "status": "complete",
+        "seconds": 0.9577067040081602,
+        "process_rss_highwater_bytes": 606433280
+      },
+      "da3": {
+        "status": "complete",
+        "cold_tensor_bytes_written": 0,
+        "peak_retained_cpu_tensor_bytes": 9463344128,
+        "weight_host_to_device_bytes": 5743324160,
+        "seconds": 35.67041293400689,
+        "process_rss_highwater_bytes": 14543695872,
+        "cuda_allocated_peak_bytes": 6827321344,
+        "cuda_reserved_peak_bytes": 11978932224
+      },
+      "alltracker": {
+        "status": "complete",
+        "seconds": 4.132295576011529,
+        "process_rss_highwater_bytes": 14543695872,
+        "cuda_allocated_peak_bytes": 3063476224,
+        "cuda_reserved_peak_bytes": 4773117952
+      },
+      "corrector_load": {
+        "status": "complete",
+        "seconds": 0.1444768609944731,
+        "process_rss_highwater_bytes": 14543695872,
+        "cuda_allocated_peak_bytes": 165359616,
+        "cuda_reserved_peak_bytes": 171966464
+      },
+      "corrector_stream": {
+        "status": "complete",
+        "seconds": 9.459410624986049,
+        "process_rss_highwater_bytes": 14543695872,
+        "cuda_allocated_peak_bytes": 2073145856,
+        "cuda_reserved_peak_bytes": 2835349504
+      }
+    }
+  }
+]

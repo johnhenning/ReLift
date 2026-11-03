@@ -17,47 +17,73 @@ processes, each taking every third scene of the sorted scene list and drawing it
 running streams 0, 1 and 2 (of 3) reproduces the cache array for array.  Any other number of streams gives a
 different, equally valid, point sampling.
 """
+
+from __future__ import annotations
+
 import os
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 
+from ..records.model import PointOdysseyWindows
+
 T, P = 84, 2048
-DYN_THR = 0.05          # metres of world displacement (max over the window)
+DYN_THR = 0.05  # metres of world displacement (max over the window)
 STEPS = (1, 2)
-EXCLUDE = {"cab_e_ego2"}            # the same recording as WorldTrack's cab_e_3rd
-VAL_EVERY, VAL_FROM = 13, 6         # validation = every 13th scene name from the 7th
+EXCLUDE = {"cab_e_ego2"}  # the same recording as WorldTrack's cab_e_3rd
+VAL_EVERY, VAL_FROM = 13, 6  # validation = every 13th scene name from the 7th
 
 
-def windows_of(z, rng, T=T, P=P, dyn_thr=DYN_THR, steps=STEPS):
+def windows_of(
+    z: Any,
+    rng: np.random.Generator,
+    T: int = T,
+    P: int = P,
+    dyn_thr: float = DYN_THR,
+    steps: tuple[int, ...] = STEPS,
+) -> PointOdysseyWindows:
     """One scene's annotations (``anno.npz`` arrays) -> dict of lists (see the module docstring)."""
     Xw, uv, E, K = z["trajs_3d"], z["trajs_2d"], z["extrinsics"].astype(np.float64), z["intrinsics"]
     vis, val = z["visibs"], z["valids"]
     F = Xw.shape[0]
     W_img, H_img = 2.0 * K[0, 0, 2], 2.0 * K[0, 1, 2]
-    out = dict(X=[], vis=[], origin=[], dyn=[], step=[], start=[])
+    out: PointOdysseyWindows = dict(X=[], vis=[], origin=[], dyn=[], step=[], start=[])
     for s in steps:
         span = (T - 1) * s + 1
         for t0 in range(0, F - span + 1, (T // 2) * s):
             idx = np.arange(t0, t0 + span, s)
-            xw = Xw[idx].astype(np.float64)                                        # T,N,3
+            xw = Xw[idx].astype(np.float64)  # T,N,3
             ok = val[idx].all(0) & np.isfinite(xw).all((0, 2)) & (np.abs(xw).max((0, 2)) < 1e3)
             Rt = E[idx]
-            xc = np.einsum("tij,tnj->tni", Rt[:, :3, :3], xw) + Rt[:, None, :3, 3]     # per-frame camera
-            inside = (uv[idx, :, 0] >= 0) & (uv[idx, :, 0] < W_img) & (uv[idx, :, 1] >= 0) & (uv[idx, :, 1] < H_img) & (xc[..., 2] > 0.1)
+            xc = (
+                np.einsum("tij,tnj->tni", Rt[:, :3, :3], xw) + Rt[:, None, :3, 3]
+            )  # per-frame camera
+            inside = (
+                (uv[idx, :, 0] >= 0)
+                & (uv[idx, :, 0] < W_img)
+                & (uv[idx, :, 1] >= 0)
+                & (uv[idx, :, 1] < H_img)
+                & (xc[..., 2] > 0.1)
+            )
             v = vis[idx] & inside
             cand = np.flatnonzero(ok & v[0])
             if len(cand) < P // 2:
                 continue
             c2w0 = np.linalg.inv(Rt[0])
-            M = np.einsum("tij,jk->tik", Rt, c2w0)                                   # frame-0 camera -> frame-t camera
-            Minv = np.linalg.inv(M)                                                  # frame-t camera -> frame-0 camera
+            M = np.einsum("tij,jk->tik", Rt, c2w0)  # frame-0 camera -> frame-t camera
+            Minv = np.linalg.inv(M)  # frame-t camera -> frame-0 camera
             x0 = np.einsum("tij,tnj->tni", Minv[:, :3, :3], xc[:, cand]) + Minv[:, None, :3, 3]
             moved = np.linalg.norm(xw[:, cand] - xw[:1, cand], axis=-1).max(0) > dyn_thr
             d, st = np.flatnonzero(moved), np.flatnonzero(~moved)
             nd = min(len(d), P // 2) if len(st) >= P - min(len(d), P // 2) else min(len(d), P)
-            pick = np.concatenate([rng.choice(d, nd, replace=False) if nd else d[:0],
-                                   rng.choice(st, P - nd, replace=len(st) < P - nd) if P - nd else st[:0]])
+            pick = np.concatenate(
+                [
+                    rng.choice(d, nd, replace=False) if nd else d[:0],
+                    rng.choice(st, P - nd, replace=len(st) < P - nd) if P - nd else st[:0],
+                ]
+            )
             out["X"].append(x0[:, pick].astype(np.float32))
             out["vis"].append(v[:, cand[pick]])
             out["origin"].append(Minv[:, :3, 3].astype(np.float32))
@@ -67,12 +93,19 @@ def windows_of(z, rng, T=T, P=P, dyn_thr=DYN_THR, steps=STEPS):
     return out
 
 
-def scene_names(src):
+def scene_names(src: str | Path) -> list[str]:
     """Scenes with annotations, sorted: ``<src>/<scene>/anno.npz``."""
     return sorted(p.parent.name for p in Path(src).glob("*/anno.npz"))
 
 
-def build_stream(src, cache, stream=0, nstreams=3, log=print, rewrite=False):
+def build_stream(
+    src: str | Path,
+    cache: str | Path,
+    stream: int = 0,
+    nstreams: int = 3,
+    log: Callable[..., Any] = print,
+    rewrite: bool = False,
+) -> None:
     """Build the windows of every ``nstreams``-th scene starting at ``stream`` with one ``default_rng(0)`` stream.
     A scene whose file exists is still computed (the stream must advance) but not rewritten unless ``rewrite``."""
     cache = Path(cache)
@@ -93,13 +126,22 @@ def build_stream(src, cache, stream=0, nstreams=3, log=print, rewrite=False):
             log(f"{name}: {len(o['X'])} windows (file exists, kept)")
             continue
         tmp = cache / f".{name}.tmp.npz"
-        np.savez(tmp, X=np.stack(o["X"]), vis=np.stack(o["vis"]), origin=np.stack(o["origin"]), dyn=np.stack(o["dyn"]),
-                 step=np.array(o["step"], np.int8), start=np.array(o["start"], np.int32))
+        np.savez(
+            tmp,
+            X=np.stack(o["X"]),
+            vis=np.stack(o["vis"]),
+            origin=np.stack(o["origin"]),
+            dyn=np.stack(o["dyn"]),
+            step=np.array(o["step"], np.int8),
+            start=np.array(o["start"], np.int32),
+        )
         os.replace(tmp, dst)
-        log(f"{name}: {len(o['X'])} windows, dynamic share {np.mean(o['dyn']):.2f}, visible share {np.mean(o['vis']):.2f}")
+        log(
+            f"{name}: {len(o['X'])} windows, dynamic share {np.mean(o['dyn']):.2f}, visible share {np.mean(o['vis']):.2f}"
+        )
 
 
-def split(cache):
+def split(cache: str | Path) -> tuple[list[str], list[str]]:
     """Training and validation scene names of a window cache: drop EXCLUDE, hold out names[VAL_FROM::VAL_EVERY]."""
     names = sorted(p.stem for p in Path(cache).glob("*.npz") if not p.name.startswith("."))
     names = [n for n in names if n not in EXCLUDE]

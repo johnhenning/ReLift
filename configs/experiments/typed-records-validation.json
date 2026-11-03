@@ -1,0 +1,25 @@
+{
+  "scene": "swing-tire",
+  "input": "cache/demo_inputs/swing-tire.mp4",
+  "prepared_window": "outputs/benchmarks/offload-primary/swing-tire/ram/trial-01/output/window",
+  "process_res": 504,
+  "output_root": "outputs/experiments/typed-records-validation",
+  "experiments": {
+    "correction": {
+      "task": "correction",
+      "repeats": 1,
+      "variants": [
+        {
+          "name": "control",
+          "source": "outputs/experiments/typed-records-before-source",
+          "options": {"inference_profile": "ram"}
+        },
+        {
+          "name": "typed",
+          "source": "outputs/experiments/typed-records-source",
+          "options": {"inference_profile": "ram"}
+        }
+      ]
+    }
+  }
+}

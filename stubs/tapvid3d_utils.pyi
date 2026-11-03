@@ -1,0 +1,3 @@
+from typing import Any
+
+def load_npz_data(path: str, num_frames: int = ...) -> tuple[Any, ...]: ...

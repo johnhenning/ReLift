@@ -14,6 +14,9 @@ All settings come from the config (configs/eval/table1.yaml): visibility gate, g
 seed, and the per-tracker visibility remap.  CUDA is required (the pixel-to-group partition and the
 depth sampling are defined on the CUDA path).
 """
+
+from __future__ import annotations
+
 import argparse
 import os
 import sys
@@ -31,12 +34,23 @@ from relift.infer import observations, predict_dense  # noqa: E402
 from relift.provenance import machine  # noqa: E402
 
 
-def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+def main() -> None:
+    ap = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     ap.add_argument("--config", default=str(REPO / "configs" / "eval" / "table1.yaml"))
-    ap.add_argument("--rows", nargs="+", default=None, help="<tracker>_<geometry>; default: every row of the config")
+    ap.add_argument(
+        "--rows",
+        nargs="+",
+        default=None,
+        help="<tracker>_<geometry>; default: every row of the config",
+    )
     ap.add_argument("--subsets", nargs="+", default=None, help="default: the config's subsets")
-    ap.add_argument("--checkpoint", default=None, help="default <checkpoints_root>/<config corrector.checkpoint>")
+    ap.add_argument(
+        "--checkpoint",
+        default=None,
+        help="default <checkpoints_root>/<config corrector.checkpoint>",
+    )
     ap.add_argument("--windows_root", default=None, help="default <cache_root>/worldtrack_windows")
     ap.add_argument("--worldtrack_root", default=None, help="default <data_root>/worldtrack")
     ap.add_argument("--preds_root", default=None, help="default <outputs_root>/preds")
@@ -58,7 +72,10 @@ def main():
     T_max = int(cfg["num_frames"])
     model, info = load(ckpt, a.device)
     prov = {k: np.array(str(v)) for k, v in machine(a.device).items() if k in ("gpu", "torch")}
-    print(f"{ckpt}: step {info['step']} | rows {rows} | subsets {subsets} | shard {a.shard}/{a.nshards} -> {preds}", flush=True)
+    print(
+        f"{ckpt}: step {info['step']} | rows {rows} | subsets {subsets} | shard {a.shard}/{a.nshards} -> {preds}",
+        flush=True,
+    )
     n_done, times = 0, []
     for subset in subsets:
         paths_ = clip_paths(wt, subset, a.shard, a.nshards)
@@ -76,26 +93,45 @@ def main():
             t0 = time.perf_counter()
             clip = load_clip(path, T_max)
             T = len(clip["frames"])
+            n_q = 0
             for row, dst in dsts.items():
                 if os.path.exists(dst):
                     continue
                 tracker, geometry = row.split("_", 1)
                 tf, df = f"{tracker}_tracks.npz", f"{geometry}_depth_data.npz"
-                if not (os.path.exists(os.path.join(W, tf)) and os.path.exists(os.path.join(W, df))):
-                    print(f"MISSING {subset_dir(subset)}/{name}: {tf if not os.path.exists(os.path.join(W, tf)) else df}", flush=True)
+                if not (
+                    os.path.exists(os.path.join(W, tf)) and os.path.exists(os.path.join(W, df))
+                ):
+                    print(
+                        f"MISSING {subset_dir(subset)}/{name}: {tf if not os.path.exists(os.path.join(W, tf)) else df}",
+                        flush=True,
+                    )
                     continue
                 with np.load(os.path.join(W, df)) as z:
                     geo = dict(poses=z["poses"], intrinsics=z["intrinsics"])
-                o, d, r, vis = observations(W, T, a.device, tf, df, vis_tau=cfg["trackers"][tracker]["vis_tau"])
+                o, d, r, vis = observations(
+                    W, T, a.device, tf, df, vis_tau=cfg["trackers"][tracker]["vis_tau"]
+                )
                 visf = vis.float().cpu().numpy().astype(np.float16)
-                field = predict_dense(model, o, d, r, vis, group=C["group"], batch=C["batch"], seed=C["seed"]).float().cpu().numpy()
+                field = (
+                    predict_dense(
+                        model, o, d, r, vis, group=C["group"], batch=C["batch"], seed=C["seed"]
+                    )
+                    .float()
+                    .cpu()
+                    .numpy()
+                )
                 n_q = read_out(field, visf, geo, clip, dst, **prov)
                 del o, d, r, vis, field
                 torch.cuda.empty_cache()
             times.append(time.perf_counter() - t0)
             n_done += 1
             print(f"{subset_dir(subset)}/{name} T={T} queries={n_q} {times[-1]:.1f}s", flush=True)
-    print(f"RUN_CORRECTOR_DONE: {n_done} clips" + (f", mean {np.mean(times):.1f}s per clip over {len(rows)} rows" if times else ""), flush=True)
+    print(
+        f"RUN_CORRECTOR_DONE: {n_done} clips"
+        + (f", mean {np.mean(times):.1f}s per clip over {len(rows)} rows" if times else ""),
+        flush=True,
+    )
 
 
 if __name__ == "__main__":

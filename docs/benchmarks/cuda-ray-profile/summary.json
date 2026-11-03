@@ -1,0 +1,491 @@
+[
+  {
+    "experiment": "correction",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/rays-timeline/correction/control/trial-01/trial.json",
+      "outputs/experiments/rays-timeline/correction/control/trial-02/trial.json",
+      "outputs/experiments/rays-timeline/correction/control/trial-03/trial.json",
+      "outputs/experiments/rays-timeline/correction/control/trial-04/trial.json",
+      "outputs/experiments/rays-timeline/correction/control/trial-05/trial.json"
+    ],
+    "options": {
+      "optimizations": {}
+    },
+    "source_fingerprint": "8f9e7e36cea6fa2846b01f0bd280be5a42c8341f89acfba94a5f3024e638fcff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 18.419877892010845,
+    "wall_min": 18.01919130299939,
+    "wall_max": 20.348151076002978,
+    "sampled_peak_process_tree_rss_bytes": 1648644096,
+    "sampled_peak_process_tree_pss_bytes": 1638326272,
+    "sampled_peak_gpu_device_used_bytes": 4173004800,
+    "process_tree_read_bytes": 4096,
+    "process_tree_write_bytes": 416604160,
+    "phase_medians": {
+      "model_load": 0.16552098098327406,
+      "correction": 16.488870356988627
+    },
+    "process_rss_highwater_bytes": 1648644096,
+    "sampled_output_peak_allocated_bytes": 570445824
+  },
+  {
+    "experiment": "correction",
+    "variant": "corrected-cuda",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/rays-timeline/correction/corrected-cuda/trial-01/trial.json",
+      "outputs/experiments/rays-timeline/correction/corrected-cuda/trial-02/trial.json",
+      "outputs/experiments/rays-timeline/correction/corrected-cuda/trial-03/trial.json",
+      "outputs/experiments/rays-timeline/correction/corrected-cuda/trial-04/trial.json",
+      "outputs/experiments/rays-timeline/correction/corrected-cuda/trial-05/trial.json"
+    ],
+    "options": {
+      "optimizations": {
+        "rays": "cuda"
+      },
+      "native_build": "outputs/native/da3-final"
+    },
+    "source_fingerprint": "168993139aa16832926589690669a99de2cc9b86e84bf47914a35c0e5d7637a8",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 19.09927068298566,
+    "wall_min": 17.25951017200714,
+    "wall_max": 19.29913093999494,
+    "sampled_peak_process_tree_rss_bytes": 1701560320,
+    "sampled_peak_process_tree_pss_bytes": 1689887744,
+    "sampled_peak_gpu_device_used_bytes": 4173004800,
+    "process_tree_read_bytes": 749568,
+    "process_tree_write_bytes": 416608256,
+    "phase_medians": {
+      "model_load": 0.16465683400747366,
+      "correction": 17.07649137399858
+    },
+    "process_rss_highwater_bytes": 1701560320,
+    "sampled_output_peak_allocated_bytes": 570445824
+  },
+  {
+    "experiment": "correction",
+    "variant": "timeline-cuda",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/rays-timeline/correction/timeline-cuda/trial-01/trial.json",
+      "outputs/experiments/rays-timeline/correction/timeline-cuda/trial-02/trial.json",
+      "outputs/experiments/rays-timeline/correction/timeline-cuda/trial-03/trial.json",
+      "outputs/experiments/rays-timeline/correction/timeline-cuda/trial-04/trial.json",
+      "outputs/experiments/rays-timeline/correction/timeline-cuda/trial-05/trial.json"
+    ],
+    "options": {
+      "optimizations": {
+        "rays": "cuda_timeline"
+      },
+      "native_build": "outputs/native/da3-final"
+    },
+    "source_fingerprint": "4b53b67c4ec965f7ef9dbe664e124c8ee93000ad739f46171d33cd4b7b9f6011",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 19.24935394298518,
+    "wall_min": 18.12356768999598,
+    "wall_max": 20.74522915002308,
+    "sampled_peak_process_tree_rss_bytes": 1696538624,
+    "sampled_peak_process_tree_pss_bytes": 1684777984,
+    "sampled_peak_gpu_device_used_bytes": 4173004800,
+    "process_tree_read_bytes": 782336,
+    "process_tree_write_bytes": 416608256,
+    "phase_medians": {
+      "model_load": 0.16568833001656458,
+      "correction": 17.170944572018925
+    },
+    "process_rss_highwater_bytes": 1696571392,
+    "sampled_output_peak_allocated_bytes": 570445824
+  },
+  {
+    "experiment": "diagnostic",
+    "variant": "control",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": true,
+    "trial_records": [
+      "outputs/experiments/rays-timeline/diagnostic/control/trial-01/trial.json"
+    ],
+    "options": {
+      "profile": true,
+      "optimizations": {}
+    },
+    "source_fingerprint": "d8891c024e1688a3a7fa59206daf48274e1555d7331cbd466cb8dc3ab8b2fed5",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": null,
+    "wall_median": 19.508489833009662,
+    "wall_min": 19.508489833009662,
+    "wall_max": 19.508489833009662,
+    "sampled_peak_process_tree_rss_bytes": 1806544896,
+    "sampled_peak_process_tree_pss_bytes": 1796434944,
+    "sampled_peak_gpu_device_used_bytes": 4185587712,
+    "process_tree_read_bytes": 49152,
+    "process_tree_write_bytes": 422092800,
+    "phase_medians": {
+      "model_load": 0.16852956201182678,
+      "correction": 17.32084765401669
+    },
+    "process_rss_highwater_bytes": 1806544896,
+    "sampled_output_peak_allocated_bytes": 575934464
+  },
+  {
+    "experiment": "diagnostic",
+    "variant": "corrected-cuda",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": true,
+    "trial_records": [
+      "outputs/experiments/rays-timeline/diagnostic/corrected-cuda/trial-01/trial.json"
+    ],
+    "options": {
+      "profile": true,
+      "optimizations": {
+        "rays": "cuda"
+      },
+      "native_build": "outputs/native/da3-final"
+    },
+    "source_fingerprint": "26dd387eb6a6a5ae28579b25e824f01e31f5b2d6dfa75df246f0d670205d9eb9",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": null,
+    "wall_median": 19.29286212401348,
+    "wall_min": 19.29286212401348,
+    "wall_max": 19.29286212401348,
+    "sampled_peak_process_tree_rss_bytes": 1734008832,
+    "sampled_peak_process_tree_pss_bytes": 1722329088,
+    "sampled_peak_gpu_device_used_bytes": 4185587712,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 422133760,
+    "phase_medians": {
+      "model_load": 0.1623947220214177,
+      "correction": 17.232393999991473
+    },
+    "process_rss_highwater_bytes": 1734008832,
+    "sampled_output_peak_allocated_bytes": 575971328
+  },
+  {
+    "experiment": "diagnostic",
+    "variant": "timeline-cuda",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": true,
+    "trial_records": [
+      "outputs/experiments/rays-timeline/diagnostic/timeline-cuda/trial-01/trial.json"
+    ],
+    "options": {
+      "profile": true,
+      "optimizations": {
+        "rays": "cuda_timeline"
+      },
+      "native_build": "outputs/native/da3-final"
+    },
+    "source_fingerprint": "dccfc5170ec29a12abe752f4fd388a90a13e1ebe19c6556d07e03d35e2378556",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": null,
+    "wall_median": 19.26586283298093,
+    "wall_min": 19.26586283298093,
+    "wall_max": 19.26586283298093,
+    "sampled_peak_process_tree_rss_bytes": 1733578752,
+    "sampled_peak_process_tree_pss_bytes": 1722324992,
+    "sampled_peak_gpu_device_used_bytes": 4185587712,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 421994496,
+    "phase_medians": {
+      "model_load": 0.16427216099691577,
+      "correction": 17.21939675300382
+    },
+    "process_rss_highwater_bytes": 1733709824,
+    "sampled_output_peak_allocated_bytes": 575832064
+  },
+  {
+    "experiment": "eager-correction",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/rays-timeline/eager-correction/control/trial-01/trial.json",
+      "outputs/experiments/rays-timeline/eager-correction/control/trial-02/trial.json",
+      "outputs/experiments/rays-timeline/eager-correction/control/trial-03/trial.json",
+      "outputs/experiments/rays-timeline/eager-correction/control/trial-04/trial.json",
+      "outputs/experiments/rays-timeline/eager-correction/control/trial-05/trial.json"
+    ],
+    "options": {
+      "optimizations": {}
+    },
+    "source_fingerprint": "7e3bb6c79b8184fd498539628c455ea101d76d77e7d05bb3e9526fd086fa4b5a",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 16.70177708900883,
+    "wall_min": 16.590319343988085,
+    "wall_max": 18.24766825599363,
+    "sampled_peak_process_tree_rss_bytes": 1650098176,
+    "sampled_peak_process_tree_pss_bytes": 1640031232,
+    "sampled_peak_gpu_device_used_bytes": 4173004800,
+    "process_tree_read_bytes": 4096,
+    "process_tree_write_bytes": 416604160,
+    "phase_medians": {
+      "model_load": 0.16738433498539962,
+      "correction": 14.808118926011957
+    },
+    "process_rss_highwater_bytes": 1650098176,
+    "sampled_output_peak_allocated_bytes": 570445824
+  },
+  {
+    "experiment": "eager-correction",
+    "variant": "corrected-cuda",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/rays-timeline/eager-correction/corrected-cuda/trial-01/trial.json",
+      "outputs/experiments/rays-timeline/eager-correction/corrected-cuda/trial-02/trial.json",
+      "outputs/experiments/rays-timeline/eager-correction/corrected-cuda/trial-03/trial.json",
+      "outputs/experiments/rays-timeline/eager-correction/corrected-cuda/trial-04/trial.json",
+      "outputs/experiments/rays-timeline/eager-correction/corrected-cuda/trial-05/trial.json"
+    ],
+    "options": {
+      "optimizations": {
+        "rays": "cuda"
+      },
+      "native_build": "outputs/native/da3-final"
+    },
+    "source_fingerprint": "76596d7ebc6dee753c9512c291a64f002c935498d1c577f4597a163a39c23a6e",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 18.897391045000404,
+    "wall_min": 14.425300430011703,
+    "wall_max": 20.414625959994737,
+    "sampled_peak_process_tree_rss_bytes": 1690607616,
+    "sampled_peak_process_tree_pss_bytes": 1678986240,
+    "sampled_peak_gpu_device_used_bytes": 4174446592,
+    "process_tree_read_bytes": 4096,
+    "process_tree_write_bytes": 416608256,
+    "phase_medians": {
+      "model_load": 0.1679193130112253,
+      "correction": 16.833559416001663
+    },
+    "process_rss_highwater_bytes": 1690607616,
+    "sampled_output_peak_allocated_bytes": 570445824
+  },
+  {
+    "experiment": "eager-correction",
+    "variant": "timeline-eager",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/rays-timeline/eager-correction/timeline-eager/trial-01/trial.json",
+      "outputs/experiments/rays-timeline/eager-correction/timeline-eager/trial-02/trial.json",
+      "outputs/experiments/rays-timeline/eager-correction/timeline-eager/trial-03/trial.json",
+      "outputs/experiments/rays-timeline/eager-correction/timeline-eager/trial-04/trial.json",
+      "outputs/experiments/rays-timeline/eager-correction/timeline-eager/trial-05/trial.json"
+    ],
+    "options": {
+      "optimizations": {
+        "rays": "cuda_timeline"
+      },
+      "native_build": "outputs/native/da3-final"
+    },
+    "source_fingerprint": "13aa49f7397bf9bdaf8a767cdfde39c569aa79c4810a71fdbc9b4ea417167f17",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 18.148498630005633,
+    "wall_min": 10.579569441004423,
+    "wall_max": 18.52735961601138,
+    "sampled_peak_process_tree_rss_bytes": 1580707840,
+    "sampled_peak_process_tree_pss_bytes": 1568976896,
+    "sampled_peak_gpu_device_used_bytes": 4173004800,
+    "process_tree_read_bytes": 8192,
+    "process_tree_write_bytes": 416608256,
+    "phase_medians": {
+      "model_load": 0.16900083498330787,
+      "correction": 16.252108506974764
+    },
+    "process_rss_highwater_bytes": 1580707840,
+    "sampled_output_peak_allocated_bytes": 570445824
+  },
+  {
+    "experiment": "eager-diagnostic",
+    "variant": "timeline-eager",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": true,
+    "trial_records": [
+      "outputs/experiments/rays-timeline/eager-diagnostic/timeline-eager/trial-01/trial.json"
+    ],
+    "options": {
+      "profile": true,
+      "optimizations": {
+        "rays": "cuda_timeline"
+      },
+      "native_build": "outputs/native/da3-final"
+    },
+    "source_fingerprint": "f4683e6f126fca9dc4e7d52bbcdadb04a53f0d1b98ddfd35a80ebd4ecfbe4972",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": null,
+    "wall_median": 17.614530432008905,
+    "wall_min": 17.614530432008905,
+    "wall_max": 17.614530432008905,
+    "sampled_peak_process_tree_rss_bytes": 1716371456,
+    "sampled_peak_process_tree_pss_bytes": 1704812544,
+    "sampled_peak_gpu_device_used_bytes": 4187029504,
+    "process_tree_read_bytes": 212992,
+    "process_tree_write_bytes": 421978112,
+    "phase_medians": {
+      "model_load": 0.16827359900344163,
+      "correction": 15.346474082005443
+    },
+    "process_rss_highwater_bytes": 1716371456,
+    "sampled_output_peak_allocated_bytes": 575815680
+  }
+]

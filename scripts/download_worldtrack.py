@@ -8,6 +8,9 @@ holds the per-file ids and sizes; the folder is linked from 4RC's README).  File
 ``<data_root>/worldtrack/<subset>_mini/<clip>.npz``; a file whose size and md5 match the manifest is skipped.
 Google Drive throttles bulk downloads at times: rerun until every file is reported ``ok``.
 """
+
+from __future__ import annotations
+
 import argparse
 import concurrent.futures as cf
 import hashlib
@@ -15,6 +18,8 @@ import json
 import os
 import sys
 import urllib.request
+from pathlib import Path
+from typing import Any
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from relift.config import REPO, paths  # noqa: E402
@@ -25,7 +30,7 @@ MD5 = REPO / "manifests" / "worldtrack_md5.json"
 URL = "https://drive.usercontent.google.com/download?id={id}&export=download&confirm=t"
 
 
-def md5(path, chunk=1 << 24):
+def md5(path: str | Path, chunk: int = 1 << 24) -> Any:
     h = hashlib.md5()
     with open(path, "rb") as f:
         for b in iter(lambda: f.read(chunk), b""):
@@ -33,7 +38,7 @@ def md5(path, chunk=1 << 24):
     return h.hexdigest()
 
 
-def fetch(job):
+def fetch(job: Any) -> Any:
     sub, e, root, want_md5, verify_only = job
     dst = os.path.join(root, sub, e["name"])
     key = f"{sub}/{e['name']}"
@@ -44,7 +49,12 @@ def fetch(job):
     err = "unknown"
     for _ in range(4):
         try:
-            r = urllib.request.urlopen(urllib.request.Request(URL.format(id=e["id"]), headers={"User-Agent": "Mozilla/5.0"}), timeout=120)
+            r = urllib.request.urlopen(
+                urllib.request.Request(
+                    URL.format(id=e["id"]), headers={"User-Agent": "Mozilla/5.0"}
+                ),
+                timeout=120,
+            )
             tmp = dst + ".part"
             with open(tmp, "wb") as f:
                 while True:
@@ -62,7 +72,9 @@ def fetch(job):
 
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     ap.add_argument("--subsets", nargs="+", default=list(SUBSETS))
     ap.add_argument("--root", default=None, help="default <data_root>/worldtrack")
     ap.add_argument("--limit", type=int, default=0)
@@ -75,7 +87,10 @@ if __name__ == "__main__":
     for s in a.subsets:
         sub = SUBSETS.get(s, s)
         os.makedirs(os.path.join(root, sub), exist_ok=True)
-        jobs += [(sub, e, root, want[f"{sub}/{e['name']}"], a.verify_only) for e in drive[sub][: a.limit or None]]
+        jobs += [
+            (sub, e, root, want[f"{sub}/{e['name']}"], a.verify_only)
+            for e in drive[sub][: a.limit or None]
+        ]
     with cf.ThreadPoolExecutor(a.workers) as ex:
         res = dict(ex.map(fetch, jobs))
     bad = {k: v for k, v in res.items() if v != "ok"}

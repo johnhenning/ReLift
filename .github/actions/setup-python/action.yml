@@ -1,0 +1,20 @@
+name: Set up Python development environment
+description: Install the locked development environment using CPU PyTorch wheels.
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version-file: ".python-version"
+    - name: Install uv
+      uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+      with:
+        version: "0.13.1"
+    - name: Install (CPU wheels)
+      shell: bash
+      run: |
+        uv venv
+        uv pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cpu
+        uv export --locked --extra dev --no-hashes --prune torch --prune torchvision --output-file requirements-ci.txt --quiet
+        uv pip install --no-sources --no-deps -r requirements-ci.txt
+        uv pip check

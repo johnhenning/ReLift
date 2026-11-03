@@ -1,0 +1,23 @@
+{
+  "source_revision": "31fb0934ab16cfc41d971ba790f0220cc5aed063",
+  "regular": {
+    "vector_count": 2,
+    "nonfinite_vectors": 0,
+    "bitwise_equal": false,
+    "max_normalized_vector_error": 0.5,
+    "mean_normalized_vector_error": 0.25,
+    "median_normalized_error_upper_bound": 0.0,
+    "p99_normalized_error_upper_bound": 0.5080218046913012,
+    "quantile_method": "fixed logarithmic histogram upper bounds; maximum is exact"
+  },
+  "nonfinite": {
+    "vector_count": 1,
+    "nonfinite_vectors": 1,
+    "bitwise_equal": false,
+    "max_normalized_vector_error": null,
+    "mean_normalized_vector_error": 0.0,
+    "median_normalized_error_upper_bound": 0.0,
+    "p99_normalized_error_upper_bound": 0.0,
+    "quantile_method": "fixed logarithmic histogram upper bounds; maximum is exact"
+  }
+}

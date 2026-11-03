@@ -1,0 +1,381 @@
+{
+  "created_at": "2026-11-03T20:27:00.141352+00:00",
+  "shape": [
+    294,
+    280,
+    504
+  ],
+  "points": 41489280,
+  "results": {},
+  "construction": {
+    "control": {
+      "seconds": 2.7235565749870148,
+      "cache": {
+        "state": "disabled",
+        "budget_bytes": 0,
+        "required_bytes": 248935680,
+        "resident_bytes": 0,
+        "upload_bytes": 0,
+        "upload_calls": 0,
+        "gather_calls": 0,
+        "pixel_id_upload_bytes": 0,
+        "source_dtypes": [
+          "float16",
+          "float16"
+        ],
+        "device": "cuda"
+      }
+    },
+    "observations": {
+      "seconds": 2.341711890010629,
+      "cache": {
+        "state": "active",
+        "budget_bytes": 536870912,
+        "required_bytes": 248935680,
+        "resident_bytes": 248935680,
+        "upload_bytes": 248935680,
+        "upload_calls": 38,
+        "gather_calls": 0,
+        "pixel_id_upload_bytes": 0,
+        "source_dtypes": [
+          "float16",
+          "float16"
+        ],
+        "device": "cuda"
+      }
+    },
+    "depth": {
+      "seconds": 2.340037204005057,
+      "cache": {
+        "state": "disabled",
+        "budget_bytes": 0,
+        "required_bytes": 248935680,
+        "resident_bytes": 0,
+        "upload_bytes": 0,
+        "upload_calls": 0,
+        "gather_calls": 0,
+        "pixel_id_upload_bytes": 0,
+        "source_dtypes": [
+          "float16",
+          "float16"
+        ],
+        "device": "cuda"
+      }
+    },
+    "observations-depth": {
+      "seconds": 2.3973982559982687,
+      "cache": {
+        "state": "active",
+        "budget_bytes": 536870912,
+        "required_bytes": 248935680,
+        "resident_bytes": 248935680,
+        "upload_bytes": 248935680,
+        "upload_calls": 38,
+        "gather_calls": 0,
+        "pixel_id_upload_bytes": 0,
+        "source_dtypes": [
+          "float16",
+          "float16"
+        ],
+        "device": "cuda"
+      }
+    },
+    "eager": {
+      "seconds": 2.288568452990148,
+      "cache": {
+        "state": "disabled",
+        "budget_bytes": 0,
+        "required_bytes": 248935680,
+        "resident_bytes": 0,
+        "upload_bytes": 0,
+        "upload_calls": 0,
+        "gather_calls": 0,
+        "pixel_id_upload_bytes": 0,
+        "source_dtypes": [
+          "float16",
+          "float16"
+        ],
+        "device": "cuda"
+      }
+    },
+    "observations-eager": {
+      "seconds": 2.337372139998479,
+      "cache": {
+        "state": "active",
+        "budget_bytes": 536870912,
+        "required_bytes": 248935680,
+        "resident_bytes": 248935680,
+        "upload_bytes": 248935680,
+        "upload_calls": 38,
+        "gather_calls": 0,
+        "pixel_id_upload_bytes": 0,
+        "source_dtypes": [
+          "float16",
+          "float16"
+        ],
+        "device": "cuda"
+      }
+    },
+    "observations-depth-eager": {
+      "seconds": 2.3952476469858084,
+      "cache": {
+        "state": "active",
+        "budget_bytes": 536870912,
+        "required_bytes": 248935680,
+        "resident_bytes": 248935680,
+        "upload_bytes": 248935680,
+        "upload_calls": 38,
+        "gather_calls": 0,
+        "pixel_id_upload_bytes": 0,
+        "source_dtypes": [
+          "float16",
+          "float16"
+        ],
+        "device": "cuda"
+      }
+    }
+  },
+  "bitwise_differences": {
+    "observations": {
+      "origins": 0,
+      "directions": 0,
+      "ranges": 0,
+      "visibility": 0
+    },
+    "depth": {
+      "origins": 0,
+      "directions": 0,
+      "ranges": 0,
+      "visibility": 0
+    },
+    "observations-depth": {
+      "origins": 0,
+      "directions": 0,
+      "ranges": 0,
+      "visibility": 0
+    },
+    "eager": {
+      "origins": 0,
+      "directions": 0,
+      "ranges": 0,
+      "visibility": 0
+    },
+    "observations-eager": {
+      "origins": 0,
+      "directions": 0,
+      "ranges": 0,
+      "visibility": 0
+    },
+    "observations-depth-eager": {
+      "origins": 0,
+      "directions": 0,
+      "ranges": 0,
+      "visibility": 0
+    }
+  },
+  "passed": true,
+  "final_cache_metrics": {
+    "control": {
+      "state": "disabled",
+      "budget_bytes": 0,
+      "required_bytes": 248935680,
+      "resident_bytes": 0,
+      "upload_bytes": 0,
+      "upload_calls": 0,
+      "gather_calls": 0,
+      "pixel_id_upload_bytes": 0,
+      "source_dtypes": [
+        "float16",
+        "float16"
+      ],
+      "device": "cuda"
+    },
+    "observations": {
+      "state": "active",
+      "budget_bytes": 536870912,
+      "required_bytes": 248935680,
+      "resident_bytes": 248935680,
+      "upload_bytes": 248935680,
+      "upload_calls": 38,
+      "gather_calls": 18,
+      "pixel_id_upload_bytes": 1128960,
+      "source_dtypes": [
+        "float16",
+        "float16"
+      ],
+      "device": "cuda"
+    },
+    "depth": {
+      "state": "disabled",
+      "budget_bytes": 0,
+      "required_bytes": 248935680,
+      "resident_bytes": 0,
+      "upload_bytes": 0,
+      "upload_calls": 0,
+      "gather_calls": 0,
+      "pixel_id_upload_bytes": 0,
+      "source_dtypes": [
+        "float16",
+        "float16"
+      ],
+      "device": "cuda"
+    },
+    "observations-depth": {
+      "state": "active",
+      "budget_bytes": 536870912,
+      "required_bytes": 248935680,
+      "resident_bytes": 248935680,
+      "upload_bytes": 248935680,
+      "upload_calls": 38,
+      "gather_calls": 18,
+      "pixel_id_upload_bytes": 1128960,
+      "source_dtypes": [
+        "float16",
+        "float16"
+      ],
+      "device": "cuda"
+    },
+    "eager": {
+      "state": "disabled",
+      "budget_bytes": 0,
+      "required_bytes": 248935680,
+      "resident_bytes": 0,
+      "upload_bytes": 0,
+      "upload_calls": 0,
+      "gather_calls": 0,
+      "pixel_id_upload_bytes": 0,
+      "source_dtypes": [
+        "float16",
+        "float16"
+      ],
+      "device": "cuda"
+    },
+    "observations-eager": {
+      "state": "active",
+      "budget_bytes": 536870912,
+      "required_bytes": 248935680,
+      "resident_bytes": 248935680,
+      "upload_bytes": 248935680,
+      "upload_calls": 38,
+      "gather_calls": 18,
+      "pixel_id_upload_bytes": 1128960,
+      "source_dtypes": [
+        "float16",
+        "float16"
+      ],
+      "device": "cuda"
+    },
+    "observations-depth-eager": {
+      "state": "active",
+      "budget_bytes": 536870912,
+      "required_bytes": 248935680,
+      "resident_bytes": 248935680,
+      "upload_bytes": 248935680,
+      "upload_calls": 38,
+      "gather_calls": 18,
+      "pixel_id_upload_bytes": 1128960,
+      "source_dtypes": [
+        "float16",
+        "float16"
+      ],
+      "device": "cuda"
+    }
+  },
+  "input_hashes": {
+    "da3_depth_data.npz": "ee04c2a375f7a7afedb42f24801207a5d7eff696eb6fc1e55180a89cb925c35b",
+    "alltracker_tracks.npz": "62080c880aa5db3adba3bf6afd3cda5da402afcb2d3d5d7f1dda34f7f957b272"
+  },
+  "source_hashes": {
+    "relift/__init__.py": "c3e706c496c0a9ea57099d26553ff412056f1cc640bccc5bfcec1b4f8b849fe0",
+    "relift/batch_gather.py": "b39e34009eb3c381df66ec2e003e71d62ef37eae2433f02ceaa39df69ebed50c",
+    "relift/checkpoint.py": "52121cc0872cdace9ca212ff918c88e86573ff2f47e3abb6beb2983af3799f36",
+    "relift/config.py": "4a2c34e1a641a4a4b11fb0f624e7ab9bfb0e86fab460578bef20acf2b347a079",
+    "relift/corrupt.py": "b1d2858480768a33c78d87a45200260b26cab825dea64c3e3f099573e0f8c405",
+    "relift/cuda_rays.py": "13bc7b9afa8337161f55141d9c4fc46899cfca555926a5c5ba15bef08e254e14",
+    "relift/da3_offload.py": "31af7372087c26b37b9f17e9a73e8ebef44252949cd48df0c1b051e0e961ae29",
+    "relift/da3_packing.py": "f900515e70645a71e81b8c2699da877383e881f820db47ca74c75f9df87f170f",
+    "relift/features.py": "d9073e858f761736e10f9a143337c2bf8bfe74eccf1e2c7fe1ed02ab0daa0b91",
+    "relift/infer.py": "1cd5eb40b6aded66092093be76ef48d220249c4c461844dfdbcd1ade64600125",
+    "relift/model.py": "22ee56f7ced67904f46a9c48ce50ee002fccd6267a936e552ecccb7df3c92f84",
+    "relift/native_backend.py": "f30016ee4a583a5e70618898217e2585e222dd12281503553d4149e76da0c200",
+    "relift/observation_cache.py": "5d77bdabd09dc2b38bf401f804a8bc9ae24d13b5fd1cc71cd2aa982c27b240b5",
+    "relift/optimization.py": "b0768b7e5fad76b810f72fa5fa5eef5a98eabab6c68704b20c863c38bb3edb6e",
+    "relift/prefetch.py": "9164f215f869c3b6df323ccaa3357b7a9bf756f016d46feac1a66834590f5f3d",
+    "relift/provenance.py": "b7fd1835579c6ea753b9721e8bc8f7525bb596e58ffecdec1da24f398b19658c",
+    "relift/rays.py": "259a3c475a290148bb65caa2c1aadd46f07c6d92e2d0f3864efbf76c5a6f18a6",
+    "relift/shard_packing.py": "7de1623d130041c5d6e67fd0cd50302eb6d923f2467744b44dc5a83e3ce0c3bd",
+    "relift/storage.py": "3a2f40e8289f6640ba5bac125be68ff5616cc3494ce84d595e469ba3d2c34bec",
+    "relift/streaming.py": "c4c0aedd8dbc107b6d03f622d8527fb9c00b4848ed1a19984e62899abc5b5192",
+    "relift/telemetry.py": "c15990e45b94d16bbbdc4524c49447f5fa1e4dc9b80e540b558e7de5c756e39c",
+    "relift/train.py": "b0586c13f2a856ff436c9e0057da8271e597b5ac2a2f8f4c9c42de574761801c",
+    "relift/vendor.py": "402b73135250231534d5ab6c7a551241247b73af84e818737d859fd9b91829cc"
+  },
+  "command": [
+    "scripts/profile_observation_cache.py",
+    "--source",
+    ".",
+    "--build",
+    "outputs/native/da3-final",
+    "--window",
+    "outputs/benchmarks/offload-capacity/forest/ram/trial-01/output/window",
+    "--budget-mb",
+    "512",
+    "--audit-only",
+    "--out",
+    "outputs/experiments/observation-cache-forest-rays"
+  ],
+  "script_sha256": "0a5eb038ee541aea777e9aac13f7894d526429670b60752971bd37d05e36174f",
+  "torch": "2.11.0+cu128",
+  "gpu": "NVIDIA GeForce RTX 3090 Ti",
+  "native_build": {
+    "command": [
+      "g++-13",
+      "-O3",
+      "-std=c++17",
+      "-shared",
+      "-fPIC",
+      "-fno-fast-math",
+      "-I/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/include/python3.13",
+      "-I.venv/lib/python3.13/site-packages/torch/include",
+      "native/cpu.cpp",
+      "-o",
+      "outputs/native/da3-final/_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+      "-lcrypto",
+      "-DRELIFT_WITH_CUDA",
+      "outputs/native/da3-final/rays.o",
+      "-lcudart"
+    ],
+    "compiler": "g++-13 (Ubuntu 13.4.0-10ubuntu1) 13.4.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+    "torch": "2.11.0+cu128",
+    "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+    "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+    "sources": {
+      "native/cpu.cpp": "ed5e990f64563259ac8656acfaede38739005c0ffdd7e58633a882d6b9ec329f",
+      "native/rays.cu": "466201ea8c626841e96755a0d8651527e9888e38e45837d3b6f7ab4063bc23c2"
+    },
+    "binary": "_relift_cpu.cpython-313-x86_64-linux-gnu.so",
+    "binary_sha256": "ceab5897e9099f0990a51adb3fc145202aae5149dfc261d317ee200cf997fe0c",
+    "build_seconds": 6.480629013996804,
+    "cuda_command": [
+      "nvcc",
+      "-O3",
+      "-std=c++17",
+      "-ccbin",
+      "g++-13",
+      "-Xcompiler",
+      "-fPIC",
+      "--fmad=false",
+      "--prec-div=true",
+      "--prec-sqrt=true",
+      "-arch=sm_86",
+      "-c",
+      "native/rays.cu",
+      "-o",
+      "outputs/native/da3-final/rays.o"
+    ],
+    "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2024 NVIDIA Corporation\nBuilt on Thu_Mar_28_02:18:24_PDT_2024\nCuda compilation tools, release 12.4, V12.4.131\nBuild cuda_12.4.r12.4/compiler.34097967_0\n",
+    "arch": "sm_86"
+  },
+  "caveat": "Warm rotating component timings; separate traces; constructors and audit are excluded from warm timings. Full-process trials include preparation/upload costs."
+}

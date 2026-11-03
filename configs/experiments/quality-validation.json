@@ -1,0 +1,16 @@
+{
+  "scene": "swing-tire",
+  "input": "cache/demo_inputs/swing-tire.mp4",
+  "prepared_window": "outputs/benchmarks/offload-primary/swing-tire/ram/trial-01/output/window",
+  "process_res": 504,
+  "output_root": "outputs/experiments/quality-validation",
+  "experiments": {
+    "default-validation": {
+      "task": "correction", "repeats": 1,
+      "variants": [
+        {"name": "before", "source": "outputs/experiments/configuration-before-source", "options": {"optimizations": {}}},
+        {"name": "annotated", "source": "outputs/experiments/quality-source", "options": {"optimizations": {}}}
+      ]
+    }
+  }
+}

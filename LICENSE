@@ -20,6 +20,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-This licence covers the code in this repository.  Third-party code under third_party/ and the model weights and
-datasets it downloads are distributed under their own licences, listed in docs/THIRD_PARTY.md; several of them are
+This licence covers the code in this repository.  The front-end Python dependencies and the model weights and
+datasets it downloads are distributed under their own licences, listed in docs/frontend-dependencies.md; several of them are
 non-commercial.

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>__TITLE__ — ReLift trajectories</title>
+  <style>
+    body { margin: 0; background: #fff; color: #243047; font: 15px/1.5 system-ui, sans-serif; }
+    main { max-width: 1440px; margin: auto; padding: 24px; }
+    h1 { margin: 0 0 8px; font-size: 26px; }
+    p { margin: 4px 0; }
+    .secondary { color: #57647a; }
+    .controls { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin: 16px 0; }
+    button { border: 1px solid #b8c4d3; border-radius: 6px; background: #edf3fa; color: #243047; padding: 8px 18px; font: inherit; cursor: pointer; }
+    label { display: inline-flex; align-items: center; gap: 8px; }
+    input[type=range] { flex: 1; min-width: 160px; accent-color: #2868a0; }
+    #frame-label { min-width: 185px; font-variant-numeric: tabular-nums; }
+    #selected { min-height: 1.5em; font-variant-numeric: tabular-nums; }
+    #error { color: #a82222; }
+    @media(max-width: 720px) { main { padding: 12px; } h1 { font-size: 22px; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>__TITLE__ · full-length 3D trajectories</h1>
+  <p id="extent" class="secondary"></p>
+  <p class="secondary">Drag to orbit, scroll to zoom, and click any point to inspect its complete trajectory. The two cameras stay synchronized.</p>
+  <div class="controls">
+    <button id="play" type="button">Play</button>
+    <label for="frame-slider">Frame</label>
+    <input id="frame-slider" type="range" min="0" value="0" step="1" aria-label="Video frame">
+    <output id="frame-label" for="frame-slider"></output>
+    <label><input id="paths" type="checkbox" checked>Complete paths</label>
+  </div>
+  <p id="selected" aria-live="polite"></p>
+  <div id="error" role="alert"></div>
+  <div role="img" aria-label="Interactive side-by-side 3D views of raw lifted and ReLift-corrected trajectories">__PLOT__</div>
+  <p class="secondary">Coordinates are estimated geometry units. Point colours come from the first video frame. Blue lines show representative motion paths; orange highlights the selected point. Axis limits exclude extreme depth outliers.</p>
+</main>
+<script id="trajectory-data" type="application/json">__PAYLOAD__</script>
+<script>__VIEWER_JS__</script>
+</body>
+</html>

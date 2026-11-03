@@ -1,0 +1,20 @@
+{
+  "cartwheel": {"local_file": "assets/demo/cartwheel.mp4", "source_url": "https://relift3d.github.io/static/videos/optimized/individual/demo_cartwheel.mp4", "description": "Person doing a cartwheel"},
+  "basketball": {"local_file": "assets/demo/basketball.mp4", "source_url": "https://relift3d.github.io/static/videos/optimized/individual/slider_basketball_3_input.mp4", "sha256": "bcac38a3b9a573afa55f2a2b3c30b7c69c8affaedae800bacef066b482ffad2a", "description": "Basketball player and ball"},
+  "running": {"source_url": "https://relift3d.github.io/static/videos/demo_running.mp4", "description": "Running scene"},
+  "swing-tire": {"source_url": "https://relift3d.github.io/static/videos/optimized/individual/demo_swing-tire.mp4", "description": "Tire swing"},
+  "swing": {"source_url": "https://relift3d.github.io/static/videos/optimized/individual/demo_swing.mp4", "description": "Swing scene"},
+  "spin": {"source_url": "https://relift3d.github.io/static/videos/optimized/individual/demo_spin.mp4", "description": "Spinning scene"},
+  "forest": {"source_url": "https://relift3d.github.io/static/videos/demo_forest.mp4", "description": "Forest scene"},
+  "tennis": {"source_url": "https://relift3d.github.io/static/videos/optimized/individual/demo_tennis.mp4", "description": "Tennis player"},
+  "motocross-bumps": {"source_url": "https://relift3d.github.io/static/videos/demo_motocross-bumps.mp4", "description": "Motocross over bumps"},
+  "drift-turn": {"source_url": "https://relift3d.github.io/static/videos/demo_drift-turn.mp4", "description": "Drifting vehicle"},
+  "lady-running": {"source_url": "https://relift3d.github.io/static/videos/cmp_lady-running_input.mp4", "description": "Running comparison input"},
+  "libby": {"source_url": "https://relift3d.github.io/static/videos/cmp_libby_input.mp4", "description": "Libby comparison input"},
+  "motorbike": {"source_url": "https://relift3d.github.io/static/videos/cmp_motorbike_input.mp4", "description": "Motorbike comparison input"},
+  "bmx-trees": {"source_url": "https://relift3d.github.io/static/videos/cmp_bmx-trees_input.mp4", "description": "BMX in trees"},
+  "kangaroo": {"source_url": "https://relift3d.github.io/static/videos/more_kangaroo_with_occlusion_short_input.mp4", "description": "Kangaroo with occlusion"},
+  "horsejump-high": {"source_url": "https://relift3d.github.io/static/videos/more_horsejump-high_input.mp4", "description": "Horse jumping"},
+  "schoolgirls": {"source_url": "https://relift3d.github.io/static/videos/more_schoolgirls_input.mp4", "description": "Schoolgirls scene"},
+  "camel": {"source_url": "https://relift3d.github.io/static/videos/more_camel_input.mp4", "description": "Camel scene"}
+}

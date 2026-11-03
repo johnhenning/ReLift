@@ -1,0 +1,49 @@
+<div id="relift-architecture" class="relift-architecture">
+  <h2>Pipeline explorer</h2>
+  <div class="arch-flow" role="group" aria-label="Architecture components and their code">
+    <svg class="arch-connectors" aria-hidden="true"></svg>
+    <div class="arch-slot arch-wide" data-position="decode"><button type="button" class="btn btn-block" data-node="decode" aria-pressed="false">Read video</button></div>
+    <div class="arch-slot" data-position="geometry"><button type="button" class="btn btn-block" data-node="geometry" aria-pressed="false">DA3 geometry</button></div>
+    <div class="arch-slot" data-position="tracking"><button type="button" class="btn btn-block" data-node="tracking" aria-pressed="false">AllTracker</button></div>
+    <div class="arch-slot" data-position="lift"><button type="button" class="btn btn-block" data-node="lift" aria-pressed="true">Lift into 3D</button></div>
+    <div class="arch-slot" data-position="visibility"><button type="button" class="btn btn-block" data-node="visibility" aria-pressed="false">Observed mask</button></div>
+    <div class="arch-slot" data-position="interpolation"><button type="button" class="btn btn-block" data-node="interpolation" aria-pressed="false">Fill gaps</button></div>
+    <div class="arch-slot" data-position="features"><button type="button" class="btn btn-block" data-node="features" aria-pressed="false">14 features</button></div>
+    <div class="arch-slot" data-position="grouping"><button type="button" class="btn btn-block" data-node="grouping" aria-pressed="false">Group tracks</button></div>
+    <div class="arch-slot" data-position="corrector"><button type="button" class="btn btn-block" data-node="corrector" aria-pressed="false">ReLift corrector</button></div>
+    <div class="arch-slot" data-position="arrays"><button type="button" class="btn btn-block" data-node="arrays" aria-pressed="false">Save trajectories</button></div>
+    <div class="arch-slot" data-position="plotly"><button type="button" class="btn btn-block" data-node="plotly" aria-pressed="false">3D views</button></div>
+  </div>
+  <div class="arch-internals">
+    <h3>Inside trajectory repair · attention repeats 8 times</h3>
+    <div class="viz-row">
+      <button type="button" class="btn" data-node="pack" aria-pressed="false">Pack 4 frames</button>
+      <button type="button" class="btn" data-node="time" aria-pressed="false">Time attention</button>
+      <button type="button" class="btn" data-node="space" aria-pressed="false">Space attention</button>
+      <button type="button" class="btn" data-node="residual" aria-pressed="false">Add the repair</button>
+    </div>
+  </div>
+  <details class="arch-offload">
+    <summary>Memory placement · GPU, RAM and SSD</summary>
+    <div class="viz-row arch-offload-nodes">
+      <button type="button" class="btn" data-node="da3-pager" aria-pressed="false">DA3 RAM or disk paging</button>
+      <button type="button" class="btn" data-node="streamed-correction" aria-pressed="false">Streamed correction</button>
+      <button type="button" class="btn" data-node="mapped-store" aria-pressed="false">SSD trajectory store</button>
+    </div>
+  </details>
+  <hr>
+  <section id="relift-code-panel" class="arch-source" aria-labelledby="relift-selected-title">
+    <h3 id="relift-selected-title"></h3>
+    <div id="relift-selected-purpose" aria-live="polite"></div>
+    <dl class="arch-io">
+      <div><dt>Inputs</dt><dd id="relift-selected-inputs"></dd></div>
+      <div><dt>Outputs</dt><dd id="relift-selected-outputs"></dd></div>
+    </dl>
+    <div class="arch-location"><code id="relift-selected-location"></code></div>
+    <p><a id="relift-selected-file" href="#source-files">Read the complete source file</a></p>
+    <pre><code id="relift-selected-code"></code></pre>
+  </section>
+  <style>__ARCHITECTURE_CSS__</style>
+  <script id="relift-architecture-data" type="application/json">__ARCHITECTURE_DATA__</script>
+  <script>__ARCHITECTURE_JS__</script>
+</div>
