@@ -3,24 +3,23 @@ on:
   push:
   pull_request:
 jobs:
+  quality:
+    name: Python quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-python
+      - name: Ruff formatting
+        run: uv run --no-sync ruff format --check .
+      - name: Ruff lint
+        run: uv run --no-sync ruff check .
+      - name: Pyrefly types
+        run: uv run --no-sync pyrefly check --min-severity warn
   cpu:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version-file: ".python-version"
-      - name: Install uv
-        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
-        with:
-          version: "0.13.1"
-      - name: Install (CPU wheels)
-        run: |
-          uv venv
-          uv pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cpu
-          uv export --locked --extra dev --no-hashes --prune torch --prune torchvision --output-file requirements-ci.txt --quiet
-          uv pip install --no-sources --no-deps -r requirements-ci.txt
-          uv pip check
+      - uses: ./.github/actions/setup-python
       - name: CPU unit tests
         run: uv run --no-sync pytest tests --ignore=tests/gpu -q
       - name: Plotly viewer control tests

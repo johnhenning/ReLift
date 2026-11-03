@@ -10,11 +10,15 @@ uv run pyrefly check --min-severity warn
 uv run pytest tests --ignore=tests/gpu -q
 ```
 
-The existing CPU CI suite runs `tests/test_quality.py` for every push and pull
-request, enforcing all three checks without a separate workflow entry point. Ruff requires function
-annotations, checks imports and common correctness issues, and formats the full
-first-party source tree. Pyrefly covers `relift/`, `scripts/`, `tests/`, the frontend
-packaging adapter and `stubs/`. It reports warnings as failures too.
+The GitHub workflow runs a dedicated Python-quality job for every push and pull
+request, with separate Ruff-formatting, Ruff-lint and Pyrefly-type steps. Unit tests
+run independently in the CPU job. Both jobs use the shared setup action to install
+the same locked development dependencies with CPU PyTorch wheels.
+
+Ruff requires function annotations, checks imports and common correctness issues,
+and formats the full first-party source tree. Pyrefly covers `relift/`, `scripts/`,
+`tests/`, the frontend packaging adapter and `stubs/`. It reports warnings as
+failures too.
 
 Use concrete types and protocols for stable interfaces. Dynamic checkpoint,
 provider and JSON boundaries may use `Any`. Optional state needs an explicit

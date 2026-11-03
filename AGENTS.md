@@ -20,6 +20,7 @@ backends. Preserve benchmark snapshots and raw results in `outputs/`; do not
 format or rewrite historical sources. Keep report generation based on recorded
 technical evidence and place interpretation in separate analysis documents.
 
-CI enforces formatting, lint, types and the CPU suite. Check all first-party code;
+The dedicated CI quality job enforces Ruff formatting/lint and Pyrefly types;
+the CPU job runs unit and viewer tests separately. Check all first-party code;
 vendored dependencies, generated artifacts, weights and historical outputs are
 outside this scope.
