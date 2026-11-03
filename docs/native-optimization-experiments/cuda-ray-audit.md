@@ -12,6 +12,7 @@ its source/build hashes and before/after records are retained with the campaign.
 | Rotation used separate multiply/add arithmetic | Replacing rotation with the observed cuBLAS FMA order matches the large real-input case, but fails exact tests for some small shapes/layouts | Keep rotation in the original PyTorch `einsum`, preserving its layout and shape-dependent implementation |
 | Direct registered-operator calls bypassed wrapper checks | Invalid dtype/shape or noncontiguous tensors could reach a raw pointer kernel without the convenience wrapper | Validate inside the registered implementation and normalize its raw-kernel inputs there; test direct calls |
 | Operator cache identity omitted Python implementation | A changed wrapper could reuse an earlier registered implementation for the same binary | Include both binary and Python implementation bytes in the registered operator identity |
+| Very large image bounds were not constrained to exact float32 indices | For width 16,777,220, float32(width−1) rounds to width, which could pass an invalid raw index to the kernel | Reject dimensions above 2²⁴ inside the operator; verify rejection using fake tensors without allocating or executing an unsafe probe |
 
 The norm observation is specific to the pinned PyTorch 2.11 float32 path. Its
 [norm kernel](https://github.com/pytorch/pytorch/blob/v2.11.0/aten/src/ATen/native/cuda/ReduceNormKernel.cu)
@@ -35,10 +36,11 @@ mismatches** and **zero range differences**. Direction components differed 9,970
 times, with a maximum absolute error of 1.7881393432617188e-7.
 
 The corrected scan has **zero differences in directions, ranges or sampled pixels**
-over the same inputs. Nine CUDA regression cases pass: image borders/nearest ties,
+over the same inputs. Ten CUDA regression cases pass: image borders/nearest ties,
 degenerate dimensions, nonfinite coordinates, nondefault streams, direct-operator
 validation, noncontiguous inputs, and exact arithmetic across point counts 1, 7 and
-8192 with both rotation layouts. Tests pin imports to the selected source so an
+8192 with both rotation layouts, plus rejection of inexact oversized image bounds.
+Tests pin imports to the selected source so an
 editable installation cannot accidentally test different code.
 
 Five fresh corrected control/candidate pairs then completed. All **nine** subsequent

@@ -53,3 +53,17 @@ def test_boundaries_ties_nonfinite_and_stream(H,W):
     strided=torch.stack([coords,coords],-1)[...,0]
     direct=build.operator(strided,depth,K,rotation)
     for a,b in zip(direct,actual): torch.testing.assert_close(a,b,rtol=0,atol=0)
+
+
+def test_direct_operator_rejects_inexact_large_pixel_bounds_without_allocation():
+    if not os.environ.get("RELIFT_NATIVE_BUILD"): pytest.skip("explicit CUDA build required")
+    native=load_cpu()
+    if not hasattr(native,"launch_camera_rays"): pytest.skip("corrected CUDA build required")
+    build=make_ray_builder(native)
+    from torch._subclasses.fake_tensor import FakeTensorMode
+    with FakeTensorMode():
+        coords=torch.empty((1,1,2),device="cuda")
+        depth=torch.empty((1,1,2**24+4),device="cuda")
+        K=torch.empty((1,3,3),device="cuda")
+        with pytest.raises(ValueError,match="pixel-index"):
+            build.operator(coords,depth,K,K)

@@ -31,6 +31,10 @@ def make_ray_builder(native):
             raise ValueError("CUDA ray input shapes differ")
         T,N,_=coords.shape
         H,W=depth.shape[1:]
+        # Beyond this limit float32(W-1) can round to W; a clipped coordinate
+        # could then become an out-of-bounds raw pointer index in the kernel.
+        if H>2**24 or W>2**24:
+            raise ValueError("CUDA rays require image dimensions within exact float32 pixel-index range")
         if T<1 or H<1 or W<1 or max(T,N,H,W)>2**31-1 or depth.shape[0]!=T or K.shape!=(T,3,3) or rotation.shape!=(T,3,3):
             raise ValueError("CUDA ray input shapes differ")
         if any(v.requires_grad for v in values):
