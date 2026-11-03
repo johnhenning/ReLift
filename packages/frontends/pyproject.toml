@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "relift-frontends"
 version = "0.1.0"
 description = "Packaging adapter for ReLift's pinned upstream inference modules"
-requires-python = ">=3.10"
+requires-python = ">=3.13"
 # ReLift pins these versions; upstream application/training extras are intentionally excluded.
 dependencies = [
     "torch", "torchvision", "numpy", "opencv-python-headless", "pillow",

@@ -7,7 +7,7 @@ name = "relift"
 version = "0.1.0"
 description = "ReLift: a learned corrector for lifted dense 2-D tracks"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.13"
 license = {text = "MIT"}
 # Published runtime versions, including the five front ends (CUDA 12.8).
 dependencies = [
@@ -19,7 +19,7 @@ dependencies = [
     "scipy==1.15.3",
     "tqdm==4.67.1",
     "pyyaml==6.0.3",
-    "matplotlib==3.8.4",
+    "matplotlib==3.10.8",
     "huggingface_hub==1.30.0",
     "safetensors==0.8.0",
     "einops==0.8.1",
