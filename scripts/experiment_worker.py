@@ -215,6 +215,7 @@ def main():
     execution = dict(peak_pinned_bytes=lookahead.peak_pinned_bytes,
                      prefetched_host_to_device_bytes=lookahead.host_to_device_bytes) if lookahead else {}
     save(output / "result.json", dict(task=args.task, phases=phases.results, shape=store.shape, execution=execution,
+         observation_cache=json.loads((output/'observation-cache.json').read_text()) if (output/'observation-cache.json').exists() else None,
          finite=bool(store.finite()), source=str(args.source.resolve()), started_at=datetime.now(timezone.utc).isoformat()))
     print(json.dumps(dict(phases=phases.results, shape=store.shape)), flush=True)
 

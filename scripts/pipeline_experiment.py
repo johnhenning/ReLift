@@ -33,5 +33,6 @@ def run(args, options):
     metrics = json.loads((output / "metrics.json").read_text())
     store = TrajectoryStore.open(output)
     return dict(task="pipeline", phases=metrics["stages"], shape=store.shape, finite=bool(store.finite()),
+                observation_cache=json.loads((output/'observation-cache.json').read_text()) if (output/'observation-cache.json').exists() else None,
                 source=str(args.source.resolve()),
                 scope="Fresh full clip decode, DA3, AllTracker, correction and durable output commits; excludes viewer/video export and provisioning.")

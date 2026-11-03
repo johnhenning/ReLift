@@ -18,7 +18,7 @@ from .storage import TrajectoryStore, file_sha256, mapped_archive
 class MappedObservations:
     """CUDA ray construction for selected original pixels, retaining baseline math."""
 
-    def __init__(self, window_dir, device="cuda", depth_file="da3_depth_data.npz", tracks_file="alltracker_tracks.npz", depth_cache_mb=0, gather_backend="current", components=None, ray_backend="current"):
+    def __init__(self, window_dir, device="cuda", depth_file="da3_depth_data.npz", tracks_file="alltracker_tracks.npz", depth_cache_mb=0, gather_backend="current", components=None, ray_backend="current", observation_cache_mb=0):
         window = Path(window_dir)
         self.depth_source, self.track_source = window / depth_file, window / tracks_file
         depth = mapped_archive(self.depth_source)
@@ -28,6 +28,8 @@ class MappedObservations:
         if self.tracks.shape[:3] != self.depth.shape or self.visibility.shape != self.depth.shape:
             raise ValueError("Geometry and tracker frames/grids do not match")
         self.device = torch.device(device)
+        if observation_cache_mb and (gather_backend!='current' or (components and components.gather_factory is not None)):
+            raise ValueError('observation cache replaces CPU gathering; select one gathering strategy')
         self.ray_builder = components.ray_builder if components else None
         if self.ray_builder is None and ray_backend in ("cuda", "cuda_timeline"):
             from .cuda_rays import make_ray_builder, TimelineRayBuilder
@@ -59,6 +61,13 @@ class MappedObservations:
         P = P @ inv0
         self.Rwc = P[:, :3, :3].transpose(-2, -1)
         self.origin = -torch.einsum("tij,tj->ti", self.Rwc, P[:, :3, 3])
+        from .observation_cache import ObservationCache
+        factory=components.observation_cache_factory if components and components.observation_cache_factory else ObservationCache
+        self.observation_cache=factory(self.tracks,self.visibility,self.device,observation_cache_mb)
+
+    def close(self):
+        self.observation_cache.close()
+        self.depth_cuda=None
 
     @torch.no_grad()
     def rays(self, pixel_ids, frame=None):
@@ -66,7 +75,11 @@ class MappedObservations:
         ids = np.asarray(pixel_ids, dtype=np.int64)
         rows, cols = np.divmod(ids, self.W)
         times = slice(None) if frame is None else slice(frame, frame + 1)
-        if self.gather is None:
+        cached_vis=None
+        if self.observation_cache.active:
+            coords,cached_vis=self.observation_cache.gather(ids,frame=frame)
+            gathered_vis=None
+        elif self.gather is None:
             coords = self._transfer(self.tracks[times, rows, cols])
             gathered_vis = None
         else:
@@ -114,7 +127,7 @@ class MappedObservations:
             direction,distance = torch.cat(built_directions),torch.cat(built_distances)
             if camera_builder is not None:
                 direction = self.ray_builder.rotate(Rwc, direction)
-        vis = (self._transfer(self.visibility[times, rows, cols]) if gathered_vis is None else
+        vis = cached_vis if cached_vis is not None else (self._transfer(self.visibility[times, rows, cols]) if gathered_vis is None else
                torch.as_tensor(gathered_vis, dtype=torch.float32, device=self.device))
         return origin, torch.nan_to_num(direction), torch.nan_to_num(distance), torch.nan_to_num(vis)
 
@@ -189,7 +202,9 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
         raise ValueError("padding_batch must be positive")
     dev = torch.device(device)
     obs_source = MappedObservations(window_dir, dev, depth_file, tracks_file, depth_cache_mb=depth_cache_mb, gather_backend=gather_backend, components=components,
-                                    ray_backend=optimizations.rays if optimizations else "current")
+                                    ray_backend=optimizations.rays if optimizations else "current",
+                                    observation_cache_mb=optimizations.observation_cache_mb if optimizations else 0)
+    resources.callback(obs_source.close)
     T, H, W = obs_source.T, obs_source.H, obs_source.W
     total = H * W
     # Only the reference frame needs all points for the exact clip-wide median.
@@ -229,6 +244,7 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
                       ram_budget_gb=ram_budget_gb, vram_budget_gb=vram_budget_gb,
                       scratch_budget_gb=scratch_budget_gb)
     provenance.update(depth_cache_mb=depth_cache_mb, depth_cache_bytes=obs_source.depth_cuda.numel() * 4 if obs_source.depth_cuda is not None else 0,
+                      observation_cache=obs_source.observation_cache.metrics,
                       hash_writes=hash_writes, padding_batch=padding_batch, gather_backend=gather_backend,
                       optimizations=optimizations.as_dict() if optimizations else None, components=components.describe())
     if optimizations is not None:
@@ -311,4 +327,9 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
                           lift=raw.permute(1, 0, 2).float().cpu().numpy().astype(np.float16),
                           observed=observed.T.cpu().numpy())
         del origin, d, r, vis, observed, xyz, Y, raw
-    return store.finish()
+    result=store.finish()
+    # Runtime counters are measurements, not resume identity: keep the manifest's
+    # construction-time placement record stable across repeat/resume calls.
+    from .storage import atomic_json
+    atomic_json(output_dir/'observation-cache.json',obs_source.observation_cache.metrics)
+    return result

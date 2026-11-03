@@ -20,6 +20,7 @@ class OptimizationConfig:
     tracker_copy_outputs: bool = False
     hash_writes: bool = True
     depth_cache_mb: float = 0
+    observation_cache_mb: float = 0
     prefetch: bool = False
     corrector_batch: int = 8
     padding_batch: int | None = None
@@ -36,8 +37,12 @@ class OptimizationConfig:
         for key in ("tracker_init_weights","tracker_copy_outputs","hash_writes","prefetch","compile_corrector","reuse_da3"):
             if type(getattr(self,key)) is not bool:
                 raise TypeError(f"{key} must be a boolean")
-        if type(self.depth_cache_mb) not in (int,float) or not math.isfinite(self.depth_cache_mb) or self.depth_cache_mb < 0:
-            raise ValueError("depth_cache_mb must be finite and nonnegative")
+        for key in ('depth_cache_mb','observation_cache_mb'):
+            value=getattr(self,key)
+            if type(value) not in (int,float) or not math.isfinite(value) or value<0:
+                raise ValueError(f'{key} must be finite and nonnegative')
+        if self.observation_cache_mb and self.gather!='current':
+            raise ValueError('observation cache replaces CPU gathering; select gather="current"')
         for key in ("corrector_batch","padding_batch"):
             value = getattr(self,key)
             if key == "padding_batch" and value is None:
@@ -74,7 +79,7 @@ class OptimizationConfig:
             raise ValueError("Feature archives require disk offload")
         if mode == "none":
             default=OptimizationConfig().as_dict()
-            stream_fields=("gather","shards","rays","hash_writes","depth_cache_mb","prefetch","padding_batch","compile_corrector")
+            stream_fields=("gather","shards","rays","hash_writes","depth_cache_mb","observation_cache_mb","prefetch","padding_batch","compile_corrector")
             selected=[key for key in stream_fields if getattr(self,key)!=default[key]]
             if self.shard_writer == "cpp": selected.append("shard_writer")
             if selected:
@@ -89,6 +94,7 @@ class InferenceComponents:
     included in store provenance; changing a dependency invalidates resume.
     """
     gather_factory: Callable | None = None
+    observation_cache_factory: Callable | None = None
     ray_builder: Callable | None = None
     shard_packer: Callable | None = None
     npy_writer: Callable | None = None
