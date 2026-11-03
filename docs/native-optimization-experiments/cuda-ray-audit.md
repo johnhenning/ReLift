@@ -54,6 +54,9 @@ the default ray backend remains unchanged. These are correction-only measurement
 not full-pipeline speed claims. Compiler, driver, hardware and source versions remain
 part of the evidence; these tests do not prove equivalence for every GPU/library.
 
+The [profiling follow-up](cuda-ray-profile.md) investigates the corrected path's
+overhead and tests `cuda_timeline` without changing the audited kernel arithmetic.
+
 ## Reproduce
 
 Choose fresh output names. The original failed snapshot and corrected source are

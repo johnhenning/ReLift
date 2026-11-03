@@ -21,6 +21,7 @@ def main():
     parser.add_argument("--build",type=Path,required=True)
     parser.add_argument("--window",type=Path,required=True)
     parser.add_argument("--out",type=Path,required=True)
+    parser.add_argument("--mapped-backend",choices=("cuda","cuda_timeline"),help="Also compare complete timelines through MappedObservations, with cache off/on")
     args=parser.parse_args()
     if args.out.exists(): raise FileExistsError(args.out)
     sys.path.insert(0,str(args.source.resolve()))
@@ -82,13 +83,33 @@ def main():
         for t,p in torch.nonzero(mismatch)[:max(0,12-len(examples))].tolist():
             examples.append(dict(frame=start+t,reference_pixel=p,coordinate=coords[t,p].tolist(),
                                  expected_pixel=int(expected[t,p]),actual_pixel=int(actual[t,p])))
+    mapped={}
+    if args.mapped_backend:
+        from relift.optimization import InferenceComponents
+        components=InferenceComponents().with_native_build(str(args.build.resolve()))
+        for cache in (0,256):
+            candidate=MappedObservations(args.window,"cuda",depth_cache_mb=cache,
+                                         ray_backend=args.mapped_backend,components=components)
+            reference=MappedObservations(args.window,"cuda",depth_cache_mb=cache)
+            differences={key:0 for key in ("origins","directions","ranges","visibility")}
+            for p in range(0,H*W,8192):
+                ids=np.arange(p,min(p+8192,H*W))
+                expected=reference.rays(ids); actual=candidate.rays(ids)
+                for key,a,b in zip(differences,expected,actual):
+                    differences[key]+=int(torch.count_nonzero(a.view(torch.int32)!=b.view(torch.int32)))
+            mapped[str(cache)]=dict(points=source.T*H*W,bitwise_differences=differences,
+                                    passed=not any(differences.values()))
+            del candidate,reference
     record=dict(source=str(args.source.resolve()),build=json.loads((args.build/"build.json").read_text()),
                 shape=[source.T,H,W],totals=totals,first_block_decomposition=decomposition,nearest_examples=examples,
                 tracker_sha256=hashlib.sha256(source.track_source.read_bytes()).hexdigest(),
-                script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
+                script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),mapped_backend=args.mapped_backend,mapped=mapped)
     args.out.parent.mkdir(parents=True,exist_ok=True)
     args.out.write_text(json.dumps(record,indent=2)+"\n")
     print(json.dumps(totals,indent=2)); print(json.dumps(decomposition,indent=2)); print(json.dumps(examples[:4],indent=2))
+    if mapped:
+        print(json.dumps(mapped,indent=2))
+        if not all(row["passed"] for row in mapped.values()): raise SystemExit(1)
 
 
 if __name__ == "__main__": main()

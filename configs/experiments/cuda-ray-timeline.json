@@ -1,0 +1,43 @@
+{
+  "scene": "swing-tire",
+  "input": "cache/demo_inputs/swing-tire.mp4",
+  "prepared_window": "outputs/benchmarks/offload-primary/swing-tire/ram/trial-01/output/window",
+  "process_res": 504,
+  "output_root": "outputs/experiments/rays-timeline",
+  "experiments": {
+    "eager-correction": {
+      "task": "correction",
+      "repeats": 5,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/rays-timeline-eager-source", "options": {"optimizations": {}}},
+        {"name": "corrected-cuda", "source": "outputs/experiments/rays-timeline-eager-source", "options": {"optimizations": {"rays": "cuda"}, "native_build": "outputs/native/da3-final"}},
+        {"name": "timeline-eager", "source": "outputs/experiments/rays-timeline-eager-source", "options": {"optimizations": {"rays": "cuda_timeline"}, "native_build": "outputs/native/da3-final"}}
+      ]
+    },
+    "eager-diagnostic": {
+      "task": "correction",
+      "repeats": 1,
+      "variants": [
+        {"name": "timeline-eager", "source": "outputs/experiments/rays-timeline-eager-source", "options": {"profile": true, "optimizations": {"rays": "cuda_timeline"}, "native_build": "outputs/native/da3-final"}}
+      ]
+    },
+    "correction": {
+      "task": "correction",
+      "repeats": 5,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/rays-timeline-v2-source", "options": {"optimizations": {}}},
+        {"name": "corrected-cuda", "source": "outputs/experiments/rays-timeline-v2-source", "options": {"optimizations": {"rays": "cuda"}, "native_build": "outputs/native/da3-final"}},
+        {"name": "timeline-cuda", "source": "outputs/experiments/rays-timeline-v2-source", "options": {"optimizations": {"rays": "cuda_timeline"}, "native_build": "outputs/native/da3-final"}}
+      ]
+    },
+    "diagnostic": {
+      "task": "correction",
+      "repeats": 1,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/rays-timeline-v2-source", "options": {"profile": true, "optimizations": {}}},
+        {"name": "corrected-cuda", "source": "outputs/experiments/rays-timeline-v2-source", "options": {"profile": true, "optimizations": {"rays": "cuda"}, "native_build": "outputs/native/da3-final"}},
+        {"name": "timeline-cuda", "source": "outputs/experiments/rays-timeline-v2-source", "options": {"profile": true, "optimizations": {"rays": "cuda_timeline"}, "native_build": "outputs/native/da3-final"}}
+      ]
+    }
+  }
+}

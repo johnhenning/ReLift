@@ -10,6 +10,8 @@ the second experiment without changing the original proposal.
 The [ray construction result](03-cuda-ray-construction-results.md) includes the
 initial failed CUDA gate; the [bug audit](cuda-ray-audit.md) records the fixes and
 passing corrected comparison. The new backend remains disabled by default.
+The [corrected CUDA profile](cuda-ray-profile.md) tests full-timeline rotation and
+separates the fused kernel's time from dispatch, gathering, transfers and commits.
 The [DA3 packing/archive result](04-da3-archive-and-block-loading-results.md)
 records the repeated RAM comparison, disk pilot and composition/reuse checks.
 The proposals below remain the original review plans; result documents record

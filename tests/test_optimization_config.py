@@ -56,6 +56,31 @@ def test_inapplicable_optimizations_fail_instead_of_silently_running_control():
     OptimizationConfig(gather="cpp",da3_weights="cpp",da3_features="cpp").validate_mode("disk")
 
 
+def test_injected_camera_builder_uses_full_timeline_rotation(tmp_path):
+    from relift.cuda_rays import torch_ray_builder
+    T,_,_=prepared_window(tmp_path)
+    calls=[]
+    class Builder:
+        def __call__(self,*args): raise AssertionError('camera protocol should be used')
+        def camera(self,coords,depth,K):
+            calls.append(('camera',len(coords)))
+            identity=torch.eye(3).expand(len(coords),3,3)
+            return torch_ray_builder(coords,depth,K,identity)
+        def rotate(self,rotation,camera):
+            calls.append(('rotate',len(camera)))
+            return torch.einsum('tij,tnj->tni',rotation,camera)
+    builder=Builder()
+    components=InferenceComponents(ray_builder=builder,fingerprints=(("ray_builder","camera-test-v1"),))
+    ids=np.array([0,3,3,14])
+    reference=MappedObservations(tmp_path,'cpu').rays(ids)
+    actual=MappedObservations(tmp_path,'cpu',components=components).rays(ids)
+    assert calls==[('camera',T),('rotate',T)]
+    for a,b in zip(actual,reference): torch.testing.assert_close(a,b,rtol=0,atol=0)
+    assert OptimizationConfig.read(overrides=['rays="cuda_timeline"']).rays=='cuda_timeline'
+    with pytest.raises(ValueError,match='Streaming'):
+        OptimizationConfig(rays='cuda_timeline').validate_mode('none')
+
+
 def test_session_reuses_only_matching_provider_and_closes_on_exception(tmp_path):
     events = []
     class Provider:

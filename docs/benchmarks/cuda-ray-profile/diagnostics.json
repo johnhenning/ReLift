@@ -1,0 +1,3394 @@
+{
+  "diagnostic/control/trial-01/output/diagnostic.json": {
+    "spans": {
+      "file_hash": {
+        "calls": 72,
+        "seconds": 1.1787057089968584
+      },
+      "manifest_commit": {
+        "calls": 23,
+        "seconds": 1.670095398061676
+      },
+      "mapped_archive": {
+        "calls": 3,
+        "seconds": 4.348381952993805
+      },
+      "rays": {
+        "calls": 19,
+        "seconds": 1.0774043629935477
+      },
+      "input_hash": {
+        "calls": 36,
+        "seconds": 0.28474273200845346
+      },
+      "npy_commit": {
+        "calls": 58,
+        "seconds": 5.2246085600345396
+      },
+      "corrector": {
+        "calls": 18,
+        "seconds": 3.6868497469404247
+      },
+      "raw_interpolation": {
+        "calls": 18,
+        "seconds": 0.013586372951976955
+      },
+      "shard_write_inclusive": {
+        "calls": 18,
+        "seconds": 5.143592040985823
+      },
+      "finish_verify": {
+        "calls": 1,
+        "seconds": 0.5171410879993346
+      }
+    },
+    "caveat": "Diagnostic synchronized inclusive spans overlap and alter execution. Never use their sum or runtime as an unprofiled speed measurement.",
+    "functions": [
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.fsync>",
+        "calls": 88,
+        "self_seconds": 8.016416589,
+        "inclusive_seconds": 8.016416589
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._cuda_synchronize>",
+        "calls": 113,
+        "self_seconds": 3.1229825100000004,
+        "inclusive_seconds": 3.1229825100000004
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'update' of '_hashlib.HASH' objects>",
+        "calls": 962,
+        "self_seconds": 2.058151052,
+        "inclusive_seconds": 2.058151052
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/numpy/_core/memmap.py",
+        "line": 357,
+        "function": "__getitem__",
+        "calls": 147,
+        "self_seconds": 0.511297875,
+        "inclusive_seconds": 0.5125948020000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._nn.linear>",
+        "calls": 936,
+        "self_seconds": 0.40015482500000005,
+        "inclusive_seconds": 0.40015482500000005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.as_tensor>",
+        "calls": 149,
+        "self_seconds": 0.32904403400000004,
+        "inclusive_seconds": 0.32904403400000004
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/numpy/lib/format.py",
+        "line": 684,
+        "function": "write_array",
+        "calls": 58,
+        "self_seconds": 0.28381500200000004,
+        "inclusive_seconds": 0.9667120770000001
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/storage.py",
+        "line": 290,
+        "function": "write_shard",
+        "calls": 18,
+        "self_seconds": 0.145068832,
+        "inclusive_seconds": 5.142261154000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method marshal.loads>",
+        "calls": 844,
+        "self_seconds": 0.11276949300000001,
+        "inclusive_seconds": 0.11276949300000001
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/_library/custom_ops.py",
+        "line": 607,
+        "function": "_register_to_dispatcher",
+        "calls": 9,
+        "self_seconds": 0.10802194500000001,
+        "inclusive_seconds": 0.089686925
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method numpy.array>",
+        "calls": 149,
+        "self_seconds": 0.102543278,
+        "inclusive_seconds": 0.102543278
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.exec>",
+        "calls": 1172,
+        "self_seconds": 0.09804451,
+        "inclusive_seconds": 0.0023234930000000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'astype' of 'numpy.ndarray' objects>",
+        "calls": 20,
+        "self_seconds": 0.097491878,
+        "inclusive_seconds": 0.097491878
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'cpu' of 'torch._C.TensorBase' objects>",
+        "calls": 57,
+        "self_seconds": 0.08474197700000001,
+        "inclusive_seconds": 0.08474197700000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'tobytes' of 'numpy.ndarray' objects>",
+        "calls": 54,
+        "self_seconds": 0.084184326,
+        "inclusive_seconds": 0.084184326
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'read' of '_io.BufferedReader' objects>",
+        "calls": 2013,
+        "self_seconds": 0.081382729,
+        "inclusive_seconds": 0.081382729
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'write' of '_io.BufferedWriter' objects>",
+        "calls": 263,
+        "self_seconds": 0.078439954,
+        "inclusive_seconds": 0.078439954
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/streaming.py",
+        "line": 21,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 0.06769599400000001,
+        "inclusive_seconds": 3.8791157590000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._autograd._disable_profiler>",
+        "calls": 1,
+        "self_seconds": 0.054676789,
+        "inclusive_seconds": 0.054676789
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/encoder.py",
+        "line": 336,
+        "function": "_iterencode_dict",
+        "calls": 61815,
+        "self_seconds": 0.043042451,
+        "inclusive_seconds": 0.067759649
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/core/facts.py",
+        "line": 599,
+        "function": "deduce_all_facts",
+        "calls": 136,
+        "self_seconds": 0.041404805,
+        "inclusive_seconds": 0.043837157
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/streaming.py",
+        "line": 63,
+        "function": "rays",
+        "calls": 19,
+        "self_seconds": 0.040239537000000006,
+        "inclusive_seconds": 1.072919726
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method zlib.crc32>",
+        "calls": 165,
+        "self_seconds": 0.035673946000000005,
+        "inclusive_seconds": 0.035673946000000005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.isinstance>",
+        "calls": 172507,
+        "self_seconds": 0.032039125,
+        "inclusive_seconds": 0.032232406000000005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.__build_class__>",
+        "calls": 2246,
+        "self_seconds": 0.02816636,
+        "inclusive_seconds": 0.196981644
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._linalg.linalg_vector_norm>",
+        "calls": 19,
+        "self_seconds": 0.027636379000000003,
+        "inclusive_seconds": 0.027636379000000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.layer_norm>",
+        "calls": 450,
+        "self_seconds": 0.024915913,
+        "inclusive_seconds": 0.024915913
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/storage.py",
+        "line": 32,
+        "function": "_json_value",
+        "calls": 8343,
+        "self_seconds": 0.023590211,
+        "inclusive_seconds": 0.034567176000000005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'median' of 'torch._C.TensorBase' objects>",
+        "calls": 1,
+        "self_seconds": 0.022838108000000003,
+        "inclusive_seconds": 0.022838108000000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.gather>",
+        "calls": 72,
+        "self_seconds": 0.022686592000000002,
+        "inclusive_seconds": 0.022686592000000002
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/core/assumptions.py",
+        "line": 614,
+        "function": "_prepare_class_assumptions",
+        "calls": 479,
+        "self_seconds": 0.022347445,
+        "inclusive_seconds": 0.089091365
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.sqrt>",
+        "calls": 19,
+        "self_seconds": 0.022145318,
+        "inclusive_seconds": 0.022145318
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/__init__.py",
+        "line": 120,
+        "function": "dump",
+        "calls": 23,
+        "self_seconds": 0.021600659,
+        "inclusive_seconds": 0.11359066100000001
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/_dynamo/variables/functions.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 0.021109720000000002,
+        "inclusive_seconds": 6.989961672000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.lstat>",
+        "calls": 10294,
+        "self_seconds": 0.019991626000000002,
+        "inclusive_seconds": 0.019991626000000002
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/autograd/profiler.py",
+        "line": 515,
+        "function": "export_chrome_trace",
+        "calls": 1,
+        "self_seconds": 0.01863267,
+        "inclusive_seconds": 0.018632871000000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.getattr>",
+        "calls": 75825,
+        "self_seconds": 0.016562808000000002,
+        "inclusive_seconds": 0.018598748000000002
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/streaming.py",
+        "line": 131,
+        "function": "_batch_plan",
+        "calls": 1,
+        "self_seconds": 0.016332829,
+        "inclusive_seconds": 0.036491306
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._nn.scaled_dot_product_attention>",
+        "calls": 288,
+        "self_seconds": 0.015278518000000001,
+        "inclusive_seconds": 0.015278518000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.stat>",
+        "calls": 4210,
+        "self_seconds": 0.014849891,
+        "inclusive_seconds": 0.015253664
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'clamp_min' of 'torch._C.TensorBase' objects>",
+        "calls": 56,
+        "self_seconds": 0.014821417000000002,
+        "inclusive_seconds": 0.014821417000000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.minimum>",
+        "calls": 36,
+        "self_seconds": 0.014495135000000001,
+        "inclusive_seconds": 0.014495135000000001
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 779,
+        "function": "_compile_bytecode",
+        "calls": 844,
+        "self_seconds": 0.014259294,
+        "inclusive_seconds": 0.12757793
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/encoder.py",
+        "line": 280,
+        "function": "_iterencode_list",
+        "calls": 15439,
+        "self_seconds": 0.013579683,
+        "inclusive_seconds": 0.040687824000000004
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._unique2>",
+        "calls": 1,
+        "self_seconds": 0.013510636000000001,
+        "inclusive_seconds": 0.013510636000000001
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/encoder.py",
+        "line": 417,
+        "function": "_iterencode",
+        "calls": 23183,
+        "self_seconds": 0.012913779,
+        "inclusive_seconds": 0.080710214
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.hasattr>",
+        "calls": 37739,
+        "self_seconds": 0.012414012,
+        "inclusive_seconds": 5.1275000000000006e-05
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/tokenize.py",
+        "line": 575,
+        "function": "_generate_tokens_from_c_tokenizer",
+        "calls": 18584,
+        "self_seconds": 0.011871376000000001,
+        "inclusive_seconds": 0.022958109
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._autograd._prepare_profiler>",
+        "calls": 1,
+        "self_seconds": 0.011410884000000001,
+        "inclusive_seconds": 0.011410884000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method _io.open_code>",
+        "calls": 844,
+        "self_seconds": 0.011064623,
+        "inclusive_seconds": 0.011064623
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/dataclasses.py",
+        "line": 929,
+        "function": "_process_class",
+        "calls": 339,
+        "self_seconds": 0.011019266000000002,
+        "inclusive_seconds": 0.172115132
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'write' of '_io.TextIOWrapper' objects>",
+        "calls": 23184,
+        "self_seconds": 0.010905046,
+        "inclusive_seconds": 0.010905046
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.grid_sampler>",
+        "calls": 109,
+        "self_seconds": 0.010732603,
+        "inclusive_seconds": 0.010732603
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'tofile' of 'numpy.ndarray' objects>",
+        "calls": 4,
+        "self_seconds": 0.010499877000000001,
+        "inclusive_seconds": 0.010522868000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method _io.open>",
+        "calls": 344,
+        "self_seconds": 0.009943708,
+        "inclusive_seconds": 0.014725544
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/model.py",
+        "line": 49,
+        "function": "forward",
+        "calls": 144,
+        "self_seconds": 0.009726736000000001,
+        "inclusive_seconds": 0.147335395
+      },
+      {
+        "file": "<frozen posixpath>",
+        "line": 388,
+        "function": "realpath",
+        "calls": 897,
+        "self_seconds": 0.009228168,
+        "inclusive_seconds": 0.032758256
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method __new__ of type object at 0x1548630>",
+        "calls": 24590,
+        "self_seconds": 0.009223735,
+        "inclusive_seconds": 0.014965774000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.len>",
+        "calls": 90472,
+        "self_seconds": 0.008739599,
+        "inclusive_seconds": 0.008927842
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 304,
+        "function": "acquire",
+        "calls": 2462,
+        "self_seconds": 0.008718018000000001,
+        "inclusive_seconds": 0.024384286
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/multipledispatch/conflict.py",
+        "line": 7,
+        "function": "supercedes",
+        "calls": 15616,
+        "self_seconds": 0.008523356000000001,
+        "inclusive_seconds": 0.012833145
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 2507,
+        "function": "_signature_from_callable",
+        "calls": 1530,
+        "self_seconds": 0.008357370000000001,
+        "inclusive_seconds": 0.054277496
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.eye>",
+        "calls": 1,
+        "self_seconds": 0.00780092,
+        "inclusive_seconds": 0.00780092
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'reshape' of 'torch._C.TensorBase' objects>",
+        "calls": 829,
+        "self_seconds": 0.007775412000000001,
+        "inclusive_seconds": 0.007775412000000001
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 1011,
+        "function": "getmodule",
+        "calls": 91,
+        "self_seconds": 0.007594229,
+        "inclusive_seconds": 0.059767971
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._nn.gelu>",
+        "calls": 162,
+        "self_seconds": 0.007312377,
+        "inclusive_seconds": 0.007312377
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/features.py",
+        "line": 20,
+        "function": "interp_init",
+        "calls": 36,
+        "self_seconds": 0.007286427000000001,
+        "inclusive_seconds": 0.062380676
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+        "calls": 37,
+        "self_seconds": 0.007166569,
+        "inclusive_seconds": 0.007166569
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'get' of 'dict' objects>",
+        "calls": 42291,
+        "self_seconds": 0.006772928,
+        "inclusive_seconds": 0.006848664000000001
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/functools.py",
+        "line": 36,
+        "function": "update_wrapper",
+        "calls": 2319,
+        "self_seconds": 0.006677224000000001,
+        "inclusive_seconds": 0.011754682
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/cuda/memory.py",
+        "line": 316,
+        "function": "_recurse_add_to_result",
+        "calls": 3220,
+        "self_seconds": 0.006625472,
+        "inclusive_seconds": 0.008710285
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 2403,
+        "function": "_signature_from_function",
+        "calls": 758,
+        "self_seconds": 0.006571256,
+        "inclusive_seconds": 0.022591993
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.stack>",
+        "calls": 38,
+        "self_seconds": 0.006547146,
+        "inclusive_seconds": 0.006547146
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/collections/__init__.py",
+        "line": 450,
+        "function": "_make",
+        "calls": 18558,
+        "self_seconds": 0.006539971,
+        "inclusive_seconds": 0.011182124
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 1625,
+        "function": "find_spec",
+        "calls": 982,
+        "self_seconds": 0.006436672,
+        "inclusive_seconds": 0.031314957000000004
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.randperm>",
+        "calls": 1,
+        "self_seconds": 0.006415268,
+        "inclusive_seconds": 0.006415268
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._ops.profiler._record_function_enter_new>",
+        "calls": 284,
+        "self_seconds": 0.00628292,
+        "inclusive_seconds": 0.00628292
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 2775,
+        "function": "__init__",
+        "calls": 2528,
+        "self_seconds": 0.006250986,
+        "inclusive_seconds": 0.009257152000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.replace>",
+        "calls": 88,
+        "self_seconds": 0.005947796,
+        "inclusive_seconds": 0.008394492
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'append' of 'list' objects>",
+        "calls": 37669,
+        "self_seconds": 0.0059477620000000005,
+        "inclusive_seconds": 0.0059477620000000005
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1240,
+        "function": "_find_spec",
+        "calls": 869,
+        "self_seconds": 0.005887328000000001,
+        "inclusive_seconds": 0.048248253000000005
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1358,
+        "function": "_find_and_load",
+        "calls": 3616,
+        "self_seconds": 0.005846798,
+        "inclusive_seconds": 0.0031016100000000003
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/multipledispatch/conflict.py",
+        "line": 12,
+        "function": "consistent",
+        "calls": 6032,
+        "self_seconds": 0.005772642000000001,
+        "inclusive_seconds": 0.012504703
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 131,
+        "function": "_path_join",
+        "calls": 5863,
+        "self_seconds": 0.0055910050000000005,
+        "inclusive_seconds": 0.009186865
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method '__exit__' of '_io._IOBase' objects>",
+        "calls": 1114,
+        "self_seconds": 0.005562593,
+        "inclusive_seconds": 0.005675156000000001
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/matrices/dense.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 0.005562003,
+        "inclusive_seconds": 0.016335642
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/polys/polytools.py",
+        "line": 106,
+        "function": "Poly",
+        "calls": 1,
+        "self_seconds": 0.005440973,
+        "inclusive_seconds": 0.005661101
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/core/assumptions.py",
+        "line": 489,
+        "function": "as_property",
+        "calls": 31660,
+        "self_seconds": 0.005238085,
+        "inclusive_seconds": 0.005238085
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.setattr>",
+        "calls": 22124,
+        "self_seconds": 0.0052139510000000005,
+        "inclusive_seconds": 0.0054264660000000004
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/utils/_config_module.py",
+        "line": 237,
+        "function": "get_assignments_with_compile_ignored_comments",
+        "calls": 3,
+        "self_seconds": 0.005183389,
+        "inclusive_seconds": 0.026293421
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 1094,
+        "function": "get_code",
+        "calls": 844,
+        "self_seconds": 0.005110738,
+        "inclusive_seconds": 0.17059020600000002
+      },
+      {
+        "file": "scripts/experiment_worker.py",
+        "line": 60,
+        "function": "wrapped",
+        "calls": 266,
+        "self_seconds": 0.004931733000000001,
+        "inclusive_seconds": 15.658285662
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 1821,
+        "function": "_shadowed_dict",
+        "calls": 8635,
+        "self_seconds": 0.004908186,
+        "inclusive_seconds": 0.004915765
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 3063,
+        "function": "__init__",
+        "calls": 1354,
+        "self_seconds": 0.004681228,
+        "inclusive_seconds": 0.006099378000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'join' of 'str' objects>",
+        "calls": 13675,
+        "self_seconds": 0.0046809370000000005,
+        "inclusive_seconds": 0.006290091
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/nn/modules/module.py",
+        "line": 1783,
+        "function": "_call_impl",
+        "calls": 2160,
+        "self_seconds": 0.004466074,
+        "inclusive_seconds": 0.501902855
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'copy' of 'dict' objects>",
+        "calls": 216,
+        "self_seconds": 0.004435648,
+        "inclusive_seconds": 0.004435648
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/multipledispatch/conflict.py",
+        "line": 24,
+        "function": "ambiguities",
+        "calls": 89,
+        "self_seconds": 0.004429925,
+        "inclusive_seconds": 0.021732900000000003
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1306,
+        "function": "_find_and_load_unlocked",
+        "calls": 852,
+        "self_seconds": 0.004373734000000001,
+        "inclusive_seconds": 0.002970214
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._ops.profiler.>",
+        "calls": 284,
+        "self_seconds": 0.004341251,
+        "inclusive_seconds": 0.004341251
+      }
+    ],
+    "function_selection": "Top 100 by self_seconds; full pstats retained locally"
+  },
+  "diagnostic/corrected-cuda/trial-01/output/diagnostic.json": {
+    "spans": {
+      "file_hash": {
+        "calls": 72,
+        "seconds": 1.1630652900203131
+      },
+      "manifest_commit": {
+        "calls": 23,
+        "seconds": 0.2513119060313329
+      },
+      "mapped_archive": {
+        "calls": 3,
+        "seconds": 2.7767179330112413
+      },
+      "rays": {
+        "calls": 19,
+        "seconds": 2.0069473380572163
+      },
+      "input_hash": {
+        "calls": 36,
+        "seconds": 0.2852499949221965
+      },
+      "npy_commit": {
+        "calls": 58,
+        "seconds": 6.854438446898712
+      },
+      "corrector": {
+        "calls": 18,
+        "seconds": 3.689850540016778
+      },
+      "raw_interpolation": {
+        "calls": 18,
+        "seconds": 0.013968082057544962
+      },
+      "shard_write_inclusive": {
+        "calls": 18,
+        "seconds": 6.657956135954009
+      },
+      "finish_verify": {
+        "calls": 1,
+        "seconds": 0.49727418000111356
+      }
+    },
+    "caveat": "Diagnostic synchronized inclusive spans overlap and alter execution. Never use their sum or runtime as an unprofiled speed measurement.",
+    "functions": [
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.fsync>",
+        "calls": 88,
+        "self_seconds": 8.087802509000001,
+        "inclusive_seconds": 8.087802509000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._cuda_synchronize>",
+        "calls": 113,
+        "self_seconds": 3.1420220910000003,
+        "inclusive_seconds": 3.1420220910000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'update' of '_hashlib.HASH' objects>",
+        "calls": 962,
+        "self_seconds": 2.032001596,
+        "inclusive_seconds": 2.032001596
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/numpy/_core/memmap.py",
+        "line": 357,
+        "function": "__getitem__",
+        "calls": 147,
+        "self_seconds": 0.523260968,
+        "inclusive_seconds": 0.524563478
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._nn.linear>",
+        "calls": 936,
+        "self_seconds": 0.401279946,
+        "inclusive_seconds": 0.401279946
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/numpy/lib/format.py",
+        "line": 684,
+        "function": "write_array",
+        "calls": 58,
+        "self_seconds": 0.30186696900000004,
+        "inclusive_seconds": 0.927166491
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.as_tensor>",
+        "calls": 149,
+        "self_seconds": 0.27502437,
+        "inclusive_seconds": 0.27502437
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method numpy.array>",
+        "calls": 149,
+        "self_seconds": 0.16034969100000002,
+        "inclusive_seconds": 0.16034969100000002
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/storage.py",
+        "line": 290,
+        "function": "write_shard",
+        "calls": 18,
+        "self_seconds": 0.14376654700000002,
+        "inclusive_seconds": 6.656706858000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method marshal.loads>",
+        "calls": 846,
+        "self_seconds": 0.09775088100000001,
+        "inclusive_seconds": 0.09775088100000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'read' of '_io.BufferedReader' objects>",
+        "calls": 2020,
+        "self_seconds": 0.097556267,
+        "inclusive_seconds": 0.097556267
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/_library/custom_ops.py",
+        "line": 607,
+        "function": "_register_to_dispatcher",
+        "calls": 10,
+        "self_seconds": 0.097227934,
+        "inclusive_seconds": 2.216234236
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'astype' of 'numpy.ndarray' objects>",
+        "calls": 20,
+        "self_seconds": 0.091809978,
+        "inclusive_seconds": 0.091809978
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.exec>",
+        "calls": 1175,
+        "self_seconds": 0.08926898600000001,
+        "inclusive_seconds": 0.0025247800000000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'write' of '_io.BufferedWriter' objects>",
+        "calls": 263,
+        "self_seconds": 0.078349925,
+        "inclusive_seconds": 0.078349925
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'cpu' of 'torch._C.TensorBase' objects>",
+        "calls": 57,
+        "self_seconds": 0.061572854,
+        "inclusive_seconds": 0.061572854
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._autograd._disable_profiler>",
+        "calls": 1,
+        "self_seconds": 0.058150388000000004,
+        "inclusive_seconds": 0.058150388000000004
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/core/facts.py",
+        "line": 599,
+        "function": "deduce_all_facts",
+        "calls": 136,
+        "self_seconds": 0.041766424,
+        "inclusive_seconds": 0.044015572
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'tobytes' of 'numpy.ndarray' objects>",
+        "calls": 54,
+        "self_seconds": 0.036319181,
+        "inclusive_seconds": 0.036319181
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'median' of 'torch._C.TensorBase' objects>",
+        "calls": 1,
+        "self_seconds": 0.036313042000000004,
+        "inclusive_seconds": 0.036313042000000004
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method zlib.crc32>",
+        "calls": 165,
+        "self_seconds": 0.035663396,
+        "inclusive_seconds": 0.035663396
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/encoder.py",
+        "line": 336,
+        "function": "_iterencode_dict",
+        "calls": 62175,
+        "self_seconds": 0.035173335,
+        "inclusive_seconds": 0.054833868
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.nan_to_num>",
+        "calls": 184,
+        "self_seconds": 0.031182585000000002,
+        "inclusive_seconds": 0.031182585000000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._unique2>",
+        "calls": 1,
+        "self_seconds": 0.029380616000000002,
+        "inclusive_seconds": 0.029380616000000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.isinstance>",
+        "calls": 175729,
+        "self_seconds": 0.029119275000000003,
+        "inclusive_seconds": 0.029308255000000002
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/_library/custom_ops.py",
+        "line": 346,
+        "function": "backend_impl",
+        "calls": 108,
+        "self_seconds": 0.028344295000000002,
+        "inclusive_seconds": 0.0
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.__build_class__>",
+        "calls": 2248,
+        "self_seconds": 0.028004743000000002,
+        "inclusive_seconds": 0.20030524600000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._autograd._prepare_profiler>",
+        "calls": 1,
+        "self_seconds": 0.025769082000000002,
+        "inclusive_seconds": 0.025769082000000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.layer_norm>",
+        "calls": 450,
+        "self_seconds": 0.024118441,
+        "inclusive_seconds": 0.024118441
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/core/assumptions.py",
+        "line": 614,
+        "function": "_prepare_class_assumptions",
+        "calls": 479,
+        "self_seconds": 0.022271676,
+        "inclusive_seconds": 0.089136295
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.lstat>",
+        "calls": 10395,
+        "self_seconds": 0.019884191000000002,
+        "inclusive_seconds": 0.019884191000000002
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/storage.py",
+        "line": 32,
+        "function": "_json_value",
+        "calls": 8364,
+        "self_seconds": 0.019662886,
+        "inclusive_seconds": 0.029163902000000002
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/autograd/profiler.py",
+        "line": 515,
+        "function": "export_chrome_trace",
+        "calls": 1,
+        "self_seconds": 0.018368552,
+        "inclusive_seconds": 0.018368729
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/__init__.py",
+        "line": 120,
+        "function": "dump",
+        "calls": 23,
+        "self_seconds": 0.016878833,
+        "inclusive_seconds": 0.091337841
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 779,
+        "function": "_compile_bytecode",
+        "calls": 846,
+        "self_seconds": 0.016582499,
+        "inclusive_seconds": 0.114856233
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.getattr>",
+        "calls": 76233,
+        "self_seconds": 0.016554759000000002,
+        "inclusive_seconds": 0.018785120000000002
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/streaming.py",
+        "line": 131,
+        "function": "_batch_plan",
+        "calls": 1,
+        "self_seconds": 0.016153102000000003,
+        "inclusive_seconds": 0.052195367000000006
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._nn.scaled_dot_product_attention>",
+        "calls": 288,
+        "self_seconds": 0.014393194000000002,
+        "inclusive_seconds": 0.014393194000000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.minimum>",
+        "calls": 36,
+        "self_seconds": 0.014390484,
+        "inclusive_seconds": 0.014390484
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.stat>",
+        "calls": 4229,
+        "self_seconds": 0.013909545,
+        "inclusive_seconds": 0.014420356
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'tofile' of 'numpy.ndarray' objects>",
+        "calls": 4,
+        "self_seconds": 0.013726695,
+        "inclusive_seconds": 0.013741409000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.hasattr>",
+        "calls": 38939,
+        "self_seconds": 0.012350741,
+        "inclusive_seconds": 0.012846174
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'copy' of 'dict' objects>",
+        "calls": 217,
+        "self_seconds": 0.012251233,
+        "inclusive_seconds": 0.012251233
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.gather>",
+        "calls": 72,
+        "self_seconds": 0.011624808,
+        "inclusive_seconds": 0.011624808
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/encoder.py",
+        "line": 280,
+        "function": "_iterencode_list",
+        "calls": 15439,
+        "self_seconds": 0.010760145,
+        "inclusive_seconds": 0.033264074000000005
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/dataclasses.py",
+        "line": 929,
+        "function": "_process_class",
+        "calls": 340,
+        "self_seconds": 0.010688264000000001,
+        "inclusive_seconds": 0.16030664800000002
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/tokenize.py",
+        "line": 575,
+        "function": "_generate_tokens_from_c_tokenizer",
+        "calls": 18584,
+        "self_seconds": 0.010612218000000001,
+        "inclusive_seconds": 0.020394059000000003
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/encoder.py",
+        "line": 417,
+        "function": "_iterencode",
+        "calls": 23303,
+        "self_seconds": 0.010400489,
+        "inclusive_seconds": 0.06526446300000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method _io.open_code>",
+        "calls": 846,
+        "self_seconds": 0.010367883000000001,
+        "inclusive_seconds": 0.010367883000000001
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 2507,
+        "function": "_signature_from_callable",
+        "calls": 1534,
+        "self_seconds": 0.010181904,
+        "inclusive_seconds": 0.060354216
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method _io.open>",
+        "calls": 352,
+        "self_seconds": 0.009360754,
+        "inclusive_seconds": 0.014018517000000001
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/model.py",
+        "line": 49,
+        "function": "forward",
+        "calls": 144,
+        "self_seconds": 0.009236752,
+        "inclusive_seconds": 0.141315144
+      },
+      {
+        "file": "<frozen posixpath>",
+        "line": 388,
+        "function": "realpath",
+        "calls": 907,
+        "self_seconds": 0.009028041,
+        "inclusive_seconds": 0.032685042000000004
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'join' of 'str' objects>",
+        "calls": 13718,
+        "self_seconds": 0.00899726,
+        "inclusive_seconds": 0.010612745
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'write' of '_io.TextIOWrapper' objects>",
+        "calls": 23304,
+        "self_seconds": 0.008946701000000001,
+        "inclusive_seconds": 0.008946701000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method __new__ of type object at 0x1548630>",
+        "calls": 24719,
+        "self_seconds": 0.008804491000000001,
+        "inclusive_seconds": 0.014390377000000001
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/multipledispatch/conflict.py",
+        "line": 7,
+        "function": "supercedes",
+        "calls": 15433,
+        "self_seconds": 0.008541651,
+        "inclusive_seconds": 0.012815638
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.len>",
+        "calls": 90439,
+        "self_seconds": 0.008455961,
+        "inclusive_seconds": 0.008652634000000001
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 304,
+        "function": "acquire",
+        "calls": 2462,
+        "self_seconds": 0.008172608000000001,
+        "inclusive_seconds": 0.022846693
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.einsum>",
+        "calls": 110,
+        "self_seconds": 0.008130062,
+        "inclusive_seconds": 0.008130062
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 1011,
+        "function": "getmodule",
+        "calls": 93,
+        "self_seconds": 0.008002767000000001,
+        "inclusive_seconds": 0.060886749000000004
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+        "calls": 37,
+        "self_seconds": 0.007460810000000001,
+        "inclusive_seconds": 0.007460810000000001
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/features.py",
+        "line": 20,
+        "function": "interp_init",
+        "calls": 36,
+        "self_seconds": 0.0072844450000000005,
+        "inclusive_seconds": 0.049127000000000004
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._nn.gelu>",
+        "calls": 162,
+        "self_seconds": 0.007204029000000001,
+        "inclusive_seconds": 0.007204029000000001
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/cuda/memory.py",
+        "line": 316,
+        "function": "_recurse_add_to_result",
+        "calls": 3220,
+        "self_seconds": 0.007034088000000001,
+        "inclusive_seconds": 0.008985076
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 2403,
+        "function": "_signature_from_function",
+        "calls": 760,
+        "self_seconds": 0.0069476040000000005,
+        "inclusive_seconds": 0.01959735
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'reshape' of 'torch._C.TensorBase' objects>",
+        "calls": 720,
+        "self_seconds": 0.006844385000000001,
+        "inclusive_seconds": 0.006844385000000001
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/cuda_rays.py",
+        "line": 74,
+        "function": "build",
+        "calls": 54,
+        "self_seconds": 0.006791898,
+        "inclusive_seconds": 0.0
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'get' of 'dict' objects>",
+        "calls": 42981,
+        "self_seconds": 0.006642500000000001,
+        "inclusive_seconds": 0.006709977000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.randperm>",
+        "calls": 1,
+        "self_seconds": 0.006419411000000001,
+        "inclusive_seconds": 0.006419411000000001
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/functools.py",
+        "line": 36,
+        "function": "update_wrapper",
+        "calls": 2321,
+        "self_seconds": 0.006231194000000001,
+        "inclusive_seconds": 0.011255503
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 1625,
+        "function": "find_spec",
+        "calls": 984,
+        "self_seconds": 0.006065748,
+        "inclusive_seconds": 0.033477608
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.eye>",
+        "calls": 1,
+        "self_seconds": 0.006040971,
+        "inclusive_seconds": 0.006040971
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._ops.profiler._record_function_enter_new>",
+        "calls": 284,
+        "self_seconds": 0.005922684,
+        "inclusive_seconds": 0.005922684
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/multipledispatch/conflict.py",
+        "line": 12,
+        "function": "consistent",
+        "calls": 6032,
+        "self_seconds": 0.005815565,
+        "inclusive_seconds": 0.012497715000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'append' of 'list' objects>",
+        "calls": 37828,
+        "self_seconds": 0.0057915810000000005,
+        "inclusive_seconds": 0.0057915810000000005
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/collections/__init__.py",
+        "line": 450,
+        "function": "_make",
+        "calls": 18558,
+        "self_seconds": 0.005733113000000001,
+        "inclusive_seconds": 0.009873468
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1358,
+        "function": "_find_and_load",
+        "calls": 3619,
+        "self_seconds": 0.005623833,
+        "inclusive_seconds": 0.0033487340000000003
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1240,
+        "function": "_find_spec",
+        "calls": 871,
+        "self_seconds": 0.005483111000000001,
+        "inclusive_seconds": 0.049107078000000005
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 131,
+        "function": "_path_join",
+        "calls": 5875,
+        "self_seconds": 0.0054050570000000004,
+        "inclusive_seconds": 0.013267889000000001
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/core/assumptions.py",
+        "line": 489,
+        "function": "as_property",
+        "calls": 31660,
+        "self_seconds": 0.00524941,
+        "inclusive_seconds": 0.00524941
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.replace>",
+        "calls": 88,
+        "self_seconds": 0.005133574,
+        "inclusive_seconds": 0.007206128000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.setattr>",
+        "calls": 22148,
+        "self_seconds": 0.005132193,
+        "inclusive_seconds": 0.005325206000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method '__exit__' of '_io._IOBase' objects>",
+        "calls": 1124,
+        "self_seconds": 0.005048351,
+        "inclusive_seconds": 0.005152338
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method _imp.create_dynamic>",
+        "calls": 3,
+        "self_seconds": 0.005022192,
+        "inclusive_seconds": 0.005022192
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 1094,
+        "function": "get_code",
+        "calls": 846,
+        "self_seconds": 0.004861398,
+        "inclusive_seconds": 0.172688323
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 1821,
+        "function": "_shadowed_dict",
+        "calls": 8637,
+        "self_seconds": 0.0048460330000000005,
+        "inclusive_seconds": 0.004853223
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.nonzero>",
+        "calls": 1,
+        "self_seconds": 0.004786635,
+        "inclusive_seconds": 0.004786635
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/multipledispatch/conflict.py",
+        "line": 24,
+        "function": "ambiguities",
+        "calls": 89,
+        "self_seconds": 0.0044945160000000005,
+        "inclusive_seconds": 0.02159463
+      },
+      {
+        "file": "scripts/experiment_worker.py",
+        "line": 60,
+        "function": "wrapped",
+        "calls": 247,
+        "self_seconds": 0.004318745000000001,
+        "inclusive_seconds": 2.1349559350000002
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/utils/_config_module.py",
+        "line": 237,
+        "function": "get_assignments_with_compile_ignored_comments",
+        "calls": 3,
+        "self_seconds": 0.004315393000000001,
+        "inclusive_seconds": 0.021975979
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/nn/modules/module.py",
+        "line": 1783,
+        "function": "_call_impl",
+        "calls": 2160,
+        "self_seconds": 0.004193298000000001,
+        "inclusive_seconds": 0.499739845
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method _imp.exec_dynamic>",
+        "calls": 3,
+        "self_seconds": 0.004165158,
+        "inclusive_seconds": 0.0041660080000000006
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.cat>",
+        "calls": 93,
+        "self_seconds": 0.004158025,
+        "inclusive_seconds": 0.004158025
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1306,
+        "function": "_find_and_load_unlocked",
+        "calls": 855,
+        "self_seconds": 0.004101593000000001,
+        "inclusive_seconds": 0.003180323
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 509,
+        "function": "cache_from_source",
+        "calls": 1692,
+        "self_seconds": 0.004084588,
+        "inclusive_seconds": 0.012141873000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.all>",
+        "calls": 23221,
+        "self_seconds": 0.004074924000000001,
+        "inclusive_seconds": 0.008605162000000001
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 372,
+        "function": "release",
+        "calls": 2462,
+        "self_seconds": 0.004071039,
+        "inclusive_seconds": 0.006240222
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._ops.profiler.>",
+        "calls": 284,
+        "self_seconds": 0.004028133000000001,
+        "inclusive_seconds": 0.004028133000000001
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 3063,
+        "function": "__init__",
+        "calls": 1357,
+        "self_seconds": 0.003941435,
+        "inclusive_seconds": 0.005364726
+      }
+    ],
+    "function_selection": "Top 100 by self_seconds; full pstats retained locally"
+  },
+  "diagnostic/timeline-cuda/trial-01/output/diagnostic.json": {
+    "spans": {
+      "file_hash": {
+        "calls": 72,
+        "seconds": 1.169003474933561
+      },
+      "manifest_commit": {
+        "calls": 23,
+        "seconds": 0.29133653701865114
+      },
+      "mapped_archive": {
+        "calls": 3,
+        "seconds": 2.728837229020428
+      },
+      "rays": {
+        "calls": 19,
+        "seconds": 1.9482376280066092
+      },
+      "input_hash": {
+        "calls": 36,
+        "seconds": 0.2841835880535655
+      },
+      "npy_commit": {
+        "calls": 58,
+        "seconds": 6.915082369931042
+      },
+      "corrector": {
+        "calls": 18,
+        "seconds": 3.672112444997765
+      },
+      "raw_interpolation": {
+        "calls": 18,
+        "seconds": 0.01368535595247522
+      },
+      "shard_write_inclusive": {
+        "calls": 18,
+        "seconds": 6.902196701004868
+      },
+      "finish_verify": {
+        "calls": 1,
+        "seconds": 0.5109846369887237
+      }
+    },
+    "caveat": "Diagnostic synchronized inclusive spans overlap and alter execution. Never use their sum or runtime as an unprofiled speed measurement.",
+    "functions": [
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.fsync>",
+        "calls": 88,
+        "self_seconds": 8.08763355,
+        "inclusive_seconds": 8.08763355
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._cuda_synchronize>",
+        "calls": 113,
+        "self_seconds": 3.1316002540000003,
+        "inclusive_seconds": 3.1316002540000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'update' of '_hashlib.HASH' objects>",
+        "calls": 962,
+        "self_seconds": 2.069977476,
+        "inclusive_seconds": 2.069977476
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/numpy/_core/memmap.py",
+        "line": 357,
+        "function": "__getitem__",
+        "calls": 147,
+        "self_seconds": 0.513746342,
+        "inclusive_seconds": 0.51499413
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._nn.linear>",
+        "calls": 936,
+        "self_seconds": 0.397251572,
+        "inclusive_seconds": 0.397251572
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/numpy/lib/format.py",
+        "line": 684,
+        "function": "write_array",
+        "calls": 58,
+        "self_seconds": 0.32603399,
+        "inclusive_seconds": 0.9886644760000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.as_tensor>",
+        "calls": 149,
+        "self_seconds": 0.250699312,
+        "inclusive_seconds": 0.250699312
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/storage.py",
+        "line": 290,
+        "function": "write_shard",
+        "calls": 18,
+        "self_seconds": 0.142893453,
+        "inclusive_seconds": 6.900844234
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method numpy.array>",
+        "calls": 149,
+        "self_seconds": 0.136292074,
+        "inclusive_seconds": 0.136292074
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method marshal.loads>",
+        "calls": 846,
+        "self_seconds": 0.103589178,
+        "inclusive_seconds": 0.103589178
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'read' of '_io.BufferedReader' objects>",
+        "calls": 2020,
+        "self_seconds": 0.101789815,
+        "inclusive_seconds": 0.101789815
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/_library/custom_ops.py",
+        "line": 607,
+        "function": "_register_to_dispatcher",
+        "calls": 10,
+        "self_seconds": 0.098032516,
+        "inclusive_seconds": 2.1791845860000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'astype' of 'numpy.ndarray' objects>",
+        "calls": 20,
+        "self_seconds": 0.09451273800000001,
+        "inclusive_seconds": 0.09451273800000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.exec>",
+        "calls": 1175,
+        "self_seconds": 0.092714405,
+        "inclusive_seconds": 0.0025529890000000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'write' of '_io.BufferedWriter' objects>",
+        "calls": 263,
+        "self_seconds": 0.082950695,
+        "inclusive_seconds": 0.082950695
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.__build_class__>",
+        "calls": 2248,
+        "self_seconds": 0.067279269,
+        "inclusive_seconds": 0.19977445600000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'cpu' of 'torch._C.TensorBase' objects>",
+        "calls": 57,
+        "self_seconds": 0.061055296,
+        "inclusive_seconds": 0.061055296
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._autograd._disable_profiler>",
+        "calls": 1,
+        "self_seconds": 0.051878182,
+        "inclusive_seconds": 0.051878182
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'tobytes' of 'numpy.ndarray' objects>",
+        "calls": 54,
+        "self_seconds": 0.037886575000000006,
+        "inclusive_seconds": 0.037886575000000006
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'median' of 'torch._C.TensorBase' objects>",
+        "calls": 1,
+        "self_seconds": 0.036706289,
+        "inclusive_seconds": 0.036706289
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method zlib.crc32>",
+        "calls": 165,
+        "self_seconds": 0.035551915,
+        "inclusive_seconds": 0.035551915
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/encoder.py",
+        "line": 336,
+        "function": "_iterencode_dict",
+        "calls": 62175,
+        "self_seconds": 0.03427303,
+        "inclusive_seconds": 0.053962197
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._unique2>",
+        "calls": 1,
+        "self_seconds": 0.029525482000000002,
+        "inclusive_seconds": 0.029525482000000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.isinstance>",
+        "calls": 175632,
+        "self_seconds": 0.029065229,
+        "inclusive_seconds": 0.029263678
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.nan_to_num>",
+        "calls": 75,
+        "self_seconds": 0.029037467,
+        "inclusive_seconds": 0.029037467
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._autograd._prepare_profiler>",
+        "calls": 1,
+        "self_seconds": 0.026445705000000003,
+        "inclusive_seconds": 0.026445705000000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.layer_norm>",
+        "calls": 450,
+        "self_seconds": 0.023385389000000003,
+        "inclusive_seconds": 0.023385389000000003
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/core/assumptions.py",
+        "line": 614,
+        "function": "_prepare_class_assumptions",
+        "calls": 479,
+        "self_seconds": 0.022431045,
+        "inclusive_seconds": 0.049721067
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.lstat>",
+        "calls": 10395,
+        "self_seconds": 0.020509954,
+        "inclusive_seconds": 0.020509954
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.stat>",
+        "calls": 4229,
+        "self_seconds": 0.018800434,
+        "inclusive_seconds": 0.01921116
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/storage.py",
+        "line": 32,
+        "function": "_json_value",
+        "calls": 8364,
+        "self_seconds": 0.018090618000000003,
+        "inclusive_seconds": 0.026745763000000002
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/autograd/profiler.py",
+        "line": 515,
+        "function": "export_chrome_trace",
+        "calls": 1,
+        "self_seconds": 0.018023839,
+        "inclusive_seconds": 0.018024027
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 779,
+        "function": "_compile_bytecode",
+        "calls": 846,
+        "self_seconds": 0.017173943,
+        "inclusive_seconds": 0.121286661
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/__init__.py",
+        "line": 120,
+        "function": "dump",
+        "calls": 23,
+        "self_seconds": 0.016805455,
+        "inclusive_seconds": 0.09007433000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.getattr>",
+        "calls": 76143,
+        "self_seconds": 0.016400355000000002,
+        "inclusive_seconds": 0.018545882
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/streaming.py",
+        "line": 131,
+        "function": "_batch_plan",
+        "calls": 1,
+        "self_seconds": 0.01631847,
+        "inclusive_seconds": 0.052491463
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.minimum>",
+        "calls": 36,
+        "self_seconds": 0.014437891000000001,
+        "inclusive_seconds": 0.014437891000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._nn.scaled_dot_product_attention>",
+        "calls": 288,
+        "self_seconds": 0.014243561,
+        "inclusive_seconds": 0.014243561
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/_library/custom_ops.py",
+        "line": 346,
+        "function": "backend_impl",
+        "calls": 108,
+        "self_seconds": 0.013181954000000001,
+        "inclusive_seconds": 0.0
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'copy' of 'dict' objects>",
+        "calls": 217,
+        "self_seconds": 0.012308181000000001,
+        "inclusive_seconds": 0.012308181000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.hasattr>",
+        "calls": 38939,
+        "self_seconds": 0.011985799,
+        "inclusive_seconds": 0.012463817
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.gather>",
+        "calls": 72,
+        "self_seconds": 0.011507315,
+        "inclusive_seconds": 0.011507315
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/dataclasses.py",
+        "line": 929,
+        "function": "_process_class",
+        "calls": 340,
+        "self_seconds": 0.010785257000000001,
+        "inclusive_seconds": 0.16384621100000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'tofile' of 'numpy.ndarray' objects>",
+        "calls": 4,
+        "self_seconds": 0.010777473000000001,
+        "inclusive_seconds": 0.010793293
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/encoder.py",
+        "line": 280,
+        "function": "_iterencode_list",
+        "calls": 15439,
+        "self_seconds": 0.010770418,
+        "inclusive_seconds": 0.032906539000000005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method _io.open_code>",
+        "calls": 846,
+        "self_seconds": 0.010360382000000001,
+        "inclusive_seconds": 0.010360382000000001
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/encoder.py",
+        "line": 417,
+        "function": "_iterencode",
+        "calls": 23303,
+        "self_seconds": 0.010293057000000001,
+        "inclusive_seconds": 0.06428431500000001
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 2507,
+        "function": "_signature_from_callable",
+        "calls": 1534,
+        "self_seconds": 0.010198916,
+        "inclusive_seconds": 0.060348289000000006
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/tokenize.py",
+        "line": 575,
+        "function": "_generate_tokens_from_c_tokenizer",
+        "calls": 18584,
+        "self_seconds": 0.010080187000000001,
+        "inclusive_seconds": 0.019513964
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method _io.open>",
+        "calls": 352,
+        "self_seconds": 0.009437369000000001,
+        "inclusive_seconds": 0.014288557
+      },
+      {
+        "file": "<frozen posixpath>",
+        "line": 388,
+        "function": "realpath",
+        "calls": 907,
+        "self_seconds": 0.00933157,
+        "inclusive_seconds": 0.03355252
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/model.py",
+        "line": 49,
+        "function": "forward",
+        "calls": 144,
+        "self_seconds": 0.008993830000000001,
+        "inclusive_seconds": 0.137230186
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method __new__ of type object at 0x1548630>",
+        "calls": 24719,
+        "self_seconds": 0.008776381,
+        "inclusive_seconds": 0.014406089
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'write' of '_io.TextIOWrapper' objects>",
+        "calls": 23304,
+        "self_seconds": 0.008723985,
+        "inclusive_seconds": 0.008723985
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/multipledispatch/conflict.py",
+        "line": 7,
+        "function": "supercedes",
+        "calls": 15509,
+        "self_seconds": 0.008530267000000001,
+        "inclusive_seconds": 0.012813914000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.len>",
+        "calls": 90322,
+        "self_seconds": 0.008453812,
+        "inclusive_seconds": 0.008653666
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 1011,
+        "function": "getmodule",
+        "calls": 93,
+        "self_seconds": 0.008248,
+        "inclusive_seconds": 0.06161269900000001
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 304,
+        "function": "acquire",
+        "calls": 2462,
+        "self_seconds": 0.007915233,
+        "inclusive_seconds": 0.022207915
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+        "calls": 37,
+        "self_seconds": 0.007179811,
+        "inclusive_seconds": 0.007179811
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/_library/custom_ops.py",
+        "line": 697,
+        "function": "__call__",
+        "calls": 54,
+        "self_seconds": 0.007142548,
+        "inclusive_seconds": 0.0
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._nn.gelu>",
+        "calls": 162,
+        "self_seconds": 0.007090021,
+        "inclusive_seconds": 0.007090021
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/cuda/memory.py",
+        "line": 316,
+        "function": "_recurse_add_to_result",
+        "calls": 3220,
+        "self_seconds": 0.007087321000000001,
+        "inclusive_seconds": 0.009267520000000001
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-v2-source/relift/features.py",
+        "line": 20,
+        "function": "interp_init",
+        "calls": 36,
+        "self_seconds": 0.0070712760000000005,
+        "inclusive_seconds": 0.048605720000000005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'reshape' of 'torch._C.TensorBase' objects>",
+        "calls": 720,
+        "self_seconds": 0.006914062,
+        "inclusive_seconds": 0.006914062
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 2403,
+        "function": "_signature_from_function",
+        "calls": 760,
+        "self_seconds": 0.006895786,
+        "inclusive_seconds": 0.019591473
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'get' of 'dict' objects>",
+        "calls": 43393,
+        "self_seconds": 0.006680232,
+        "inclusive_seconds": 0.006752946
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.randperm>",
+        "calls": 1,
+        "self_seconds": 0.006417281,
+        "inclusive_seconds": 0.006417281
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/functools.py",
+        "line": 36,
+        "function": "update_wrapper",
+        "calls": 2321,
+        "self_seconds": 0.0062101890000000005,
+        "inclusive_seconds": 0.011187309000000001
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 1625,
+        "function": "find_spec",
+        "calls": 984,
+        "self_seconds": 0.006188377,
+        "inclusive_seconds": 0.034015498000000005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.eye>",
+        "calls": 1,
+        "self_seconds": 0.006033087,
+        "inclusive_seconds": 0.006033087
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._ops.profiler._record_function_enter_new>",
+        "calls": 284,
+        "self_seconds": 0.00592255,
+        "inclusive_seconds": 0.00592255
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'append' of 'list' objects>",
+        "calls": 37826,
+        "self_seconds": 0.005814652,
+        "inclusive_seconds": 0.005814652
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1358,
+        "function": "_find_and_load",
+        "calls": 3619,
+        "self_seconds": 0.0058074680000000005,
+        "inclusive_seconds": 0.003370179
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/multipledispatch/conflict.py",
+        "line": 12,
+        "function": "consistent",
+        "calls": 6032,
+        "self_seconds": 0.0057763680000000005,
+        "inclusive_seconds": 0.012513119000000001
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/collections/__init__.py",
+        "line": 450,
+        "function": "_make",
+        "calls": 18558,
+        "self_seconds": 0.005505834,
+        "inclusive_seconds": 0.009529465
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1240,
+        "function": "_find_spec",
+        "calls": 871,
+        "self_seconds": 0.005452704,
+        "inclusive_seconds": 0.049626099
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.replace>",
+        "calls": 88,
+        "self_seconds": 0.005429263,
+        "inclusive_seconds": 0.007503828000000001
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 131,
+        "function": "_path_join",
+        "calls": 5875,
+        "self_seconds": 0.005385152000000001,
+        "inclusive_seconds": 0.008770659
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/core/assumptions.py",
+        "line": 489,
+        "function": "as_property",
+        "calls": 31660,
+        "self_seconds": 0.0052623850000000005,
+        "inclusive_seconds": 0.0052623850000000005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method '__exit__' of '_io._IOBase' objects>",
+        "calls": 1124,
+        "self_seconds": 0.005112587,
+        "inclusive_seconds": 0.005249521
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.setattr>",
+        "calls": 22148,
+        "self_seconds": 0.005102698,
+        "inclusive_seconds": 0.0052941920000000005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method _imp.create_dynamic>",
+        "calls": 3,
+        "self_seconds": 0.00506104,
+        "inclusive_seconds": 0.00506104
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 1821,
+        "function": "_shadowed_dict",
+        "calls": 8637,
+        "self_seconds": 0.005007344,
+        "inclusive_seconds": 0.0050150030000000005
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 1094,
+        "function": "get_code",
+        "calls": 846,
+        "self_seconds": 0.0048997910000000006,
+        "inclusive_seconds": 0.18275054000000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.nonzero>",
+        "calls": 1,
+        "self_seconds": 0.004670870000000001,
+        "inclusive_seconds": 0.004670870000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'join' of 'str' objects>",
+        "calls": 13718,
+        "self_seconds": 0.0045373850000000005,
+        "inclusive_seconds": 0.006178956
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/multipledispatch/conflict.py",
+        "line": 24,
+        "function": "ambiguities",
+        "calls": 89,
+        "self_seconds": 0.004487461,
+        "inclusive_seconds": 0.021674772000000002
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/numpy/_core/memmap.py",
+        "line": 214,
+        "function": "__new__",
+        "calls": 8,
+        "self_seconds": 0.004322806,
+        "inclusive_seconds": 0.006521289
+      },
+      {
+        "file": "scripts/experiment_worker.py",
+        "line": 60,
+        "function": "wrapped",
+        "calls": 247,
+        "self_seconds": 0.004230861000000001,
+        "inclusive_seconds": 2.097282807
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/nn/modules/module.py",
+        "line": 1783,
+        "function": "_call_impl",
+        "calls": 2160,
+        "self_seconds": 0.00416222,
+        "inclusive_seconds": 0.492951646
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method _imp.exec_dynamic>",
+        "calls": 3,
+        "self_seconds": 0.004150714000000001,
+        "inclusive_seconds": 0.004151715
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.all>",
+        "calls": 23295,
+        "self_seconds": 0.004129287000000001,
+        "inclusive_seconds": 0.008844281
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1306,
+        "function": "_find_and_load_unlocked",
+        "calls": 855,
+        "self_seconds": 0.004121420000000001,
+        "inclusive_seconds": 0.0032109760000000004
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 372,
+        "function": "release",
+        "calls": 2462,
+        "self_seconds": 0.004115645,
+        "inclusive_seconds": 0.006287498000000001
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/utils/_config_module.py",
+        "line": 237,
+        "function": "get_assignments_with_compile_ignored_comments",
+        "calls": 3,
+        "self_seconds": 0.004073871000000001,
+        "inclusive_seconds": 0.020825091
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 509,
+        "function": "cache_from_source",
+        "calls": 1692,
+        "self_seconds": 0.004068176000000001,
+        "inclusive_seconds": 0.012087935000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._ops.profiler.>",
+        "calls": 284,
+        "self_seconds": 0.003993605,
+        "inclusive_seconds": 0.003993605
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.cat>",
+        "calls": 93,
+        "self_seconds": 0.0039765700000000005,
+        "inclusive_seconds": 0.0039765700000000005
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 3063,
+        "function": "__init__",
+        "calls": 1357,
+        "self_seconds": 0.003902402,
+        "inclusive_seconds": 0.005289172
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/re/_parser.py",
+        "line": 511,
+        "function": "_parse",
+        "calls": 197,
+        "self_seconds": 0.0038760200000000004,
+        "inclusive_seconds": 0.010428274000000001
+      }
+    ],
+    "function_selection": "Top 100 by self_seconds; full pstats retained locally"
+  },
+  "eager-diagnostic/timeline-eager/trial-01/output/diagnostic.json": {
+    "spans": {
+      "file_hash": {
+        "calls": 72,
+        "seconds": 1.2031013488885947
+      },
+      "manifest_commit": {
+        "calls": 23,
+        "seconds": 0.2661145879828837
+      },
+      "mapped_archive": {
+        "calls": 3,
+        "seconds": 2.7369931929861195
+      },
+      "rays": {
+        "calls": 19,
+        "seconds": 0.961257532966556
+      },
+      "input_hash": {
+        "calls": 36,
+        "seconds": 0.28409125210600905
+      },
+      "npy_commit": {
+        "calls": 58,
+        "seconds": 5.112457546900259
+      },
+      "corrector": {
+        "calls": 18,
+        "seconds": 3.661864958005026
+      },
+      "raw_interpolation": {
+        "calls": 18,
+        "seconds": 0.013649862026795745
+      },
+      "shard_write_inclusive": {
+        "calls": 18,
+        "seconds": 5.015505636984017
+      },
+      "finish_verify": {
+        "calls": 1,
+        "seconds": 0.5041145930008497
+      }
+    },
+    "caveat": "Diagnostic synchronized inclusive spans overlap and alter execution. Never use their sum or runtime as an unprofiled speed measurement.",
+    "functions": [
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.fsync>",
+        "calls": 88,
+        "self_seconds": 6.288337825,
+        "inclusive_seconds": 6.288337825
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._cuda_synchronize>",
+        "calls": 113,
+        "self_seconds": 3.1155056670000003,
+        "inclusive_seconds": 3.1155056670000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'update' of '_hashlib.HASH' objects>",
+        "calls": 962,
+        "self_seconds": 2.084319706,
+        "inclusive_seconds": 2.084319706
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/numpy/_core/memmap.py",
+        "line": 357,
+        "function": "__getitem__",
+        "calls": 147,
+        "self_seconds": 0.5243630450000001,
+        "inclusive_seconds": 0.525641645
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._nn.linear>",
+        "calls": 936,
+        "self_seconds": 0.39848140200000004,
+        "inclusive_seconds": 0.39848140200000004
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/numpy/lib/format.py",
+        "line": 684,
+        "function": "write_array",
+        "calls": 58,
+        "self_seconds": 0.301733592,
+        "inclusive_seconds": 0.937882736
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.as_tensor>",
+        "calls": 149,
+        "self_seconds": 0.261135022,
+        "inclusive_seconds": 0.261135022
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-eager-source/relift/storage.py",
+        "line": 290,
+        "function": "write_shard",
+        "calls": 18,
+        "self_seconds": 0.14186879700000002,
+        "inclusive_seconds": 5.014321997000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method numpy.array>",
+        "calls": 149,
+        "self_seconds": 0.127366154,
+        "inclusive_seconds": 0.127366154
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/_library/custom_ops.py",
+        "line": 607,
+        "function": "_register_to_dispatcher",
+        "calls": 9,
+        "self_seconds": 0.09446101600000001,
+        "inclusive_seconds": 0.07620850300000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method marshal.loads>",
+        "calls": 846,
+        "self_seconds": 0.09217805700000001,
+        "inclusive_seconds": 0.09217805700000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'astype' of 'numpy.ndarray' objects>",
+        "calls": 20,
+        "self_seconds": 0.091689383,
+        "inclusive_seconds": 0.091689383
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-eager-source/relift/streaming.py",
+        "line": 21,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 0.090638825,
+        "inclusive_seconds": 2.168882495
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.exec>",
+        "calls": 1174,
+        "self_seconds": 0.085130728,
+        "inclusive_seconds": 0.0023683750000000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'read' of '_io.BufferedReader' objects>",
+        "calls": 2018,
+        "self_seconds": 0.083119303,
+        "inclusive_seconds": 0.083119303
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'write' of '_io.BufferedWriter' objects>",
+        "calls": 263,
+        "self_seconds": 0.07819674,
+        "inclusive_seconds": 0.07819674
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/_dynamo/variables/functions.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 0.070366985,
+        "inclusive_seconds": 5.335001082000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'cpu' of 'torch._C.TensorBase' objects>",
+        "calls": 57,
+        "self_seconds": 0.059693911,
+        "inclusive_seconds": 0.059693911
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._autograd._disable_profiler>",
+        "calls": 1,
+        "self_seconds": 0.051863604,
+        "inclusive_seconds": 0.051863604
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/core/facts.py",
+        "line": 599,
+        "function": "deduce_all_facts",
+        "calls": 136,
+        "self_seconds": 0.041958778,
+        "inclusive_seconds": 0.044191346
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'median' of 'torch._C.TensorBase' objects>",
+        "calls": 1,
+        "self_seconds": 0.036332734000000005,
+        "inclusive_seconds": 0.036332734000000005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method zlib.crc32>",
+        "calls": 165,
+        "self_seconds": 0.035533029,
+        "inclusive_seconds": 0.035533029
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'tobytes' of 'numpy.ndarray' objects>",
+        "calls": 54,
+        "self_seconds": 0.035335774,
+        "inclusive_seconds": 0.035335774
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/encoder.py",
+        "line": 336,
+        "function": "_iterencode_dict",
+        "calls": 62175,
+        "self_seconds": 0.033581242000000004,
+        "inclusive_seconds": 0.05283982
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.isinstance>",
+        "calls": 174208,
+        "self_seconds": 0.027869049000000003,
+        "inclusive_seconds": 0.028076720000000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.__build_class__>",
+        "calls": 2247,
+        "self_seconds": 0.027664201000000003,
+        "inclusive_seconds": 0.198131677
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.layer_norm>",
+        "calls": 450,
+        "self_seconds": 0.024339158000000003,
+        "inclusive_seconds": 0.024339158000000003
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/core/assumptions.py",
+        "line": 614,
+        "function": "_prepare_class_assumptions",
+        "calls": 479,
+        "self_seconds": 0.022349203,
+        "inclusive_seconds": 0.08896998
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.lstat>",
+        "calls": 10328,
+        "self_seconds": 0.020158446,
+        "inclusive_seconds": 0.020158446
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/autograd/profiler.py",
+        "line": 515,
+        "function": "export_chrome_trace",
+        "calls": 1,
+        "self_seconds": 0.017988154000000003,
+        "inclusive_seconds": 0.017988351
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-eager-source/relift/storage.py",
+        "line": 32,
+        "function": "_json_value",
+        "calls": 8364,
+        "self_seconds": 0.017780627,
+        "inclusive_seconds": 0.026164853000000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.getattr>",
+        "calls": 75873,
+        "self_seconds": 0.016306386000000003,
+        "inclusive_seconds": 0.018357088
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-eager-source/relift/streaming.py",
+        "line": 131,
+        "function": "_batch_plan",
+        "calls": 1,
+        "self_seconds": 0.016282586,
+        "inclusive_seconds": 0.035496755000000005
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/__init__.py",
+        "line": 120,
+        "function": "dump",
+        "calls": 23,
+        "self_seconds": 0.016244358,
+        "inclusive_seconds": 0.08807263600000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.nan_to_num>",
+        "calls": 75,
+        "self_seconds": 0.015077932,
+        "inclusive_seconds": 0.015077932
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._nn.scaled_dot_product_attention>",
+        "calls": 288,
+        "self_seconds": 0.01488328,
+        "inclusive_seconds": 0.01488328
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.minimum>",
+        "calls": 36,
+        "self_seconds": 0.014349573000000001,
+        "inclusive_seconds": 0.014349573000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.stat>",
+        "calls": 4218,
+        "self_seconds": 0.013881594,
+        "inclusive_seconds": 0.014285286000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._unique2>",
+        "calls": 1,
+        "self_seconds": 0.012356792,
+        "inclusive_seconds": 0.012356792
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 779,
+        "function": "_compile_bytecode",
+        "calls": 846,
+        "self_seconds": 0.011868092,
+        "inclusive_seconds": 0.104575728
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.hasattr>",
+        "calls": 37761,
+        "self_seconds": 0.011742401000000001,
+        "inclusive_seconds": 5.845100000000001e-05
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.gather>",
+        "calls": 72,
+        "self_seconds": 0.011373758000000001,
+        "inclusive_seconds": 0.011373758000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._autograd._prepare_profiler>",
+        "calls": 1,
+        "self_seconds": 0.011334246000000001,
+        "inclusive_seconds": 0.011334246000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'tofile' of 'numpy.ndarray' objects>",
+        "calls": 4,
+        "self_seconds": 0.010910092000000001,
+        "inclusive_seconds": 0.010926043
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/dataclasses.py",
+        "line": 929,
+        "function": "_process_class",
+        "calls": 339,
+        "self_seconds": 0.010653836,
+        "inclusive_seconds": 0.157343486
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/encoder.py",
+        "line": 280,
+        "function": "_iterencode_list",
+        "calls": 15439,
+        "self_seconds": 0.01053801,
+        "inclusive_seconds": 0.032371174
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method _io.open_code>",
+        "calls": 846,
+        "self_seconds": 0.010203564,
+        "inclusive_seconds": 0.010203564
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/tokenize.py",
+        "line": 575,
+        "function": "_generate_tokens_from_c_tokenizer",
+        "calls": 18584,
+        "self_seconds": 0.010075743,
+        "inclusive_seconds": 0.019463473000000002
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-eager-source/relift/streaming.py",
+        "line": 63,
+        "function": "rays",
+        "calls": 19,
+        "self_seconds": 0.010049126,
+        "inclusive_seconds": 0.957099644
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/json/encoder.py",
+        "line": 417,
+        "function": "_iterencode",
+        "calls": 23303,
+        "self_seconds": 0.010037275,
+        "inclusive_seconds": 0.062917911
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-eager-source/relift/model.py",
+        "line": 49,
+        "function": "forward",
+        "calls": 144,
+        "self_seconds": 0.009582473000000001,
+        "inclusive_seconds": 0.143476291
+      },
+      {
+        "file": "<frozen posixpath>",
+        "line": 388,
+        "function": "realpath",
+        "calls": 901,
+        "self_seconds": 0.009299944000000001,
+        "inclusive_seconds": 0.032994569
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method _io.open>",
+        "calls": 349,
+        "self_seconds": 0.009292482000000001,
+        "inclusive_seconds": 0.013927246
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/multipledispatch/conflict.py",
+        "line": 7,
+        "function": "supercedes",
+        "calls": 15704,
+        "self_seconds": 0.008839833,
+        "inclusive_seconds": 0.013277738
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method __new__ of type object at 0x1548630>",
+        "calls": 24715,
+        "self_seconds": 0.008805667000000001,
+        "inclusive_seconds": 0.014307469000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'write' of '_io.TextIOWrapper' objects>",
+        "calls": 23304,
+        "self_seconds": 0.008593127,
+        "inclusive_seconds": 0.008593127
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.len>",
+        "calls": 90690,
+        "self_seconds": 0.008496174,
+        "inclusive_seconds": 0.008688599
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 2507,
+        "function": "_signature_from_callable",
+        "calls": 1530,
+        "self_seconds": 0.008215668,
+        "inclusive_seconds": 0.051573811000000004
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 304,
+        "function": "acquire",
+        "calls": 2464,
+        "self_seconds": 0.008073326,
+        "inclusive_seconds": 0.022614826
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 1011,
+        "function": "getmodule",
+        "calls": 91,
+        "self_seconds": 0.0075464650000000005,
+        "inclusive_seconds": 0.059561489
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'reduce' of 'numpy.ufunc' objects>",
+        "calls": 37,
+        "self_seconds": 0.007521615000000001,
+        "inclusive_seconds": 0.007521615000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.eye>",
+        "calls": 1,
+        "self_seconds": 0.007432715,
+        "inclusive_seconds": 0.007432715
+      },
+      {
+        "file": "outputs/experiments/rays-timeline-eager-source/relift/features.py",
+        "line": 20,
+        "function": "interp_init",
+        "calls": 36,
+        "self_seconds": 0.007289834,
+        "inclusive_seconds": 0.048931764
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._C._nn.gelu>",
+        "calls": 162,
+        "self_seconds": 0.0071385500000000005,
+        "inclusive_seconds": 0.0071385500000000005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'reshape' of 'torch._C.TensorBase' objects>",
+        "calls": 720,
+        "self_seconds": 0.006756328000000001,
+        "inclusive_seconds": 0.006756328000000001
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/cuda/memory.py",
+        "line": 316,
+        "function": "_recurse_add_to_result",
+        "calls": 3220,
+        "self_seconds": 0.006673032000000001,
+        "inclusive_seconds": 0.008585611
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.randperm>",
+        "calls": 1,
+        "self_seconds": 0.006629077000000001,
+        "inclusive_seconds": 0.006629077000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.nonzero>",
+        "calls": 1,
+        "self_seconds": 0.0066179690000000005,
+        "inclusive_seconds": 0.0066179690000000005
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 2403,
+        "function": "_signature_from_function",
+        "calls": 758,
+        "self_seconds": 0.006593264000000001,
+        "inclusive_seconds": 0.022408530000000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'get' of 'dict' objects>",
+        "calls": 41865,
+        "self_seconds": 0.006582157000000001,
+        "inclusive_seconds": 0.006639908000000001
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/functools.py",
+        "line": 36,
+        "function": "update_wrapper",
+        "calls": 2319,
+        "self_seconds": 0.006535169,
+        "inclusive_seconds": 0.011521914000000001
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 2775,
+        "function": "__init__",
+        "calls": 2528,
+        "self_seconds": 0.0062038710000000006,
+        "inclusive_seconds": 0.009130522
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 1625,
+        "function": "find_spec",
+        "calls": 984,
+        "self_seconds": 0.006053795000000001,
+        "inclusive_seconds": 0.028740276000000002
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/multipledispatch/conflict.py",
+        "line": 12,
+        "function": "consistent",
+        "calls": 6032,
+        "self_seconds": 0.005938397000000001,
+        "inclusive_seconds": 0.013053793000000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'append' of 'list' objects>",
+        "calls": 37797,
+        "self_seconds": 0.005758434000000001,
+        "inclusive_seconds": 0.005758434000000001
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1358,
+        "function": "_find_and_load",
+        "calls": 3618,
+        "self_seconds": 0.005745355000000001,
+        "inclusive_seconds": 0.0036013700000000004
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch._ops.profiler._record_function_enter_new>",
+        "calls": 284,
+        "self_seconds": 0.005624761000000001,
+        "inclusive_seconds": 0.005624761000000001
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/collections/__init__.py",
+        "line": 450,
+        "function": "_make",
+        "calls": 18558,
+        "self_seconds": 0.005495127000000001,
+        "inclusive_seconds": 0.009477708000000001
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1240,
+        "function": "_find_spec",
+        "calls": 871,
+        "self_seconds": 0.005453623,
+        "inclusive_seconds": 0.044287799
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 131,
+        "function": "_path_join",
+        "calls": 5875,
+        "self_seconds": 0.005270768,
+        "inclusive_seconds": 0.008642012000000001
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 1821,
+        "function": "_shadowed_dict",
+        "calls": 8635,
+        "self_seconds": 0.00517979,
+        "inclusive_seconds": 0.0051877220000000005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method posix.replace>",
+        "calls": 88,
+        "self_seconds": 0.005150308,
+        "inclusive_seconds": 0.0071716390000000005
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/core/assumptions.py",
+        "line": 489,
+        "function": "as_property",
+        "calls": 31660,
+        "self_seconds": 0.005131409,
+        "inclusive_seconds": 0.005131409
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.setattr>",
+        "calls": 22126,
+        "self_seconds": 0.005131366,
+        "inclusive_seconds": 0.005321578
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method _imp.create_dynamic>",
+        "calls": 3,
+        "self_seconds": 0.004973174,
+        "inclusive_seconds": 0.004973174
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method '__exit__' of '_io._IOBase' objects>",
+        "calls": 1121,
+        "self_seconds": 0.0048551060000000005,
+        "inclusive_seconds": 0.004980208000000001
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 1094,
+        "function": "get_code",
+        "calls": 846,
+        "self_seconds": 0.004785862,
+        "inclusive_seconds": 0.144334395
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/_decomp/decompositions_for_rng.py",
+        "line": 66,
+        "function": "PhiloxState",
+        "calls": 1,
+        "self_seconds": 0.004777248,
+        "inclusive_seconds": 0.004777248
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/sympy/multipledispatch/conflict.py",
+        "line": 24,
+        "function": "ambiguities",
+        "calls": 89,
+        "self_seconds": 0.004610305,
+        "inclusive_seconds": 0.022754243
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/inspect.py",
+        "line": 3063,
+        "function": "__init__",
+        "calls": 1354,
+        "self_seconds": 0.0045034440000000005,
+        "inclusive_seconds": 0.005905692000000001
+      },
+      {
+        "file": "scripts/experiment_worker.py",
+        "line": 60,
+        "function": "wrapped",
+        "calls": 266,
+        "self_seconds": 0.004485945,
+        "inclusive_seconds": 13.742241853000001
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/nn/modules/module.py",
+        "line": 1783,
+        "function": "_call_impl",
+        "calls": 2160,
+        "self_seconds": 0.0043956690000000005,
+        "inclusive_seconds": 0.49805062200000005
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'join' of 'str' objects>",
+        "calls": 13700,
+        "self_seconds": 0.004354438,
+        "inclusive_seconds": 0.006020013
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.all>",
+        "calls": 23468,
+        "self_seconds": 0.004254187,
+        "inclusive_seconds": 0.009052656000000001
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1306,
+        "function": "_find_and_load_unlocked",
+        "calls": 854,
+        "self_seconds": 0.004135686,
+        "inclusive_seconds": 0.0034068070000000004
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 372,
+        "function": "release",
+        "calls": 2464,
+        "self_seconds": 0.004126296000000001,
+        "inclusive_seconds": 0.006278653
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method torch.cat>",
+        "calls": 93,
+        "self_seconds": 0.004122835,
+        "inclusive_seconds": 0.004122835
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/dataclasses.py",
+        "line": 470,
+        "function": "add_fns_to_class",
+        "calls": 339,
+        "self_seconds": 0.004119314000000001,
+        "inclusive_seconds": 0.090340114
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/torch/utils/_config_module.py",
+        "line": 237,
+        "function": "get_assignments_with_compile_ignored_comments",
+        "calls": 3,
+        "self_seconds": 0.004110021,
+        "inclusive_seconds": 0.020665718
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 509,
+        "function": "cache_from_source",
+        "calls": 1692,
+        "self_seconds": 0.0040561830000000005,
+        "inclusive_seconds": 0.012037129
+      }
+    ],
+    "function_selection": "Top 100 by self_seconds; full pstats retained locally"
+  }
+}

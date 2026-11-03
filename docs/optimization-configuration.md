@@ -11,7 +11,7 @@ and trajectory-store provenance; changed settings invalidate resume.
 | `gather` | `current` | `current`, reusable-buffer `python`, native `cpp` gathering |
 | `shards` | `current` | `current`, `python`, `cpp` shard packing and optional native writing |
 | `shard_writer` | `null` | Inherit `shards`; explicit `current`/`cpp` isolates packing from payload writing |
-| `rays` | `current` | `current`, blocked `python`, CUDA preparation with PyTorch rotation |
+| `rays` | `current` | `current`, blocked `python`, `cuda` per-block rotation, `cuda_timeline` full-timeline rotation |
 | `da3_weights` | `current` | `current`, packed `python`, packed `cpp` |
 | `da3_features` | `current` | `current`, archived `python`, archived `cpp`; disk mode only |
 | `tracker_init_weights` | `false` | Skip discarded pretrained initialization; `true` restores old initialization |
@@ -34,6 +34,12 @@ packed DA3 weights require RAM/disk placement and feature archives require disk.
 The original fully fused CUDA ray prototype failed the full-output gate. The
 corrected preparation path retains PyTorch rotation and passes the recorded full
 comparison, but remains experimental because it is slower. See the ray bug audit.
+The [profiling follow-up](native-optimization-experiments/cuda-ray-profile.md)
+adds `cuda_timeline` as a separate opt-in experiment. It keeps bounded depth
+uploads, performs the original PyTorch rotation once over the timeline, and uses
+a validated eager native launch to avoid registered-operator first-dispatch cost.
+Select it with `--opt rays='"cuda_timeline"'` or
+`configs/optimizations/rays-cuda-timeline.json`; a `--cuda` native build is required.
 
 ## CLI configuration
 

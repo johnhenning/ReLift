@@ -76,3 +76,23 @@ def test_direct_operator_rejects_inexact_large_pixel_bounds_without_allocation(f
         with pytest.raises(ValueError,match="pixel-index"):
             if isinstance(build,TimelineRayBuilder): build.camera(coords,depth,K)
             else: build.operator(coords,depth,K,K)
+
+
+def test_timeline_registered_and_eager_launches_match_with_fake_registration():
+    if not os.environ.get('RELIFT_NATIVE_BUILD'): pytest.skip('explicit native build required')
+    native=load_cpu()
+    if not hasattr(native,'launch_camera_rays'): pytest.skip('CUDA build required')
+    eager=TimelineRayBuilder(native)
+    registered=TimelineRayBuilder(native,registered=True)
+    coords=torch.tensor([[[.5,.5],[2.,1.],[float('nan'),0.]]],device='cuda')
+    depth=torch.arange(15,device='cuda',dtype=torch.float32).reshape(1,3,5)
+    K=torch.eye(3,device='cuda')[None]
+    for a,b in zip(eager(coords,depth,K,K),registered(coords,depth,K,K)):
+        torch.testing.assert_close(a,b,rtol=0,atol=0)
+    from torch._subclasses.fake_tensor import FakeTensorMode
+    with FakeTensorMode():
+        coords=torch.empty((2,7,2),device='cuda')
+        depth=torch.empty((2,9,11),device='cuda')
+        K=torch.empty((2,3,3),device='cuda')
+        direction,distance=registered.camera(coords,depth,K)
+        assert direction.shape==(2,7,3) and distance.shape==(2,7)

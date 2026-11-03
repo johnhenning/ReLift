@@ -86,26 +86,34 @@ class TimelineRayBuilder:
     einsum and its output layout. MappedObservations performs final sanitization.
     The four-argument callable remains compatible with injected ray builders.
     """
-    def __init__(self,native):
+    def __init__(self,native,registered=False):
         if not hasattr(native,"launch_camera_rays"):
             raise RuntimeError("Selected CUDA rays require a --cuda native build")
+        def camera(coords,depth,K):
+            _validate(coords,depth,K)
+            coords,depth,K=(value.contiguous() for value in (coords,depth,K))
+            T,N,_=coords.shape
+            H,W=depth.shape[1:]
+            direction=coords.new_empty((T,N,3))
+            distance=coords.new_empty((T,N))
+            with torch.cuda.device(coords.device):
+                native.launch_camera_rays(coords.data_ptr(),depth.data_ptr(),K.data_ptr(),
+                                          direction.data_ptr(),distance.data_ptr(),T,N,H,W,
+                                          torch.cuda.current_stream(coords.device).cuda_stream)
+            return direction,distance
+        # In ordinary inference a custom_op's first dispatch imports compiler /
+        # fake-tensor machinery. The validated eager launch needs none of it.
+        # Explicit registration remains available for graph-capture experiments.
+        self.camera=camera
+        if not registered:
+            return
         name="camera_"+_identity(native)
         try:
             operator=getattr(torch.ops.relift_native,name)
         except AttributeError:
             @torch.library.custom_op("relift_native::"+name,mutates_args=(),device_types="cuda")
             def operator(coords:torch.Tensor,depth:torch.Tensor,K:torch.Tensor)->tuple[torch.Tensor,torch.Tensor]:
-                _validate(coords,depth,K)
-                coords,depth,K=(value.contiguous() for value in (coords,depth,K))
-                T,N,_=coords.shape
-                H,W=depth.shape[1:]
-                camera=coords.new_empty((T,N,3))
-                distance=coords.new_empty((T,N))
-                with torch.cuda.device(coords.device):
-                    native.launch_camera_rays(coords.data_ptr(),depth.data_ptr(),K.data_ptr(),
-                                              camera.data_ptr(),distance.data_ptr(),T,N,H,W,
-                                              torch.cuda.current_stream(coords.device).cuda_stream)
-                return camera,distance
+                return camera(coords,depth,K)
 
             @operator.register_fake
             def fake(coords,depth,K):
