@@ -1,11 +1,16 @@
 """Validated experiment settings and injectable construction, with no global cache."""
-from dataclasses import asdict, dataclass, fields, replace
-from functools import partial
-import hashlib
+
+from __future__ import annotations
+
 import json
 import math
+from collections.abc import Callable
+from dataclasses import asdict, dataclass, fields, replace
+from functools import partial
 from pathlib import Path
-from typing import Callable
+from typing import Any
+
+import torch
 
 
 @dataclass(frozen=True)
@@ -27,38 +32,51 @@ class OptimizationConfig:
     compile_corrector: bool = False
     reuse_da3: bool = False
 
-    def __post_init__(self):
-        for key, choices in dict(gather=("current","python","cpp"), shards=("current","python","cpp"),
-                                 shard_writer=(None,"current","cpp"),
-                                 rays=("current","python","cuda","cuda_timeline"), da3_weights=("current","python","cpp"),
-                                 da3_features=("current","python","cpp")).items():
-            if getattr(self,key) not in choices:
+    def __post_init__(self) -> None:
+        for key, choices in dict(
+            gather=("current", "python", "cpp"),
+            shards=("current", "python", "cpp"),
+            shard_writer=(None, "current", "cpp"),
+            rays=("current", "python", "cuda", "cuda_timeline"),
+            da3_weights=("current", "python", "cpp"),
+            da3_features=("current", "python", "cpp"),
+        ).items():
+            if getattr(self, key) not in choices:
                 raise ValueError(f"{key} must be one of {choices}")
-        for key in ("tracker_init_weights","tracker_copy_outputs","hash_writes","prefetch","compile_corrector","reuse_da3"):
-            if type(getattr(self,key)) is not bool:
+        for key in (
+            "tracker_init_weights",
+            "tracker_copy_outputs",
+            "hash_writes",
+            "prefetch",
+            "compile_corrector",
+            "reuse_da3",
+        ):
+            if type(getattr(self, key)) is not bool:
                 raise TypeError(f"{key} must be a boolean")
-        for key in ('depth_cache_mb','observation_cache_mb'):
-            value=getattr(self,key)
-            if type(value) not in (int,float) or not math.isfinite(value) or value<0:
-                raise ValueError(f'{key} must be finite and nonnegative')
-        if self.observation_cache_mb and self.gather!='current':
+        for key in ("depth_cache_mb", "observation_cache_mb"):
+            value = getattr(self, key)
+            if type(value) not in (int, float) or not math.isfinite(value) or value < 0:
+                raise ValueError(f"{key} must be finite and nonnegative")
+        if self.observation_cache_mb and self.gather != "current":
             raise ValueError('observation cache replaces CPU gathering; select gather="current"')
-        for key in ("corrector_batch","padding_batch"):
-            value = getattr(self,key)
+        for key in ("corrector_batch", "padding_batch"):
+            value = getattr(self, key)
             if key == "padding_batch" and value is None:
                 continue
             if type(value) is not int or value < 1:
                 raise ValueError(f"{key} must be a positive integer")
 
     @classmethod
-    def from_dict(cls, values):
+    def from_dict(cls, values: dict[str, Any]) -> OptimizationConfig:
         unknown = set(values) - {f.name for f in fields(cls)}
         if unknown:
             raise ValueError(f"Unknown optimization settings: {sorted(unknown)}")
         return cls(**values)
 
     @classmethod
-    def read(cls, path=None, overrides=()):
+    def read(
+        cls, path: str | Path | None = None, overrides: tuple[str, ...] | list[str] = ()
+    ) -> OptimizationConfig:
         values = json.loads(Path(path).read_text()) if path else {}
         for override in overrides:
             key, separator, value = override.partition("=")
@@ -67,23 +85,36 @@ class OptimizationConfig:
             values[key] = json.loads(value)
         return cls.from_dict(values)
 
-    def as_dict(self):
+    def as_dict(self) -> dict[str, Any]:
         return asdict(self)
 
-    def validate_mode(self,mode):
-        if mode not in ("none","streamed","ram","disk"):
+    def validate_mode(self, mode: str) -> None:
+        if mode not in ("none", "streamed", "ram", "disk"):
             raise ValueError("Resolve the offload mode before validating optimizations")
-        if self.da3_weights != "current" and mode not in ("ram","disk"):
+        if self.da3_weights != "current" and mode not in ("ram", "disk"):
             raise ValueError("Packed DA3 weights require RAM or disk offload")
         if self.da3_features != "current" and mode != "disk":
             raise ValueError("Feature archives require disk offload")
         if mode == "none":
-            default=OptimizationConfig().as_dict()
-            stream_fields=("gather","shards","rays","hash_writes","depth_cache_mb","observation_cache_mb","prefetch","padding_batch","compile_corrector")
-            selected=[key for key in stream_fields if getattr(self,key)!=default[key]]
-            if self.shard_writer == "cpp": selected.append("shard_writer")
+            default = OptimizationConfig().as_dict()
+            stream_fields = (
+                "gather",
+                "shards",
+                "rays",
+                "hash_writes",
+                "depth_cache_mb",
+                "observation_cache_mb",
+                "prefetch",
+                "padding_batch",
+                "compile_corrector",
+            )
+            selected = [key for key in stream_fields if getattr(self, key) != default[key]]
+            if self.shard_writer == "cpp":
+                selected.append("shard_writer")
             if selected:
-                raise ValueError(f"Streaming optimizations require streamed/RAM/disk mode: {selected}")
+                raise ValueError(
+                    f"Streaming optimizations require streamed/RAM/disk mode: {selected}"
+                )
 
 
 @dataclass(frozen=True)
@@ -93,6 +124,7 @@ class InferenceComponents:
     Give injected implementations stable version/content fingerprints. These are
     included in store provenance; changing a dependency invalidates resume.
     """
+
     gather_factory: Callable | None = None
     observation_cache_factory: Callable | None = None
     ray_builder: Callable | None = None
@@ -108,23 +140,34 @@ class InferenceComponents:
     native_loader: Callable | None = None
     fingerprints: tuple[tuple[str, str], ...] = ()
 
-    def __post_init__(self):
-        supplied = {f.name for f in fields(self) if f.name != "fingerprints" and getattr(self,f.name) is not None}
+    def __post_init__(self) -> None:
+        supplied = {
+            f.name
+            for f in fields(self)
+            if f.name != "fingerprints" and getattr(self, f.name) is not None
+        }
         named = dict(self.fingerprints)
         if supplied - named.keys():
-            raise ValueError(f"Injected components require fingerprints: {sorted(supplied - named.keys())}")
-        if any(not callable(getattr(self,key)) for key in supplied):
+            raise ValueError(
+                f"Injected components require fingerprints: {sorted(supplied - named.keys())}"
+            )
+        if any(not callable(getattr(self, key)) for key in supplied):
             raise TypeError("Injected components must be callable")
 
-    def describe(self):
+    def describe(self) -> dict[str, str]:
         return dict(self.fingerprints)
 
-    def with_native_build(self, directory):
+    def with_native_build(self, directory: str | Path) -> InferenceComponents:
         from .native_backend import load_cpu
+
         directory = Path(directory).resolve()
         manifest = json.loads((directory / "build.json").read_text())
         fingerprints = dict(self.fingerprints, native_loader=manifest["binary_sha256"])
-        return replace(self, native_loader=partial(load_cpu, directory), fingerprints=tuple(sorted(fingerprints.items())))
+        return replace(
+            self,
+            native_loader=partial(load_cpu, directory),
+            fingerprints=tuple(sorted(fingerprints.items())),
+        )
 
 
 class InferenceSession:
@@ -133,7 +176,13 @@ class InferenceSession:
     Reused DA3 models reside on CPU between stages/clips. This avoids keeping its
     always-resident heads on CUDA while tracking/correction runs.
     """
-    def __init__(self, config=None, components=None, native_build=None):
+
+    def __init__(
+        self,
+        config: OptimizationConfig | None = None,
+        components: InferenceComponents | None = None,
+        native_build: str | Path | None = None,
+    ) -> None:
         self.config = config or OptimizationConfig()
         self.components = components or InferenceComponents()
         if native_build:
@@ -141,15 +190,22 @@ class InferenceSession:
         self.provider = None
         self.provider_key = None
 
-    def depth(self, weights, device, **kwargs):
+    def depth(self, weights: str | Path, device: str | torch.device, **kwargs: Any) -> Any:
         from .providers.da3 import DepthAnything3Provider
-        key = (str(Path(weights).resolve()), str(device), json.dumps({k:v for k,v in kwargs.items() if k != "scratch_dir"}, sort_keys=True))
+
+        key = (
+            str(Path(weights).resolve()),
+            str(device),
+            json.dumps({k: v for k, v in kwargs.items() if k != "scratch_dir"}, sort_keys=True),
+        )
         if self.provider is not None and self.provider_key != key:
             self.provider.close()
             self.provider = None
         factory = self.components.depth_provider_factory or DepthAnything3Provider
         if self.provider is None:
-            provider = factory(weights, device, optimizations=self.config, components=self.components, **kwargs)
+            provider = factory(
+                weights, device, optimizations=self.config, components=self.components, **kwargs
+            )
             if self.config.reuse_da3:
                 self.provider, self.provider_key = provider, key
         else:
@@ -157,19 +213,19 @@ class InferenceSession:
             provider.activate()
         return provider
 
-    def release_depth(self, provider):
+    def release_depth(self, provider: Any) -> None:
         if self.config.reuse_da3:
             provider.park()
         else:
             provider.close()
 
-    def close(self):
+    def close(self) -> None:
         if self.provider is not None:
             self.provider.close()
             self.provider = None
 
-    def __enter__(self):
+    def __enter__(self) -> InferenceSession:
         return self
 
-    def __exit__(self, *error):
+    def __exit__(self, *error: Any) -> None:
         self.close()

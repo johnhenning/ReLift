@@ -4,6 +4,9 @@ Layout: ``<worldtrack_root>/<subset>/<clip>.npz`` with subset in SUBSETS.  Each 
 ``tracks_XYZ`` (T, N, 3), ``visibility`` (T, N) and ``fx_fy_cx_cy``.  Clips are loaded with 4RC's own loader so that
 frames (OpenCV JPEG decoding), projected query pixels and ground truth are exactly what the protocol scores.
 """
+from __future__ import annotations
+from typing import Any
+from pathlib import Path
 import os
 import re
 from pathlib import Path
@@ -17,21 +20,21 @@ NAMES = {"adt": "ADT", "pstudio": "PS", "po": "PO", "ds": "DR"}
 NUM_FRAMES = 84
 
 
-def subset_dir(key_or_dir):
+def subset_dir(key_or_dir: str) -> str:
     """'adt' -> 'adt_mini'; a directory name is returned unchanged."""
     return SUBSETS.get(key_or_dir, key_or_dir)
 
 
-def _natural(path):
+def _natural(path: str | Path) -> list[int | str]:
     return [int(t) if t.isdigit() else t.lower() for t in re.split(r"(\d+)", os.path.basename(str(path)))]
 
 
-def clip_paths(root, subset, shard=0, nshards=1):
+def clip_paths(root: str | Path, subset: str, shard: int=0, nshards: int=1) -> list[Path]:
     """The clips of a subset in natural order (the order of the research runs), optionally one shard of them."""
     return sorted(Path(root).joinpath(subset_dir(subset)).glob("*.npz"), key=_natural)[shard::nshards]
 
 
-def load_clip(path, num_frames=NUM_FRAMES):
+def load_clip(path: str | Path, num_frames: int=NUM_FRAMES) -> dict[str, Any]:
     """-> dict(frames: list of PIL images, tracks_uv (T,N,2), intrinsics (4,), world (T,N,3), visibility (T,N) bool)."""
     TE, _ = rc4_eval()
     out = TE.load_npz_data(str(path), num_frames=num_frames)
@@ -40,7 +43,7 @@ def load_clip(path, num_frames=NUM_FRAMES):
                 name=Path(path).stem)
 
 
-def load_jpeg_frames_pillow(path, num_frames=NUM_FRAMES):
+def load_jpeg_frames_pillow(path: str | Path, num_frames: int=NUM_FRAMES) -> np.ndarray[Any, Any]:
     """The clip's frames decoded by Pillow, (T,H,W,3) uint8 RGB: the decoding CoWTracker's windows were built with."""
     import io
     from PIL import Image
@@ -48,7 +51,7 @@ def load_jpeg_frames_pillow(path, num_frames=NUM_FRAMES):
     return np.stack([np.array(Image.open(io.BytesIO(bytes(b))).convert("RGB")) for b in g["images_jpeg_bytes"][:num_frames]])
 
 
-def read_out(field, visf, geo, clip, dst, **extra):
+def read_out(field: np.ndarray[Any, Any], visf: np.ndarray[Any, Any], geo: dict[str, np.ndarray[Any, Any]], clip: dict[str, Any], dst: str | Path, **extra: Any) -> int:
     """4RC's read-out of a dense prediction: the ground-truth points visible in frame 0, scaled from the image to the
     prediction grid, dropped when outside it, truncated to integer pixels.  Writes the sparse prediction file the
     scorer reads and returns the number of scored points."""

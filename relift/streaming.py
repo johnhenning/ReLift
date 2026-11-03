@@ -1,10 +1,13 @@
 """Dense correction with mapped inputs and one full-timeline point batch on CUDA."""
+
 from __future__ import annotations
 
-from pathlib import Path
 import shutil
+from collections.abc import Callable
 from contextlib import ExitStack
 from functools import wraps
+from pathlib import Path
+from typing import Any, cast
 
 import numpy as np
 import torch
@@ -12,48 +15,90 @@ import torch.nn.functional as F
 
 from .features import correct, interp_init
 from .infer import VIS_GATE
+from .model import Corrector
+from .optimization import InferenceComponents, OptimizationConfig
 from .storage import TrajectoryStore, file_sha256, mapped_archive
 
 
 class MappedObservations:
     """CUDA ray construction for selected original pixels, retaining baseline math."""
 
-    def __init__(self, window_dir, device="cuda", depth_file="da3_depth_data.npz", tracks_file="alltracker_tracks.npz", depth_cache_mb=0, gather_backend="current", components=None, ray_backend="current", observation_cache_mb=0):
+    def __init__(
+        self,
+        window_dir: str | Path,
+        device: str | torch.device = "cuda",
+        depth_file: str = "da3_depth_data.npz",
+        tracks_file: str = "alltracker_tracks.npz",
+        depth_cache_mb: float = 0,
+        gather_backend: str = "current",
+        components: InferenceComponents | None = None,
+        ray_backend: str = "current",
+        observation_cache_mb: float = 0,
+    ) -> None:
         window = Path(window_dir)
         self.depth_source, self.track_source = window / depth_file, window / tracks_file
         depth = mapped_archive(self.depth_source)
         tracks = mapped_archive(self.track_source)
-        self.depth, self.tracks, self.visibility = depth["depth"], tracks["tracks_2d"], tracks["visibility"]
+        self.depth, self.tracks, self.visibility = (
+            depth["depth"],
+            tracks["tracks_2d"],
+            tracks["visibility"],
+        )
         self.T, self.H, self.W = self.depth.shape
         if self.tracks.shape[:3] != self.depth.shape or self.visibility.shape != self.depth.shape:
             raise ValueError("Geometry and tracker frames/grids do not match")
+        self._pinned_inputs: list[torch.Tensor] | None = None
         self.device = torch.device(device)
-        if observation_cache_mb and (gather_backend!='current' or (components and components.gather_factory is not None)):
-            raise ValueError('observation cache replaces CPU gathering; select one gathering strategy')
-        self.ray_builder = components.ray_builder if components else None
+        if observation_cache_mb and (
+            gather_backend != "current" or (components and components.gather_factory is not None)
+        ):
+            raise ValueError(
+                "observation cache replaces CPU gathering; select one gathering strategy"
+            )
+        self.ray_builder: Any = components.ray_builder if components else None
         if self.ray_builder is None and ray_backend in ("cuda", "cuda_timeline"):
-            from .cuda_rays import make_ray_builder, TimelineRayBuilder
+            from .cuda_rays import TimelineRayBuilder, make_ray_builder
             from .native_backend import load_cpu
+
             factory = TimelineRayBuilder if ray_backend == "cuda_timeline" else make_ray_builder
-            self.ray_builder = factory(components.native_loader() if components and components.native_loader else load_cpu())
+            self.ray_builder = factory(
+                components.native_loader()
+                if components and components.native_loader
+                else load_cpu()
+            )
         elif self.ray_builder is None and ray_backend == "python":
             from .cuda_rays import torch_ray_builder
+
             self.ray_builder = torch_ray_builder
         self.gather = None
         if components is not None and components.gather_factory is not None:
             self.gather = components.gather_factory()
         elif gather_backend != "current":
             from .batch_gather import BatchGather
-            native = components.native_loader() if gather_backend == "cpp" and components and components.native_loader else None
+
+            native = (
+                components.native_loader()
+                if gather_backend == "cpp" and components and components.native_loader
+                else None
+            )
             self.gather = BatchGather(gather_backend, native=native)
-        self.depth_cuda = None
+        self.depth_cuda: torch.Tensor | None = None
         needed = self.T * self.H * self.W * 4
         if depth_cache_mb > 0 and needed <= depth_cache_mb * 2**20:
-            if self.device.type != "cuda" or torch.cuda.mem_get_info(self.device)[0] > needed + 512 * 2**20:
-                self.depth_cuda = torch.as_tensor(np.array(self.depth), dtype=torch.float32, device=self.device)
+            if (
+                self.device.type != "cuda"
+                or torch.cuda.mem_get_info(self.device)[0] > needed + 512 * 2**20
+            ):
+                self.depth_cuda = torch.as_tensor(
+                    np.array(self.depth), dtype=torch.float32, device=self.device
+                )
         self.poses_cpu, self.intrinsics_cpu = depth["poses"], depth["intrinsics"]
-        self.poses = torch.as_tensor(np.array(self.poses_cpu), dtype=torch.float32, device=self.device)
-        self.K = torch.as_tensor(np.array(self.intrinsics_cpu), dtype=torch.float32, device=self.device)
+        self.poses = torch.as_tensor(
+            np.array(self.poses_cpu), dtype=torch.float32, device=self.device
+        )
+        self.K = torch.as_tensor(
+            np.array(self.intrinsics_cpu), dtype=torch.float32, device=self.device
+        )
         P = self.poses.clone()
         inv0 = torch.eye(4, device=self.device, dtype=P.dtype)
         r0, t0 = P[0, :3, :3], P[0, :3, 3]
@@ -62,23 +107,32 @@ class MappedObservations:
         self.Rwc = P[:, :3, :3].transpose(-2, -1)
         self.origin = -torch.einsum("tij,tj->ti", self.Rwc, P[:, :3, 3])
         from .observation_cache import ObservationCache
-        factory=components.observation_cache_factory if components and components.observation_cache_factory else ObservationCache
-        self.observation_cache=factory(self.tracks,self.visibility,self.device,observation_cache_mb)
 
-    def close(self):
+        factory = (
+            components.observation_cache_factory
+            if components and components.observation_cache_factory
+            else ObservationCache
+        )
+        self.observation_cache = factory(
+            self.tracks, self.visibility, self.device, observation_cache_mb
+        )
+
+    def close(self) -> None:
         self.observation_cache.close()
-        self.depth_cuda=None
+        self.depth_cuda: torch.Tensor | None = None
 
     @torch.no_grad()
-    def rays(self, pixel_ids, frame=None):
+    def rays(
+        self, pixel_ids: np.ndarray[Any, Any], frame: int | None = None
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
         """Return origin, direction, distance, visibility; never construct all-T/all-P rays."""
         ids = np.asarray(pixel_ids, dtype=np.int64)
         rows, cols = np.divmod(ids, self.W)
         times = slice(None) if frame is None else slice(frame, frame + 1)
-        cached_vis=None
+        cached_vis = None
         if self.observation_cache.active:
-            coords,cached_vis=self.observation_cache.gather(ids,frame=frame)
-            gathered_vis=None
+            coords, cached_vis = self.observation_cache.gather(ids, frame=frame)
+            gathered_vis = None
         elif self.gather is None:
             coords = self._transfer(self.tracks[times, rows, cols])
             gathered_vis = None
@@ -95,26 +149,46 @@ class MappedObservations:
             coords = coords.contiguous()
         # Only image-depth slices enter CUDA. grid_sample still uses original full H/W.
         # Small frame blocks limit source-image memory and transfer call overhead.
-        norm = (torch.stack([2.0 * coords[..., 0] / max(self.W - 1, 1) - 1.0,
-                            2.0 * coords[..., 1] / max(self.H - 1, 1) - 1.0], -1)
-                if self.ray_builder is None else None)
+        norm = (
+            torch.stack(
+                [
+                    2.0 * coords[..., 0] / max(self.W - 1, 1) - 1.0,
+                    2.0 * coords[..., 1] / max(self.H - 1, 1) - 1.0,
+                ],
+                -1,
+            )
+            if self.ray_builder is None
+            else None
+        )
         sampled, built_directions, built_distances = [], [], []
         offset = 0 if frame is None else frame
         frame_block = T if camera_builder is not None and self.depth_cuda is not None else 16
         for t in range(0, T, frame_block):
             length = min(frame_block, T - t)
-            depth = (self.depth_cuda[offset + t:offset + t + length] if self.depth_cuda is not None else
-                     self._transfer(self.depth[offset + t:offset + t + length]))
+            depth = (
+                self.depth_cuda[offset + t : offset + t + length]
+                if self.depth_cuda is not None
+                else self._transfer(self.depth[offset + t : offset + t + length])
+            )
             if self.ray_builder is None:
-                z = F.grid_sample(depth[:, None], norm[t:t + length].reshape(length, count, 1, 2), mode="nearest",
-                                  padding_mode="border", align_corners=True)[:, 0, :, 0]
+                assert norm is not None
+                z = F.grid_sample(
+                    depth[:, None],
+                    norm[t : t + length].reshape(length, count, 1, 2),
+                    mode="nearest",
+                    padding_mode="border",
+                    align_corners=True,
+                )[:, 0, :, 0]
                 sampled.append(z)
             else:
                 if camera_builder is not None:
-                    d,r = camera_builder(coords[t:t+length],depth,K[t:t+length])
+                    d, r = camera_builder(coords[t : t + length], depth, K[t : t + length])
                 else:
-                    d,r = self.ray_builder(coords[t:t+length],depth,K[t:t+length],Rwc[t:t+length])
-                built_directions.append(d); built_distances.append(r)
+                    d, r = self.ray_builder(
+                        coords[t : t + length], depth, K[t : t + length], Rwc[t : t + length]
+                    )
+                built_directions.append(d)
+                built_distances.append(r)
         if self.ray_builder is None:
             z = torch.cat(sampled)
             fx, fy = K[:, 0, 0, None], K[:, 1, 1, None]
@@ -124,14 +198,26 @@ class MappedObservations:
             direction = torch.einsum("tij,tnj->tni", Rwc, dcam)
             distance = z * torch.sqrt(xc * xc + yc * yc + 1.0)
         else:
-            direction,distance = torch.cat(built_directions),torch.cat(built_distances)
+            direction, distance = torch.cat(built_directions), torch.cat(built_distances)
             if camera_builder is not None:
                 direction = self.ray_builder.rotate(Rwc, direction)
-        vis = cached_vis if cached_vis is not None else (self._transfer(self.visibility[times, rows, cols]) if gathered_vis is None else
-               torch.as_tensor(gathered_vis, dtype=torch.float32, device=self.device))
-        return origin, torch.nan_to_num(direction), torch.nan_to_num(distance), torch.nan_to_num(vis)
+        vis = (
+            cached_vis
+            if cached_vis is not None
+            else (
+                self._transfer(self.visibility[times, rows, cols])
+                if gathered_vis is None
+                else torch.as_tensor(gathered_vis, dtype=torch.float32, device=self.device)
+            )
+        )
+        return (
+            origin,
+            torch.nan_to_num(direction),
+            torch.nan_to_num(distance),
+            torch.nan_to_num(vis),
+        )
 
-    def _transfer(self, values):
+    def _transfer(self, values: np.ndarray[Any, Any]) -> torch.Tensor:
         array = np.array(values)
         hosts = getattr(self, "_pinned_inputs", None)
         if hosts is None:
@@ -141,13 +227,20 @@ class MappedObservations:
         return host.to(device=self.device, dtype=torch.float32, non_blocking=True)
 
 
-def _batch_plan(valid, group, batch, seed, device, padding_batch=None):
+def _batch_plan(
+    valid: torch.Tensor,
+    group: int,
+    batch: int,
+    seed: int,
+    device: str | torch.device,
+    padding_batch: int | None = None,
+) -> tuple[torch.Tensor, torch.Tensor]:
     gen = torch.Generator(device=device).manual_seed(seed)
     perm = valid[torch.randperm(len(valid), device=device, generator=gen)]
     repeated = []
     planning_batch = batch if padding_batch is None else padding_batch
     for start in range(0, len(perm), group * planning_batch):
-        sel = perm[start:start + group * planning_batch]
+        sel = perm[start : start + group * planning_batch]
         need = max(1, (len(sel) + group - 1) // group) * group - len(sel)
         if need:
             repeated.append(sel[torch.arange(need, device=device) % len(sel)])
@@ -155,9 +248,15 @@ def _batch_plan(valid, group, batch, seed, device, padding_batch=None):
     return perm, duplicates
 
 
-def _selected_ids(order, start, group, batch, padding_batch=None):
+def _selected_ids(
+    order: np.ndarray[Any, Any],
+    start: int,
+    group: int,
+    batch: int,
+    padding_batch: int | None = None,
+) -> tuple[np.ndarray[Any, Any], np.ndarray[Any, Any]]:
     """Keep the reference padded group intact while varying execution batching."""
-    original = order[start:start + group * batch]
+    original = order[start : start + group * batch]
     need = (-len(original)) % group
     if not need:
         return original, original
@@ -168,42 +267,71 @@ def _selected_ids(order, start, group, batch, padding_batch=None):
     return original, np.concatenate([original, source[np.arange(need) % len(source)]])
 
 
-def managed_resources(function):
+def managed_resources(function: Callable[..., Any]) -> Callable[..., TrajectoryStore]:
     @wraps(function)
-    def run(*args, **kwargs):
+    def run(*args: Any, **kwargs: Any) -> TrajectoryStore:
         with ExitStack() as resources:
             return function(*args, resources=resources, **kwargs)
+
     return run
 
 
 @managed_resources
 @torch.no_grad()
-def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8, seed=0,
-                   device="cuda", depth_file="da3_depth_data.npz", tracks_file="alltracker_tracks.npz",
-                   ram_budget_gb=18, vram_budget_gb=20, scratch_budget_gb=64, depth_cache_mb=0, hash_writes=True,
-                   padding_batch=None, gather_backend="current", optimizations=None, components=None, resources=None):
+def stream_correct(
+    window_dir: str | Path,
+    output_dir: str | Path,
+    model: Corrector,
+    metadata: dict[str, Any],
+    group: int = 1024,
+    batch: int = 8,
+    seed: int = 0,
+    device: str = "cuda",
+    depth_file: str = "da3_depth_data.npz",
+    tracks_file: str = "alltracker_tracks.npz",
+    ram_budget_gb: int = 18,
+    vram_budget_gb: int = 20,
+    scratch_budget_gb: int = 64,
+    depth_cache_mb: float = 0,
+    hash_writes: bool = True,
+    padding_batch: int | None = None,
+    gather_backend: str = "current",
+    optimizations: OptimizationConfig | None = None,
+    components: InferenceComponents | None = None,
+    resources: ExitStack | None = None,
+) -> TrajectoryStore:
     """Correct every source pixel using full timelines and atomic mapped result shards.
 
     ``metadata`` must identify the checkpoint/settings for safe resume. The output
     is a ``TrajectoryStore``; compatibility NPZ export is an explicit later step.
     Padded duplicate results use their first occurrence and are listed for parity.
     """
-    from .optimization import OptimizationConfig, InferenceComponents
+    from .optimization import InferenceComponents
+
+    assert resources is not None
     components = components or InferenceComponents()
     if optimizations is not None:
         batch, padding_batch = optimizations.corrector_batch, optimizations.padding_batch
         gather_backend = optimizations.gather
         depth_cache_mb, hash_writes = optimizations.depth_cache_mb, optimizations.hash_writes
         if optimizations.compile_corrector:
-            model = torch.compile(model, dynamic=False)
+            model = cast(Corrector, torch.compile(model, dynamic=False))
     if min(group, batch) < 1:
         raise ValueError("group and batch must be positive")
     if padding_batch is not None and padding_batch < 1:
         raise ValueError("padding_batch must be positive")
     dev = torch.device(device)
-    obs_source = MappedObservations(window_dir, dev, depth_file, tracks_file, depth_cache_mb=depth_cache_mb, gather_backend=gather_backend, components=components,
-                                    ray_backend=optimizations.rays if optimizations else "current",
-                                    observation_cache_mb=optimizations.observation_cache_mb if optimizations else 0)
+    obs_source = MappedObservations(
+        window_dir,
+        dev,
+        depth_file,
+        tracks_file,
+        depth_cache_mb=depth_cache_mb,
+        gather_backend=gather_backend,
+        components=components,
+        ray_backend=optimizations.rays if optimizations else "current",
+        observation_cache_mb=optimizations.observation_cache_mb if optimizations else 0,
+    )
     resources.callback(obs_source.close)
     T, H, W = obs_source.T, obs_source.H, obs_source.W
     total = H * W
@@ -212,7 +340,7 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
     origin0, direction0, ranges0, _ = obs_source.rays(reference_ids, frame=0)
     valid = torch.nonzero(ranges0[0] > 0)[:, 0]
     raw0 = (origin0[:, None, :] + direction0 * ranges0[..., None]).float()[0]
-    scale = raw0[valid, 2].median().clamp_min(1e-6) if len(valid) else raw0.new_tensor(1.)
+    scale = raw0[valid, 2].median().clamp_min(1e-6) if len(valid) else raw0.new_tensor(1.0)
     perm, repeated = _batch_plan(valid, group, batch, seed, dev, padding_batch=padding_batch)
     valid_ids = perm.cpu().numpy()
     invalid_ids = np.flatnonzero(~(ranges0[0] > 0).cpu().numpy())
@@ -227,49 +355,87 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     free = shutil.disk_usage(output_dir).free
-    if stored_bytes > scratch_budget_gb * 2**30 or stored_bytes > free * .9:
+    if stored_bytes > scratch_budget_gb * 2**30 or stored_bytes > free * 0.9:
         raise MemoryError("Trajectory store would exceed scratch budget or available disk space")
     batch_bytes = min(total, group * batch) * T * 64
     if batch_bytes > ram_budget_gb * 2**30:
         raise MemoryError("Trajectory staging batch exceeds RAM budget; lower corrector batch")
     poses = np.asarray(obs_source.poses_cpu, dtype=np.float32)
     poses = poses @ np.linalg.inv(poses[0])
-    provenance = dict(metadata, group=group, batch=batch, seed=seed, vis_gate=VIS_GATE,
-                      depth_sha256=file_sha256(obs_source.depth_source), tracker_sha256=file_sha256(obs_source.track_source),
-                      frames_sha256=file_sha256(Path(window_dir) / "da3_frames.npz"),
-                      scale=float(scale), storage="mapped-track-shards", duplicate_policy="first occurrence",
-                      streaming_sha256=file_sha256(__file__),
-                      storage_sha256=file_sha256(Path(__file__).with_name("storage.py")),
-                      device=str(dev), torch_version=torch.__version__, numpy_version=np.__version__,
-                      ram_budget_gb=ram_budget_gb, vram_budget_gb=vram_budget_gb,
-                      scratch_budget_gb=scratch_budget_gb)
-    provenance.update(depth_cache_mb=depth_cache_mb, depth_cache_bytes=obs_source.depth_cuda.numel() * 4 if obs_source.depth_cuda is not None else 0,
-                      observation_cache=obs_source.observation_cache.metrics,
-                      hash_writes=hash_writes, padding_batch=padding_batch, gather_backend=gather_backend,
-                      optimizations=optimizations.as_dict() if optimizations else None, components=components.describe())
+    provenance: dict[str, Any] = dict(
+        metadata,
+        group=group,
+        batch=batch,
+        seed=seed,
+        vis_gate=VIS_GATE,
+        depth_sha256=file_sha256(obs_source.depth_source),
+        tracker_sha256=file_sha256(obs_source.track_source),
+        frames_sha256=file_sha256(Path(window_dir) / "da3_frames.npz"),
+        scale=float(scale),
+        storage="mapped-track-shards",
+        duplicate_policy="first occurrence",
+        streaming_sha256=file_sha256(__file__),
+        storage_sha256=file_sha256(Path(__file__).with_name("storage.py")),
+        device=str(dev),
+        torch_version=torch.__version__,
+        numpy_version=np.__version__,
+        ram_budget_gb=ram_budget_gb,
+        vram_budget_gb=vram_budget_gb,
+        scratch_budget_gb=scratch_budget_gb,
+    )
+    provenance.update(
+        depth_cache_mb=depth_cache_mb,
+        depth_cache_bytes=obs_source.depth_cuda.numel() * 4
+        if obs_source.depth_cuda is not None
+        else 0,
+        observation_cache=obs_source.observation_cache.metrics,
+        hash_writes=hash_writes,
+        padding_batch=padding_batch,
+        gather_backend=gather_backend,
+        optimizations=optimizations.as_dict() if optimizations else None,
+        components=components.describe(),
+    )
     if optimizations is not None:
-        provenance["implementation_hashes"] = {str(p.relative_to(Path(__file__).parent)): file_sha256(p)
-            for p in sorted(Path(__file__).parent.rglob("*.py"))}
+        provenance["implementation_hashes"] = {
+            str(p.relative_to(Path(__file__).parent)): file_sha256(p)
+            for p in sorted(Path(__file__).parent.rglob("*.py"))
+        }
     packer, payload_writer = components.shard_packer, components.npy_writer
     if optimizations:
         from .shard_packing import ShardPacker
-        writer_backend = optimizations.shard_writer or ("cpp" if optimizations.shards == "cpp" else "current")
+
+        writer_backend = optimizations.shard_writer or (
+            "cpp" if optimizations.shards == "cpp" else "current"
+        )
         native = None
-        if ((optimizations.shards == "cpp" and packer is None) or (writer_backend == "cpp" and payload_writer is None)):
+        if (optimizations.shards == "cpp" and packer is None) or (
+            writer_backend == "cpp" and payload_writer is None
+        ):
             from .native_backend import load_cpu
+
             native = components.native_loader() if components.native_loader else load_cpu()
         if optimizations.shards != "current" and packer is None:
-            packer = ShardPacker(optimizations.shards,native=native)
+            packer = ShardPacker(optimizations.shards, native=native)
         if writer_backend == "cpp" and payload_writer is None:
-            payload_writer = ShardPacker("cpp",native=native).write
-    store = TrajectoryStore.create(output_dir, (T, H, W, 3), provenance, order,
-                                   dict(images=images, poses=poses, intrinsics=np.asarray(obs_source.intrinsics_cpu)), repeated_ids,
-                                   hash_writes=hash_writes, packer=packer, payload_writer=payload_writer)
+            payload_writer = ShardPacker("cpp", native=native).write
+    store = TrajectoryStore.create(
+        output_dir,
+        (T, H, W, 3),
+        provenance,
+        order,
+        dict(images=images, poses=poses, intrinsics=np.asarray(obs_source.intrinsics_cpu)),
+        repeated_ids,
+        hash_writes=hash_writes,
+        packer=packer,
+        payload_writer=payload_writer,
+    )
+    assert store.manifest is not None
     if store.manifest["state"] == "complete":
         return store
     scheduler = None
     if optimizations is not None and optimizations.prefetch:
         from .prefetch import PrefetchedRays
+
         scheduler = resources.enter_context(PrefetchedRays(obs_source))
     # Shared source matrices and one depth image remain small. The active corrector
     # batch is the only full-timeline CUDA allocation that scales with point count.
@@ -279,7 +445,9 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
         if store.has_shard(start, stop):
             continue
         nb = max(1, (len(original) + group - 1) // group)
-        origin, direction, distance, vis = (scheduler.rays(selected) if scheduler else obs_source.rays(selected))
+        origin, direction, distance, vis = (
+            scheduler.rays(selected) if scheduler else obs_source.rays(selected)
+        )
         d = direction.reshape(T, nb, group, 3).permute(1, 0, 2, 3)
         r = distance.reshape(T, nb, group).permute(1, 0, 2)
         observed = (vis.reshape(T, nb, group).permute(1, 0, 2) > VIS_GATE) & (r > 0)
@@ -297,23 +465,48 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
         result = correct(model, Y / scale, observed, ray, o / scale)[:, :T] * scale
         if scheduler:
             for following_start in range(start + group * batch, len(valid_ids), group * batch):
-                following_original, following = _selected_ids(valid_ids, following_start, group, batch, padding_batch)
+                following_original, following = _selected_ids(
+                    valid_ids, following_start, group, batch, padding_batch
+                )
                 if not store.has_shard(following_start, following_start + len(following_original)):
                     scheduler.schedule(following)
                     break
-        result = torch.nan_to_num(result.permute(1, 0, 2, 3).reshape(T, -1, 3))[:, :len(original)]
-        raw = interp_init(unpadded_Y, unpadded_observed)[0].permute(1, 0, 2, 3).reshape(T, -1, 3)[:, :len(original)]
-        observed_export = unpadded_observed.permute(1, 0, 2).reshape(T, -1)[:, :len(original)]
-        store.write_shard(start, xyz=result.permute(1, 0, 2).float().cpu().numpy(),
-                          lift=raw.permute(1, 0, 2).float().cpu().numpy().astype(np.float16),
-                          observed=observed_export.T.cpu().numpy())
-        del origin, direction, distance, vis, d, r, observed, Y, ray, o, result, raw, observed_export, unpadded_Y, unpadded_observed
+        result = torch.nan_to_num(result.permute(1, 0, 2, 3).reshape(T, -1, 3))[:, : len(original)]
+        raw = (
+            interp_init(unpadded_Y, unpadded_observed)[0]
+            .permute(1, 0, 2, 3)
+            .reshape(T, -1, 3)[:, : len(original)]
+        )
+        observed_export = unpadded_observed.permute(1, 0, 2).reshape(T, -1)[:, : len(original)]
+        store.write_shard(
+            start,
+            xyz=result.permute(1, 0, 2).float().cpu().numpy(),
+            lift=raw.permute(1, 0, 2).float().cpu().numpy().astype(np.float16),
+            observed=observed_export.T.cpu().numpy(),
+        )
+        del origin
+        del direction
+        del distance
+        del vis
+        del d
+        del r
+        del observed
+        del Y
+        del ray
+        del o
+        del result
+        del raw
+        del observed_export
+        del unpadded_Y
+        del unpadded_observed
         if dev.type == "cuda" and torch.cuda.max_memory_allocated(dev) > vram_budget_gb * 2**30:
-            raise MemoryError("Corrector exceeded the configured GPU allocation budget; lower batch size")
+            raise MemoryError(
+                "Corrector exceeded the configured GPU allocation budget; lower batch size"
+            )
     # Pixels without a valid reference range retain their un-interpolated raw lift
     # in xyz, exactly as predict_dense does. The exported lift still interpolates.
     for offset in range(0, len(invalid_ids), group * batch):
-        ids = invalid_ids[offset:offset + group * batch]
+        ids = invalid_ids[offset : offset + group * batch]
         start = len(valid_ids) + offset
         if store.has_shard(start, start + len(ids)):
             continue
@@ -323,13 +516,17 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
         xyz = torch.nan_to_num(origin[:, None, :] + d * r[..., None])
         Y = xyz * observed[..., None]
         raw = interp_init(Y[None], observed[None])[0][0]
-        store.write_shard(start, xyz=xyz.permute(1, 0, 2).float().cpu().numpy(),
-                          lift=raw.permute(1, 0, 2).float().cpu().numpy().astype(np.float16),
-                          observed=observed.T.cpu().numpy())
+        store.write_shard(
+            start,
+            xyz=xyz.permute(1, 0, 2).float().cpu().numpy(),
+            lift=raw.permute(1, 0, 2).float().cpu().numpy().astype(np.float16),
+            observed=observed.T.cpu().numpy(),
+        )
         del origin, d, r, vis, observed, xyz, Y, raw
-    result=store.finish()
+    result = store.finish()
     # Runtime counters are measurements, not resume identity: keep the manifest's
     # construction-time placement record stable across repeat/resume calls.
     from .storage import atomic_json
-    atomic_json(output_dir/'observation-cache.json',obs_source.observation_cache.metrics)
+
+    atomic_json(output_dir / "observation-cache.json", obs_source.observation_cache.metrics)
     return result

@@ -1,15 +1,17 @@
+from __future__ import annotations
+
 import torch
 
 from relift.features import S, correct, features_clean, interp_init
 from relift.model import Corrector
 
 
-def test_parameter_count_of_the_released_configuration():
+def test_parameter_count_of_the_released_configuration() -> None:
     m = Corrector(dim=384, depth=8, heads=6, in_feats=14, chunk=4)
     assert sum(p.numel() for p in m.parameters()) == 19_145_100
 
 
-def test_untrained_model_returns_the_initialised_trajectory():
+def test_untrained_model_returns_the_initialised_trajectory() -> None:
     """The head is zero-initialised, so the correction is zero and `correct` returns the interpolated lift."""
     torch.manual_seed(0)
     m = Corrector(dim=64, depth=2, heads=2).eval()
@@ -25,11 +27,12 @@ def test_untrained_model_returns_the_initialised_trajectory():
     assert torch.equal(out, x_start)
 
 
-def test_permutation_equivariance_over_tracks():
+def test_permutation_equivariance_over_tracks() -> None:
     torch.manual_seed(0)
     m = Corrector(dim=64, depth=2, heads=2).eval()
     with torch.no_grad():
-        m.head.weight.normal_(); m.head.bias.normal_()
+        m.head.weight.normal_()
+        m.head.bias.normal_()
     B, T, P = 1, 8, 12
     f, a = torch.randn(B, T, P, 14), torch.randn(B, P, 3)
     perm = torch.randperm(P)
@@ -39,7 +42,7 @@ def test_permutation_equivariance_over_tracks():
     assert torch.allclose(u[:, :, perm], up, atol=1e-5)
 
 
-def test_feature_layout():
+def test_feature_layout() -> None:
     """14 channels: initialised trajectory, observed lift, observed flag, gap, observed ray, camera centre."""
     B, T, P = 1, 4, 3
     x_start = torch.arange(B * T * P * 3, dtype=torch.float32).view(B, T, P, 3)
@@ -51,7 +54,10 @@ def test_feature_layout():
     f, a = features_clean(x_start, Y, obs, gap, ray, origin)
     assert f.shape == (B, T, P, 14) and torch.equal(a, x_start[:, 0])
     assert torch.equal(f[..., :3], (x_start - x_start[:, :1]) * S)
-    assert torch.equal(f[:, :, :2, 3:6], (Y - x_start[:, :1])[:, :, :2] * S) and (f[:, :, 2, 3:6] == 0).all()
+    assert (
+        torch.equal(f[:, :, :2, 3:6], (Y - x_start[:, :1])[:, :, :2] * S)
+        and (f[:, :, 2, 3:6] == 0).all()
+    )
     assert torch.equal(f[..., 6], obs.float())
     assert torch.equal(f[:, :, 2, 7], torch.ones(B, T)) and (f[:, :, :2, 7] == 0).all()
     assert torch.equal(f[:, :, :2, 8:11], torch.ones(B, T, 2, 3)) and (f[:, :, 2, 8:11] == 0).all()

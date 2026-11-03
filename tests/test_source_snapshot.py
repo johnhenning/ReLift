@@ -1,18 +1,25 @@
 """Reconstruction must use committed bytes and preserve the live working tree."""
+
+from __future__ import annotations
+
 import hashlib
 import json
 import subprocess
+from pathlib import Path
+from typing import Any
 
 import pytest
 
 from scripts.freeze_benchmark_baseline import freeze_revision
 
 
-def test_snapshot_uses_committed_revision_and_refuses_overwrite(tmp_path):
+def test_snapshot_uses_committed_revision_and_refuses_overwrite(tmp_path: Path) -> None:
     repository = tmp_path / "repo"
     repository.mkdir()
-    def git(*args):
+
+    def git(*args: Any) -> Any:
         return subprocess.check_output(["git", "-C", str(repository), *args], text=True).strip()
+
     git("init", "-q")
     source = repository / "implementation.py"
     source.write_text("committed\n")

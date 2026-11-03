@@ -7,11 +7,14 @@
 No inference runs here. The second command exports viewers from the copied store.
 Existing destination stores are never replaced. Benchmark originals remain intact.
 """
+
+from __future__ import annotations
+
 import argparse
 import json
-from pathlib import Path
 import shutil
 import sys
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -19,9 +22,11 @@ from relift.storage import TrajectoryStore, file_sha256
 from scripts.generate_all_views import dense_result_ready
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source-root", type=Path, default=ROOT / "outputs/benchmarks/offload-capacity")
+    parser.add_argument(
+        "--source-root", type=Path, default=ROOT / "outputs/benchmarks/offload-capacity"
+    )
     parser.add_argument("--output-root", type=Path, default=ROOT / "outputs/demo-full")
     parser.add_argument("--scenes", nargs="+", default=["running", "forest"])
     parser.add_argument("--mode", default="ram")
@@ -32,8 +37,12 @@ def main():
         trial = json.loads((trial_dir / "trial.json").read_text())
         source = json.loads((ROOT / "cache/demo_inputs" / f"{scene}.json").read_text())
         output = trial_dir / "output"
-        if (trial["status"] != "complete" or trial["process_res"] != 504 or trial["num_frames"] != 0
-                or not dense_result_ready(output, source, 504)):
+        if (
+            trial["status"] != "complete"
+            or trial["process_res"] != 504
+            or trial["num_frames"] != 0
+            or not dense_result_ready(output, source, 504)
+        ):
             raise ValueError(f"Not a validated full-resolution, full-length result: {trial_dir}")
         store = TrajectoryStore.open(output)
         if not store.finite():
@@ -42,7 +51,9 @@ def main():
         destination.mkdir(parents=True, exist_ok=True)
         target = destination / "tracks.store"
         if target.exists():
-            if file_sha256(target / "manifest.json") != file_sha256(output / "tracks.store/manifest.json"):
+            if file_sha256(target / "manifest.json") != file_sha256(
+                output / "tracks.store/manifest.json"
+            ):
                 raise FileExistsError(f"Refusing to replace different data: {target}")
             TrajectoryStore.open(destination).verify()
         else:

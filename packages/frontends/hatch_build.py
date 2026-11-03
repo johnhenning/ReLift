@@ -1,16 +1,20 @@
 """Build a normal wheel from immutable upstream archives without vendoring source in Git."""
+
+from __future__ import annotations
+
 import hashlib
 import json
-from pathlib import Path, PurePosixPath
 import shutil
 import tarfile
 import tempfile
 import urllib.request
+from pathlib import Path, PurePosixPath
+from typing import Any
 
 from hatchling.builders.hooks.plugin.interface import BuildHookInterface
 
 
-def unpack_selected(archive, destination, packages):
+def unpack_selected(archive: Any, destination: str | Path, packages: Any) -> None:
     """Copy regular members only, retaining upstream package contents and nested licences."""
     found = set()
     with tarfile.open(archive, "r:gz") as tar:
@@ -25,7 +29,9 @@ def unpack_selected(archive, destination, packages):
                 if relative == PurePosixPath(source) or PurePosixPath(source) in relative.parents:
                     output = destination / target / relative.relative_to(source)
                     output.parent.mkdir(parents=True, exist_ok=True)
-                    with tar.extractfile(member) as src, output.open("wb") as dst:
+                    extracted = tar.extractfile(member)
+                    assert extracted is not None
+                    with extracted as src, output.open("wb") as dst:
                         shutil.copyfileobj(src, dst)
                     found.add(source)
     if missing := set(packages) - found:
@@ -33,7 +39,7 @@ def unpack_selected(archive, destination, packages):
 
 
 class UpstreamBuildHook(BuildHookInterface):
-    def initialize(self, version, build_data):
+    def initialize(self, version: Any, build_data: Any) -> None:
         self.staging = tempfile.TemporaryDirectory(prefix="relift-frontends-")
         staging = Path(self.staging.name)
         manifest = Path(self.root) / "upstreams.json"
@@ -50,7 +56,9 @@ class UpstreamBuildHook(BuildHookInterface):
                 raise ValueError(f"SHA256 mismatch for {entry['name']} at {entry['revision']}")
             packages = dict(entry["packages"])
             # Retain each upstream's root licence alongside its installed source.
-            packages[entry.get("license_file", "LICENSE")] = f"relift_frontends/licenses/{entry['name']}/LICENSE"
+            packages[entry.get("license_file", "LICENSE")] = (
+                f"relift_frontends/licenses/{entry['name']}/LICENSE"
+            )
             unpack_selected(archive, staging / "wheel", packages)
         for name in ("alltracker", "rc4_eval"):
             (staging / "wheel/relift_frontends" / name / "__init__.py").touch()
@@ -58,5 +66,5 @@ class UpstreamBuildHook(BuildHookInterface):
         for path in (staging / "wheel").iterdir():
             build_data["force_include"][str(path)] = path.name
 
-    def finalize(self, version, build_data, artifact_path):
+    def finalize(self, version: Any, build_data: Any, artifact_path: Any) -> None:
         self.staging.cleanup()

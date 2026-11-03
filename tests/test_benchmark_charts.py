@@ -1,45 +1,67 @@
 """Chart summaries preserve measured settings, missing values and capacity failures."""
+
+from __future__ import annotations
+
 import json
+from pathlib import Path
+from typing import Any
 
 import numpy as np
 
 from scripts.build_benchmark_charts import collect, inventory_output, write_outputs
 
 
-def trial(root, mode, repeat, seconds, status="complete", **changes):
+def trial(
+    root: Path, mode: str, repeat: Any, seconds: Any, status: str = "complete", **changes: Any
+) -> Any:
     directory = root / "arbitrary-scene" / mode / f"trial-{repeat:02}"
     directory.mkdir(parents=True)
-    data = dict(scene="arbitrary-scene", mode=mode, status=status, wall_seconds=seconds,
-                scenario="fresh", input_sha256="same-input", process_res=210, corrector_batch=3,
-                num_frames=0, seed=7, wrapper_sha256="wrapper", lockfile_sha256="lock",
-                code_hashes={"algorithm.py": mode},
-                telemetry=dict(sampled_peak_process_tree_rss_bytes=2**30,
-                               sampled_peak_gpu_device_used_bytes=2 * 2**30,
-                               process_tree_write_bytes=0))
+    data = dict(
+        scene="arbitrary-scene",
+        mode=mode,
+        status=status,
+        wall_seconds=seconds,
+        scenario="fresh",
+        input_sha256="same-input",
+        process_res=210,
+        corrector_batch=3,
+        num_frames=0,
+        seed=7,
+        wrapper_sha256="wrapper",
+        lockfile_sha256="lock",
+        code_hashes={"algorithm.py": mode},
+        telemetry=dict(
+            sampled_peak_process_tree_rss_bytes=2**30,
+            sampled_peak_gpu_device_used_bytes=2 * 2**30,
+            process_tree_write_bytes=0,
+        ),
+    )
     data.update(changes)
     (directory / "trial.json").write_text(json.dumps(data))
     return directory
 
 
-def test_medians_ranges_and_zero_io_are_distinct_from_missing_measurements(tmp_path):
+def test_medians_ranges_and_zero_io_are_distinct_from_missing_measurements(tmp_path: Path) -> None:
     root = tmp_path / "campaign"
     trial(root, "existing", 1, 10)
     trial(root, "existing", 2, 14)
     trial(root, "ram", 1, 20)
-    item, = collect([root])
+    (item,) = collect([root])
     original, ram = item["rows"]
-    assert original["metrics"]["runtime_s"] == dict(values=[10., 14.], median=12., min=10., max=14., n=2)
+    assert original["metrics"]["runtime_s"] == dict(
+        values=[10.0, 14.0], median=12.0, min=10.0, max=14.0, n=2
+    )
     assert original["metrics"]["disk_writes_gib"]["median"] == 0
     assert original["metrics"]["disk_reads_gib"]["median"] is None
     assert ram["metrics"]["host_rss_gib"]["median"] == 1
     assert ram["metrics"]["gpu_gib"]["median"] == 2
 
 
-def test_failures_are_capacity_outcomes_not_fast_runtimes_or_zero_memory(tmp_path):
+def test_failures_are_capacity_outcomes_not_fast_runtimes_or_zero_memory(tmp_path: Path) -> None:
     root = tmp_path / "campaign"
     trial(root, "existing", 1, 1, status="cuda_oom")
     trial(root, "ram", 1, 30)
-    item, = collect([root])
+    (item,) = collect([root])
     original, ram = item["rows"]
     assert original["n"] == 0 and original["statuses"] == {"cuda_oom": 1}
     assert original["metrics"]["runtime_s"]["median"] is None
@@ -47,7 +69,7 @@ def test_failures_are_capacity_outcomes_not_fast_runtimes_or_zero_memory(tmp_pat
     assert ram["metrics"]["runtime_s"]["median"] == 30
 
 
-def test_changed_workloads_and_source_versions_are_not_pooled(tmp_path):
+def test_changed_workloads_and_source_versions_are_not_pooled(tmp_path: Path) -> None:
     root = tmp_path / "campaign"
     trial(root, "ram", 1, 10)
     trial(root, "ram", 2, 20, code_hashes={"algorithm.py": "changed"})
@@ -58,7 +80,9 @@ def test_changed_workloads_and_source_versions_are_not_pooled(tmp_path):
     assert all(len({row["label"] for row in item["rows"]}) == len(item["rows"]) for item in items)
 
 
-def test_actual_runtime_separates_interpreters_and_allows_frozen_source_locks(tmp_path):
+def test_actual_runtime_separates_interpreters_and_allows_frozen_source_locks(
+    tmp_path: Path,
+) -> None:
     root = tmp_path / "campaign"
     runtime = dict(python="3.13", environment_lockfile_sha256="actual-environment")
     trial(root, "control", 1, 10, lockfile_sha256="old-source-lock", environment=runtime)
@@ -68,7 +92,9 @@ def test_actual_runtime_separates_interpreters_and_allows_frozen_source_locks(tm
     assert sorted(len(item["rows"]) for item in items) == [1, 2]
 
 
-def test_dense_inventory_ignores_validation_caches_and_never_extracts_archives(tmp_path):
+def test_dense_inventory_ignores_validation_caches_and_never_extracts_archives(
+    tmp_path: Path,
+) -> None:
     np.savez(tmp_path / "tracks.npz", xyz=np.zeros((3, 2, 4, 3), np.float32))
     mapped = tmp_path / ".mapped"
     mapped.mkdir()
@@ -81,7 +107,7 @@ def test_dense_inventory_ignores_validation_caches_and_never_extracts_archives(t
     assert sorted(tmp_path.rglob("*")) == before
 
 
-def test_chart_outputs_and_raw_data_are_generated_from_arbitrary_records(tmp_path):
+def test_chart_outputs_and_raw_data_are_generated_from_arbitrary_records(tmp_path: Path) -> None:
     root = tmp_path / "campaign"
     trial(root, "existing", 1, 10)
     trial(root, "ram", 1, 20)

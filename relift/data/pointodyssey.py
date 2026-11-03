@@ -17,6 +17,11 @@ processes, each taking every third scene of the sorted scene list and drawing it
 running streams 0, 1 and 2 (of 3) reproduces the cache array for array.  Any other number of streams gives a
 different, equally valid, point sampling.
 """
+from __future__ import annotations
+from typing import Any
+from typing import Callable
+from typing import Iterator
+from pathlib import Path
 import os
 from pathlib import Path
 
@@ -29,7 +34,7 @@ EXCLUDE = {"cab_e_ego2"}            # the same recording as WorldTrack's cab_e_3
 VAL_EVERY, VAL_FROM = 13, 6         # validation = every 13th scene name from the 7th
 
 
-def windows_of(z, rng, T=T, P=P, dyn_thr=DYN_THR, steps=STEPS):
+def windows_of(z: Any, rng: np.random.Generator, T: int=T, P: int=P, dyn_thr: float=DYN_THR, steps: tuple[int, ...]=STEPS) -> dict[str, list[Any]]:
     """One scene's annotations (``anno.npz`` arrays) -> dict of lists (see the module docstring)."""
     Xw, uv, E, K = z["trajs_3d"], z["trajs_2d"], z["extrinsics"].astype(np.float64), z["intrinsics"]
     vis, val = z["visibs"], z["valids"]
@@ -67,12 +72,12 @@ def windows_of(z, rng, T=T, P=P, dyn_thr=DYN_THR, steps=STEPS):
     return out
 
 
-def scene_names(src):
+def scene_names(src: str | Path) -> list[str]:
     """Scenes with annotations, sorted: ``<src>/<scene>/anno.npz``."""
     return sorted(p.parent.name for p in Path(src).glob("*/anno.npz"))
 
 
-def build_stream(src, cache, stream=0, nstreams=3, log=print, rewrite=False):
+def build_stream(src: str | Path, cache: str | Path, stream: int=0, nstreams: int=3, log: Callable[..., Any]=print, rewrite: bool=False) -> None:
     """Build the windows of every ``nstreams``-th scene starting at ``stream`` with one ``default_rng(0)`` stream.
     A scene whose file exists is still computed (the stream must advance) but not rewritten unless ``rewrite``."""
     cache = Path(cache)
@@ -99,7 +104,7 @@ def build_stream(src, cache, stream=0, nstreams=3, log=print, rewrite=False):
         log(f"{name}: {len(o['X'])} windows, dynamic share {np.mean(o['dyn']):.2f}, visible share {np.mean(o['vis']):.2f}")
 
 
-def split(cache):
+def split(cache: str | Path) -> tuple[list[str], list[str]]:
     """Training and validation scene names of a window cache: drop EXCLUDE, hold out names[VAL_FROM::VAL_EVERY]."""
     names = sorted(p.stem for p in Path(cache).glob("*.npz") if not p.name.startswith("."))
     names = [n for n in names if n not in EXCLUDE]

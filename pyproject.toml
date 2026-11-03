@@ -39,7 +39,34 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "markdown-it-py==4.2.0"]
+dev = [
+    "pytest",
+    "markdown-it-py==4.2.0",
+    "ruff==0.17.3",
+    "pyrefly==1.4.0",
+    "hatchling==1.30.0",
+    "types-pyyaml==6.0.12.20261103",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+extend-exclude = ["outputs", "checkpoints", "cache", "data", "third_party", "docs/vendor", ".venv", ".codex", ".agents"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B", "ANN"]
+# Dynamic checkpoint/provider and JSON boundaries legitimately carry Any.
+ignore = ["ANN401"]
+
+[tool.ruff.lint.per-file-ignores]
+# Scripts pin a selected source before importing it.
+"scripts/**/*.py" = ["E402"]
+
+[tool.pyrefly]
+project-includes = ["relift/**/*.py", "scripts/**/*.py", "tests/**/*.py", "packages/frontends/**/*.py", "stubs/**/*.pyi"]
+project-excludes = ["outputs/**", ".venv/**", "packages/frontends/.hatch/**"]
+python-version = "3.13"
+search-path = ["stubs", ".", "scripts", "tests", "packages/frontends/src"]
 
 [tool.setuptools.packages.find]
 include = ["relift*"]

@@ -1,19 +1,22 @@
 #!/usr/bin/env python
 """Seed the identical process environment before invoking either implementation.
 
-    python scripts/benchmark_worker.py --seed 0 frozen/scripts/demo_video.py VIDEO ...
+python scripts/benchmark_worker.py --seed 0 frozen/scripts/demo_video.py VIDEO ...
 """
+
+from __future__ import annotations
+
 import argparse
-from pathlib import Path
 import random
 import runpy
 import sys
+from pathlib import Path
 
 import numpy as np
 import torch
 
 
-def main():
+def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("script", type=Path)

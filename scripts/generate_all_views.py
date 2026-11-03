@@ -8,15 +8,19 @@ GPU jobs run sequentially. Completed results are validated and reused; failed
 clips do not prevent the others from running. Rerun the same command to resume.
 Each clip gets inference/export logs. index.html and batch.json track progress.
 """
+
+from __future__ import annotations
+
 import argparse
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timezone
 import html
 import json
-from pathlib import Path
 import shlex
 import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import UTC, datetime
+from pathlib import Path
+from typing import Any
 from urllib.parse import quote
 
 import cv2
@@ -29,22 +33,32 @@ from relift.storage import TrajectoryStore
 from scripts.download_demo_inputs import catalog, fetch_input, sha256
 
 
-def now():
-    return datetime.now(timezone.utc).isoformat()
+def now() -> Any:
+    return datetime.now(UTC).isoformat()
 
 
-def save_json(path, data):
+def save_json(path: Path, data: Any) -> None:
     temp = path.with_suffix(path.suffix + ".tmp")
     temp.write_text(json.dumps(data, indent=2) + "\n")
     temp.replace(path)
 
 
-def complete_result(output, source, process_resolution=None):
+def complete_result(
+    output: Any, source: dict[str, Any], process_resolution: Any = None
+) -> dict[str, Any] | None:
     """Never reuse a short window or an HTML export of different trajectory data."""
     output = Path(output)
-    arrays, manifest, page = output / "tracks.npz", output / "plotly.json", output / "trajectories.html"
+    arrays, manifest, page = (
+        output / "tracks.npz",
+        output / "plotly.json",
+        output / "trajectories.html",
+    )
     store_manifest = output / "tracks.store/manifest.json"
-    if not manifest.is_file() or not page.is_file() or not (arrays.is_file() or store_manifest.is_file()):
+    if (
+        not manifest.is_file()
+        or not page.is_file()
+        or not (arrays.is_file() or store_manifest.is_file())
+    ):
         return None
     metadata = json.loads(manifest.read_text())
     if metadata.get("frames") != source["frames"] or metadata.get("requested_frames") != 0:
@@ -60,12 +74,21 @@ def complete_result(output, source, process_resolution=None):
         try:
             store = TrajectoryStore.open(output)
             store.verify()
-            if (store.shape[0] != source["frames"] or store.metadata.get("requested_frames") != 0
-                    or not np.isclose(store.metadata.get("source_fps", 0), source["fps"])):
+            if (
+                store.shape[0] != source["frames"]
+                or store.metadata.get("requested_frames") != 0
+                or not np.isclose(store.metadata.get("source_fps", 0), source["fps"])
+            ):
                 return None
-            if process_resolution is not None and store.metadata.get("process_resolution") != process_resolution:
+            if (
+                process_resolution is not None
+                and store.metadata.get("process_resolution") != process_resolution
+            ):
                 return None
-            if source.get("sha256") is not None and store.metadata.get("input_sha256") != source["sha256"]:
+            if (
+                source.get("sha256") is not None
+                and store.metadata.get("input_sha256") != source["sha256"]
+            ):
                 return None
         except (ValueError, OSError, KeyError):
             return None
@@ -79,29 +102,43 @@ def complete_result(output, source, process_resolution=None):
     return metadata
 
 
-def dense_result_ready(output, source, process_resolution=504):
+def dense_result_ready(output: Any, source: dict[str, Any], process_resolution: int = 504) -> bool:
     """Check complete dense data even when a viewer still needs to be exported."""
     try:
         store = TrajectoryStore.open(output)
         if store.manifest is not None:
             store.verify()
-            if source.get("sha256") is not None and store.metadata.get("input_sha256") != source["sha256"]:
+            if (
+                source.get("sha256") is not None
+                and store.metadata.get("input_sha256") != source["sha256"]
+            ):
                 return False
-        return (store.shape[0] == source["frames"] and store.metadata.get("requested_frames") == 0
-                and np.isclose(store.metadata.get("source_fps", 0), source["fps"])
-                and store.metadata.get("process_resolution", max(store.shape[1:3])) == process_resolution)
+        return (
+            store.shape[0] == source["frames"]
+            and store.metadata.get("requested_frames") == 0
+            and bool(np.isclose(store.metadata.get("source_fps", 0), source["fps"]))
+            and store.metadata.get("process_resolution", max(store.shape[1:3]))
+            == process_resolution
+        )
     except (ValueError, OSError, KeyError):
         return False
 
 
-def run_logged(script, arguments, log):
+def run_logged(script: Any, arguments: Any, log: Path) -> None:
     command = [sys.executable, f"scripts/{script}", *map(str, arguments)]
     print("+ " + shlex.join(command), flush=True)
     with log.open("w") as stream:
         stream.write("+ " + shlex.join(command) + "\n")
         stream.flush()
-        process = subprocess.Popen(command, cwd=REPO, stdout=subprocess.PIPE,
-                                   stderr=subprocess.STDOUT, text=True, bufsize=1)
+        process = subprocess.Popen(
+            command,
+            cwd=REPO,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+        )
+        assert process.stdout is not None
         for line in process.stdout:
             stream.write(line)
             stream.flush()
@@ -111,7 +148,7 @@ def run_logged(script, arguments, log):
         raise RuntimeError(f"{script} exited {result}; see {log.name}")
 
 
-def infer_with_memory_retries(video, output, record):
+def infer_with_memory_retries(video: Any, output: Any, record: dict[str, Any]) -> None:
     """Explicit legacy opt-in only: reduce spatial grids after CUDA OOM."""
     record["inference_attempts"] = []
     for resolution, batch in ((504, 8), (392, 4), (336, 4), (280, 2)):
@@ -119,8 +156,24 @@ def infer_with_memory_retries(video, output, record):
         attempt = dict(resolution=resolution, corrector_batch=batch, log=log.name, started_at=now())
         record["inference_attempts"].append(attempt)
         try:
-            run_logged("demo_video.py", [video, "--num_frames", 0, "--geometry", "da3", "--out", output,
-                                        "--no_video", "--process-res", resolution, "--corrector-batch", batch], log)
+            run_logged(
+                "demo_video.py",
+                [
+                    video,
+                    "--num_frames",
+                    0,
+                    "--geometry",
+                    "da3",
+                    "--out",
+                    output,
+                    "--no_video",
+                    "--process-res",
+                    resolution,
+                    "--corrector-batch",
+                    batch,
+                ],
+                log,
+            )
             attempt.update(status="complete", finished_at=now())
             # Keep a predictable log path as well as every individual attempt.
             (output / "inference.log").write_text(log.read_text())
@@ -131,19 +184,44 @@ def infer_with_memory_retries(video, output, record):
             text = log.read_text()
             if "CUDA out of memory" not in text and "OutOfMemoryError" not in text:
                 raise
-            print(f"GPU memory retry: {output.name}, long side {resolution}; retaining all frames", flush=True)
-    raise RuntimeError("CUDA memory exhausted at every configured spatial resolution; see inference_res*.log")
+            print(
+                f"GPU memory retry: {output.name}, long side {resolution}; retaining all frames",
+                flush=True,
+            )
+    raise RuntimeError(
+        "CUDA memory exhausted at every configured spatial resolution; see inference_res*.log"
+    )
 
 
-def infer_full_resolution(video, output, record, args):
+def infer_full_resolution(video: Any, output: Any, record: dict[str, Any], args: Any) -> None:
     """Offload storage/placement, retaining the full source timeline and 504 grid."""
     log = output / f"inference_{args.offload}_res504.log"
-    attempt = dict(resolution=504, corrector_batch=8, offload=args.offload, log=log.name, started_at=now())
+    attempt = dict(
+        resolution=504, corrector_batch=8, offload=args.offload, log=log.name, started_at=now()
+    )
     record["inference_attempts"] = [attempt]
-    arguments = [video, "--num_frames", 0, "--geometry", "da3", "--out", output, "--no_video",
-                 "--process-res", 504, "--corrector-batch", 8, "--offload", args.offload,
-                 "--ram-budget-gb", args.ram_budget_gb, "--vram-budget-gb", args.vram_budget_gb,
-                 "--scratch-budget-gb", args.scratch_budget_gb]
+    arguments = [
+        video,
+        "--num_frames",
+        0,
+        "--geometry",
+        "da3",
+        "--out",
+        output,
+        "--no_video",
+        "--process-res",
+        504,
+        "--corrector-batch",
+        8,
+        "--offload",
+        args.offload,
+        "--ram-budget-gb",
+        args.ram_budget_gb,
+        "--vram-budget-gb",
+        args.vram_budget_gb,
+        "--scratch-budget-gb",
+        args.scratch_budget_gb,
+    ]
     if args.scratch_dir:
         arguments += ["--scratch-dir", args.scratch_dir]
     try:
@@ -158,26 +236,42 @@ def infer_full_resolution(video, output, record, args):
             (output / "inference.log").write_text(log.read_text())
 
 
-def write_index(root, state):
+def write_index(root: Path, state: Any) -> None:
     rows = []
     for name, entry in catalog().items():
         record = state["videos"].get(name, {})
         source = record.get("source", {})
         status = record.get("status", "pending")
         page = root / name / "trajectories.html"
-        link = f'<a href="{quote(name)}/trajectories.html">Open 3D viewer</a>' if status == "complete" and page.exists() else html.escape(status)
-        image = f'<img src="{quote(name)}/input.jpg" alt="{html.escape(entry["description"])}" loading="lazy">' if (root / name / "input.jpg").exists() else ""
+        link = (
+            f'<a href="{quote(name)}/trajectories.html">Open 3D viewer</a>'
+            if status == "complete" and page.exists()
+            else html.escape(status)
+        )
+        image = (
+            f'<img src="{quote(name)}/input.jpg" alt="{html.escape(entry["description"])}" loading="lazy">'
+            if (root / name / "input.jpg").exists()
+            else ""
+        )
         frames = source.get("frames", "—")
-        seconds = f'{source["duration_seconds"]:.2f} s' if source.get("duration_seconds") is not None else "—"
+        seconds = (
+            f"{source['duration_seconds']:.2f} s"
+            if source.get("duration_seconds") is not None
+            else "—"
+        )
         metadata = record.get("result", {})
-        tracks = f'{metadata["dense_trajectories"]:,}' if "dense_trajectories" in metadata else "—"
+        tracks = f"{metadata['dense_trajectories']:,}" if "dense_trajectories" in metadata else "—"
         if metadata.get("grid"):
-            tracks += f'<p>{metadata["grid"][1]}×{metadata["grid"][0]} grid</p>'
-        error = f'<p class="error">{html.escape(record["error"])}</p>' if record.get("error") else ""
-        rows.append(f'<tr><td>{image}</td><td><strong>{html.escape(name)}</strong><p>{html.escape(entry["description"])}</p>{error}</td>'
-                    f'<td>{frames}</td><td>{seconds}</td><td>{tracks}</td><td>{link}</td></tr>')
+            tracks += f"<p>{metadata['grid'][1]}×{metadata['grid'][0]} grid</p>"
+        error = (
+            f'<p class="error">{html.escape(record["error"])}</p>' if record.get("error") else ""
+        )
+        rows.append(
+            f"<tr><td>{image}</td><td><strong>{html.escape(name)}</strong><p>{html.escape(entry['description'])}</p>{error}</td>"
+            f"<td>{frames}</td><td>{seconds}</td><td>{tracks}</td><td>{link}</td></tr>"
+        )
     finished = sum(v.get("status") == "complete" for v in state["videos"].values())
-    page = '''<!doctype html><html lang="en"><head><meta charset="utf-8">
+    page = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>ReLift interactive demo gallery</title>
 <style>body{font:15px/1.5 system-ui,sans-serif;color:#243047;background:#fff;margin:0}main{max-width:1200px;margin:auto;padding:24px}
 h1{margin:0 0 8px}p{margin:4px 0;color:#57647a}table{width:100%;border-collapse:collapse;margin-top:24px}
@@ -188,13 +282,15 @@ th,td{text-align:left;padding:12px;border-bottom:1px solid #dce2ea;vertical-alig
 <p>Plots sample reference pixels for browser performance. Saved tracks.store directories or legacy tracks.npz files keep dense trajectories. Source clips are the published demonstration videos.</p>
 <div class="table-wrap"><table><thead><tr><th>Input</th><th>Scene</th><th>Frames</th><th>Duration</th><th>Dense tracks</th><th>Interactive view</th></tr></thead><tbody>__ROWS__</tbody></table></div>
 <p>Generated by scripts/generate_all_views.py. Detailed progress and provenance are in batch.json; each output directory contains inference.log, plotly.log, and plotly.json.</p>
-</main></body></html>'''
-    (root / "index.html").write_text(page.replace("__COUNT__", str(finished)).replace("__ROWS__", "\n".join(rows)))
+</main></body></html>"""
+    (root / "index.html").write_text(
+        page.replace("__COUNT__", str(finished)).replace("__ROWS__", "\n".join(rows))
+    )
     state["updated_at"] = now()
     save_json(root / "batch.json", state)
 
 
-def prepare_input(name, output):
+def prepare_input(name: str, output: Any) -> Any:
     path = fetch_input(name)
     source = json.loads((paths()["cache_root"] / "demo_inputs" / f"{name}.json").read_text())
     if source["frames"] < 2 or source["fps"] <= 0:
@@ -210,18 +306,32 @@ def prepare_input(name, output):
     return path, source
 
 
-def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+def main() -> None:
+    ap = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     ap.add_argument("--output-root", type=Path, default=paths()["outputs_root"] / "demo-full")
-    ap.add_argument("--videos", nargs="+", choices=tuple(catalog()), help="default: all catalog videos")
+    ap.add_argument(
+        "--videos", nargs="+", choices=tuple(catalog()), help="default: all catalog videos"
+    )
     ap.add_argument("--download-only", action="store_true")
-    ap.add_argument("--status", action="store_true", help="print saved progress without downloading or running models")
-    ap.add_argument("--offload", choices=["none", "streamed", "ram", "disk", "auto"], default="auto")
+    ap.add_argument(
+        "--status",
+        action="store_true",
+        help="print saved progress without downloading or running models",
+    )
+    ap.add_argument(
+        "--offload", choices=["none", "streamed", "ram", "disk", "auto"], default="auto"
+    )
     ap.add_argument("--scratch-dir", type=Path)
     ap.add_argument("--ram-budget-gb", type=float, default=18)
     ap.add_argument("--vram-budget-gb", type=float, default=20)
     ap.add_argument("--scratch-budget-gb", type=float, default=64)
-    ap.add_argument("--allow-resolution-retry", action="store_true", help="explicit legacy opt-in; only with --offload none")
+    ap.add_argument(
+        "--allow-resolution-retry",
+        action="store_true",
+        help="explicit legacy opt-in; only with --offload none",
+    )
     args = ap.parse_args()
     if min(args.ram_budget_gb, args.vram_budget_gb, args.scratch_budget_gb) <= 0:
         ap.error("memory and scratch budgets must be positive")
@@ -231,11 +341,15 @@ def main():
     root.mkdir(parents=True, exist_ok=True)
     names = args.videos or list(catalog())
     manifest = root / "batch.json"
-    state = json.loads(manifest.read_text()) if manifest.exists() else dict(started_at=now(), videos={})
+    state = (
+        json.loads(manifest.read_text()) if manifest.exists() else dict(started_at=now(), videos={})
+    )
     if args.status:
         for name in names:
             record = state["videos"].get(name, {})
-            print(f"{name:20} {record.get('status', 'pending'):10} {record.get('source', {}).get('frames', '—')} frames")
+            print(
+                f"{name:20} {record.get('status', 'pending'):10} {record.get('source', {}).get('frames', '—')} frames"
+            )
         return
     inputs = {}
     # Downloads and input inspection are independent; GPU inference stays sequential.
@@ -248,7 +362,9 @@ def main():
                 inputs[name] = path
                 record = state["videos"].get(name, {})
                 if record.get("source", {}).get("sha256") not in (None, source["sha256"]):
-                    raise ValueError("source input changed; choose a fresh output root to avoid mixing cached windows")
+                    raise ValueError(
+                        "source input changed; choose a fresh output root to avoid mixing cached windows"
+                    )
                 state["videos"][name] = dict(status="ready", source=source)
             except Exception as error:
                 state["videos"][name] = dict(status="failed", stage="download", error=str(error))
@@ -257,7 +373,9 @@ def main():
     if args.download_only:
         print(f"Input inventory: {root / 'batch.json'}", flush=True)
         return
-    run_logged("download_weights.py", ["--only", "relift", "da3", "alltracker"], root / "weights.log")
+    run_logged(
+        "download_weights.py", ["--only", "relift", "da3", "alltracker"], root / "weights.log"
+    )
     for name in names:
         record = state["videos"][name]
         if name not in inputs or record["status"] == "failed":
@@ -285,10 +403,15 @@ def main():
                 run_logged("plotly_demo.py", [output], output / "plotly.log")
                 metadata = complete_result(output, source, required_resolution)
                 if metadata is None:
-                    raise ValueError("export does not match the full source frame count or trajectory checksum")
+                    raise ValueError(
+                        "export does not match the full source frame count or trajectory checksum"
+                    )
                 record.update(status="complete", result=metadata, finished_at=now(), reused=False)
                 record.pop("error", None)
-                print(f"COMPLETE {name}: {metadata['frames']} frames, {metadata['dense_trajectories']} dense tracks", flush=True)
+                print(
+                    f"COMPLETE {name}: {metadata['frames']} frames, {metadata['dense_trajectories']} dense tracks",
+                    flush=True,
+                )
         except Exception as error:
             record.update(status="failed", error=str(error), finished_at=now())
             print(f"FAILED {name}: {error}", flush=True)

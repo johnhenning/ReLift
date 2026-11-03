@@ -1,26 +1,54 @@
 """Reports follow arbitrary persisted campaigns, not repository-specific claims."""
+
+from __future__ import annotations
+
 import json
 from pathlib import Path
+from typing import Any
 
 import pytest
 
 from scripts.report_offload_results import aggregate, load_trials, main, ratios, render_report
 
 
-def write_trial(root, scene, mode, index, seconds, **changes):
+def write_trial(
+    root: str | Path, scene: Any, mode: str, index: int, seconds: Any, **changes: Any
+) -> Any:
     folder = root / scene / mode / f"trial-{index:02}"
     folder.mkdir(parents=True)
-    data = dict(scene=scene, mode=mode, repeat=index, status="complete", wall_seconds=seconds,
-                started_at=f"2031-04-12T11:00:{index:02}+00:00", scenario="synthetic-process",
-                input_sha256="input-a", process_res=210, corrector_batch=3, num_frames=17, seed=23,
-                code_hashes={"model.py": f"code-{mode}"}, wrapper_sha256="wrapper-a", lockfile_sha256="lock-a",
-                telemetry=dict(sampled_peak_gpu_device_used_bytes=4 * 2**30,
-                               sampled_peak_process_tree_rss_bytes=3 * 2**30,
-                               sampled_peak_process_tree_pss_bytes=2 * 2**30,
-                               process_tree_read_bytes=2**30, process_tree_write_bytes=2**29),
-                metrics=dict(settings=dict(ram_budget_gb=7), stages=dict(encode=dict(seconds=seconds / 2,
-                             cuda_allocated_peak_bytes=123, cuda_reserved_peak_bytes=456))),
-                log=str(folder / "run.log"))
+    data = dict(
+        scene=scene,
+        mode=mode,
+        repeat=index,
+        status="complete",
+        wall_seconds=seconds,
+        started_at=f"2031-04-12T11:00:{index:02}+00:00",
+        scenario="synthetic-process",
+        input_sha256="input-a",
+        process_res=210,
+        corrector_batch=3,
+        num_frames=17,
+        seed=23,
+        code_hashes={"model.py": f"code-{mode}"},
+        wrapper_sha256="wrapper-a",
+        lockfile_sha256="lock-a",
+        telemetry=dict(
+            sampled_peak_gpu_device_used_bytes=4 * 2**30,
+            sampled_peak_process_tree_rss_bytes=3 * 2**30,
+            sampled_peak_process_tree_pss_bytes=2 * 2**30,
+            process_tree_read_bytes=2**30,
+            process_tree_write_bytes=2**29,
+        ),
+        metrics=dict(
+            settings=dict(ram_budget_gb=7),
+            stages=dict(
+                encode=dict(
+                    seconds=seconds / 2, cuda_allocated_peak_bytes=123, cuda_reserved_peak_bytes=456
+                )
+            ),
+        ),
+        log=str(folder / "run.log"),
+    )
     data.update(changes)
     (folder / "trial.json").write_text(json.dumps(data))
     (folder / "run.log").write_text("synthetic log")
@@ -28,11 +56,23 @@ def write_trial(root, scene, mode, index, seconds, **changes):
     return folder / "trial.json"
 
 
-@pytest.mark.parametrize("campaign,scene,mode,existing,candidate,expected_ratio,model", [
-    ("campaign-amber", "turntable", "host", [12, 16], [6, 8], 2., "Device Alpha"),
-    ("campaign-violet", "waterfall", "archive", [21, 39, 30], [10, 14, 12], 2.5, "Device Beta"),
-])
-def test_report_is_derived_from_two_unrelated_campaigns(tmp_path, campaign, scene, mode, existing, candidate, expected_ratio, model):
+@pytest.mark.parametrize(
+    "campaign,scene,mode,existing,candidate,expected_ratio,model",
+    [
+        ("campaign-amber", "turntable", "host", [12, 16], [6, 8], 2.0, "Device Alpha"),
+        ("campaign-violet", "waterfall", "archive", [21, 39, 30], [10, 14, 12], 2.5, "Device Beta"),
+    ],
+)
+def test_report_is_derived_from_two_unrelated_campaigns(
+    tmp_path: Path,
+    campaign: Any,
+    scene: Any,
+    mode: str,
+    existing: Any,
+    candidate: Any,
+    expected_ratio: Any,
+    model: Any,
+) -> None:
     root = tmp_path / campaign
     for name, times in (("existing", existing), (mode, candidate)):
         for i, seconds in enumerate(times, 1):
@@ -40,21 +80,38 @@ def test_report_is_derived_from_two_unrelated_campaigns(tmp_path, campaign, scen
     environment = dict(hardware=dict(gpu_name=model), versions=dict(torch="synthetic-version"))
     (root / "environment.json").write_text(json.dumps(environment))
     parity = tmp_path / "arbitrary-parity.json"
-    parity_data = dict(passed=False, repeated_pixel_count=5, shape=[17, 10, 21, 3],
-                       errors=dict(ordinary_xyz=dict(max_normalized_vector_error=.125)))
+    parity_data = dict(
+        passed=False,
+        repeated_pixel_count=5,
+        shape=[17, 10, 21, 3],
+        errors=dict(ordinary_xyz=dict(max_normalized_vector_error=0.125)),
+    )
     parity.write_text(json.dumps(parity_data))
     analysis = tmp_path / "reviewed.md"
     verbatim = "Reviewed prose with exact **formatting**.\n\nDo not rewrite this.\n"
     analysis.write_text(verbatim)
     before = {p: p.read_bytes() for p in root.rglob("*") if p.is_file()}
     output = tmp_path / "reports" / "result.md"
-    main(["--benchmark-roots", str(root), "--parity-files", str(parity), "--analysis", str(analysis), "--out", str(output)])
+    main(
+        [
+            "--benchmark-roots",
+            str(root),
+            "--parity-files",
+            str(parity),
+            "--analysis",
+            str(analysis),
+            "--out",
+            str(output),
+        ]
+    )
     report = output.read_text()
     groups = aggregate(load_trials([root]))
     assert ratios(groups)[0][1] == expected_ratio
     assert scene in report and mode in report and model in report
     assert "2031-04-12T11:00:01+00:00" in report
-    assert "cuda_allocated_peak_bytes | 123" in report and "cuda_reserved_peak_bytes | 456" in report
+    assert (
+        "cuda_allocated_peak_bytes | 123" in report and "cuda_reserved_peak_bytes | 456" in report
+    )
     assert "Sampled tree PSS GiB" in report and "Physical read GiB" in report
     assert '"ram_budget_gb":7' in report
     assert "errors.ordinary_xyz.max_normalized_vector_error | 0.125" in report
@@ -68,10 +125,12 @@ def test_report_is_derived_from_two_unrelated_campaigns(tmp_path, campaign, scen
         assert unsupported not in report
 
 
-def test_missing_metadata_is_unknown_and_failure_has_no_ratio(tmp_path):
+def test_missing_metadata_is_unknown_and_failure_has_no_ratio(tmp_path: Path) -> None:
     root = tmp_path / "minimal"
     root.mkdir()
-    (root / "trial.json").write_text(json.dumps(dict(mode="existing", status="cuda_oom", wall_seconds=1)))
+    (root / "trial.json").write_text(
+        json.dumps(dict(mode="existing", status="cuda_oom", wall_seconds=1))
+    )
     report = render_report([root], destination=tmp_path / "report.md")
     assert "Hardware identity: unknown" in report
     assert "Environment metadata: unknown" in report
@@ -82,7 +141,7 @@ def test_missing_metadata_is_unknown_and_failure_has_no_ratio(tmp_path):
     assert "Parity records: unknown" in report
 
 
-def test_ratio_suppresses_oom_mismatched_settings_and_ambiguous_versions(tmp_path):
+def test_ratio_suppresses_oom_mismatched_settings_and_ambiguous_versions(tmp_path: Path) -> None:
     root = tmp_path / "changes"
     write_trial(root, "motion", "existing", 1, 1, status="cuda_oom")
     write_trial(root, "motion", "ram", 1, 5)
@@ -97,7 +156,7 @@ def test_ratio_suppresses_oom_mismatched_settings_and_ambiguous_versions(tmp_pat
     assert all(value is None for _, value, _ in ratios(aggregate(load_trials([root]))))
 
 
-def test_roots_are_explicit_and_overlaps_do_not_duplicate_records(tmp_path):
+def test_roots_are_explicit_and_overlaps_do_not_duplicate_records(tmp_path: Path) -> None:
     root = tmp_path / "campaign"
     path = write_trial(root, "clip", "existing", 1, 10)
     assert len(load_trials([root, path.parent])) == 1
@@ -105,7 +164,9 @@ def test_roots_are_explicit_and_overlaps_do_not_duplicate_records(tmp_path):
         main(["--out", str(tmp_path / "report.md")])
 
 
-def test_capacity_metadata_does_not_invent_device_identity_and_environment_is_optional(tmp_path):
+def test_capacity_metadata_does_not_invent_device_identity_and_environment_is_optional(
+    tmp_path: Path,
+) -> None:
     root = tmp_path / "capacity"
     write_trial(root, "clip", "existing", 1, 10)
     environment = tmp_path / "separate-environment.json"
@@ -116,28 +177,53 @@ def test_capacity_metadata_does_not_invent_device_identity_and_environment_is_op
     assert "RTX" not in report and "Device Alpha" not in report
 
 
-def test_additional_inference_flags_prevent_an_unmatched_ratio(tmp_path):
+def test_additional_inference_flags_prevent_an_unmatched_ratio(tmp_path: Path) -> None:
     root = tmp_path / "flags"
-    command = ["interpreter", "worker", "--seed", "23", "script", "video", "--num_frames", "17", "--no_video"]
+    command = [
+        "interpreter",
+        "worker",
+        "--seed",
+        "23",
+        "script",
+        "video",
+        "--num_frames",
+        "17",
+        "--no_video",
+    ]
     write_trial(root, "clip", "existing", 1, 10, command=command + ["--out", "baseline-output"])
-    write_trial(root, "clip", "host", 1, 5, command=command + ["--out", "candidate-output", "--offload", "host"])
+    write_trial(
+        root,
+        "clip",
+        "host",
+        1,
+        5,
+        command=command + ["--out", "candidate-output", "--offload", "host"],
+    )
     assert ratios(aggregate(load_trials([root])))[0][1] == 2
     write_trial(root, "clip", "tuned", 1, 3, command=command + ["--geometry", "another-provider"])
     result = ratios(aggregate(load_trials([root])))
     assert result[1][1] is None
 
 
-def test_supplementary_environment_metadata_is_not_a_conflicting_environment(tmp_path):
+def test_supplementary_environment_metadata_is_not_a_conflicting_environment(
+    tmp_path: Path,
+) -> None:
     root = tmp_path / "supplemented"
     write_trial(root, "clip", "existing", 1, 10)
-    harness = dict(python="3.12.9 (build details)", platform="synthetic-platform",
-                   versions={"torch": "8.0", "Some_Package": "1.2"},
-                   cuda_sampling=dict(gpu_device_used_bytes=120))
+    harness = dict(
+        python="3.12.9 (build details)",
+        platform="synthetic-platform",
+        versions={"torch": "8.0", "Some_Package": "1.2"},
+        cuda_sampling=dict(gpu_device_used_bytes=120),
+    )
     (root / "environment.json").write_text(json.dumps(harness))
     shared = tmp_path / "shared.json"
-    detailed = dict(python="3.12.9", platform="synthetic-platform",
-                    packages={"torch": "8.0", "some-package": "1.2", "extra": "4.5"},
-                    hardware=dict(cpu_models=["Synthetic CPU"], memory_bytes=123456))
+    detailed = dict(
+        python="3.12.9",
+        platform="synthetic-platform",
+        packages={"torch": "8.0", "some-package": "1.2", "extra": "4.5"},
+        hardware=dict(cpu_models=["Synthetic CPU"], memory_bytes=123456),
+    )
     shared.write_text(json.dumps(detailed))
     report = render_report([root], environment=shared)
     assert "Mixed recorded environments" not in report
@@ -153,14 +239,18 @@ def test_supplementary_environment_metadata_is_not_a_conflicting_environment(tmp
     assert "packages.extra;" not in report and "hardware.memory_bytes;" not in report
 
 
-def test_parity_tables_preserve_small_values_and_link_long_lists(tmp_path):
+def test_parity_tables_preserve_small_values_and_link_long_lists(tmp_path: Path) -> None:
     root = tmp_path / "campaign"
     write_trial(root, "clip", "existing", 1, 10)
     parity = tmp_path / "parity.json"
-    values = dict(passed=True, shape=[4, 8, 9, 3], repeated_pixel_ids=list(range(127)),
-                  pixel_policy=dict(source="policy-store", grouping=dict(seed=7, group=16)),
-                  errors=dict(ordinary_xyz=dict(bitwise_equal=False, max_normalized_vector_error=1e-7)),
-                  missing_value=None)
+    values = dict(
+        passed=True,
+        shape=[4, 8, 9, 3],
+        repeated_pixel_ids=list(range(127)),
+        pixel_policy=dict(source="policy-store", grouping=dict(seed=7, group=16)),
+        errors=dict(ordinary_xyz=dict(bitwise_equal=False, max_normalized_vector_error=1e-7)),
+        missing_value=None,
+    )
     parity.write_text(json.dumps(values))
     output = tmp_path / "docs" / "report.md"
     report = render_report([root], parity_files=[parity], destination=output)

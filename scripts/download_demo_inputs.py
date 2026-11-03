@@ -1,16 +1,20 @@
 #!/usr/bin/env python
 """List or download official demo inputs, recording hashes and video lengths.
 
-    uv run python scripts/download_demo_inputs.py --list
-    uv run python scripts/download_demo_inputs.py running tennis motocross-bumps
+uv run python scripts/download_demo_inputs.py --list
+uv run python scripts/download_demo_inputs.py running tennis motocross-bumps
 """
+
+from __future__ import annotations
+
 import argparse
 import hashlib
 import json
-from pathlib import Path
 import shutil
 import sys
 import urllib.request
+from pathlib import Path
+from typing import Any
 
 import cv2
 
@@ -19,11 +23,11 @@ sys.path.insert(0, str(REPO))
 from relift.config import paths
 
 
-def catalog():
+def catalog() -> Any:
     return json.loads((REPO / "assets/demo/catalog.json").read_text())
 
 
-def sha256(path):
+def sha256(path: Path) -> Any:
     digest = hashlib.sha256()
     with path.open("rb") as stream:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
@@ -31,7 +35,7 @@ def sha256(path):
     return digest.hexdigest()
 
 
-def fetch_input(name):
+def fetch_input(name: str) -> Any:
     entry = catalog()[name]
     cache = paths()["cache_root"] / "demo_inputs"
     cache.mkdir(parents=True, exist_ok=True)
@@ -45,10 +49,15 @@ def fetch_input(name):
         path.parent.mkdir(parents=True, exist_ok=True)
         try:
             print(f"Downloading {entry['source_url']}", flush=True)
-            with urllib.request.urlopen(entry["source_url"], timeout=120) as source, temp.open("wb") as target:
+            with (
+                urllib.request.urlopen(entry["source_url"], timeout=120) as source,
+                temp.open("wb") as target,
+            ):
                 shutil.copyfileobj(source, target)
             if expected and sha256(temp) != expected:
-                raise ValueError(f"{name}: source checksum changed; inspect the input before updating its pin")
+                raise ValueError(
+                    f"{name}: source checksum changed; inspect the input before updating its pin"
+                )
             temp.replace(path)
         finally:
             temp.unlink(missing_ok=True)
@@ -56,9 +65,15 @@ def fetch_input(name):
     try:
         if not cap.isOpened():
             raise ValueError(f"Cannot decode {path}")
-        metadata = dict(name=name, source_url=entry["source_url"], sha256=sha256(path),
-                        frames=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)), fps=cap.get(cv2.CAP_PROP_FPS),
-                        width=int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), height=int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+        metadata = dict(
+            name=name,
+            source_url=entry["source_url"],
+            sha256=sha256(path),
+            frames=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)),
+            fps=cap.get(cv2.CAP_PROP_FPS),
+            width=int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),
+            height=int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
+        )
     finally:
         cap.release()
     metadata["duration_seconds"] = metadata["frames"] / metadata["fps"] if metadata["fps"] else None
@@ -67,10 +82,12 @@ def fetch_input(name):
     return path
 
 
-def main():
+def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("videos", nargs="*", metavar="SCENE")
-    ap.add_argument("--list", action="store_true", help="show available official inputs without downloading")
+    ap.add_argument(
+        "--list", action="store_true", help="show available official inputs without downloading"
+    )
     args = ap.parse_args()
     unknown = set(args.videos) - set(catalog())
     if unknown:

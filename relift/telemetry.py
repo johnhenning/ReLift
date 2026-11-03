@@ -1,33 +1,38 @@
 """Explicit CUDA stage timing and allocator peaks for offload experiments."""
-from contextlib import contextmanager
+
+from __future__ import annotations
+
 import json
-from pathlib import Path
 import resource
 import time
+from collections.abc import Generator
+from contextlib import contextmanager
+from pathlib import Path
+from typing import Any
 
 import torch
 
 
 class Metrics:
-    def __init__(self, output, settings):
+    def __init__(self, output: str | Path, settings: dict[str, Any]) -> None:
         self.path = Path(output) / "metrics.json"
-        self.data = dict(settings=settings, stages={})
+        self.data: dict[str, Any] = dict(settings=settings, stages={})
         self.started = time.perf_counter()
         self.save()
 
-    def save(self):
+    def save(self) -> None:
         temporary = self.path.with_suffix(".json.tmp")
         temporary.write_text(json.dumps(self.data, indent=2) + "\n")
         temporary.replace(self.path)
 
     @contextmanager
-    def stage(self, name, cuda=True):
+    def stage(self, name: str, cuda: bool = True) -> Generator[dict[str, Any]]:
         active = cuda and torch.cuda.is_available()
         if active:
             torch.cuda.synchronize()
             torch.cuda.reset_peak_memory_stats()
         start = time.perf_counter()
-        record = dict(status="running")
+        record: dict[str, Any] = dict(status="running")
         self.data["stages"][name] = record
         self.save()
         try:
@@ -40,9 +45,13 @@ class Metrics:
             raise
         finally:
             record["seconds"] = time.perf_counter() - start
-            record["process_rss_highwater_bytes"] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024
+            record["process_rss_highwater_bytes"] = (
+                resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024
+            )
             if active:
-                record.update(cuda_allocated_peak_bytes=torch.cuda.max_memory_allocated(),
-                              cuda_reserved_peak_bytes=torch.cuda.max_memory_reserved())
+                record.update(
+                    cuda_allocated_peak_bytes=torch.cuda.max_memory_allocated(),
+                    cuda_reserved_peak_bytes=torch.cuda.max_memory_reserved(),
+                )
             self.data["wall_seconds_since_metrics_init"] = time.perf_counter() - self.started
             self.save()

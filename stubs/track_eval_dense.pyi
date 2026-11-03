@@ -1,0 +1,6 @@
+from typing import Any
+
+from PIL.Image import Image
+
+def _prepare_views_from_pil_list(frames: list[Image], **kwargs: Any) -> list[dict[str, Any]]: ...
+def collate_with_cat(batch: list[tuple[dict[str, Any], ...]]) -> list[dict[str, Any]]: ...

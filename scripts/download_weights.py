@@ -9,21 +9,29 @@ must have the "read gated repositories" permission.  Files already present and m
 recorded md5 are skipped.  The corrector checkpoint is fetched from the release asset URL in the config, or you may
 place the file under <checkpoints_root> yourself.
 """
+
+from __future__ import annotations
+
 import argparse
 import hashlib
 import os
 import sys
 import urllib.request
+from pathlib import Path
+from typing import Any
 
 import yaml
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from relift.config import REPO, paths  # noqa: E402
 
-ACCESS = {"vggt_omega": "https://huggingface.co/facebook/VGGT-Omega", "cowtracker": "https://huggingface.co/facebook/cowtracker"}
+ACCESS = {
+    "vggt_omega": "https://huggingface.co/facebook/VGGT-Omega",
+    "cowtracker": "https://huggingface.co/facebook/cowtracker",
+}
 
 
-def md5(path, chunk=1 << 24):
+def md5(path: str | Path, chunk: int = 1 << 24) -> Any:
     h = hashlib.md5()
     with open(path, "rb") as f:
         for b in iter(lambda: f.read(chunk), b""):
@@ -31,18 +39,23 @@ def md5(path, chunk=1 << 24):
     return h.hexdigest()
 
 
-def fetch(name, w, root):
+def fetch(name: str, w: dict[str, Any], root: str | Path) -> Any:
     from huggingface_hub import hf_hub_download, snapshot_download
+
     dst_dir = os.path.join(root, w.get("dir", ""))
     if w["kind"] == "hf_snapshot":
         path = snapshot_download(w["repo"], revision=w.get("revision"), local_dir=dst_dir)
         if w.get("md5_model_safetensors"):
             got = md5(os.path.join(path, "model.safetensors"))
-            return path, ("md5 ok" if got == w["md5_model_safetensors"] else f"MD5 MISMATCH {got} != {w['md5_model_safetensors']}")
+            return path, (
+                "md5 ok"
+                if got == w["md5_model_safetensors"]
+                else f"MD5 MISMATCH {got} != {w['md5_model_safetensors']}"
+            )
         return path, "directory"
     if w["kind"] == "hf_file":
         path = hf_hub_download(w["repo"], w["file"], revision=w.get("revision"), local_dir=dst_dir)
-    else:                                                                   # plain URL
+    else:  # plain URL
         path = os.path.join(root, w["file"])
         if not w.get("url"):
             if os.path.exists(path):
@@ -60,7 +73,9 @@ def fetch(name, w, root):
 
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     ap.add_argument("--only", nargs="*", default=None)
     ap.add_argument("--checkpoints_root", default=None)
     a = ap.parse_args()
@@ -78,8 +93,16 @@ if __name__ == "__main__":
                 failed.append(name)
         except Exception as e:  # noqa: BLE001
             msg = str(e).splitlines()[0][:160]
-            if name in ACCESS and ("401" in msg or "403" in msg or "gated" in msg.lower() or "GatedRepo" in type(e).__name__):
-                print(f"{name:12s} ACCESS REQUIRED: request access at {ACCESS[name]}, then `hf auth login` and rerun", flush=True)
+            if name in ACCESS and (
+                "401" in msg
+                or "403" in msg
+                or "gated" in msg.lower()
+                or "GatedRepo" in type(e).__name__
+            ):
+                print(
+                    f"{name:12s} ACCESS REQUIRED: request access at {ACCESS[name]}, then `hf auth login` and rerun",
+                    flush=True,
+                )
             else:
                 print(f"{name:12s} FAILED: {msg}", flush=True)
             failed.append(name)

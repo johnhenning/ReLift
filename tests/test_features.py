@@ -1,10 +1,14 @@
+from __future__ import annotations
+
+from typing import Any
+
 import numpy as np
 import torch
 
 from relift.features import interp_init, normalise
 
 
-def _reference(Y, obs):
+def _reference(Y: Any, obs: Any) -> Any:
     """Plain NumPy interpolation, per track, held at the ends; gap = frames to the nearest observed frame."""
     B, T, P, _ = Y.shape
     x, gap = np.zeros_like(Y), np.zeros((B, T, P), np.int64)
@@ -23,7 +27,7 @@ def _reference(Y, obs):
     return x, gap
 
 
-def test_interp_init_matches_reference():
+def test_interp_init_matches_reference() -> None:
     rng = np.random.default_rng(0)
     B, T, P = 3, 20, 7
     Y = rng.normal(size=(B, T, P, 3)).astype(np.float32)
@@ -37,10 +41,12 @@ def test_interp_init_matches_reference():
     assert (x[obs] == torch.from_numpy(Y)[obs]).all()
 
 
-def test_normalise_uses_the_reference_median_depth():
+def test_normalise_uses_the_reference_median_depth() -> None:
     torch.manual_seed(0)
     Y = torch.rand(2, 5, 11, 3) + 0.5
     origin = torch.rand(2, 5, 3)
     Yn, on, s = normalise(Y, None, origin)
     assert torch.allclose(s, Y[:, 0, :, 2].median(dim=1).values)
-    assert torch.allclose(Yn * s.view(-1, 1, 1, 1), Y) and torch.allclose(on * s.view(-1, 1, 1), origin)
+    assert torch.allclose(Yn * s.view(-1, 1, 1, 1), Y) and torch.allclose(
+        on * s.view(-1, 1, 1), origin
+    )

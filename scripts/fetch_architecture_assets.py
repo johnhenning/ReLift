@@ -6,6 +6,9 @@
 The first download records checksums; subsequent downloads must match them.
 Normal viewer builds use the checked-in assets and never access the network.
 """
+
+from __future__ import annotations
+
 import hashlib
 import json
 from pathlib import Path
@@ -16,7 +19,7 @@ VERSION = "11.12.0"
 DEST = ROOT / "docs/vendor/mermaid"
 
 
-def main():
+def main() -> None:
     DEST.mkdir(parents=True, exist_ok=True)
     lock = DEST / "source.json"
     previous = json.loads(lock.read_text()) if lock.exists() else {}
@@ -32,7 +35,9 @@ def main():
         (DEST / filename).write_bytes(data)
         records[filename] = dict(url=url, sha256=digest, bytes=len(data))
         print(f"Vendored {filename}: {len(data):,} bytes")
-    lock.write_text(json.dumps(dict(package="mermaid", version=VERSION, files=records), indent=2) + "\n")
+    lock.write_text(
+        json.dumps(dict(package="mermaid", version=VERSION, files=records), indent=2) + "\n"
+    )
 
 
 if __name__ == "__main__":
