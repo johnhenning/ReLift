@@ -21,6 +21,7 @@ MEASURED = [
     "scripts/pipeline_experiment.py",
     "scripts/prepare_background_commits_pr.py",
     "tests/test_shard_commits.py",
+    "tests/test_configuration.py",
     "tests/gpu/test_shard_commits.py",
     "configs/experiments/background-commits.json",
     "configs/inference/background-commits.toml",
@@ -47,6 +48,7 @@ def main() -> None:
     else:
         files += [
             "scripts/publish_background_commits.py",
+            "scripts/build_optimization_charts.py",
             "docs/optimization-configuration.md",
             "docs/native-optimization-experiments/06-background-commits.md",
             "docs/native-optimization-experiments/README.md",
@@ -55,6 +57,11 @@ def main() -> None:
             ".gitattributes",
             "configs/experiments/background-commits-revisions.json",
             "configs/experiments/background-commits-roles.json",
+            "scripts/summarize_optimization_experiments.py",
+            "scripts/run_background_campaign.py",
+            "scripts/benchmark_offload.py",
+            "scripts/run_optimization_experiments.py",
+            "tests/test_gpu_benchmark_guard.py",
         ]
         files += [
             str(p.relative_to(ROOT))

@@ -11,6 +11,7 @@ import argparse
 import hashlib
 import html
 import json
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -145,7 +146,9 @@ def main() -> None:
                 "Medians; runtime whiskers show observed min–max. Labels show completed/attempted trials.\nTree/device/output peaks are sampled; main-process RSS high water is OS-reported. Output allocation includes fixtures.",
                 fontsize=10,
             )
-            figure.savefig(args.out_dir / f"{identity}.png", dpi=150)
+            figure.savefig(
+                args.out_dir / f"{identity}.png", dpi=150, bbox_inches="tight", pad_inches=0.15
+            )
             plt.close(figure)
             graph.update_layout(
                 height=950, template="plotly_white", title=title, margin=dict(l=180, r=40, b=60)
@@ -161,9 +164,10 @@ def main() -> None:
             )
     analysis = ""
     if args.analysis:
-        from markdown_it import MarkdownIt
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+        from scripts.build_benchmark_charts import render_analysis
 
-        analysis = MarkdownIt("commonmark", {"html": False}).render(args.analysis.read_text())
+        analysis = render_analysis(args.analysis, args.out_dir / "index.html")
     from plotly.utils import PlotlyJSONEncoder
 
     payload = json.dumps(graphs, cls=PlotlyJSONEncoder).replace("<", "\\u003c")

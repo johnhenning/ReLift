@@ -17,6 +17,9 @@ records the repeated RAM comparison, disk pilot and composition/reuse checks.
 The next [budgeted observation-cache experiment](05-observation-cache.md) targets
 CPU tracker gathering identified by the ray profile, with independent placement
 and combination checks.
+The [bounded background-commit experiment](06-background-commits.md) tests
+overlapping one CPU shard commit with the following GPU batch, using typed
+component profiles and an independently injectable owner.
 The proposals below remain the original review plans; result documents record
 actual implementation and measurements separately.
 

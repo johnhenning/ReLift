@@ -1,0 +1,396 @@
+[
+  {
+    "experiment": "combinations",
+    "variant": "cached",
+    "n": 1,
+    "samples": [
+      {
+        "backend": "threaded",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 1,
+        "peak_pending_payload_bytes": 13074432,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.961953771970002,
+        "worker_write_seconds": 4.807605319074355
+      }
+    ],
+    "medians": {
+      "shards_submitted": 18,
+      "shards_committed": 18,
+      "max_pending_shards": 1,
+      "peak_pending_payload_bytes": 13074432,
+      "pending_payload_bytes": 0,
+      "wait_seconds": 0.961953771970002,
+      "worker_write_seconds": 4.807605319074355
+    }
+  },
+  {
+    "experiment": "combinations",
+    "variant": "control",
+    "n": 1,
+    "samples": [
+      {
+        "backend": "sync",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 0,
+        "peak_pending_payload_bytes": 0,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.0,
+        "worker_write_seconds": 5.517503934010165
+      }
+    ],
+    "medians": {
+      "shards_submitted": 18,
+      "shards_committed": 18,
+      "max_pending_shards": 0,
+      "peak_pending_payload_bytes": 0,
+      "pending_payload_bytes": 0,
+      "wait_seconds": 0.0,
+      "worker_write_seconds": 5.517503934010165
+    }
+  },
+  {
+    "experiment": "combinations",
+    "variant": "native",
+    "n": 1,
+    "samples": [
+      {
+        "backend": "threaded",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 1,
+        "peak_pending_payload_bytes": 13074432,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 5.595621877990197,
+        "worker_write_seconds": 9.091250177036272
+      }
+    ],
+    "medians": {
+      "shards_submitted": 18,
+      "shards_committed": 18,
+      "max_pending_shards": 1,
+      "peak_pending_payload_bytes": 13074432,
+      "pending_payload_bytes": 0,
+      "wait_seconds": 5.595621877990197,
+      "worker_write_seconds": 9.091250177036272
+    }
+  },
+  {
+    "experiment": "combinations",
+    "variant": "prefetched",
+    "n": 1,
+    "samples": [
+      {
+        "backend": "threaded",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 1,
+        "peak_pending_payload_bytes": 13074432,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 1.2878755419806112,
+        "worker_write_seconds": 4.942846022953745
+      }
+    ],
+    "medians": {
+      "shards_submitted": 18,
+      "shards_committed": 18,
+      "max_pending_shards": 1,
+      "peak_pending_payload_bytes": 13074432,
+      "pending_payload_bytes": 0,
+      "wait_seconds": 1.2878755419806112,
+      "worker_write_seconds": 4.942846022953745
+    }
+  },
+  {
+    "experiment": "correction",
+    "variant": "control",
+    "n": 5,
+    "samples": [
+      {
+        "backend": "sync",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 0,
+        "peak_pending_payload_bytes": 0,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.0,
+        "worker_write_seconds": 5.19432124303421
+      },
+      {
+        "backend": "sync",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 0,
+        "peak_pending_payload_bytes": 0,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.0,
+        "worker_write_seconds": 7.114583156013396
+      },
+      {
+        "backend": "sync",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 0,
+        "peak_pending_payload_bytes": 0,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.0,
+        "worker_write_seconds": 7.131792923930334
+      },
+      {
+        "backend": "sync",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 0,
+        "peak_pending_payload_bytes": 0,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.0,
+        "worker_write_seconds": 7.207587643963052
+      },
+      {
+        "backend": "sync",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 0,
+        "peak_pending_payload_bytes": 0,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.0,
+        "worker_write_seconds": 6.898708452004939
+      }
+    ],
+    "medians": {
+      "shards_submitted": 18,
+      "shards_committed": 18,
+      "max_pending_shards": 0,
+      "peak_pending_payload_bytes": 0,
+      "pending_payload_bytes": 0,
+      "wait_seconds": 0.0,
+      "worker_write_seconds": 7.114583156013396
+    }
+  },
+  {
+    "experiment": "correction",
+    "variant": "threaded",
+    "n": 5,
+    "samples": [
+      {
+        "backend": "threaded",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 1,
+        "peak_pending_payload_bytes": 13074432,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.7072076698532328,
+        "worker_write_seconds": 4.816476738022175
+      },
+      {
+        "backend": "threaded",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 1,
+        "peak_pending_payload_bytes": 13074432,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.5752956270007417,
+        "worker_write_seconds": 4.676351221947698
+      },
+      {
+        "backend": "threaded",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 1,
+        "peak_pending_payload_bytes": 13074432,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.7845313369471114,
+        "worker_write_seconds": 4.934228149999399
+      },
+      {
+        "backend": "threaded",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 1,
+        "peak_pending_payload_bytes": 13074432,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.5900904900336172,
+        "worker_write_seconds": 4.708320127014304
+      },
+      {
+        "backend": "threaded",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 1,
+        "peak_pending_payload_bytes": 13074432,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.6249583351018373,
+        "worker_write_seconds": 4.668696300039301
+      }
+    ],
+    "medians": {
+      "shards_submitted": 18,
+      "shards_committed": 18,
+      "max_pending_shards": 1,
+      "peak_pending_payload_bytes": 13074432,
+      "pending_payload_bytes": 0,
+      "wait_seconds": 0.6249583351018373,
+      "worker_write_seconds": 4.708320127014304
+    }
+  },
+  {
+    "experiment": "defaults",
+    "variant": "configured-default",
+    "n": 1,
+    "samples": [
+      {
+        "backend": "sync",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 0,
+        "peak_pending_payload_bytes": 0,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.0,
+        "worker_write_seconds": 6.813219288946129
+      }
+    ],
+    "medians": {
+      "shards_submitted": 18,
+      "shards_committed": 18,
+      "max_pending_shards": 0,
+      "peak_pending_payload_bytes": 0,
+      "pending_payload_bytes": 0,
+      "wait_seconds": 0.0,
+      "worker_write_seconds": 6.813219288946129
+    }
+  },
+  {
+    "experiment": "pipeline",
+    "variant": "control",
+    "n": 5,
+    "samples": [
+      {
+        "backend": "sync",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 0,
+        "peak_pending_payload_bytes": 0,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.0,
+        "worker_write_seconds": 5.134542941028485
+      },
+      {
+        "backend": "sync",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 0,
+        "peak_pending_payload_bytes": 0,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.0,
+        "worker_write_seconds": 4.879719830059912
+      },
+      {
+        "backend": "sync",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 0,
+        "peak_pending_payload_bytes": 0,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.0,
+        "worker_write_seconds": 4.937747370073339
+      },
+      {
+        "backend": "sync",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 0,
+        "peak_pending_payload_bytes": 0,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.0,
+        "worker_write_seconds": 4.834455842006719
+      },
+      {
+        "backend": "sync",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 0,
+        "peak_pending_payload_bytes": 0,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.0,
+        "worker_write_seconds": 4.800752233044477
+      }
+    ],
+    "medians": {
+      "shards_submitted": 18,
+      "shards_committed": 18,
+      "max_pending_shards": 0,
+      "peak_pending_payload_bytes": 0,
+      "pending_payload_bytes": 0,
+      "wait_seconds": 0.0,
+      "worker_write_seconds": 4.879719830059912
+    }
+  },
+  {
+    "experiment": "pipeline",
+    "variant": "threaded",
+    "n": 5,
+    "samples": [
+      {
+        "backend": "threaded",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 1,
+        "peak_pending_payload_bytes": 13074432,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.7882509409682825,
+        "worker_write_seconds": 5.089183487958508
+      },
+      {
+        "backend": "threaded",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 1,
+        "peak_pending_payload_bytes": 13074432,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.7936029049742501,
+        "worker_write_seconds": 4.846726621006383
+      },
+      {
+        "backend": "threaded",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 1,
+        "peak_pending_payload_bytes": 13074432,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.6077219189319294,
+        "worker_write_seconds": 4.674754297971958
+      },
+      {
+        "backend": "threaded",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 1,
+        "peak_pending_payload_bytes": 13074432,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.5594597420131322,
+        "worker_write_seconds": 4.709125903929817
+      },
+      {
+        "backend": "threaded",
+        "shards_submitted": 18,
+        "shards_committed": 18,
+        "max_pending_shards": 1,
+        "peak_pending_payload_bytes": 13074432,
+        "pending_payload_bytes": 0,
+        "wait_seconds": 0.5997205518942792,
+        "worker_write_seconds": 4.768146288988646
+      }
+    ],
+    "medians": {
+      "shards_submitted": 18,
+      "shards_committed": 18,
+      "max_pending_shards": 1,
+      "peak_pending_payload_bytes": 13074432,
+      "pending_payload_bytes": 0,
+      "wait_seconds": 0.6077219189319294,
+      "worker_write_seconds": 4.768146288988646
+    }
+  }
+]

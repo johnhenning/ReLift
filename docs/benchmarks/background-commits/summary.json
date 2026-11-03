@@ -1,0 +1,467 @@
+[
+  {
+    "experiment": "combinations",
+    "variant": "cached",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "validation",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/background-commits-isolated/combinations/cached/trial-01/trial.json"
+    ],
+    "options": {
+      "inference_profile": "background-cached"
+    },
+    "source_fingerprint": "1babc89dc417b2f3ffc7ed995ababac09cbdbe9c36675842004ba89ab9848196",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "/home/johnhenning/projects/relift/.venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "a0e2704311fe72e5b3a173cd2da9c0dc7d452849eca35b90fd64f8586d19726a"
+    },
+    "quality": "pass",
+    "wall_median": 13.003105185984168,
+    "wall_min": 13.003105185984168,
+    "wall_max": 13.003105185984168,
+    "sampled_peak_process_tree_rss_bytes": 1663586304,
+    "sampled_peak_process_tree_pss_bytes": 1521110016,
+    "sampled_peak_gpu_device_used_bytes": 4367515648,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 416669696,
+    "phase_medians": {
+      "model_load": 0.1670414010004606,
+      "correction": 11.125026173016522
+    },
+    "process_rss_highwater_bytes": 1663586304,
+    "sampled_output_peak_allocated_bytes": 570458112
+  },
+  {
+    "experiment": "combinations",
+    "variant": "control",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "validation",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/background-commits-isolated/combinations/control/trial-01/trial.json"
+    ],
+    "options": {
+      "inference_profile": "ram"
+    },
+    "source_fingerprint": "ec26be339937a4579938f927138a5390183538aa09576a3291c15951f0e87078",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "/home/johnhenning/projects/relift/.venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "a0e2704311fe72e5b3a173cd2da9c0dc7d452849eca35b90fd64f8586d19726a"
+    },
+    "quality": null,
+    "wall_median": 17.992788462986937,
+    "wall_min": 17.992788462986937,
+    "wall_max": 17.992788462986937,
+    "sampled_peak_process_tree_rss_bytes": 1658220544,
+    "sampled_peak_process_tree_pss_bytes": 1515560960,
+    "sampled_peak_gpu_device_used_bytes": 4292018176,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 416657408,
+    "phase_medians": {
+      "model_load": 0.1793716630199924,
+      "correction": 15.938551230996381
+    },
+    "process_rss_highwater_bytes": 1658220544,
+    "sampled_output_peak_allocated_bytes": 570466304
+  },
+  {
+    "experiment": "combinations",
+    "variant": "native",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "validation",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/background-commits-isolated/combinations/native/trial-01/trial.json"
+    ],
+    "options": {
+      "inference_profile": "background-native",
+      "native_build": "outputs/native/da3-final"
+    },
+    "source_fingerprint": "2936b9a5eabc86a2527865ed0cad664def33a892e784115b1cd4732cea378083",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "/home/johnhenning/projects/relift/.venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "a0e2704311fe72e5b3a173cd2da9c0dc7d452849eca35b90fd64f8586d19726a"
+    },
+    "quality": "pass",
+    "wall_median": 16.23251074901782,
+    "wall_min": 16.23251074901782,
+    "wall_max": 16.23251074901782,
+    "sampled_peak_process_tree_rss_bytes": 1551257600,
+    "sampled_peak_process_tree_pss_bytes": 1405320192,
+    "sampled_peak_gpu_device_used_bytes": 4531093504,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 416702464,
+    "phase_medians": {
+      "model_load": 0.16835514100966975,
+      "correction": 14.307491824001772
+    },
+    "process_rss_highwater_bytes": 1551257600,
+    "sampled_output_peak_allocated_bytes": 570470400
+  },
+  {
+    "experiment": "combinations",
+    "variant": "prefetched",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "validation",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/background-commits-isolated/combinations/prefetched/trial-01/trial.json"
+    ],
+    "options": {
+      "inference_profile": "background-prefetch"
+    },
+    "source_fingerprint": "9894d0b9f2523f773c6a9da8f3ee71de60e1c61d57e7958bf98002d046cd53a2",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "/home/johnhenning/projects/relift/.venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "a0e2704311fe72e5b3a173cd2da9c0dc7d452849eca35b90fd64f8586d19726a"
+    },
+    "quality": "pass",
+    "wall_median": 13.877165015990613,
+    "wall_min": 13.877165015990613,
+    "wall_max": 13.877165015990613,
+    "sampled_peak_process_tree_rss_bytes": 1716936704,
+    "sampled_peak_process_tree_pss_bytes": 1574681600,
+    "sampled_peak_gpu_device_used_bytes": 4505927680,
+    "process_tree_read_bytes": 4096,
+    "process_tree_write_bytes": 416690176,
+    "phase_medians": {
+      "model_load": 0.1715019989933353,
+      "correction": 11.98335470200982
+    },
+    "process_rss_highwater_bytes": 1716936704,
+    "sampled_output_peak_allocated_bytes": 570458112
+  },
+  {
+    "experiment": "correction",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/background-commits-isolated/correction/control/trial-01/trial.json",
+      "outputs/experiments/background-commits-isolated/correction/control/trial-02/trial.json",
+      "outputs/experiments/background-commits-isolated/correction/control/trial-03/trial.json",
+      "outputs/experiments/background-commits-isolated/correction/control/trial-04/trial.json",
+      "outputs/experiments/background-commits-isolated/correction/control/trial-05/trial.json"
+    ],
+    "options": {
+      "inference_profile": "ram"
+    },
+    "source_fingerprint": "ec26be339937a4579938f927138a5390183538aa09576a3291c15951f0e87078",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "/home/johnhenning/projects/relift/.venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "a0e2704311fe72e5b3a173cd2da9c0dc7d452849eca35b90fd64f8586d19726a"
+    },
+    "quality": "pass",
+    "wall_median": 18.753914203000022,
+    "wall_min": 17.01991291399463,
+    "wall_max": 21.018568800995126,
+    "sampled_peak_process_tree_rss_bytes": 1633185792,
+    "sampled_peak_process_tree_pss_bytes": 1490751488,
+    "sampled_peak_gpu_device_used_bytes": 4259708928,
+    "process_tree_read_bytes": 737280,
+    "process_tree_write_bytes": 416657408,
+    "phase_medians": {
+      "model_load": 0.16749964500195347,
+      "correction": 16.846312680019764
+    },
+    "process_rss_highwater_bytes": 1633185792,
+    "sampled_output_peak_allocated_bytes": 570458112
+  },
+  {
+    "experiment": "correction",
+    "variant": "threaded",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/background-commits-isolated/correction/threaded/trial-01/trial.json",
+      "outputs/experiments/background-commits-isolated/correction/threaded/trial-02/trial.json",
+      "outputs/experiments/background-commits-isolated/correction/threaded/trial-03/trial.json",
+      "outputs/experiments/background-commits-isolated/correction/threaded/trial-04/trial.json",
+      "outputs/experiments/background-commits-isolated/correction/threaded/trial-05/trial.json"
+    ],
+    "options": {
+      "inference_profile": "background-commits"
+    },
+    "source_fingerprint": "ea08d5297e96bba09da3cd7b80ce75d33628a85f217ab85221d9b83fe4d88264",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "/home/johnhenning/projects/relift/.venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "a0e2704311fe72e5b3a173cd2da9c0dc7d452849eca35b90fd64f8586d19726a"
+    },
+    "quality": "pass",
+    "wall_median": 12.060452926991275,
+    "wall_min": 11.947125284990761,
+    "wall_max": 13.883413951989496,
+    "sampled_peak_process_tree_rss_bytes": 1655480320,
+    "sampled_peak_process_tree_pss_bytes": 1513165824,
+    "sampled_peak_gpu_device_used_bytes": 4259708928,
+    "process_tree_read_bytes": 831488,
+    "process_tree_write_bytes": 416665600,
+    "phase_medians": {
+      "model_load": 0.16647800002829172,
+      "correction": 10.131590193981538
+    },
+    "process_rss_highwater_bytes": 1655480320,
+    "sampled_output_peak_allocated_bytes": 570458112
+  },
+  {
+    "experiment": "defaults",
+    "variant": "configured-default",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "validation",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/background-commits-isolated/defaults/configured-default/trial-01/trial.json"
+    ],
+    "options": {
+      "inference_profile": "ram"
+    },
+    "source_fingerprint": "ec26be339937a4579938f927138a5390183538aa09576a3291c15951f0e87078",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "/home/johnhenning/projects/relift/.venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "a0e2704311fe72e5b3a173cd2da9c0dc7d452849eca35b90fd64f8586d19726a"
+    },
+    "quality": "pass",
+    "wall_median": 18.54716581699904,
+    "wall_min": 18.54716581699904,
+    "wall_max": 18.54716581699904,
+    "sampled_peak_process_tree_rss_bytes": 1630142464,
+    "sampled_peak_process_tree_pss_bytes": 1487466496,
+    "sampled_peak_gpu_device_used_bytes": 4292018176,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 416657408,
+    "phase_medians": {
+      "model_load": 0.16885758598800749,
+      "correction": 16.574867532006465
+    },
+    "process_rss_highwater_bytes": 1630142464,
+    "sampled_output_peak_allocated_bytes": 570458112
+  },
+  {
+    "experiment": "defaults",
+    "variant": "control",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "validation",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/background-commits-isolated/defaults/control/trial-01/trial.json"
+    ],
+    "options": {
+      "inference_profile": "ram"
+    },
+    "source_fingerprint": "5a9eab80705ef4baa387ee46507333c623f1ba44e1c452d41852992838329898",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "/home/johnhenning/projects/relift/.venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "a0e2704311fe72e5b3a173cd2da9c0dc7d452849eca35b90fd64f8586d19726a"
+    },
+    "quality": null,
+    "wall_median": 19.74222419501166,
+    "wall_min": 19.74222419501166,
+    "wall_max": 19.74222419501166,
+    "sampled_peak_process_tree_rss_bytes": 1647263744,
+    "sampled_peak_process_tree_pss_bytes": 1504615424,
+    "sampled_peak_gpu_device_used_bytes": 4292018176,
+    "process_tree_read_bytes": 176128,
+    "process_tree_write_bytes": 416641024,
+    "phase_medians": {
+      "model_load": 0.1780738969973754,
+      "correction": 16.63347640298889
+    },
+    "process_rss_highwater_bytes": 1647271936,
+    "sampled_output_peak_allocated_bytes": 570449920
+  },
+  {
+    "experiment": "pipeline",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/background-commits-isolated/pipeline/control/trial-01/trial.json",
+      "outputs/experiments/background-commits-isolated/pipeline/control/trial-02/trial.json",
+      "outputs/experiments/background-commits-isolated/pipeline/control/trial-03/trial.json",
+      "outputs/experiments/background-commits-isolated/pipeline/control/trial-04/trial.json",
+      "outputs/experiments/background-commits-isolated/pipeline/control/trial-05/trial.json"
+    ],
+    "options": {
+      "video": "cache/demo_inputs/swing-tire.mp4",
+      "inference_profile": "ram"
+    },
+    "source_fingerprint": "2e689c93c6eb296fdedffc987b0364f59d40ec7acdd7fc455e90c6958087b574",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "/home/johnhenning/projects/relift/.venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "a0e2704311fe72e5b3a173cd2da9c0dc7d452849eca35b90fd64f8586d19726a"
+    },
+    "quality": "pass",
+    "wall_median": 58.040531715989346,
+    "wall_min": 57.857561479992,
+    "wall_max": 58.53751957201166,
+    "sampled_peak_process_tree_rss_bytes": 13505716224,
+    "sampled_peak_process_tree_pss_bytes": 14401079296,
+    "sampled_peak_gpu_device_used_bytes": 13409583104,
+    "process_tree_read_bytes": 135168,
+    "process_tree_write_bytes": 628916224,
+    "phase_medians": {
+      "decode": 1.0314749110257253,
+      "da3": 35.771973783994326,
+      "alltracker": 4.206104160984978,
+      "corrector_load": 0.1494015810021665,
+      "corrector_stream": 13.861329206993105
+    },
+    "process_rss_highwater_bytes": 14543765504,
+    "sampled_output_peak_allocated_bytes": 628527104
+  },
+  {
+    "experiment": "pipeline",
+    "variant": "threaded",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/background-commits-isolated/pipeline/threaded/trial-01/trial.json",
+      "outputs/experiments/background-commits-isolated/pipeline/threaded/trial-02/trial.json",
+      "outputs/experiments/background-commits-isolated/pipeline/threaded/trial-03/trial.json",
+      "outputs/experiments/background-commits-isolated/pipeline/threaded/trial-04/trial.json",
+      "outputs/experiments/background-commits-isolated/pipeline/threaded/trial-05/trial.json"
+    ],
+    "options": {
+      "video": "cache/demo_inputs/swing-tire.mp4",
+      "inference_profile": "background-commits"
+    },
+    "source_fingerprint": "5404a4d3caf73bb635edcf7de59e336bf435a4c8531a7d57b1624cdeeda90c52",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "/home/johnhenning/projects/relift/.venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "a0e2704311fe72e5b3a173cd2da9c0dc7d452849eca35b90fd64f8586d19726a"
+    },
+    "quality": "pass",
+    "wall_median": 53.59231519000605,
+    "wall_min": 53.43709829100408,
+    "wall_max": 53.80163406900829,
+    "sampled_peak_process_tree_rss_bytes": 14233153536,
+    "sampled_peak_process_tree_pss_bytes": 13503139840,
+    "sampled_peak_gpu_device_used_bytes": 13409583104,
+    "process_tree_read_bytes": 847872,
+    "process_tree_write_bytes": 628920320,
+    "phase_medians": {
+      "decode": 1.0075442210072652,
+      "da3": 35.70193437198759,
+      "alltracker": 4.156062669993844,
+      "corrector_load": 0.155256586993346,
+      "corrector_stream": 9.459410624986049
+    },
+    "process_rss_highwater_bytes": 14543720448,
+    "sampled_output_peak_allocated_bytes": 628527104
+  }
+]

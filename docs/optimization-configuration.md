@@ -100,7 +100,7 @@ A changed source file invalidates store resume even if its effective values matc
 | `observations` | `gather`, `cache_mb`, `depth_cache_mb`, `prefetch` |
 | `rays` | `backend` |
 | `correction` | `batch`, `padding_batch`, `compile` |
-| `storage` | `packing`, `writer`, `hash_writes` |
+| `storage` | `packing`, `writer`, `hash_writes`, `commits` |
 | `da3` | `weights`, `features`, `reuse` |
 | `tracker` | `init_weights`, `copy_outputs` |
 | `runtime` | `native_build` |
@@ -210,3 +210,19 @@ The historical worker snapshots and monkey-patching prefetch driver remain intac
 for reproducing old measurements. The configurable production path uses an explicit
 `PrefetchedRays` object with one future and stream, and restores no global methods.
 Timed trials record actual backends, source/binary hashes and the environment.
+
+## Background shard commits
+
+`storage.commits` selects `sync` (default) or `threaded`. The latter owns one
+pending CPU shard and overlaps its commit with the next GPU batch. It reserves an
+additional staging workspace under the RAM target and drains before final store
+verification. Select `background-commits`, or compose the field into an existing
+TOML profile. `background-cached`, `background-prefetch` and `background-native`
+are explicit composition-validation profiles; they are not automatic defaults.
+
+The legacy adapter exposes the same choice as `commit_backend`.
+`InferenceComponents.shard_committer_factory` receives the store sink and returns
+an owner implementing `submit(start, xyz=..., lift=..., observed=...)`, `drain()`,
+`metrics`, `__enter__` and `__exit__`. Submission transfers CPU buffer ownership
+until the next drain; at most one submitted shard may remain pending. The factory
+requires its own stable fingerprint. See the [experiment design and results](native-optimization-experiments/06-background-commits.md).

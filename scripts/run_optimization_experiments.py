@@ -62,6 +62,10 @@ def run_variant(
         return
     if directory.exists():
         raise FileExistsError(directory)
+    gpu = NvidiaSampler()
+    occupied = gpu.compute_processes()
+    if occupied:
+        raise RuntimeError(f"Benchmark requires an idle compute GPU; active processes: {occupied}")
     output = directory / "output"
     output.mkdir(parents=True)
     if definition["task"] in ("correction", "alltracker", "compilation"):
@@ -100,8 +104,7 @@ def run_variant(
         },
         environment_lockfile_sha256=sha256(ROOT / "uv.lock"),
     )
-    gpu = NvidiaSampler()
-    telemetry = Telemetry(gpu)
+    telemetry = Telemetry(gpu, require_exclusive_gpu=True)
     output / "scratch"
     environment = dict(
         os.environ,
@@ -138,28 +141,38 @@ def run_variant(
             env=environment,
             start_new_session=True,
         )
-        while process.poll() is None:
-            elapsed = time.perf_counter() - started
-            telemetry.capture(process.pid, elapsed)
-            sizes = tree_size(output)
-            for key, value in sizes.items():
-                peaks[key] = max(peaks[key], value)
-            if elapsed > definition.get("timeout_seconds", 900):
-                timed_out = True
+        try:
+            while process.poll() is None:
+                elapsed = time.perf_counter() - started
+                telemetry.capture(process.pid, elapsed)
+                sizes = tree_size(output)
+                for key, value in sizes.items():
+                    peaks[key] = max(peaks[key], value)
+                if telemetry.interference or elapsed > definition.get("timeout_seconds", 900):
+                    timed_out = not telemetry.interference
+                    os.killpg(process.pid, signal.SIGTERM)
+                    try:
+                        process.wait(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        os.killpg(process.pid, signal.SIGKILL)
+                    break
+                time.sleep(0.1)
+        finally:
+            if process.poll() is None:
                 os.killpg(process.pid, signal.SIGTERM)
                 try:
                     process.wait(timeout=5)
                 except subprocess.TimeoutExpired:
                     os.killpg(process.pid, signal.SIGKILL)
-                break
-            time.sleep(0.1)
         returncode = process.wait()
     wall = time.perf_counter() - started
     text = log.read_text(errors="replace")
     result_file = output / "result.json"
     result = json.loads(result_file.read_text()) if result_file.exists() else None
     status = (
-        "timeout"
+        "gpu_interference"
+        if telemetry.interference
+        else "timeout"
         if timed_out
         else "complete"
         if returncode == 0 and result
@@ -215,6 +228,8 @@ def run_variant(
     print(f"FINISH {name}/{variant['name']} repeat {repeat}: {status}, {wall:.3f}s", flush=True)
     if status != "complete":
         print(log, flush=True)
+    if telemetry.interference:
+        raise RuntimeError("Stopped benchmark after another GPU compute process appeared")
 
 
 def main() -> None:

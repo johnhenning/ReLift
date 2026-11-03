@@ -25,6 +25,7 @@ def summarize(root: Path, roles: Any = None) -> Any:
                 "environment",
                 "wrapper_sha256",
                 "options",
+                "configuration",
                 "task",
                 "input_sha256",
                 "process_res",

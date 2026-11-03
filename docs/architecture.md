@@ -161,7 +161,7 @@ The Plotly viewer displays a uniform subset of at most 2,500 reference points wh
 
 ## Where the current implementation spends memory
 
-There are two distinct bottlenecks. DA3 can fail while evaluating an active layer and retaining backbone features across the complete clip. Later, the existing correction path loads complete observation fields and allocates complete output trajectories on CUDA. Plotly export also loads dense arrays before sampling them.
+There are two distinct bottlenecks. DA3 can fail while evaluating an active layer and retaining backbone features across the complete clip. The legacy correction path loads complete observation fields and allocates complete output trajectories on CUDA. The implemented offload path instead maps prepared observations, constructs one point batch's rays on CUDA and writes track-major shards. Plotly reads selected tracks directly from that mapped store; legacy NPZ input remains supported.
 
 Writing final results to disk addresses the later dense-array allocations, but it cannot recover GPU space needed by a DA3 layer that already failed. The offload work therefore has two parts: move inactive model state and retained features between GPU and RAM, and stream bounded trajectory groups through correction into disk-backed arrays. Disk becomes backing storage for cold state when the RAM budget requires it. These placement changes must preserve full temporal context and the mathematical path described above.
 
@@ -177,12 +177,27 @@ This last diagram describes the implemented offload path. Full-resolution runnin
 the [benchmark report](offload-benchmark-results.md) separates those outcomes from latency and parity measurements.
 The [offload design and benchmark plan](memory-offload-design.md) defines the memory budgets and comparison protocol.
 
+The [component configuration](../relift/configuration.py) groups memory placement,
+observations, rays, correction, storage and provider settings into inheritable
+TOML profiles. A [session](../relift/optimization.py) owns reusable providers and
+fingerprinted injected components. Effective settings and profile content hashes
+are recorded with each run, so configuration changes invalidate store resume.
+
+Storage can use a [bounded commit owner](../relift/shard_commits.py). With
+`storage.commits = "threaded"`, a single CPU worker validates and commits one
+shard while the main thread computes the next GPU batch. The main thread waits
+before submitting again, then drains the owner before final store verification.
+Only the writer touches the mutable manifest during that loop; verified resume
+coverage is snapshotted before it starts. The synchronous backend remains the
+default, and both preserve the same mathematical path and atomic store format.
+
 ## Where to read the implementation
 
 | Concern | Source |
 |---|---|
 | Single-video orchestration and serialization | [scripts/demo_video.py](../scripts/demo_video.py) |
 | Component profiles and configuration inheritance | [relift/configuration.py](../relift/configuration.py) |
+| Bounded CPU shard commit ownership | [relift/shard_commits.py](../relift/shard_commits.py) |
 | Session ownership and dependency injection | [relift/optimization.py](../relift/optimization.py) |
 | Geometry and tracker adapters | [relift/providers](../relift/providers) |
 | CUDA ray construction and camera conversion | [relift/rays.py](../relift/rays.py) |

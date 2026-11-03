@@ -3,3 +3,5 @@ docs/vendor/** linguist-vendored -whitespace
 docs/architecture-view.html linguist-generated -whitespace
 docs/benchmarks/cuda-ray-profile/** linguist-generated
 docs/benchmarks/observation-cache/** linguist-generated
+docs/benchmarks/background-commits/** linguist-generated
+docs/benchmarks/background-commits/index.html -whitespace

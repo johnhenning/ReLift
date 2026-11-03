@@ -58,6 +58,7 @@ def test_inheritance_and_content_fingerprints(tmp_path: Path) -> None:
         {"memory": {"ram_gb": float("inf")}},
         {"memory": {"ram_gb": 0}},
         {"memory": []},
+        {"storage": {"commits": "unbounded"}},
         {"memory": {"offload": "ram"}, "observations": {"cache_mb": 128, "gather": "cpp"}},
     ],
 )

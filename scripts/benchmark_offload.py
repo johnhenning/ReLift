@@ -77,6 +77,36 @@ class NvidiaSampler:
             self.error = str(error)
             self.library, self.handle = None, None
 
+    class ProcessInfo(ctypes.Structure):
+        # nvmlProcessInfo_t from the installed nvml.h (v3 query, v2 layout).
+        _fields_ = [
+            ("pid", ctypes.c_uint),
+            ("usedGpuMemory", ctypes.c_ulonglong),
+            ("gpuInstanceId", ctypes.c_uint),
+            ("computeInstanceId", ctypes.c_uint),
+        ]
+
+    def compute_processes(self) -> list[dict[str, int]]:
+        if self.library is None or self.handle is None:
+            raise RuntimeError(f"Cannot verify GPU exclusivity: {self.error}")
+        capacity = 32
+        for _ in range(3):
+            count = ctypes.c_uint(capacity)
+            entries = (self.ProcessInfo * capacity)()
+            code = self.library.nvmlDeviceGetComputeRunningProcesses_v3(
+                self.handle, ctypes.byref(count), entries
+            )
+            if code == 7:  # NVML_ERROR_INSUFFICIENT_SIZE; processes can appear mid-query.
+                capacity = count.value + 16
+                continue
+            if code:
+                raise RuntimeError(f"NVML compute-process query failed: {code}")
+            return [
+                dict(pid=int(entry.pid), gpu_memory_bytes=int(entry.usedGpuMemory))
+                for entry in entries[: count.value]
+            ]
+        raise RuntimeError("GPU process list kept changing during the exclusivity query")
+
     def sample(self) -> Any:
         if self.library is None:
             return {}
@@ -163,8 +193,10 @@ def swap_counters() -> Any:
 
 
 class Telemetry:
-    def __init__(self, gpu: Any) -> None:
+    def __init__(self, gpu: Any, require_exclusive_gpu: bool = False) -> None:
         self.gpu = gpu
+        self.require_exclusive_gpu = require_exclusive_gpu
+        self.interference: list[dict[str, int]] = []
         self.samples, self.counters = [], {}
 
     def capture(self, root_pid: Any, elapsed: Any) -> None:
@@ -189,6 +221,12 @@ class Telemetry:
             p.get("pss_unavailable") or p.get("io_unavailable") for p in processes
         )
         row.update(self.gpu.sample())
+        if self.require_exclusive_gpu:
+            compute = self.gpu.compute_processes()
+            allowed = {root_pid, *(proc["pid"] for proc in processes)}
+            other = [proc for proc in compute if proc["pid"] not in allowed]
+            self.interference.extend(other)
+            row.update(gpu_compute_processes=compute, other_gpu_compute_processes=other)
         self.samples.append(row)
 
     def summary(self) -> Any:
@@ -215,6 +253,8 @@ class Telemetry:
                 proc.get(counter, 0) for proc in self.counters.values()
             )
         peaks["sample_count"] = len(self.samples)
+        peaks["gpu_exclusivity_monitored"] = self.require_exclusive_gpu
+        peaks["other_gpu_compute_processes"] = self.interference
         peaks["gpu_sampling_error"] = self.gpu.error
         peaks["sampling_limits"] = (
             "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
