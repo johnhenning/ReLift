@@ -57,7 +57,7 @@ Hugging Face: request access on https://huggingface.co/facebook/VGGT-Omega, then
 `HF_TOKEN`) and rerun the download. VGGT-Omega, CoWTracker, 4RC and the Depth Anything 3 checkpoint are released under
 non-commercial licences.
 
-uv installs Python 3.10 automatically when needed. Runtime versions live in `pyproject.toml`,
+uv installs Python 3.13 automatically when needed. Runtime versions live in `pyproject.toml`,
 with transitive dependencies pinned in `uv.lock`; PyTorch and torchvision use the CUDA 12.8 index.
 Run commands with `uv run` (no activation needed), or `source .venv/bin/activate` to use plain `python`.
 Rerun `bash scripts/setup.sh` to sync the locked environment; after intentional dependency changes, run
