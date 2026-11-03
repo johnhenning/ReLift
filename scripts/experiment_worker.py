@@ -6,7 +6,7 @@ The source checkout and options are explicit; diagnostic profiles are not timing
 """
 import argparse
 from collections import defaultdict
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 import cProfile
 from datetime import datetime, timezone
 import functools
@@ -131,6 +131,18 @@ def main():
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     phases = Phases()
+    if args.task == "pipeline":
+        from pipeline_experiment import run
+        result = run(args, options)
+        save(output / "result.json", result)
+        print(json.dumps(dict(shape=result["shape"], finite=result["finite"])), flush=True)
+        return
+    if args.task == "da3-reuse":
+        from provider_reuse_experiment import run
+        result = run(args, options, phases)
+        save(output / "result.json", result)
+        print(json.dumps(result["totals"]), flush=True)
+        return
     if args.task == "alltracker":
         from relift.providers.alltracker import AllTrackerProvider
         from relift.storage import file_sha256
@@ -159,20 +171,32 @@ def main():
     from relift.storage import file_sha256
     with phases.stage("model_load"):
         model, info = load(args.root / "checkpoints/released_checkpoint.pt")
+    if args.task == "compilation":
+        from compilation_experiment import run
+        result = run(args, options, phases, model, info)
+        save(output / "result.json", result)
+        print(json.dumps(result["phases"]), flush=True)
+        return
     if args.task != "correction":
         raise ValueError(f"Unknown task: {args.task}")
     diagnostic = Diagnostic(output) if options.pop("profile", False) else None
+    lookahead = None
+    if options.pop("prefetch", False):
+        from relift.prefetch import RayLookahead
+        lookahead = RayLookahead(batch=options.get("batch", 8))
     if diagnostic:
         diagnostic.__enter__()
     try:
-        with phases.stage("correction"):
+        with phases.stage("correction"), lookahead if lookahead else nullcontext():
             store = stream_correct(output / "window", output, model,
                 dict(checkpoint_sha256=file_sha256(args.root / "checkpoints/released_checkpoint.pt"), checkpoint_step=info["step"]),
                 group=1024, batch=options.pop("batch", 8), seed=0, **options)
     finally:
         if diagnostic:
             diagnostic.__exit__(*sys.exc_info())
-    save(output / "result.json", dict(task=args.task, phases=phases.results, shape=store.shape,
+    execution = dict(peak_pinned_bytes=lookahead.peak_pinned_bytes,
+                     prefetched_host_to_device_bytes=lookahead.host_to_device_bytes) if lookahead else {}
+    save(output / "result.json", dict(task=args.task, phases=phases.results, shape=store.shape, execution=execution,
          finite=bool(store.finite()), source=str(args.source.resolve()), started_at=datetime.now(timezone.utc).isoformat()))
     print(json.dumps(dict(phases=phases.results, shape=store.shape)), flush=True)
 

@@ -84,12 +84,13 @@ class MappedObservations:
         return host.to(device=self.device, dtype=torch.float32, non_blocking=True)
 
 
-def _batch_plan(valid, group, batch, seed, device):
+def _batch_plan(valid, group, batch, seed, device, padding_batch=None):
     gen = torch.Generator(device=device).manual_seed(seed)
     perm = valid[torch.randperm(len(valid), device=device, generator=gen)]
     repeated = []
-    for start in range(0, len(perm), group * batch):
-        sel = perm[start:start + group * batch]
+    planning_batch = batch if padding_batch is None else padding_batch
+    for start in range(0, len(perm), group * planning_batch):
+        sel = perm[start:start + group * planning_batch]
         need = max(1, (len(sel) + group - 1) // group) * group - len(sel)
         if need:
             repeated.append(sel[torch.arange(need, device=device) % len(sel)])
@@ -97,10 +98,24 @@ def _batch_plan(valid, group, batch, seed, device):
     return perm, duplicates
 
 
+def _selected_ids(order, start, group, batch, padding_batch=None):
+    """Keep the reference padded group intact while varying execution batching."""
+    original = order[start:start + group * batch]
+    need = (-len(original)) % group
+    if not need:
+        return original, original
+    source = original
+    if padding_batch is not None:
+        reference_start = ((len(order) - 1) // (group * padding_batch)) * group * padding_batch
+        source = order[reference_start:]
+    return original, np.concatenate([original, source[np.arange(need) % len(source)]])
+
+
 @torch.no_grad()
 def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8, seed=0,
                    device="cuda", depth_file="da3_depth_data.npz", tracks_file="alltracker_tracks.npz",
-                   ram_budget_gb=18, vram_budget_gb=20, scratch_budget_gb=64, depth_cache_mb=0, hash_writes=False):
+                   ram_budget_gb=18, vram_budget_gb=20, scratch_budget_gb=64, depth_cache_mb=0, hash_writes=True,
+                   padding_batch=None):
     """Correct every source pixel using full timelines and atomic mapped result shards.
 
     ``metadata`` must identify the checkpoint/settings for safe resume. The output
@@ -109,6 +124,8 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
     """
     if min(group, batch) < 1:
         raise ValueError("group and batch must be positive")
+    if padding_batch is not None and padding_batch < 1:
+        raise ValueError("padding_batch must be positive")
     dev = torch.device(device)
     obs_source = MappedObservations(window_dir, dev, depth_file, tracks_file, depth_cache_mb=depth_cache_mb)
     T, H, W = obs_source.T, obs_source.H, obs_source.W
@@ -119,7 +136,7 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
     valid = torch.nonzero(ranges0[0] > 0)[:, 0]
     raw0 = (origin0[:, None, :] + direction0 * ranges0[..., None]).float()[0]
     scale = raw0[valid, 2].median().clamp_min(1e-6) if len(valid) else raw0.new_tensor(1.)
-    perm, repeated = _batch_plan(valid, group, batch, seed, dev)
+    perm, repeated = _batch_plan(valid, group, batch, seed, dev, padding_batch=padding_batch)
     valid_ids = perm.cpu().numpy()
     invalid_ids = np.flatnonzero(~(ranges0[0] > 0).cpu().numpy())
     order = np.concatenate([valid_ids, invalid_ids])
@@ -150,7 +167,7 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
                       ram_budget_gb=ram_budget_gb, vram_budget_gb=vram_budget_gb,
                       scratch_budget_gb=scratch_budget_gb)
     provenance.update(depth_cache_mb=depth_cache_mb, depth_cache_bytes=obs_source.depth_cuda.numel() * 4 if obs_source.depth_cuda is not None else 0,
-                      hash_writes=hash_writes)
+                      hash_writes=hash_writes, padding_batch=padding_batch)
     store = TrajectoryStore.create(output_dir, (T, H, W, 3), provenance, order,
                                    dict(images=images, poses=poses, intrinsics=np.asarray(obs_source.intrinsics_cpu)), repeated_ids, hash_writes=hash_writes)
     if store.manifest["state"] == "complete":
@@ -158,13 +175,11 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
     # Shared source matrices and one depth image remain small. The active corrector
     # batch is the only full-timeline CUDA allocation that scales with point count.
     for start in range(0, len(valid_ids), group * batch):
-        original = valid_ids[start:start + group * batch]
+        original, selected = _selected_ids(valid_ids, start, group, batch, padding_batch)
         stop = start + len(original)
         if store.has_shard(start, stop):
             continue
         nb = max(1, (len(original) + group - 1) // group)
-        need = nb * group - len(original)
-        selected = np.concatenate([original, original[np.arange(need) % len(original)]]) if need else original
         origin, direction, distance, vis = obs_source.rays(selected)
         d = direction.reshape(T, nb, group, 3).permute(1, 0, 2, 3)
         r = distance.reshape(T, nb, group).permute(1, 0, 2)

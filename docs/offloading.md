@@ -32,3 +32,9 @@ silently reduce resolution. Legacy spatial retries require explicit `--offload n
 Shards use temporary files, fsync and atomic rename. Resume verifies committed data and provenance.
 Padded duplicate points use deterministic first-occurrence ownership; the original CUDA scatter had
 undefined write order for those points. Numerical comparisons must report them explicitly.
+
+The optimized path strictly loads the released AllTracker checkpoint without first initializing a
+discarded pretrained backbone, and avoids copying return arrays that already have the required dtype.
+Trajectory writes hash the bytes as they are serialized; final verification and resume checks remain.
+Depth caching, prefetch and compilation remain experimental. The default corrector batch stays at 8.
+See [the experiment log](optimization-experiment-log.md) for measured scopes and quality gates.

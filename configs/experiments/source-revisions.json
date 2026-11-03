@@ -1,0 +1,11 @@
+{
+  "outputs/benchmarks/baseline-source": "754bac78a290c1fec517b26e278bc2946fa2ffbf",
+  "outputs/experiments/offload-reference": "6840e16bbb04ad619670660fd23cefa491b54d7a",
+  "outputs/experiments/sources/depth-cache": "2790179159cc526b6387ec7796f025cae5cf4f27",
+  "outputs/experiments/sources/tracker-initialization": "2790179159cc526b6387ec7796f025cae5cf4f27",
+  "outputs/experiments/sources/provider-copies": "2790179159cc526b6387ec7796f025cae5cf4f27",
+  "outputs/experiments/sources/write-hashing": "2790179159cc526b6387ec7796f025cae5cf4f27",
+  "outputs/experiments/sources/prefetch": "2790179159cc526b6387ec7796f025cae5cf4f27",
+  "outputs/experiments/sources/batch-tuning": "HEAD",
+  "outputs/experiments/sources/final-optimized": "HEAD"
+}

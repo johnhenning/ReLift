@@ -1,0 +1,584 @@
+[
+  {
+    "experiment": "batch-tuning",
+    "variant": "batch-1",
+    "n": 3,
+    "attempts": 3,
+    "statuses": {
+      "complete": 3
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization-python313/batch-tuning/batch-1/trial-01/trial.json",
+      "outputs/experiments/optimization-python313/batch-tuning/batch-1/trial-02/trial.json",
+      "outputs/experiments/optimization-python313/batch-tuning/batch-1/trial-03/trial.json"
+    ],
+    "options": {
+      "batch": 1,
+      "padding_batch": 8
+    },
+    "source_fingerprint": "955f93fe79d5362242383c0bdfbdcbb296639541936bc32e7bfe1a4f048831ee",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "fail",
+    "wall_median": 27.24990169898956,
+    "wall_min": 25.52660510300484,
+    "wall_max": 28.370146800007205,
+    "sampled_peak_process_tree_rss_bytes": 1628094464,
+    "sampled_peak_process_tree_pss_bytes": 1618237440,
+    "sampled_peak_gpu_device_used_bytes": 1829437440,
+    "process_tree_read_bytes": 983040,
+    "process_tree_write_bytes": 424509440,
+    "phase_medians": {
+      "model_load": 0.16984456300269812,
+      "correction": 25.300530002001324
+    },
+    "process_rss_highwater_bytes": null,
+    "sampled_output_peak_allocated_bytes": 571990016
+  },
+  {
+    "experiment": "batch-tuning",
+    "variant": "batch-2",
+    "n": 3,
+    "attempts": 3,
+    "statuses": {
+      "complete": 3
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization-python313/batch-tuning/batch-2/trial-01/trial.json",
+      "outputs/experiments/optimization-python313/batch-tuning/batch-2/trial-02/trial.json",
+      "outputs/experiments/optimization-python313/batch-tuning/batch-2/trial-03/trial.json"
+    ],
+    "options": {
+      "batch": 2,
+      "padding_batch": 8
+    },
+    "source_fingerprint": "456d948affe348967ec3477bf843aa38c169280cd743bb8b61e7742dc0db1e67",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "fail",
+    "wall_median": 29.546293132007122,
+    "wall_min": 21.968684187013423,
+    "wall_max": 31.470445011989796,
+    "sampled_peak_process_tree_rss_bytes": 1627553792,
+    "sampled_peak_process_tree_pss_bytes": 1617244160,
+    "sampled_peak_gpu_device_used_bytes": 2156593152,
+    "process_tree_read_bytes": 32768,
+    "process_tree_write_bytes": 418861056,
+    "phase_medians": {
+      "model_load": 0.17114002800371964,
+      "correction": 27.51023237701156
+    },
+    "process_rss_highwater_bytes": null,
+    "sampled_output_peak_allocated_bytes": 571101184
+  },
+  {
+    "experiment": "batch-tuning",
+    "variant": "batch-4",
+    "n": 3,
+    "attempts": 3,
+    "statuses": {
+      "complete": 3
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization-python313/batch-tuning/batch-4/trial-01/trial.json",
+      "outputs/experiments/optimization-python313/batch-tuning/batch-4/trial-02/trial.json",
+      "outputs/experiments/optimization-python313/batch-tuning/batch-4/trial-03/trial.json"
+    ],
+    "options": {
+      "batch": 4,
+      "padding_batch": 8
+    },
+    "source_fingerprint": "96f6c266a1136fb169668a19c25bc6987268075330ebfac999d47e83bcbb61d0",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 22.209549637002056,
+    "wall_min": 20.628417764994083,
+    "wall_max": 23.11240474799706,
+    "sampled_peak_process_tree_rss_bytes": 1612861440,
+    "sampled_peak_process_tree_pss_bytes": 1602761728,
+    "sampled_peak_gpu_device_used_bytes": 2821390336,
+    "process_tree_read_bytes": 843776,
+    "process_tree_write_bytes": 417136640,
+    "phase_medians": {
+      "model_load": 0.17092202899220865,
+      "correction": 20.323421031993348
+    },
+    "process_rss_highwater_bytes": null,
+    "sampled_output_peak_allocated_bytes": 570662912
+  },
+  {
+    "experiment": "batch-tuning",
+    "variant": "control",
+    "n": 3,
+    "attempts": 3,
+    "statuses": {
+      "complete": 3
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization-python313/batch-tuning/control/trial-01/trial.json",
+      "outputs/experiments/optimization-python313/batch-tuning/control/trial-02/trial.json",
+      "outputs/experiments/optimization-python313/batch-tuning/control/trial-03/trial.json"
+    ],
+    "options": {
+      "batch": 8
+    },
+    "source_fingerprint": "a43ccd917051275f869574985f691a13c5737839b85b390f42d5809dc928bb88",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": null,
+    "wall_median": 19.390892051000264,
+    "wall_min": 17.969914073997643,
+    "wall_max": 19.617121501010843,
+    "sampled_peak_process_tree_rss_bytes": 1621745664,
+    "sampled_peak_process_tree_pss_bytes": 1611502592,
+    "sampled_peak_gpu_device_used_bytes": 4174053376,
+    "process_tree_read_bytes": 4096,
+    "process_tree_write_bytes": 416534528,
+    "phase_medians": {
+      "model_load": 0.1723807950038463,
+      "correction": 17.42231970699504
+    },
+    "process_rss_highwater_bytes": null,
+    "sampled_output_peak_allocated_bytes": 570441728
+  },
+  {
+    "experiment": "compilation",
+    "variant": "compiled",
+    "n": 1,
+    "attempts": 1,
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization-python313/compilation/compiled/trial-01/trial.json"
+    ],
+    "options": {
+      "compile": true,
+      "passes": 4
+    },
+    "source_fingerprint": "47a4f5e41e4afa05e51c7ac0fd07c8ab158143b5f49a8ea94771591e2cd9c1a2",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "fail",
+    "wall_median": 85.32812936299888,
+    "wall_min": 85.32812936299888,
+    "wall_max": 85.32812936299888,
+    "sampled_peak_process_tree_rss_bytes": 2501902336,
+    "sampled_peak_process_tree_pss_bytes": 2491502592,
+    "sampled_peak_gpu_device_used_bytes": 3593338880,
+    "process_tree_read_bytes": 515936256,
+    "process_tree_write_bytes": 1252560896,
+    "phase_medians": {
+      "model_load": 0.17333527699520346,
+      "compile_wrapper": 1.5932257110107457,
+      "correction_cold": 41.806455587997334,
+      "correction_warm_1": 13.015456023000297,
+      "correction_warm_2": 12.474715748001472,
+      "correction_warm_3": 12.81612856699212
+    },
+    "process_rss_highwater_bytes": null,
+    "sampled_output_peak_allocated_bytes": 1392291840
+  },
+  {
+    "experiment": "compilation",
+    "variant": "control",
+    "n": 1,
+    "attempts": 1,
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization-python313/compilation/control/trial-01/trial.json"
+    ],
+    "options": {
+      "compile": false,
+      "passes": 4
+    },
+    "source_fingerprint": "76f5bef62c92122890189c5cbfe83e27141b3db53483b82b0eae7c6df43a9774",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 59.51558959799877,
+    "wall_min": 59.51558959799877,
+    "wall_max": 59.51558959799877,
+    "sampled_peak_process_tree_rss_bytes": 1746509824,
+    "sampled_peak_process_tree_pss_bytes": 1736536064,
+    "sampled_peak_gpu_device_used_bytes": 4174053376,
+    "process_tree_read_bytes": 4096,
+    "process_tree_write_bytes": 1203736576,
+    "phase_medians": {
+      "model_load": 0.16985479700088035,
+      "correction_cold": 15.553311069990741,
+      "correction_warm_1": 13.292538723006146,
+      "correction_warm_2": 14.560454638005467,
+      "correction_warm_3": 13.064997625013348
+    },
+    "process_rss_highwater_bytes": null,
+    "sampled_output_peak_allocated_bytes": 1356947456
+  },
+  {
+    "experiment": "integrated-pipeline",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization-python313/integrated-pipeline/control/trial-01/trial.json",
+      "outputs/experiments/optimization-python313/integrated-pipeline/control/trial-02/trial.json",
+      "outputs/experiments/optimization-python313/integrated-pipeline/control/trial-03/trial.json",
+      "outputs/experiments/optimization-python313/integrated-pipeline/control/trial-04/trial.json",
+      "outputs/experiments/optimization-python313/integrated-pipeline/control/trial-05/trial.json"
+    ],
+    "options": {
+      "video": "cache/demo_inputs/swing-tire.mp4"
+    },
+    "source_fingerprint": "7f25ef809bcdf044055eaf33fbdcf7eb825102b18fb6a6870fa62e63afb46629",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 58.902534148000996,
+    "wall_min": 58.591966423002305,
+    "wall_max": 59.204021381010534,
+    "sampled_peak_process_tree_rss_bytes": 12306984960,
+    "sampled_peak_process_tree_pss_bytes": 12878965760,
+    "sampled_peak_gpu_device_used_bytes": 13319929856,
+    "process_tree_read_bytes": 131072,
+    "process_tree_write_bytes": 628789248,
+    "phase_medians": {
+      "decode": 0.9886567100038519,
+      "da3": 35.02088138599356,
+      "alltracker": 4.458799036990968,
+      "corrector_load": 0.16444080699875485,
+      "corrector_stream": 15.298980692008627
+    },
+    "process_rss_highwater_bytes": 14551244800,
+    "sampled_output_peak_allocated_bytes": 628510720
+  },
+  {
+    "experiment": "integrated-pipeline",
+    "variant": "optimized",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization-python313/integrated-pipeline/optimized/trial-01/trial.json",
+      "outputs/experiments/optimization-python313/integrated-pipeline/optimized/trial-02/trial.json",
+      "outputs/experiments/optimization-python313/integrated-pipeline/optimized/trial-03/trial.json",
+      "outputs/experiments/optimization-python313/integrated-pipeline/optimized/trial-04/trial.json",
+      "outputs/experiments/optimization-python313/integrated-pipeline/optimized/trial-05/trial.json"
+    ],
+    "options": {
+      "video": "cache/demo_inputs/swing-tire.mp4"
+    },
+    "source_fingerprint": "3743b040a2a7c8b720a58d93f1baad0647b1dfcd8e51cedb3c6b0381ec1a2cff",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 57.108959059012705,
+    "wall_min": 56.78006635699421,
+    "wall_max": 57.46195060199534,
+    "sampled_peak_process_tree_rss_bytes": 13344620544,
+    "sampled_peak_process_tree_pss_bytes": 13862465536,
+    "sampled_peak_gpu_device_used_bytes": 13315735552,
+    "process_tree_read_bytes": 196608,
+    "process_tree_write_bytes": 628793344,
+    "phase_medians": {
+      "decode": 0.9845842120121233,
+      "da3": 35.012252558008186,
+      "alltracker": 4.191389936997439,
+      "corrector_load": 0.15166164500988089,
+      "corrector_stream": 13.805392959999153
+    },
+    "process_rss_highwater_bytes": 14552600576,
+    "sampled_output_peak_allocated_bytes": 628510720
+  },
+  {
+    "experiment": "prefetch",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization-python313/prefetch/control/trial-01/trial.json",
+      "outputs/experiments/optimization-python313/prefetch/control/trial-02/trial.json",
+      "outputs/experiments/optimization-python313/prefetch/control/trial-03/trial.json",
+      "outputs/experiments/optimization-python313/prefetch/control/trial-04/trial.json",
+      "outputs/experiments/optimization-python313/prefetch/control/trial-05/trial.json"
+    ],
+    "options": {},
+    "source_fingerprint": "78eaba41ce96acb912cad38d31bd641984930772a7ce8e5b9391423374fbaa9c",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": null,
+    "wall_median": 19.150840008005616,
+    "wall_min": 17.828833113992005,
+    "wall_max": 19.380203125008848,
+    "sampled_peak_process_tree_rss_bytes": 1621581824,
+    "sampled_peak_process_tree_pss_bytes": 1611138048,
+    "sampled_peak_gpu_device_used_bytes": 4174053376,
+    "process_tree_read_bytes": 499712,
+    "process_tree_write_bytes": 416534528,
+    "phase_medians": {
+      "model_load": 0.16940117100602947,
+      "correction": 17.2927064490068
+    },
+    "process_rss_highwater_bytes": null,
+    "sampled_output_peak_allocated_bytes": 570441728
+  },
+  {
+    "experiment": "prefetch",
+    "variant": "one-batch-lookahead",
+    "n": 5,
+    "attempts": 5,
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization-python313/prefetch/one-batch-lookahead/trial-01/trial.json",
+      "outputs/experiments/optimization-python313/prefetch/one-batch-lookahead/trial-02/trial.json",
+      "outputs/experiments/optimization-python313/prefetch/one-batch-lookahead/trial-03/trial.json",
+      "outputs/experiments/optimization-python313/prefetch/one-batch-lookahead/trial-04/trial.json",
+      "outputs/experiments/optimization-python313/prefetch/one-batch-lookahead/trial-05/trial.json"
+    ],
+    "options": {
+      "prefetch": true
+    },
+    "source_fingerprint": "7b84006a1d749304341b629e5acae51f0e4d4c87a23627806e439c3c117b7117",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 19.18155905000458,
+    "wall_min": 18.758449146000203,
+    "wall_max": 19.763442442010273,
+    "sampled_peak_process_tree_rss_bytes": 1700278272,
+    "sampled_peak_process_tree_pss_bytes": 1690161152,
+    "sampled_peak_gpu_device_used_bytes": 4314562560,
+    "process_tree_read_bytes": 454656,
+    "process_tree_write_bytes": 416538624,
+    "phase_medians": {
+      "model_load": 0.16596307700092439,
+      "correction": 17.31436922699504
+    },
+    "process_rss_highwater_bytes": null,
+    "sampled_output_peak_allocated_bytes": 570441728
+  },
+  {
+    "experiment": "provider-reuse",
+    "variant": "control",
+    "n": 3,
+    "attempts": 3,
+    "statuses": {
+      "complete": 3
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization-python313/provider-reuse/control/trial-01/trial.json",
+      "outputs/experiments/optimization-python313/provider-reuse/control/trial-02/trial.json",
+      "outputs/experiments/optimization-python313/provider-reuse/control/trial-03/trial.json"
+    ],
+    "options": {
+      "reuse": false,
+      "clips": [
+        "cache/demo_inputs/swing-tire.mp4",
+        "cache/demo_inputs/swing.mp4"
+      ]
+    },
+    "source_fingerprint": "b4f4c508dbddf7e3e26f87dd96e63d8c4c26cd0da914d6fc3f433ce953615b2e",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 62.83863265400578,
+    "wall_min": 61.972946350011625,
+    "wall_max": 68.4236428669974,
+    "sampled_peak_process_tree_rss_bytes": 15752470528,
+    "sampled_peak_process_tree_pss_bytes": 13593363456,
+    "sampled_peak_gpu_device_used_bytes": 13323927552,
+    "process_tree_read_bytes": 876544,
+    "process_tree_write_bytes": 142278656,
+    "phase_medians": {
+      "clip_0_decode": 0.1410608529986348,
+      "clip_0_provider_load": 17.46336436099955,
+      "clip_0_forward": 17.561926542010042,
+      "clip_0_serialize": 0.09531572699779645,
+      "clip_0_cleanup": 0.507755693004583,
+      "clip_1_decode": 0.08620614100072999,
+      "clip_1_provider_load": 11.95071957600885,
+      "clip_1_forward": 11.25705614600156,
+      "clip_1_serialize": 0.05907619898789562,
+      "clip_1_cleanup": 0.38565040699904785
+    },
+    "process_rss_highwater_bytes": null,
+    "sampled_output_peak_allocated_bytes": 296398848
+  },
+  {
+    "experiment": "provider-reuse",
+    "variant": "reuse-da3",
+    "n": 3,
+    "attempts": 3,
+    "statuses": {
+      "complete": 3
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/optimization-python313/provider-reuse/reuse-da3/trial-01/trial.json",
+      "outputs/experiments/optimization-python313/provider-reuse/reuse-da3/trial-02/trial.json",
+      "outputs/experiments/optimization-python313/provider-reuse/reuse-da3/trial-03/trial.json"
+    ],
+    "options": {
+      "reuse": true,
+      "clips": [
+        "cache/demo_inputs/swing-tire.mp4",
+        "cache/demo_inputs/swing.mp4"
+      ]
+    },
+    "source_fingerprint": "1003e2b8edcf2f7cd3ca832744c1bd12086c71bc85da02fad9232c8c0d96a652",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": "python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 49.79372968499956,
+    "wall_min": 49.52400095500343,
+    "wall_max": 50.35432157799369,
+    "sampled_peak_process_tree_rss_bytes": 14536990720,
+    "sampled_peak_process_tree_pss_bytes": 14587472896,
+    "sampled_peak_gpu_device_used_bytes": 13326024704,
+    "process_tree_read_bytes": 1966080,
+    "process_tree_write_bytes": 142278656,
+    "phase_medians": {
+      "clip_0_decode": 0.1535141069907695,
+      "clip_0_provider_load": 17.504260161993443,
+      "clip_0_forward": 17.433775594006875,
+      "clip_0_serialize": 0.0975536199985072,
+      "clip_1_decode": 0.09685358199931215,
+      "clip_1_forward": 11.097228280996205,
+      "clip_1_serialize": 0.05879285899573006,
+      "final_cleanup": 0.44667709300119895
+    },
+    "process_rss_highwater_bytes": null,
+    "sampled_output_peak_allocated_bytes": 296398848
+  }
+]

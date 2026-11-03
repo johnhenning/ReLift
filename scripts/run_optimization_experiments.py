@@ -50,8 +50,9 @@ def run_variant(spec, name, definition, variant, repeat, resume):
         raise FileExistsError(directory)
     output = directory / "output"
     output.mkdir(parents=True)
-    fixture = ROOT / spec["prepared_window"]
-    shutil.copytree(fixture, output / "window", ignore=shutil.ignore_patterns(".mapped"))
+    if definition["task"] in ("correction", "alltracker", "compilation"):
+        fixture = ROOT / spec["prepared_window"]
+        shutil.copytree(fixture, output / "window", ignore=shutil.ignore_patterns(".mapped"))
     hashes = {str(p.relative_to(source)): sha256(p) for p in sorted((source / "relift").rglob("*.py"))}
     command = [sys.executable, str(ROOT / "scripts/experiment_worker.py"), "--source", str(source),
                "--root", str(ROOT), "--output", str(output), "--task", definition["task"], "--options", json.dumps(options)]
@@ -62,7 +63,8 @@ def run_variant(spec, name, definition, variant, repeat, resume):
     gpu = NvidiaSampler()
     telemetry = Telemetry(gpu)
     scratch = output / "scratch"
-    environment = dict(os.environ, HF_HUB_OFFLINE="1", HF_HUB_DISABLE_TELEMETRY="1", TORCHINDUCTOR_COMPILE_THREADS="1")
+    environment = dict(os.environ, HF_HUB_OFFLINE="1", HF_HUB_DISABLE_TELEMETRY="1", TORCHINDUCTOR_COMPILE_THREADS="1",
+                       MAX_JOBS="1", TORCHINDUCTOR_CACHE_DIR=str(output / "compiler-cache"), TRITON_CACHE_DIR=str(output / "triton-cache"))
     log = directory / "run.log"
     swap_before = swap_counters()
     print(f"START {name}/{variant['name']} repeat {repeat}", flush=True)

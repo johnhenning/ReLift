@@ -6,7 +6,18 @@ import torch
 from relift.features import interp_init
 from relift.infer import VIS_GATE, observations, predict_dense, repeated_pixels
 from relift.model import Corrector
-from relift.streaming import MappedObservations, stream_correct
+from relift.streaming import MappedObservations, stream_correct, _selected_ids
+
+
+def test_execution_batch_keeps_all_reference_groups_including_padding():
+    order = np.random.default_rng(5).permutation(1856)
+    _, reference = _selected_ids(order, 0, 1024, 8)
+    for batch in (1, 2, 4, 8):
+        groups = [_selected_ids(order, start, 1024, batch, padding_batch=8)[1]
+                  for start in range(0, len(order), 1024 * batch)]
+        np.testing.assert_array_equal(np.concatenate(groups).reshape(-1, 1024), reference.reshape(-1, 1024))
+    # Without fixed padding, a single-group batch changes the last group's context.
+    assert not np.array_equal(_selected_ids(order, 1024, 1024, 1)[1], reference[1024:])
 
 
 def prepared_window(root):

@@ -58,6 +58,16 @@ def test_changed_workloads_and_source_versions_are_not_pooled(tmp_path):
     assert all(len({row["label"] for row in item["rows"]}) == len(item["rows"]) for item in items)
 
 
+def test_actual_runtime_separates_interpreters_and_allows_frozen_source_locks(tmp_path):
+    root = tmp_path / "campaign"
+    runtime = dict(python="3.13", environment_lockfile_sha256="actual-environment")
+    trial(root, "control", 1, 10, lockfile_sha256="old-source-lock", environment=runtime)
+    trial(root, "candidate", 1, 9, lockfile_sha256="new-source-lock", environment=runtime)
+    trial(root, "candidate", 2, 8, environment=dict(runtime, python="3.10"))
+    items = collect([root])
+    assert sorted(len(item["rows"]) for item in items) == [1, 2]
+
+
 def test_dense_inventory_ignores_validation_caches_and_never_extracts_archives(tmp_path):
     np.savez(tmp_path / "tracks.npz", xyz=np.zeros((3, 2, 4, 3), np.float32))
     mapped = tmp_path / ".mapped"

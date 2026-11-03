@@ -7,7 +7,7 @@ from ..vendor import front_ends
 
 
 class AllTrackerProvider:
-    def __init__(self, weights, device="cuda", window=16, iters=4, init_weights=True, copy_outputs=True):
+    def __init__(self, weights, device="cuda", window=16, iters=4, init_weights=False, copy_outputs=False):
         front_ends()
         from nets.alltracker import Net
         self.device, self.iters = torch.device(device), iters

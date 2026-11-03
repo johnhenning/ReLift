@@ -1,0 +1,52 @@
+{
+  "scene": "swing-tire",
+  "input": "cache/demo_inputs/swing-tire.mp4",
+  "prepared_window": "outputs/benchmarks/offload-primary/swing-tire/ram/trial-01/output/window",
+  "process_res": 504,
+  "output_root": "outputs/experiments/optimization-python313",
+  "experiments": {
+    "integrated-pipeline": {
+      "task": "pipeline",
+      "repeats": 5,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/offload-reference", "options": {"video": "cache/demo_inputs/swing-tire.mp4"}},
+        {"name": "optimized", "source": "outputs/experiments/sources/final-optimized", "options": {"video": "cache/demo_inputs/swing-tire.mp4"}}
+      ]
+    },
+    "batch-tuning": {
+      "task": "correction",
+      "repeats": 3,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/offload-reference", "options": {"batch": 8}},
+        {"name": "batch-1", "source": "outputs/experiments/sources/batch-tuning", "options": {"batch": 1, "padding_batch": 8, "hash_writes": false}},
+        {"name": "batch-2", "source": "outputs/experiments/sources/batch-tuning", "options": {"batch": 2, "padding_batch": 8, "hash_writes": false}},
+        {"name": "batch-4", "source": "outputs/experiments/sources/batch-tuning", "options": {"batch": 4, "padding_batch": 8, "hash_writes": false}}
+      ]
+    },
+    "compilation": {
+      "task": "compilation",
+      "repeats": 1,
+      "timeout_seconds": 900,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/offload-reference", "options": {"compile": false, "passes": 4}},
+        {"name": "compiled", "source": "outputs/experiments/offload-reference", "options": {"compile": true, "passes": 4}}
+      ]
+    },
+    "provider-reuse": {
+      "task": "da3-reuse",
+      "repeats": 3,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/offload-reference", "options": {"reuse": false, "clips": ["cache/demo_inputs/swing-tire.mp4", "cache/demo_inputs/swing.mp4"]}},
+        {"name": "reuse-da3", "source": "outputs/experiments/offload-reference", "options": {"reuse": true, "clips": ["cache/demo_inputs/swing-tire.mp4", "cache/demo_inputs/swing.mp4"]}}
+      ]
+    },
+    "prefetch": {
+      "task": "correction",
+      "repeats": 5,
+      "variants": [
+        {"name": "control", "source": "outputs/experiments/offload-reference", "options": {}},
+        {"name": "one-batch-lookahead", "source": "outputs/experiments/sources/prefetch", "options": {"prefetch": true}}
+      ]
+    }
+  }
+}

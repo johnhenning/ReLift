@@ -83,8 +83,123 @@ The completed screening measurements above used Python 3.10.22. The project now 
 and each comparison must run both variants in that same environment. Existing measurements
 are historical evidence; they are not silently relabeled or pooled with Python 3.13 trials.
 
-## Subsequent experiments
+## 5. One-batch transfer lookahead
 
-Pending in sequence: one-buffer prefetch,
-model/provider reuse, batch tuning with fixed group membership, and compilation with cold-start
-cost separated from reuse. No unmeasured speedup is assigned to a pending experiment.
+Completed five pairs under Python 3.13.16. The experiment retains at most one prefetched batch,
+pins its CPU transfer inputs and uploads on a dedicated CUDA stream while the current batch
+finishes. Full numerical comparison, including repeated/padded pixels, passes.
+
+Median correction time was 17.293 seconds without lookahead and 17.314 seconds with it;
+fresh-process medians were 19.151 and 19.182 seconds. Sampled GPU memory increased from
+approximately 3.887 to 4.018 GiB and host RSS from 1.510 to 1.584 GiB. The implementation
+reported a peak pinned transfer payload of about 26.5 MiB. This measured prototype provides
+no runtime gain and remains disabled. Its temporary method adapter is confined to the isolated
+experiment worker, with exception cleanup tested.
+
+## 6. Reuse DA3 across two full clips
+
+Completed three alternating pairs over swing-tire (84 frames) and swing (60 frames), both at
+280×504, under Python 3.13.16. The control creates and disposes a RAM-offloaded provider for
+each clip; the candidate resets the per-clip seed and retains one provider until both clips finish.
+Every saved depth, pose, intrinsic and processed-image artifact matches byte for byte across
+all six trials. Exception cleanup remains explicit in the isolated lifecycle driver.
+
+Median two-clip process time fell from 62.839 to 49.794 seconds (about 20.8%). Forward times
+were similar; the saving comes from avoiding a second construction. Sampled GPU memory stayed
+near 12.41 GiB; host RSS medians were 14.67 and 13.54 GiB. This is a multi-clip throughput result,
+not a fresh single-clip latency improvement. The experiment driver supports this lifecycle;
+ordinary independently launched demo processes still construct their own providers. Reuse of
+AllTracker and the corrector has not been measured by this DA3-only experiment.
+
+## 7. Execution batch size with fixed group membership
+
+Completed three repeats each for batches 1, 2, 4 and the original 8. The experiment fixes the
+reference batch-8 padding selection independently of execution batching, so every 1024-point
+group, including the padded final group, has identical membership.
+
+Median process times for batches 1/2/4/8 were 27.250/29.546/22.210/19.391 seconds. Sampled device
+peaks were approximately 1.704/2.008/2.628/3.887 GiB. The smaller batches provide a memory/runtime
+tradeoff, but batches 1 and 2 also fail the strict numerical gate: maximum ordinary vector errors
+were 0.07359 and 0.05558 reference-depth units. Their raw-lift arrays match. The cause of the
+corrector differences is not isolated by this experiment; they must not be described as an
+equivalent optimization. Batch 4 is bitwise equal, including padded pixels, but slower than 8.
+Retain batch 8 as the default. The failed gates remain saved as evidence, not reclassified as passes.
+
+## 8. Compile the corrector
+
+Completed one fresh eager process and one process with a fresh compiler cache, each executing
+one cold and three warm full-clip correction passes. The compiled model produced two graphs and
+no recorded graph breaks. Cold correction took 41.806 seconds versus 15.553 eager, with another
+1.593 seconds constructing the compile wrapper. The median of three warm stages was 12.816
+seconds compiled versus 13.293 eager (about 3.6% lower). These are within-process warm passes,
+not three independent fresh-process trials. The four-pass process took 85.328 versus 59.516 seconds.
+
+Compilation reduced sampled device memory from about 3.887 to 3.347 GiB while increasing sampled
+host RSS from 1.627 to 2.330 GiB. It fails the numerical gate: maximum normalized ordinary error
+is 0.08477 on every compiled pass. Eager repeated passes match exactly. The default remains eager;
+neither its modest warm-time benefit nor a hypothetical amortization point overrides that failed gate.
+
+## Combined confirmation
+
+Completed five fresh full-pipeline alternating pairs under Python 3.13.16. The control is the
+pre-optimization offload implementation; the candidate combines skipped discarded AllTracker
+initialization, float32 return views and hashing NPY bytes during writes. Both use RAM offload,
+batch 8, the same full 84-frame 280×504 input, seed and released checkpoints. No prepared window
+is copied into these trials. Decode, construction, geometry, tracking, correction and durable
+commits are measured; provisioning and viewer/video export are excluded.
+
+Median process time fell from **58.903 to 57.109 seconds (3.0%)**. Observed ranges were
+58.592–59.204 and 56.780–57.462 seconds, with the candidate faster in each pair. Streamed
+correction stage medians fell from 15.299 to 13.805 seconds and AllTracker from 4.459 to 4.191.
+These are measured combined results; isolated stage savings were not added to estimate them.
+
+Sampled whole-device peaks were approximately 12.405 and 12.401 GiB; physical writes were
+0.586 GiB for both. Sampled RSS medians were 11.462 and 12.428 GiB, but both miss a short startup
+peak: OS process RSS high-water marks are approximately **13.553 GiB for both**, reached in DA3
+before the tracker and serialization changes. This does not establish a RAM increase or saving.
+Both sampled and OS-reported metrics are retained in the technical summaries and charts.
+
+All nine full-output comparisons against the first control pass, covering the other four controls
+and all five candidates, pass. Corrected ordinary and repeated-point trajectories, raw lift, masks,
+images, cameras, intrinsics and prepared depth/tracker outputs match exactly. The three retained
+changes are enabled by default. Depth cache, prefetch and compilation remain disabled; batch 8
+is unchanged. DA3 reuse remains an explicit multi-clip experiment rather than a global model cache.
+
+## Reproduce a new campaign
+
+The measured local source snapshots are retained and are never overwritten. In a fresh checkout
+of the final optimization PR, reconstruct runnable sources from Git history before provisioning
+weights and demo inputs:
+
+```bash
+uv sync --locked --extra dev
+uv run python scripts/prepare_optimization_sources.py --revisions configs/experiments/source-revisions.json
+uv run python scripts/download_weights.py --only relift da3 alltracker
+uv run python scripts/provision_benchmark_backbone.py
+uv run python scripts/download_demo_inputs.py swing-tire swing
+```
+
+The revision map is technical configuration, separate from this analysis. It reconstructs the
+pre-offload source, the offload reference, the initial experimental options and the current
+candidate. It requires the fork's Git history; existing local snapshots cause an error rather
+than being replaced. `HEAD` means the checked-out final optimization revision. The reconstructed
+sources preserve the algorithms under study; they are not byte-identical copies of the earlier
+uncommitted working-tree snapshots. New runs record their own hashes and actual runtime.
+The historical backbone is provisioned outside timing because the reference AllTracker loads it
+before replacing its weights. Current inference skips that discarded initialization.
+
+Run one experiment at a time, checking its outputs before the next:
+
+```bash
+uv run python scripts/run_optimization_experiments.py --spec configs/experiments/optimization-python313.json --experiment prefetch
+uv run python scripts/check_optimization_parity.py outputs/experiments/optimization-python313/prefetch
+uv run python scripts/summarize_optimization_experiments.py outputs/experiments/optimization-python313
+uv run python scripts/build_optimization_charts.py --summaries outputs/experiments/optimization/summary.json outputs/experiments/optimization-python313/summary.json --analysis docs/optimization-experiment-log.md --out-dir outputs/optimization-charts
+```
+
+The earlier four isolated patches use `optimization.json`; the later experiments use
+`optimization-python313.json`. The batching reproduction explicitly disables write hashing so
+it stays isolated when reconstructed from the current candidate. Compilation and small-batch
+parity checks are expected to fail for the recorded configuration; retain and inspect those
+failures. A fresh checkout produces new Python 3.13 measurements, not a rerun relabeled as the
+historical Python 3.10 campaign. Choose new output roots when retaining existing trial records.

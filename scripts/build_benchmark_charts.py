@@ -81,7 +81,9 @@ def collect(roots):
         record = dict(record, data=data)
         # Unknown workload settings must not accidentally match across trials.
         settings = workload(data)
-        signature = dict(workload=settings, lockfile=data.get("lockfile_sha256"), wrapper=data.get("wrapper_sha256"))
+        runtime = data.get("environment")
+        environment_lock = lookup(data, "environment.environment_lockfile_sha256") or data.get("lockfile_sha256")
+        signature = dict(workload=settings, lockfile=environment_lock, runtime=runtime, wrapper=data.get("wrapper_sha256"))
         if any(value is None for key, value in settings.items() if key != "command_settings"):
             signature["unmatched_record"] = str(record["path"])
         key = canonical(signature)
