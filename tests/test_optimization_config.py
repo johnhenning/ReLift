@@ -38,7 +38,8 @@ def test_strict_settings_and_independent_combinations(tmp_path: Path) -> None:
     isolated = isolate({}, {"hash_writes": [True, False], "gather": ["current", "python"]})
     assert len(isolated) == 3
     assert all(
-        sum(row[key] != OptimizationConfig().as_dict()[key] for key in row) <= 1 for row in isolated
+        sum(dict(row)[key] != dict(OptimizationConfig().as_dict())[key] for key in row) <= 1
+        for row in isolated
     )
 
 

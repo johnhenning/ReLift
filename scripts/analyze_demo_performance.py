@@ -19,13 +19,20 @@ import subprocess
 from datetime import UTC, datetime
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from relift.records.reporting import (
+        ArrayMemoryEstimate,
+        DemoInventoryRow,
+        DemoPerformanceReport,
+    )
 
 REPO = Path(__file__).resolve().parents[1]
 ANSI = re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
 
 
-def sha256(path: Path) -> Any:
+def sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as stream:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
@@ -33,14 +40,14 @@ def sha256(path: Path) -> Any:
     return digest.hexdigest()
 
 
-def summarize(root: Path) -> Any:
+def summarize(root: Path) -> list[DemoInventoryRow]:
     state = json.loads((root / "batch.json").read_text())
     rows = []
     for name, record in state["videos"].items():
         directory = root / name
         log = directory / "inference.log"
         text = ANSI.sub("", log.read_text()) if log.exists() else ""
-        row = dict(
+        row: DemoInventoryRow = dict(
             name=name,
             status=record["status"],
             source=record.get("source", {}),
@@ -78,7 +85,10 @@ def summarize(root: Path) -> Any:
         for filename in ("tracks.npz", "trajectories.html"):
             file = directory / filename
             if file.exists():
-                row[filename + "_bytes"] = file.stat().st_size
+                if filename == "tracks.npz":
+                    row["tracks.npz_bytes"] = file.stat().st_size
+                else:
+                    row["trajectories.html_bytes"] = file.stat().st_size
         rows.append(row)
     return rows
 
@@ -110,7 +120,7 @@ def main() -> None:
         for name in ("demo_video.py", "plotly_demo.py", "generate_all_views.py")
     ]
     fingerprints = {str(p.relative_to(REPO)): sha256(p) for p in sorted(set(paths)) if p.is_file()}
-    memory = []
+    memory: list[ArrayMemoryEstimate] = []
     for total in (84, 100, 206, 294):
         cells = total * 504 * 280
         memory.append(
@@ -122,7 +132,7 @@ def main() -> None:
                 xyz_raw_mask_images_mib=cells * 22 / 2**20,
             )
         )
-    report = dict(
+    report: DemoPerformanceReport = dict(
         kind="observational_inventory_not_controlled_benchmark",
         captured_at=datetime.now(UTC).isoformat(),
         python=platform.python_version(),

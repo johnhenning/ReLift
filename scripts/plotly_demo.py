@@ -25,6 +25,7 @@ import plotly.io as pio
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
+from relift.records.artifacts import ViewerMetadata, ViewerPayload
 from relift.storage import TrajectoryStore, file_sha256
 
 
@@ -48,7 +49,7 @@ def prepare_data(
     max_points: int = 2500,
     trajectory_count: int = 60,
     fps_override: Any = None,
-) -> Any:
+) -> tuple[ViewerPayload, np.ndarray[Any, Any], np.ndarray[Any, Any], list[str]]:
     store = source if isinstance(source, TrajectoryStore) else TrajectoryStore.open(source)
     shape = store.shape
     if len(shape) != 4 or shape[-1] != 3 or min(shape[:3]) < 1:
@@ -92,7 +93,7 @@ def prepare_data(
     bounds[0] -= padding
     bounds[1] += padding
     colors = [f"rgb({r},{g},{b})" for r, g, b in rgb]
-    payload = dict(
+    payload: ViewerPayload = dict(
         frames=total,
         points=len(pixels),
         dense_points=height * width,
@@ -112,7 +113,7 @@ def prepare_data(
     return payload, raw, corrected, colors
 
 
-def make_figure(name: str, payload: Any, raw: Any, corrected: Any, colors: Any) -> Any:
+def make_figure(name: str, payload: ViewerPayload, raw: Any, corrected: Any, colors: Any) -> Any:
     figure = go.Figure()
     hover = "pixel (%{customdata[0]}, %{customdata[1]})<br>x=%{x:.3f}<br>depth=%{y:.3f}<br>up=%{z:.3f}<extra>%{fullData.name}</extra>"
     # Trace order is shared with plotly_viewer.js: clouds, complete paths,
@@ -210,7 +211,7 @@ def export_viewer(
     max_points: int = 2500,
     trajectory_count: int = 60,
     fps_override: Any = None,
-) -> Any:
+) -> ViewerMetadata:
     directory = Path(directory)
     store = TrajectoryStore.open(directory)
     source = (
@@ -235,7 +236,7 @@ def export_viewer(
     page = page.replace("__VIEWER_JS__", (HERE / "plotly_viewer.js").read_text())
     output = directory / "trajectories.html"
     output.write_text(page, encoding="utf-8")
-    metadata = dict(
+    metadata: ViewerMetadata = dict(
         generator="scripts/plotly_demo.py",
         plotly_version=plotly.__version__,
         source=str(source.relative_to(directory)),

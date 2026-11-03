@@ -15,6 +15,10 @@ import sys
 import sysconfig
 import time
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from relift.records.artifacts import NativeBuildManifest
 
 import torch
 
@@ -77,7 +81,7 @@ def main() -> None:
         subprocess.run(cuda_command, check=True)
         command += ["-DRELIFT_WITH_CUDA", str(obj), "-lcudart"]
     subprocess.run(command, check=True)
-    record = dict(
+    record: NativeBuildManifest = dict(
         command=command,
         compiler=subprocess.check_output([args.cxx, "--version"], text=True),
         python=sys.version,
@@ -90,6 +94,7 @@ def main() -> None:
         build_seconds=time.perf_counter() - start,
     )
     if args.cuda:
+        assert cuda_command is not None
         record.update(
             cuda_command=cuda_command,
             nvcc=subprocess.check_output([args.nvcc, "--version"], text=True),

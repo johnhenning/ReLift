@@ -88,7 +88,9 @@ def test_archive_values_private_mapping_lifetime_and_corruption(
     assert archive.verify()  # private mapped changes never modify archived bytes
     record = archive.records[0]
     with pytest.raises(ValueError):
-        archive.map(dict(record, offset=-1))
+        invalid = record.copy()
+        invalid["offset"] = -1
+        archive.map(invalid)
     with archive.path.open("r+b") as stream:
         stream.seek(-1, 2)
         stream.write(b"X")

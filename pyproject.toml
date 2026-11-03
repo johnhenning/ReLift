@@ -51,7 +51,7 @@ dev = [
 [tool.ruff]
 target-version = "py313"
 line-length = 100
-extend-exclude = ["outputs", "checkpoints", "cache", "data", "third_party", "docs/vendor", ".venv", ".codex", ".agents"]
+extend-exclude = ["outputs", "checkpoints", "cache", "./data", "third_party", "docs/vendor", ".venv", ".codex", ".agents"]
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I", "UP", "B", "ANN"]

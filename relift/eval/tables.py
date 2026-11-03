@@ -8,11 +8,12 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import numpy as np
 
 from ..data.worldtrack import NAMES, subset_dir
+from ..records.model import AlignmentMode, EvaluationRow, SubsetMeans, SubsetName
 
 ROWS = [
     ("AllTracker + DA3", "alltracker_da3"),
@@ -22,13 +23,13 @@ ROWS = [
     ("CoWTracker + VGGT-Omega", "cowtracker_vggto"),
     ("CoWTracker + 4RC", "cowtracker_rc4"),
 ]
-SUBSET_ORDER = ("adt", "pstudio", "po", "ds")
-CELLS = ("all", "dyn")
+SUBSET_ORDER: tuple[SubsetName, ...] = ("adt", "pstudio", "po", "ds")
+CELLS: tuple[Literal["all", "dyn"], ...] = ("all", "dyn")
 
 
 def subset_means(
-    scores_dir: Any, variant: Any, subset: Any, mode: str = "sim3"
-) -> dict[str, float] | None:
+    scores_dir: Any, variant: Any, subset: Any, mode: AlignmentMode = "sim3"
+) -> SubsetMeans | None:
     f = Path(scores_dir) / f"{variant}_{subset_dir(subset)}.json"
     if not f.exists():
         return None
@@ -39,35 +40,35 @@ def subset_means(
 
 
 def table(
-    scores_dir: Any, rows: Any = ROWS, mode: str = "sim3", subsets: Any = SUBSET_ORDER
-) -> dict[str, Any]:
+    scores_dir: str | Path,
+    rows: list[tuple[str, str]] = ROWS,
+    mode: AlignmentMode = "sim3",
+    subsets: tuple[SubsetName, ...] | list[SubsetName] = SUBSET_ORDER,
+) -> dict[str, EvaluationRow]:
     """-> {label: {subset: {all, dyn, clips}, "mean": {all, dyn}, "subsets": [...]}} for the rows whose files exist.
     ``subsets`` restricts the table (e.g. one subset on a test machine); the Mean column is then over those only."""
-    out = {}
+    out: dict[str, EvaluationRow] = {}
     for label, variant in rows:
         per = {s: subset_means(scores_dir, variant, s, mode) for s in subsets}
-        if any(v is None for v in per.values()):
-            missing = [s for s, v in per.items() if v is None]
-            out[label] = dict(
-                variant=variant,
-                missing=missing,
-                subsets=list(subsets),
-                **{s: v for s, v in per.items() if v},
+        row: EvaluationRow = dict(variant=variant, subsets=list(subsets))
+        missing = [s for s, value in per.items() if value is None]
+        if missing:
+            row["missing"] = missing
+        for subset, value in per.items():
+            if value is not None:
+                row[subset] = value
+        if not missing:
+            row["mean"] = dict(
+                all=float(np.mean([v["all"] for v in per.values() if v is not None])),
+                dyn=float(np.mean([v["dyn"] for v in per.values() if v is not None])),
             )
-            continue
-        out[label] = dict(
-            variant=variant,
-            subsets=list(subsets),
-            **per,
-            mean={
-                c: float(np.mean([value[c] for value in per.values() if value is not None]))
-                for c in CELLS
-            },
-        )
+        out[label] = row
     return out
 
 
-def markdown(tab: Any, subsets: Any = SUBSET_ORDER) -> str:
+def markdown(
+    tab: dict[str, EvaluationRow], subsets: tuple[SubsetName, ...] | list[SubsetName] = SUBSET_ORDER
+) -> str:
     mean = "Mean" if tuple(subsets) == tuple(SUBSET_ORDER) else f"Mean({len(subsets)})"
     head = (
         "| Method | "

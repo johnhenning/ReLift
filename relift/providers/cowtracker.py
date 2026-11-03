@@ -20,6 +20,8 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
+from ..records.model import VisibilityStats
+
 MULT = 112  # lcm of the ViT patch (14) and the side ResNet's stride (16)
 ASPECT_TOL = math.log(1.15)
 
@@ -199,7 +201,7 @@ def _to_native(
     return tr, out[:, 2].clamp(0, 1), out[:, 3].clamp(0, 1)
 
 
-def vis_stats(vis: np.ndarray[Any, Any], name: str = "") -> dict[str, Any]:
+def vis_stats(vis: np.ndarray[Any, Any], name: str = "") -> VisibilityStats:
     v = np.asarray(vis, np.float32).ravel()
     q = np.percentile(v, [10, 25, 50, 75, 90])
     return dict(

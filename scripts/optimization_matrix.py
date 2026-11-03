@@ -12,16 +12,20 @@ import argparse
 import itertools
 import json
 import sys
+from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from relift.configuration import InferenceConfig, load_configuration, merge
 from relift.optimization import OptimizationConfig
+from relift.records.benchmark import ExperimentOptions, ExperimentSpec, ExperimentVariant
+from relift.records.configuration import InferenceConfigurationRecord, OptimizationRecord
 
 
-def expand(base: Any, grid: Any) -> Any:
+def expand(
+    base: Mapping[str, object], grid: Mapping[str, Sequence[object]]
+) -> list[OptimizationRecord]:
     if not grid or any(not isinstance(values, list) or not values for values in grid.values()):
         raise ValueError("Grid must map settings to nonempty lists")
     names = sorted(grid)
@@ -33,7 +37,9 @@ def expand(base: Any, grid: Any) -> Any:
     return variants
 
 
-def isolate(base: Any, grid: Any) -> Any:
+def isolate(
+    base: Mapping[str, object], grid: Mapping[str, Sequence[object]]
+) -> list[OptimizationRecord]:
     if not grid or any(not isinstance(values, list) or not values for values in grid.values()):
         raise ValueError("Grid must map settings to nonempty lists")
     variants = [OptimizationConfig.from_dict(base).as_dict()]
@@ -46,13 +52,13 @@ def isolate(base: Any, grid: Any) -> Any:
 
 
 def component_matrix(
-    base: dict[str, Any], grid: dict[str, list[Any]], *, isolated: bool = False
-) -> list[dict[str, Any]]:
+    base: Mapping[str, object], grid: Mapping[str, Sequence[object]], *, isolated: bool = False
+) -> list[InferenceConfigurationRecord]:
     """Expand dotted component fields, with the same validator as inference."""
     if not grid or any(not isinstance(values, list) or not values for values in grid.values()):
         raise ValueError("Grid must map component fields to nonempty lists")
 
-    def patch(name: str, value: Any) -> dict[str, Any]:
+    def patch(name: str, value: object) -> dict[str, dict[str, object]]:
         parts = name.split(".")
         if len(parts) != 2:
             raise ValueError("Component grid keys must be section.field")
@@ -112,17 +118,23 @@ def main() -> None:
         or args.inference_config is not None
         or any("." in key for key in grid)
     )
+    option_sets: list[ExperimentOptions]
     if grouped:
         if args.base:
             parser.error("--base is legacy JSON; choose --profile or --inference-config")
         base = load_configuration(profile=args.profile, path=args.inference_config).config.as_dict()
-        settings = component_matrix(base, grid, isolated=args.mode == "one-at-a-time")
+        option_sets = [
+            dict(configuration=config)
+            for config in component_matrix(base, grid, isolated=args.mode == "one-at-a-time")
+        ]
     else:
         base = json.loads(args.base.read_text()) if args.base else {}
-        settings = (expand if args.mode == "cartesian" else isolate)(base, grid)
-    variants = []
-    for index, config in enumerate(settings):
-        options = {"configuration" if grouped else "optimizations": config}
+        option_sets = [
+            dict(optimizations=config)
+            for config in (expand if args.mode == "cartesian" else isolate)(base, grid)
+        ]
+    variants: list[ExperimentVariant] = []
+    for index, options in enumerate(option_sets):
         if args.task == "pipeline":
             options.update(video=args.input)
             if args.offload or not grouped:
@@ -138,7 +150,7 @@ def main() -> None:
         if args.native_build:
             options["native_build"] = args.native_build
         variants.append(dict(name=f"variant-{index:03}", source=args.source, options=options))
-    spec = dict(
+    spec: ExperimentSpec = dict(
         scene=Path(args.input).stem,
         input=args.input,
         process_res=504,

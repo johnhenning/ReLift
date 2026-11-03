@@ -23,7 +23,23 @@ from collections.abc import Generator
 from contextlib import contextmanager, nullcontext
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Protocol, cast
+from typing import TYPE_CHECKING, Any, Protocol, cast
+
+if TYPE_CHECKING:
+    from relift.records.benchmark import (
+        ExecutionMetrics,
+        ExperimentOptions,
+        ExperimentResult,
+        TrackerOptions,
+    )
+    from relift.records.runtime import (
+        DiagnosticReport,
+        DiagnosticSpan,
+        PhaseMetrics,
+        ProfileFunction,
+        StreamCorrectionOptions,
+    )
+
 
 import numpy as np
 import torch
@@ -41,7 +57,7 @@ def save(path: Path, value: Any) -> None:
 
 class Phases:
     def __init__(self) -> None:
-        self.results = {}
+        self.results: dict[str, PhaseMetrics] = {}
 
     @contextmanager
     def stage(self, name: str) -> Generator[None]:
@@ -66,7 +82,7 @@ class Diagnostic:
 
     def __init__(self, output: Any) -> None:
         self.output = output
-        self.spans = defaultdict(lambda: dict(calls=0, seconds=0.0))
+        self.spans: dict[str, DiagnosticSpan] = defaultdict(lambda: dict(calls=0, seconds=0.0))
         self.originals = []
         self.cpu = cProfile.Profile()
 
@@ -136,7 +152,7 @@ class Diagnostic:
             setattr(owner, name, original)
         self.cpu.dump_stats(str(self.output / "cpu-profile.pstats"))
         stats = pstats.Stats(self.cpu)
-        functions = [
+        functions: list[ProfileFunction] = [
             dict(
                 file=key[0],
                 line=key[1],
@@ -147,14 +163,12 @@ class Diagnostic:
             )
             for key, value in cast(ProfileStats, stats).stats.items()
         ]
-        save(
-            self.output / "diagnostic.json",
-            dict(
-                spans=dict(self.spans),
-                caveat="Diagnostic synchronized inclusive spans overlap and alter execution. Never use their sum or runtime as an unprofiled speed measurement.",
-                functions=sorted(functions, key=lambda row: row["self_seconds"], reverse=True),
-            ),
+        diagnostic: DiagnosticReport = dict(
+            spans=dict(self.spans),
+            caveat="Diagnostic synchronized inclusive spans overlap and alter execution. Never use their sum or runtime as an unprofiled speed measurement.",
+            functions=sorted(functions, key=lambda row: row["self_seconds"], reverse=True),
         )
+        save(self.output / "diagnostic.json", diagnostic)
 
 
 def main() -> None:
@@ -170,7 +184,7 @@ def main() -> None:
     np.random.seed(0)
     torch.manual_seed(0)
     torch.cuda.manual_seed_all(0)
-    options = json.loads(args.options)
+    options: ExperimentOptions = json.loads(args.options)
     options.pop("native_build", None)  # runner supplies the verified build through the environment
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -216,7 +230,8 @@ def main() -> None:
                 images = archive["images"]
         with phases.stage("provider_load"):
             provider = AllTrackerProvider(
-                args.root / "checkpoints/alltracker/alltracker.pth", **options
+                args.root / "checkpoints/alltracker/alltracker.pth",
+                **cast("TrackerOptions", dict(options)),
             )
         state = hashlib.sha256()
         for name, value in sorted(provider.net.state_dict().items()):
@@ -268,23 +283,30 @@ def main() -> None:
         diagnostic.__enter__()
     try:
         with phases.stage("correction"), lookahead if lookahead else nullcontext():
+            runtime_options = cast("StreamCorrectionOptions", dict(options))
             if configuration is not None:
                 options["optimizations"] = configuration.config.optimizations().as_dict()
-                options.setdefault("ram_budget_gb", configuration.config.memory.ram_gb)
-                options.setdefault("vram_budget_gb", configuration.config.memory.vram_gb)
-                options.setdefault("scratch_budget_gb", configuration.config.memory.scratch_gb)
-            optimization_values = options.pop("optimizations", None)
+                runtime_options.setdefault("ram_budget_gb", configuration.config.memory.ram_gb)
+                runtime_options.setdefault("vram_budget_gb", configuration.config.memory.vram_gb)
+                runtime_options.setdefault(
+                    "scratch_budget_gb", configuration.config.memory.scratch_gb
+                )
+            optimization_values = (
+                configuration.config.optimizations().as_dict()
+                if configuration
+                else options.pop("optimizations", None)
+            )
             if optimization_values is not None:
                 from relift.optimization import InferenceComponents, OptimizationConfig
 
-                options["optimizations"] = OptimizationConfig.from_dict(optimization_values)
+                runtime_options["optimizations"] = OptimizationConfig.from_dict(optimization_values)
                 components = InferenceComponents()
                 native_build = os.environ.get("RELIFT_NATIVE_BUILD") or (
                     configuration.config.runtime.native_build if configuration else None
                 )
                 if native_build:
                     components = components.with_native_build(native_build)
-                options["components"] = components
+                runtime_options["components"] = components
             store = stream_correct(
                 output / "window",
                 output,
@@ -295,14 +317,14 @@ def main() -> None:
                     **({"configuration": configuration.as_dict()} if configuration else {}),
                 ),
                 group=1024,
-                batch=options.pop("batch", 8),
+                batch=runtime_options.pop("batch", 8),
                 seed=0,
-                **options,
+                **runtime_options,
             )
     finally:
         if diagnostic:
             diagnostic.__exit__(*sys.exc_info())
-    execution = (
+    execution: ExecutionMetrics = (
         dict(
             peak_pinned_bytes=lookahead.peak_pinned_bytes,
             prefetched_host_to_device_bytes=lookahead.host_to_device_bytes,
@@ -310,25 +332,23 @@ def main() -> None:
         if lookahead
         else {}
     )
-    save(
-        output / "result.json",
-        dict(
-            task=args.task,
-            phases=phases.results,
-            shape=store.shape,
-            execution=execution,
-            configuration=configuration.as_dict() if configuration else None,
-            shard_commits=json.loads((output / "shard-commits.json").read_text())
-            if (output / "shard-commits.json").exists()
-            else None,
-            observation_cache=json.loads((output / "observation-cache.json").read_text())
-            if (output / "observation-cache.json").exists()
-            else None,
-            finite=store.finite(),
-            source=str(args.source.resolve()),
-            started_at=datetime.now(UTC).isoformat(),
-        ),
+    result: ExperimentResult = dict(
+        task=args.task,
+        phases=phases.results,
+        shape=store.shape,
+        execution=execution,
+        configuration=configuration.as_dict() if configuration else None,
+        shard_commits=json.loads((output / "shard-commits.json").read_text())
+        if (output / "shard-commits.json").exists()
+        else None,
+        observation_cache=json.loads((output / "observation-cache.json").read_text())
+        if (output / "observation-cache.json").exists()
+        else None,
+        finite=store.finite(),
+        source=str(args.source.resolve()),
+        started_at=datetime.now(UTC).isoformat(),
     )
+    save(output / "result.json", result)
     print(json.dumps(dict(phases=phases.results, shape=store.shape)), flush=True)
 
 

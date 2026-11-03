@@ -22,6 +22,7 @@ import torch
 
 from .corrupt import corrupt
 from .features import S, correct, features_clean, interp_init, normalise
+from .records.model import LossMetrics, TrainingBatch
 
 LENGTHS = (
     48,
@@ -72,7 +73,7 @@ def make_batch(
     gen: torch.Generator | None = None,
     length: int | None = None,
     augment: bool = True,
-) -> dict[str, torch.Tensor]:
+) -> TrainingBatch:
     """-> dict(X clean tracks, Y lifted observation, obs, ray, origin, dyn, vis), normalised per clip."""
     X, vis, origin, dyn = (b.to(dev, non_blocking=True) for b in batch)
     if length is not None:
@@ -86,9 +87,7 @@ def make_batch(
     return dict(X=X, Y=Y, obs=obs, ray=ray, origin=origin, dyn=dyn, vis=vis)
 
 
-def loss_fn(
-    model: torch.nn.Module, b: dict[str, torch.Tensor]
-) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
+def loss_fn(model: torch.nn.Module, b: TrainingBatch) -> tuple[torch.Tensor, LossMetrics]:
     """Position + 4 x velocity error of the correction, relative to the track's range, weighted 4x on moving tracks
     and 2x on hidden cells.  -> (loss, dict(pos, vel) per sample)."""
     x_start, gap = interp_init(b["Y"], b["obs"])
@@ -136,7 +135,7 @@ def validate(model: torch.nn.Module, loader: Any, dev: str | torch.device) -> di
     model.eval()
     acc = {}
 
-    def add(name: str, x: torch.Tensor, b: dict[str, torch.Tensor]) -> None:
+    def add(name: str, x: torch.Tensor, b: TrainingBatch) -> None:
         d = 100.0 * torch.linalg.vector_norm(x - b["X"], dim=-1)
         dynm = b["dyn"][:, None, :].expand_as(b["obs"])
         for cell, m in (

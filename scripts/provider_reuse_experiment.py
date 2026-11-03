@@ -9,7 +9,12 @@ from __future__ import annotations
 import gc
 import random
 from pathlib import Path
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from relift.records.benchmark import ExperimentOptions, ExperimentResult, PhaseRecorder
+    from relift.records.model import DA3Geometry
+
 
 import cv2
 import numpy as np
@@ -39,7 +44,7 @@ def frames(path: str | Path) -> Any:
     return np.stack(values)
 
 
-def run(args: Any, options: dict[str, Any], phases: Any) -> Any:
+def run(args: Any, options: ExperimentOptions, phases: PhaseRecorder) -> ExperimentResult:
     from relift.providers.da3 import DepthAnything3Provider
     from relift.storage import file_sha256
 
@@ -68,12 +73,20 @@ def run(args: Any, options: dict[str, Any], phases: Any) -> Any:
                     )
             reset_seed()
             with phases.stage(f"clip_{index}_forward"):
-                geometry = provider.run(images)
+                geometry: DA3Geometry = provider.run(images)
             with phases.stage(f"clip_{index}_serialize"):
                 name = f"clip-{index}.npz"
-                np.savez(output / name, **cast(dict[str, Any], geometry))
+                np.savez(output / name, **geometry)
             artifacts[name] = file_sha256(output / name)
-            shapes[name] = {key: list(value.shape) for key, value in geometry.items()}
+            shapes[name] = {
+                key: list(value.shape)
+                for key, value in (
+                    ("depth", geometry["depth"]),
+                    ("poses", geometry["poses"]),
+                    ("intrinsics", geometry["intrinsics"]),
+                    ("images", geometry["images"]),
+                )
+            }
             del images, geometry
             if not reuse:
                 with phases.stage(f"clip_{index}_cleanup"):

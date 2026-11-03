@@ -25,6 +25,13 @@ provider and JSON boundaries may use `Any`. Optional state needs an explicit
 check before use. The small external stubs in [stubs/README.md](../stubs/README.md)
 describe pinned dynamic provider imports; they do not replace checking our code.
 
+Fixed-field dictionary interfaces use shared `TypedDict` definitions in
+[`relift/records/`](../relift/records/). Annotate both their producers and consumers;
+avoid widening them back to `dict[str, Any]`. Dynamic maps keep concrete value
+types. The [record conventions](typed-records.md) explain missing fields, nullable
+values, JSON boundaries and source-isolated experiment workers. Pyrefly checks
+these contracts in the same required quality job as the rest of the Python code.
+
 Downloaded dependencies, generated artifacts, weights and frozen benchmark sources
 are excluded. Historical experiment snapshots must retain their original bytes.
 Run the CUDA tests that cover any changed inference or native path on a CUDA host.

@@ -4,17 +4,19 @@ from __future__ import annotations
 
 import json
 import math
-from collections.abc import Callable
-from dataclasses import asdict, dataclass, fields, replace
+from collections.abc import Callable, Mapping
+from dataclasses import dataclass, fields, replace
 from functools import partial
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 if TYPE_CHECKING:
     from .configuration import ConfigurationSelection, InferenceConfig
     from .shard_commits import ShardCommitter, ShardSink
 
 import torch
+
+from .records.configuration import OptimizationOverrides, OptimizationRecord
 
 
 @dataclass(frozen=True)
@@ -73,11 +75,11 @@ class OptimizationConfig:
                 raise ValueError(f"{key} must be a positive integer")
 
     @classmethod
-    def from_dict(cls, values: dict[str, Any]) -> OptimizationConfig:
+    def from_dict(cls, values: Mapping[str, object]) -> OptimizationConfig:
         unknown = set(values) - {f.name for f in fields(cls)}
         if unknown:
             raise ValueError(f"Unknown optimization settings: {sorted(unknown)}")
-        return cls(**values)
+        return cls(**cast(OptimizationOverrides, dict(values)))
 
     @classmethod
     def read(
@@ -91,8 +93,26 @@ class OptimizationConfig:
             values[key] = json.loads(value)
         return cls.from_dict(values)
 
-    def as_dict(self) -> dict[str, Any]:
-        return asdict(self)
+    def as_dict(self) -> OptimizationRecord:
+        return OptimizationRecord(
+            gather=self.gather,
+            shards=self.shards,
+            shard_writer=self.shard_writer,
+            commit_backend=self.commit_backend,
+            rays=self.rays,
+            da3_weights=self.da3_weights,
+            da3_features=self.da3_features,
+            tracker_init_weights=self.tracker_init_weights,
+            tracker_copy_outputs=self.tracker_copy_outputs,
+            hash_writes=self.hash_writes,
+            depth_cache_mb=self.depth_cache_mb,
+            observation_cache_mb=self.observation_cache_mb,
+            prefetch=self.prefetch,
+            corrector_batch=self.corrector_batch,
+            padding_batch=self.padding_batch,
+            compile_corrector=self.compile_corrector,
+            reuse_da3=self.reuse_da3,
+        )
 
     def validate_mode(self, mode: str) -> None:
         if mode not in ("none", "streamed", "ram", "disk"):
@@ -102,7 +122,7 @@ class OptimizationConfig:
         if self.da3_features != "current" and mode != "disk":
             raise ValueError("Feature archives require disk offload")
         if mode == "none":
-            default = OptimizationConfig().as_dict()
+            default = dict(OptimizationConfig().as_dict())
             stream_fields = (
                 "gather",
                 "shards",

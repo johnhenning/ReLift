@@ -10,6 +10,7 @@ from typing import Any
 import numpy as np
 import pytest
 
+from relift.records.reporting import GalleryState, GalleryVideo, VideoSource
 from relift.storage import TrajectoryStore
 from scripts.download_demo_inputs import sha256
 from scripts.generate_all_views import complete_result, infer_full_resolution, write_index
@@ -39,7 +40,7 @@ def test_gallery_links_only_completed_outputs_and_escapes_errors(tmp_path: Path)
     root = tmp_path / "running"
     root.mkdir()
     (root / "trajectories.html").write_text("<div>export</div>")
-    state = dict(
+    state: GalleryState = dict(
         videos={
             "running": dict(
                 status="complete",
@@ -77,10 +78,12 @@ def test_mapped_completion_binds_source_resolution_and_shard_integrity(tmp_path:
     store.write_shard(0, xyz=xyz, lift=xyz.astype(np.float16), observed=np.ones((H * W, T), bool))
     store.finish()
     exported = export_viewer(tmp_path)
-    source = dict(frames=T, fps=12.0, sha256="source-a")
+    source: VideoSource = dict(frames=T, fps=12.0, sha256="source-a")
     assert complete_result(tmp_path, source, 504) == exported
     assert complete_result(tmp_path, source, 392) is None
-    assert complete_result(tmp_path, dict(source, sha256="source-b"), 504) is None
+    changed_source = source.copy()
+    changed_source["sha256"] = "source-b"
+    assert complete_result(tmp_path, changed_source, 504) is None
     assert store.manifest is not None
     file = store.root / store.manifest["shards"][0]["arrays"]["xyz"]["file"]
     with file.open("r+b") as stream:
@@ -105,7 +108,7 @@ def test_offload_oom_does_not_silently_lower_spatial_resolution(
     args = SimpleNamespace(
         offload="ram", ram_budget_gb=18, vram_budget_gb=20, scratch_budget_gb=64, scratch_dir=None
     )
-    record = {}
+    record: GalleryVideo = {}
     with pytest.raises(RuntimeError, match="out of memory"):
         infer_full_resolution("source.mp4", tmp_path, record, args)
     assert len(calls) == 1

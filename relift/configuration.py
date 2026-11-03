@@ -5,11 +5,25 @@ from __future__ import annotations
 import hashlib
 import math
 import tomllib
-from dataclasses import asdict, dataclass, field, fields, replace
+from collections.abc import Mapping
+from dataclasses import dataclass, field, fields, replace
 from pathlib import Path
 from typing import Any, get_args, get_type_hints
 
 from .optimization import OptimizationConfig
+from .records.configuration import (
+    ConfigurationSelectionRecord,
+    ConfigurationSourceRecord,
+    CorrectionRecord,
+    DA3Record,
+    InferenceConfigurationRecord,
+    MemoryRecord,
+    ObservationsRecord,
+    RaysRecord,
+    RuntimeRecord,
+    StorageRecord,
+    TrackerRecord,
+)
 
 PROFILES = Path(__file__).resolve().parents[1] / "configs/inference"
 
@@ -131,11 +145,45 @@ class InferenceConfig:
             tracker_copy_outputs=self.tracker.copy_outputs,
         )
 
-    def as_dict(self) -> dict[str, Any]:
-        return asdict(self)
+    def as_dict(self) -> InferenceConfigurationRecord:
+        return InferenceConfigurationRecord(
+            memory=MemoryRecord(
+                offload=self.memory.offload,
+                ram_gb=self.memory.ram_gb,
+                vram_gb=self.memory.vram_gb,
+                scratch_gb=self.memory.scratch_gb,
+                scratch_dir=self.memory.scratch_dir,
+            ),
+            observations=ObservationsRecord(
+                gather=self.observations.gather,
+                cache_mb=self.observations.cache_mb,
+                depth_cache_mb=self.observations.depth_cache_mb,
+                prefetch=self.observations.prefetch,
+            ),
+            rays=RaysRecord(backend=self.rays.backend),
+            correction=CorrectionRecord(
+                batch=self.correction.batch,
+                padding_batch=self.correction.padding_batch,
+                compile=self.correction.compile,
+            ),
+            storage=StorageRecord(
+                packing=self.storage.packing,
+                writer=self.storage.writer,
+                hash_writes=self.storage.hash_writes,
+                commits=self.storage.commits,
+            ),
+            da3=DA3Record(
+                weights=self.da3.weights, features=self.da3.features, reuse=self.da3.reuse
+            ),
+            tracker=TrackerRecord(
+                init_weights=self.tracker.init_weights, copy_outputs=self.tracker.copy_outputs
+            ),
+            runtime=RuntimeRecord(native_build=self.runtime.native_build),
+            schema_version=self.schema_version,
+        )
 
     @classmethod
-    def from_dict(cls, values: dict[str, Any]) -> InferenceConfig:
+    def from_dict(cls, values: Mapping[str, object]) -> InferenceConfig:
         if not isinstance(values, dict):
             raise TypeError("Inference configuration must be a table")
         defaults = cls()
@@ -198,11 +246,14 @@ class ConfigurationSelection:
     config: InferenceConfig
     sources: tuple[ConfigurationSource, ...] = ()
 
-    def as_dict(self) -> dict[str, Any]:
-        return dict(resolved=self.config.as_dict(), sources=[asdict(s) for s in self.sources])
+    def as_dict(self) -> ConfigurationSelectionRecord:
+        return ConfigurationSelectionRecord(
+            resolved=self.config.as_dict(),
+            sources=[ConfigurationSourceRecord(path=s.path, sha256=s.sha256) for s in self.sources],
+        )
 
 
-def merge(base: dict[str, Any], overlay: dict[str, Any]) -> dict[str, Any]:
+def merge(base: Mapping[str, object], overlay: Mapping[str, object]) -> dict[str, object]:
     """Merge component tables without mutating either input."""
     result = dict(base)
     for key, value in overlay.items():
@@ -217,7 +268,7 @@ def load_configuration(
     *,
     profile: str | None = None,
     path: str | Path | None = None,
-    values: dict[str, Any] | None = None,
+    values: Mapping[str, object] | None = None,
     profiles_dir: Path = PROFILES,
 ) -> ConfigurationSelection:
     """Resolve one profile/file or inline table; inheritance follows declaring files."""
@@ -256,7 +307,7 @@ def load_configuration(
 
 
 def experiment_configuration(
-    options: dict[str, Any],
+    options: Mapping[str, object],
     root: Path,
     profiles_dir: Path = PROFILES,
 ) -> ConfigurationSelection | None:
@@ -267,9 +318,17 @@ def experiment_configuration(
     if "optimizations" in options:
         raise ValueError("Choose grouped configuration or legacy optimizations")
     path = options.get("inference_config")
+    profile = options.get("inference_profile")
+    values = options.get("configuration")
+    if path is not None and not isinstance(path, (str, Path)):
+        raise TypeError("inference_config must be a path")
+    if profile is not None and not isinstance(profile, str):
+        raise TypeError("inference_profile must be a string")
+    if values is not None and not isinstance(values, dict):
+        raise TypeError("configuration must be a table")
     return load_configuration(
-        profile=options.get("inference_profile"),
+        profile=profile,
         path=root / path if path is not None else None,
-        values=options.get("configuration"),
+        values=values,
         profiles_dir=profiles_dir,
     )

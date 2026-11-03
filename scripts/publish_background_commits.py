@@ -10,7 +10,11 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 from statistics import median
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from relift.records.benchmark import PairedMeasurement, TrialRecord
+    from relift.records.runtime import ShardCommitMetrics
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -22,20 +26,23 @@ def save(path: Path, value: Any) -> None:
 
 
 def paired_results(
-    records: list[dict[str, Any]], roles: dict[str, str], control: str, candidate: str
-) -> list[dict[str, Any]]:
-    groups: dict[tuple[str, int], dict[str, dict[str, Any]]] = defaultdict(dict)
+    records: list[TrialRecord], roles: dict[str, str], control: str, candidate: str
+) -> list[PairedMeasurement]:
+    groups: dict[tuple[str, int], dict[str, TrialRecord]] = defaultdict(dict)
     for record in records:
         if (
             record["status"] == "complete"
             and roles.get(record["experiment"], "benchmark") == "benchmark"
         ):
             groups[(record["experiment"], record["repeat"])][record["mode"]] = record
-    result = []
+    result: list[PairedMeasurement] = []
     for (experiment, repeat), variants in sorted(groups.items()):
         if control not in variants or candidate not in variants:
             continue
         a, b = variants[control], variants[candidate]
+        a_result, b_result = a["result"], b["result"]
+        if a_result is None or b_result is None:
+            raise ValueError("Completed paired trials require result records")
         identity = (
             "code_hashes",
             "input_sha256",
@@ -55,11 +62,23 @@ def paired_results(
                 candidate_seconds=b["wall_seconds"],
                 candidate_over_control=b["wall_seconds"] / a["wall_seconds"],
                 seconds_saved=a["wall_seconds"] - b["wall_seconds"],
-                control_phases=a["result"]["phases"],
-                candidate_phases=b["result"]["phases"],
+                control_phases=a_result["phases"],
+                candidate_phases=b_result["phases"],
             )
         )
     return result
+
+
+def numeric_metrics(sample: ShardCommitMetrics) -> dict[str, int | float]:
+    return dict(
+        shards_submitted=sample["shards_submitted"],
+        shards_committed=sample["shards_committed"],
+        max_pending_shards=sample["max_pending_shards"],
+        peak_pending_payload_bytes=sample["peak_pending_payload_bytes"],
+        pending_payload_bytes=sample["pending_payload_bytes"],
+        wait_seconds=sample["wait_seconds"],
+        worker_write_seconds=sample["worker_write_seconds"],
+    )
 
 
 def main() -> None:
@@ -86,7 +105,7 @@ def main() -> None:
     )
     pairs = paired_results(records, roles, args.control, args.candidate)
     save(args.out / "pairs.json", pairs)
-    metrics: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    metrics: dict[tuple[str, str], list[ShardCommitMetrics]] = defaultdict(list)
     for record in records:
         value = (record.get("result") or {}).get("shard_commits")
         if record["status"] == "complete" and value:
@@ -100,9 +119,8 @@ def main() -> None:
                 n=len(samples),
                 samples=samples,
                 medians={
-                    key: median(sample[key] for sample in samples)
-                    for key in samples[0]
-                    if type(samples[0][key]) in (int, float)
+                    key: median(numeric_metrics(sample)[key] for sample in samples)
+                    for key in numeric_metrics(samples[0])
                 },
             )
             for (experiment, variant), samples in sorted(metrics.items())

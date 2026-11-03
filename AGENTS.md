@@ -6,6 +6,12 @@ reserve `Any` for dynamic model/checkpoint, JSON and external library boundaries
 Narrow optional values explicitly and keep dependency stubs in `stubs/` specific
 to the pinned upstream API. Do not silence an entire module to pass type checking.
 
+Represent fixed-field dictionaries with named `TypedDict` schemas in
+`relift/records/`; use them in producers and consumers. Use concrete value types
+for mappings keyed by filenames, scenes or injected backends. Keep arbitrary
+metadata and raw historical JSON extensible at their actual boundaries. See
+`docs/typed-records.md` for optional fields, narrowing and frozen-source imports.
+
 Before publishing Python changes, run:
 
 ```sh

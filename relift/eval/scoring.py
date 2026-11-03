@@ -24,9 +24,10 @@ from typing import Any
 import numpy as np
 
 from ..data.worldtrack import NUM_FRAMES, clip_paths, load_clip, subset_dir
+from ..records.model import AlignmentMode, ClipScore
 from ..vendor import rc4_eval
 
-MODES = ("sim3", "global")
+MODES: tuple[AlignmentMode, ...] = ("sim3", "global")
 DYN_PATH_LENGTH = 0.01
 
 
@@ -61,7 +62,7 @@ def score_clip(
     occ: np.ndarray[Any, Any],
     intrinsics: np.ndarray[Any, Any],
     seed_ransac: bool = True,
-) -> dict[str, Any]:
+) -> ClipScore:
     """gt, pred (T, N, 3) float64, occ (T, N) bool, intrinsics (fx, fy, cx, cy) -> the per-clip record."""
     _, U = rc4_eval()
     thresholds = list(U.PIXEL_TO_FIXED_METRIC_THRESH.values())
@@ -72,7 +73,7 @@ def score_clip(
     )
     pred = np.nan_to_num(pred, nan=1e6, posinf=1e6, neginf=-1e6)
     dyn = np.linalg.norm(gt[1:] - gt[:-1], axis=-1).sum(0) > DYN_PATH_LENGTH
-    r: dict[str, Any] = dict(
+    r: ClipScore = dict(
         n=int(gt.shape[1]), dyn=int(dyn.sum()), occ_cells=int(occ.sum()), T=int(gt.shape[0])
     )
     for mode in MODES:
@@ -113,7 +114,7 @@ def score_subset(
     num_frames: int = NUM_FRAMES,
     seed_ransac: bool = True,
     log: Callable[..., Any] = print,
-) -> dict[str, Any]:
+) -> dict[str, ClipScore]:
     """Score every ``<preds_dir>/<clip>.npz`` of one subset into the JSON ``dst`` ({clip: record}); clips already in
     ``dst`` are kept (resumable).  Clips without an in-image query point are skipped, as in 4RC's harness."""
     rows = json.load(open(dst)) if os.path.exists(dst) else {}

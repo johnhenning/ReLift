@@ -16,12 +16,13 @@ from test_streaming import prepared_window
 
 from relift.model import Corrector
 from relift.optimization import InferenceComponents, OptimizationConfig
+from relift.records.runtime import ShardPayload
 from relift.shard_commits import BoundedShardCommitter, ShardSink
 from relift.storage import TrajectoryStore
 from relift.streaming import stream_correct
 
 
-def payload() -> dict[str, Any]:
+def payload() -> ShardPayload:
     return dict(
         xyz=np.ones((3, 5, 3), np.float32),
         lift=np.ones((3, 5, 3), np.float16),

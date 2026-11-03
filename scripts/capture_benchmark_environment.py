@@ -12,14 +12,17 @@ import sys
 from datetime import UTC, datetime
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from relift.records.artifacts import FileHashes
 
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def hashes(path: Path) -> Any:
+def hashes(path: Path) -> FileHashes:
     md5, sha = hashlib.md5(), hashlib.sha256()
     with path.open("rb") as stream:
         for block in iter(lambda: stream.read(8 << 20), b""):

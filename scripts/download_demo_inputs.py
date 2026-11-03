@@ -21,9 +21,10 @@ import cv2
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 from relift.config import paths
+from relift.records.reporting import CatalogEntry, VideoSource
 
 
-def catalog() -> Any:
+def catalog() -> dict[str, CatalogEntry]:
     return json.loads((REPO / "assets/demo/catalog.json").read_text())
 
 
@@ -35,7 +36,7 @@ def sha256(path: Path) -> Any:
     return digest.hexdigest()
 
 
-def fetch_input(name: str) -> Any:
+def fetch_input(name: str) -> Path:
     entry = catalog()[name]
     cache = paths()["cache_root"] / "demo_inputs"
     cache.mkdir(parents=True, exist_ok=True)
@@ -65,7 +66,7 @@ def fetch_input(name: str) -> Any:
     try:
         if not cap.isOpened():
             raise ValueError(f"Cannot decode {path}")
-        metadata = dict(
+        metadata: VideoSource = dict(
             name=name,
             source_url=entry["source_url"],
             sha256=sha256(path),

@@ -20,14 +20,21 @@ import time
 from datetime import UTC, datetime
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from relift.records.benchmark import (
+    DiskUsage,
+    ExperimentDefinition,
+    ExperimentSpec,
+    ExperimentVariant,
+    RuntimeEnvironment,
+    TrialRecord,
+)
 from scripts.benchmark_offload import NvidiaSampler, Telemetry, sha256, swap_counters, write_json
 
 
-def tree_size(root: str | Path) -> Any:
+def tree_size(root: str | Path) -> DiskUsage:
     logical = allocated = 0
     for directory, _, files in os.walk(root):
         for filename in files:
@@ -41,7 +48,12 @@ def tree_size(root: str | Path) -> Any:
 
 
 def run_variant(
-    spec: dict[str, Any], name: str, definition: Any, variant: Any, repeat: Any, resume: Any
+    spec: ExperimentSpec,
+    name: str,
+    definition: ExperimentDefinition,
+    variant: ExperimentVariant,
+    repeat: int,
+    resume: bool,
 ) -> None:
     source = (ROOT / variant["source"]).resolve()
     directory = ROOT / spec["output_root"] / name / variant["name"] / f"trial-{repeat:02}"
@@ -96,7 +108,7 @@ def run_variant(
     driver_hashes = {
         str(p.relative_to(ROOT)): sha256(p) for p in sorted((ROOT / "scripts").glob("*.py"))
     }
-    runtime = dict(
+    runtime: RuntimeEnvironment = dict(
         python=sys.version,
         executable=sys.executable,
         packages={
@@ -146,8 +158,8 @@ def run_variant(
                 elapsed = time.perf_counter() - started
                 telemetry.capture(process.pid, elapsed)
                 sizes = tree_size(output)
-                for key, value in sizes.items():
-                    peaks[key] = max(peaks[key], value)
+                peaks["logical_bytes"] = max(peaks["logical_bytes"], sizes["logical_bytes"])
+                peaks["allocated_bytes"] = max(peaks["allocated_bytes"], sizes["allocated_bytes"])
                 if telemetry.interference or elapsed > definition.get("timeout_seconds", 900):
                     timed_out = not telemetry.interference
                     os.killpg(process.pid, signal.SIGTERM)
@@ -180,7 +192,8 @@ def run_variant(
         if "out of memory" in text.lower()
         else "failed"
     )
-    record_data = dict(
+    swap_after = swap_counters()
+    record_data: TrialRecord = dict(
         experiment=name,
         mode=variant["name"],
         source=str(source),
@@ -213,11 +226,14 @@ def run_variant(
         environment=runtime,
         telemetry=telemetry.summary(),
         telemetry_interval_seconds=0.1,
-        sampled_output_peak=peaks,
+        sampled_output_peak=dict(
+            logical_bytes=peaks["logical_bytes"], allocated_bytes=peaks["allocated_bytes"]
+        ),
         final_output_size=tree_size(output),
-        system_swap_deltas={
-            key: value - swap_before[key] for key, value in swap_counters().items()
-        },
+        system_swap_deltas=dict(
+            pswpin_bytes=swap_after["pswpin_bytes"] - swap_before["pswpin_bytes"],
+            pswpout_bytes=swap_after["pswpout_bytes"] - swap_before["pswpout_bytes"],
+        ),
         result=result,
         metrics=dict(settings=options, stages=result["phases"]) if result else None,
     )

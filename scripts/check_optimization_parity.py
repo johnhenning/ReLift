@@ -14,19 +14,43 @@ import hashlib
 import json
 import sys
 from pathlib import Path
-from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+from relift.records.comparison import (
+    ComparisonReport,
+    ParityReport,
+    ProviderParity,
+    is_trajectory_comparison,
+)
 from scripts.compare_offload import compare
 
 
-def sha(path: str | Path) -> Any:
+def sha(path: str | Path) -> str:
     value = hashlib.sha256()
     with Path(path).open("rb") as stream:
         for block in iter(lambda: stream.read(1 << 20), b""):
             value.update(block)
     return value.hexdigest()
+
+
+def enforce_parity(report: ComparisonReport, tolerance: float) -> None:
+    """Shape failures remain failed reports; full reports also gate padded points."""
+    if not is_trajectory_comparison(report):
+        return
+    for error in (
+        report["errors"]["ordinary_xyz"],
+        report["errors"]["repeated_xyz"],
+        report["errors"]["raw_lift"],
+    ):
+        maximum = error["max_normalized_vector_error"]
+        if error["nonfinite_vectors"] or (maximum is not None and maximum > tolerance):
+            report["passed"] = False
+    for prepared in report.get("prepared_outputs", {}).values():
+        if prepared["compared"] is True:
+            arrays = prepared["arrays"]
+            if any(not value["equal"] for value in arrays.values()):
+                report["passed"] = False
 
 
 def main() -> None:
@@ -50,7 +74,7 @@ def main() -> None:
     if not controls:
         raise ValueError("No completed control trial")
     control_path, control = controls[0]
-    reports = []
+    reports: list[ComparisonReport | ProviderParity] = []
     if control["task"] == "compilation":
         reference = Path(control["result"]["runs"][0]["output"])
         for path, record in records:
@@ -58,13 +82,7 @@ def main() -> None:
                 continue
             for run in record["result"]["runs"]:
                 report = compare(reference, Path(run["output"]), tolerance=args.tolerance)
-                for category in ("ordinary_xyz", "repeated_xyz", "raw_lift"):
-                    error = report["errors"][category]
-                    if error["nonfinite_vectors"] or (
-                        error["max_normalized_vector_error"] is not None
-                        and error["max_normalized_vector_error"] > args.tolerance
-                    ):
-                        report["passed"] = False
+                enforce_parity(report, args.tolerance)
                 report.update(
                     variant=record["mode"],
                     phase=run["phase"],
@@ -86,18 +104,7 @@ def main() -> None:
             report = compare(
                 Path(control["output"]), Path(record["output"]), tolerance=args.tolerance
             )
-            for category in ("ordinary_xyz", "repeated_xyz", "raw_lift"):
-                error = report["errors"][category]
-                if error["nonfinite_vectors"] or (
-                    error["max_normalized_vector_error"] is not None
-                    and error["max_normalized_vector_error"] > args.tolerance
-                ):
-                    report["passed"] = False
-            for prepared in report.get("prepared_outputs", {}).values():
-                if prepared.get("compared") and any(
-                    not value["equal"] for value in prepared["arrays"].values()
-                ):
-                    report["passed"] = False
+            enforce_parity(report, args.tolerance)
             report.update(
                 variant=record["mode"],
                 trial=str(path),
@@ -143,7 +150,7 @@ def main() -> None:
                     ),
                 )
             )
-    value = dict(
+    value: ParityReport = dict(
         passed=bool(reports) and all(report["passed"] for report in reports), reports=reports
     )
     (args.experiment / "quality.json").write_text(json.dumps(value, indent=2) + "\n")

@@ -24,10 +24,12 @@ from markdown_it import MarkdownIt
 from markdown_it.renderer import RendererHTML
 from markdown_it.utils import OptionsDict
 
+from relift.records.artifacts import ComponentGraph, ComponentNode, SourceExcerpt
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def excerpt(filename: str, symbol: Any, focus: Any = None, limit: int = 28) -> Any:
+def excerpt(filename: str, symbol: str, focus: str | None = None, limit: int = 28) -> SourceExcerpt:
     path = ROOT / filename
     text = path.read_text()
     parts = symbol.split(".")
@@ -59,14 +61,14 @@ def excerpt(filename: str, symbol: Any, focus: Any = None, limit: int = 28) -> A
 
 def node(
     key: str,
-    title: Any,
-    purpose: Any,
-    inputs: Any,
-    outputs: Any,
+    title: str,
+    purpose: str,
+    inputs: str,
+    outputs: str,
     filename: str,
-    symbol: Any,
-    focus: Any = None,
-) -> Any:
+    symbol: str,
+    focus: str | None = None,
+) -> ComponentNode:
     return dict(
         id=key,
         title=title,
@@ -77,7 +79,7 @@ def node(
     )
 
 
-def graph_data() -> Any:
+def graph_data() -> ComponentGraph:
     nodes = [
         node(
             "decode",

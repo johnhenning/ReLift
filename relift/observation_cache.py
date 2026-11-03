@@ -8,6 +8,8 @@ from typing import Any
 import numpy as np
 import torch
 
+from .records.runtime import ObservationCacheMetrics
+
 
 class ObservationCache:
     """Own original-dtype coordinates/visibility; preserve float32 gather results.
@@ -37,7 +39,7 @@ class ObservationCache:
         self.T, self.H, self.W = tracks.shape[:3]
         self.coords = self.visibility = None
         self.closed = False
-        self._metrics: dict[str, Any] = dict(
+        self._metrics: ObservationCacheMetrics = dict(
             state="disabled",
             budget_bytes=int(budget_mb * 2**20),
             required_bytes=tracks.nbytes + visibility.nbytes,
@@ -101,8 +103,8 @@ class ObservationCache:
         return not self.closed and self._metrics["state"] == "active"
 
     @property
-    def metrics(self) -> dict[str, Any]:
-        return dict(self._metrics)
+    def metrics(self) -> ObservationCacheMetrics:
+        return self._metrics.copy()
 
     def gather(
         self, pixel_ids: np.ndarray[Any, Any] | list[int], frame: int | None = None

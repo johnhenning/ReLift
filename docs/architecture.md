@@ -197,6 +197,7 @@ default, and both preserve the same mathematical path and atomic store format.
 |---|---|
 | Single-video orchestration and serialization | [scripts/demo_video.py](../scripts/demo_video.py) |
 | Component profiles and configuration inheritance | [relift/configuration.py](../relift/configuration.py) |
+| Shared dictionary contracts for configuration, models, storage and reports | [relift/records](../relift/records) |
 | Bounded CPU shard commit ownership | [relift/shard_commits.py](../relift/shard_commits.py) |
 | Session ownership and dependency injection | [relift/optimization.py](../relift/optimization.py) |
 | Geometry and tracker adapters | [relift/providers](../relift/providers) |

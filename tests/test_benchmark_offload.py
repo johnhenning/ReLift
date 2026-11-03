@@ -11,6 +11,7 @@ from typing import Any, cast
 import numpy as np
 import pytest
 
+from relift.records.comparison import is_trajectory_comparison
 from relift.storage import TrajectoryStore
 from scripts.benchmark_offload import build_command, process_stats, write_summary
 from scripts.compare_offload import compare
@@ -104,8 +105,10 @@ def test_parity_separates_padded_pixels_and_detects_ordinary_changes(tmp_path: P
     )
     store.finish()
     report = compare(reference, candidate, chunk_points=2, prepared=False)
+    assert is_trajectory_comparison(report)
     assert report["passed"]
     assert report["errors"]["ordinary_xyz"]["max_normalized_vector_error"] == 0
+    assert report["errors"]["repeated_xyz"]["max_normalized_vector_error"] is not None
     assert report["errors"]["repeated_xyz"]["max_normalized_vector_error"] > 100
     assert report["compared_cells"] == T * H * W
     # The same numerical difference in a nonpadded point must fail.
@@ -152,10 +155,13 @@ def test_legacy_repeat_comparison_can_use_explicit_matching_pixel_policy(tmp_pat
     store.finish()
     assert not compare(reference, repeat, prepared=False)["passed"]
     report = compare(reference, repeat, prepared=False, pixel_policy_from=policy_root)
+    assert is_trajectory_comparison(report)
     assert report["passed"] and report["repeated_pixel_ids"] == [1]
     assert report["normalization_scale"] == 2.0
     assert report["errors"]["ordinary_xyz"]["max_normalized_vector_error"] == 0.0
+    assert report["errors"]["repeated_xyz"]["max_normalized_vector_error"] is not None
     assert report["errors"]["repeated_xyz"]["max_normalized_vector_error"] > 0.0
     assert report["pixel_policy"]["source"] == str(policy_root)
     assert report["pixel_policy"]["grouping"] == dict(seed=0, group=4, batch=1)
+    assert report["pixel_policy"]["manifest_sha256"] is not None
     assert len(report["pixel_policy"]["manifest_sha256"]) == 64

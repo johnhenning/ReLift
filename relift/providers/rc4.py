@@ -9,11 +9,11 @@ track field at the scored query pixels; must be about 0: the same map)."""
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
 
 import numpy as np
 import torch
 
+from ..records.model import RC4Geometry, WorldTrackClip
 from ..vendor import rc4_eval
 
 
@@ -34,7 +34,7 @@ class RC4Provider:
         self.model = Arc.from_pretrained(weights).to(device).eval()
         self.view_kw = dict(size=size, patch_size=patch_size, crop=crop, square_ok=square_ok)
 
-    def run(self, clip: dict[str, Any], h: int, w: int) -> dict[str, Any]:
+    def run(self, clip: WorldTrackClip, h: int, w: int) -> RC4Geometry:
         """clip: relift.data.worldtrack.load_clip output (PIL frames, tracks_uv, visibility); (h, w): the DA3 grid.
         -> dict(depth (T,h,w) f32, poses (T,4,4) f32, intrinsics (T,3,3) f32, model_hw, valid_depth, check_px, check_rel)."""
         import track_eval_dense as TD

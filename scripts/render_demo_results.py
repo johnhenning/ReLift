@@ -30,6 +30,8 @@ import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from PIL import Image
 
+from relift.records.artifacts import RenderSummary
+
 
 def positive_int(value: Any) -> Any:
     value = int(value)
@@ -135,7 +137,7 @@ def pointcloud_preview(root: Path, data: Any, indices: Any, stride: Any, fps: An
     return bounds.tolist()
 
 
-def render(root: Path, args: Any) -> Any:
+def render(root: Path, args: Any) -> RenderSummary:
     root = Path(root)
     source = root / "tracks.npz"
     with np.load(source) as archive:

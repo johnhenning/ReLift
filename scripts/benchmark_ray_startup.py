@@ -16,6 +16,10 @@ import sys
 import time
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from relift.records.artifacts import StartupRecord
 
 
 def main() -> None:
@@ -71,7 +75,7 @@ def main() -> None:
             builder(*values)
             torch.cuda.synchronize()
             samples.append(time.perf_counter() - start)
-        record = dict(
+        record: StartupRecord = dict(
             backend=args.backend,
             provision_seconds=provision,
             factory_seconds=factory,
@@ -127,10 +131,17 @@ def main() -> None:
                 flush=True,
             )
     summary = {
-        backend: {
-            key: statistics.median(r[key] for r in records if r["backend"] == backend)
-            for key in ["provision_seconds", "factory_seconds", "first_call_seconds"]
-        }
+        backend: dict(
+            provision_seconds=statistics.median(
+                r["provision_seconds"] for r in records if r["backend"] == backend
+            ),
+            factory_seconds=statistics.median(
+                r["factory_seconds"] for r in records if r["backend"] == backend
+            ),
+            first_call_seconds=statistics.median(
+                r["first_call_seconds"] for r in records if r["backend"] == backend
+            ),
+        )
         for backend in backends
     }
     (args.out / "summary.json").write_text(

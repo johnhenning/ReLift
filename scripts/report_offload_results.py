@@ -14,9 +14,13 @@ import math
 import os
 import re
 from collections import Counter, defaultdict
+from collections.abc import Iterable, Sequence
 from pathlib import Path
 from statistics import median
-from typing import Any
+from typing import TYPE_CHECKING, Any, TypeGuard
+
+if TYPE_CHECKING:
+    from relift.records.reporting import AggregateGroup, SourceVersion, TechnicalRecord, Workload
 from urllib.parse import quote
 
 MATCH_FIELDS = (
@@ -45,15 +49,15 @@ MEASUREMENTS = {
 }
 
 
-def canonical(value: Any) -> Any:
+def canonical(value: object) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
 
-def digest(value: Any) -> Any:
+def digest(value: object) -> str:
     return hashlib.sha256(canonical(value).encode()).hexdigest()
 
 
-def cell(value: Any) -> Any:
+def cell(value: object) -> str:
     if value is None:
         return "unknown"
     if isinstance(value, (dict, list, tuple)):
@@ -61,15 +65,15 @@ def cell(value: Any) -> Any:
     return str(value).replace("|", "&#124;").replace("\n", " ")
 
 
-def number(value: Any) -> Any:
+def number(value: object) -> TypeGuard[int | float]:
     return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
 
 
-def fmt(value: Any) -> Any:
+def fmt(value: object) -> str:
     return f"{value:.6g}" if number(value) else "unknown"
 
 
-def lookup(data: Any, dotted: Any) -> Any:
+def lookup(data: Any, dotted: str) -> Any:
     for key in dotted.split("."):
         if not isinstance(data, dict):
             return None
@@ -77,8 +81,8 @@ def lookup(data: Any, dotted: Any) -> Any:
     return data
 
 
-def numeric_leaves(data: Any, prefix: str = "") -> Any:
-    result = {}
+def numeric_leaves(data: Any, prefix: str = "") -> dict[str, int | float]:
+    result: dict[str, int | float] = {}
     if isinstance(data, dict):
         for key, value in data.items():
             name = f"{prefix}.{key}" if prefix else key
@@ -89,14 +93,14 @@ def numeric_leaves(data: Any, prefix: str = "") -> Any:
     return result
 
 
-def environment_conflicts(environments: Any) -> Any:
+def environment_conflicts(environments: Iterable[dict[str, Any]]) -> list[str]:
     """Compare only overlapping identity/version fields, never missing coverage.
 
     Environment collectors may add hardware details without contradicting a
     smaller record. Package collector aliases share a namespace. Runtime GPU
     utilization and other sampled counters are deliberately not identities.
     """
-    observed = defaultdict(set)
+    observed: dict[str, set[str]] = defaultdict(set)
 
     def collect(key: str, value: Any) -> None:
         if isinstance(value, dict):
@@ -121,9 +125,11 @@ def environment_conflicts(environments: Any) -> Any:
     return sorted(key for key, values in observed.items() if len(values) > 1)
 
 
-def recorded_fields(data: Any, prefix: str = "", short_list_limit: int = 12) -> Any:
+def recorded_fields(
+    data: Any, prefix: str = "", short_list_limit: int = 12
+) -> list[tuple[str, object]]:
     """Flatten recorded evidence; keep lengthy arrays in their linked source."""
-    rows: list[tuple[str, Any]] = []
+    rows: list[tuple[str, object]] = []
     if isinstance(data, dict):
         if not data:
             rows.append((prefix or "record", {}))
@@ -145,13 +151,13 @@ def recorded_fields(data: Any, prefix: str = "", short_list_limit: int = 12) -> 
     return rows
 
 
-def link(path: str | Path, destination: str | Path, label: Any = None) -> Any:
+def link(path: str | Path, destination: str | Path, label: str | None = None) -> str:
     path = Path(path).resolve()
     relative = os.path.relpath(path, Path(destination).resolve().parent)
     return f"[{cell(label or path.name)}]({quote(relative, safe='/._-')})"
 
 
-def table(headers: Any, rows: Any) -> Any:
+def table(headers: Sequence[str], rows: Iterable[Sequence[object]]) -> list[str]:
     return ["| " + " | ".join(headers) + " |", "|" + "|".join("---" for _ in headers) + "|"] + [
         "| " + " | ".join(cell(v) for v in row) + " |" for row in rows
     ]
@@ -162,9 +168,10 @@ def read_json(path: str | Path) -> Any:
         return json.load(stream)
 
 
-def load_trials(roots: Any) -> Any:
+def load_trials(roots: Sequence[str | Path]) -> list[TechnicalRecord]:
     """Only load small trial.json files; deduplicate overlapping explicit roots."""
-    records, seen = [], set()
+    records: list[TechnicalRecord] = []
+    seen: set[Path] = set()
     for root in roots:
         root = Path(root).resolve()
         if not root.is_dir():
@@ -177,8 +184,16 @@ def load_trials(roots: Any) -> Any:
     return records
 
 
-def workload(data: Any) -> Any:
-    result = {key: data.get(key) for key in MATCH_FIELDS}
+def workload(data: dict[str, Any]) -> Workload:
+    result: Workload = dict(
+        scene=data.get("scene"),
+        scenario=data.get("scenario"),
+        input_sha256=data.get("input_sha256"),
+        process_res=data.get("process_res"),
+        corrector_batch=data.get("corrector_batch"),
+        num_frames=data.get("num_frames"),
+        seed=data.get("seed"),
+    )
     command = data.get("command") or []
     # The benchmark worker prefixes the inference command with its own seed and
     # script arguments. Only compare flags belonging to the inference script.
@@ -206,11 +221,15 @@ def workload(data: Any) -> Any:
     return result
 
 
-def source_version(data: Any) -> Any:
-    return {key: data.get(key) for key in ("code_hashes", "lockfile_sha256", "wrapper_sha256")}
+def source_version(data: dict[str, Any]) -> SourceVersion:
+    return dict(
+        code_hashes=data.get("code_hashes"),
+        lockfile_sha256=data.get("lockfile_sha256"),
+        wrapper_sha256=data.get("wrapper_sha256"),
+    )
 
 
-def aggregate(records: Any) -> Any:
+def aggregate(records: list[TechnicalRecord]) -> list[AggregateGroup]:
     """Keep changed settings/source versions separate, without rewriting summaries."""
     groups = defaultdict(list)
     for record in records:
@@ -223,7 +242,7 @@ def aggregate(records: Any) -> Any:
             canonical(lookup(data, "metrics.settings")),
         )
         groups[key].append(record)
-    result: list[dict[str, Any]] = []
+    result: list[AggregateGroup] = []
     for members in groups.values():
         valid = [
             r
@@ -244,14 +263,14 @@ def aggregate(records: Any) -> Any:
     return result
 
 
-def ratios(groups: Any) -> Any:
+def ratios(groups: list[AggregateGroup]) -> list[tuple[AggregateGroup, float | None, str | None]]:
     """Within a campaign, match recorded workload and wrapper/environment versions.
 
     Unknown required settings or multiple matching baseline versions suppress a
     ratio. Placement budgets are displayed, but are not workload settings.
     Additional shared inference settings must agree when both sides record them.
     """
-    results = []
+    results: list[tuple[AggregateGroup, float | None, str | None]] = []
     for group in groups:
         candidate = group["members"][0]
         data = candidate["data"]
@@ -285,22 +304,23 @@ def ratios(groups: Any) -> Any:
                 reason = "no unique settings/version-matched existing group"
             elif not matches[0]["valid"] or not group["valid"]:
                 reason = "successful timings unavailable"
-        value = (
-            None
-            if reason
-            else matches[0]["values"]["wall_seconds"] / group["values"]["wall_seconds"]
-        )
+        value = None
+        if reason is None:
+            baseline_seconds = matches[0]["values"]["wall_seconds"]
+            candidate_seconds = group["values"]["wall_seconds"]
+            assert baseline_seconds is not None and candidate_seconds is not None
+            value = baseline_seconds / candidate_seconds
         results.append((group, value, reason))
     return results
 
 
 def render_report(
-    benchmark_roots: Any,
-    parity_files: Any = (),
-    environment: Any = None,
-    analysis: Any = (),
+    benchmark_roots: Sequence[str | Path],
+    parity_files: Sequence[str | Path] = (),
+    environment: str | Path | None = None,
+    analysis: Sequence[str | Path] = (),
     destination: str | Path = Path("benchmark-report.md"),
-) -> Any:
+) -> str:
     records = load_trials(benchmark_roots)
     groups = aggregate(records)
     lines = [
@@ -312,7 +332,7 @@ def render_report(
         "",
     ]
     roots = list(dict.fromkeys(Path(p).resolve() for p in benchmark_roots))
-    rows = []
+    rows: list[Sequence[object]] = []
     for root in roots:
         selected = [r for r in records if r["root"] == root]
         stamps = sorted(
@@ -406,7 +426,7 @@ def render_report(
         r = group["members"][0]
         d = r["data"]
         values = [
-            f"{fmt(group['values'][k] / divisor) if group['values'][k] is not None else 'unknown'} ({group['counts'][k]})"
+            f"{fmt(value / divisor) if (value := group['values'][k]) is not None else 'unknown'} ({group['counts'][k]})"
             for k, (_, divisor) in MEASUREMENTS.items()
         ]
         rows.append(
@@ -520,7 +540,7 @@ def render_report(
     return "\n".join(lines) + "\n"
 
 
-def main(argv: Any = None) -> None:
+def main(argv: Sequence[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--benchmark-roots", nargs="+", type=Path, required=True)
     parser.add_argument("--parity-files", nargs="*", type=Path, default=[])

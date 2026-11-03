@@ -9,10 +9,13 @@ import json
 from collections import Counter, defaultdict
 from pathlib import Path
 from statistics import median
-from typing import Any
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from relift.records.benchmark import SummaryRow
 
 
-def summarize(root: Path, roles: Any = None) -> Any:
+def summarize(root: Path, roles: dict[str, str] | None = None) -> list[SummaryRow]:
     groups = defaultdict(list)
     for path in sorted(root.rglob("trial.json")):
         record = json.loads(path.read_text())
@@ -38,7 +41,7 @@ def summarize(root: Path, roles: Any = None) -> Any:
     rows = []
     for (experiment, mode, signature), records in groups.items():
         good = [r for _, r in records if r["status"] == "complete"]
-        row = dict(
+        row: SummaryRow = dict(
             experiment=experiment,
             variant=mode,
             n=len(good),
@@ -65,6 +68,7 @@ def summarize(root: Path, roles: Any = None) -> Any:
             wall_min=min(wall) if wall else None,
             wall_max=max(wall) if wall else None,
         )
+        metrics: dict[str, float | None] = {}
         for key in (
             "sampled_peak_process_tree_rss_bytes",
             "sampled_peak_process_tree_pss_bytes",
@@ -73,7 +77,14 @@ def summarize(root: Path, roles: Any = None) -> Any:
             "process_tree_write_bytes",
         ):
             values = [r["telemetry"][key] for r in good if r["telemetry"].get(key) is not None]
-            row[key] = median(values) if values else None
+            metrics[key] = median(values) if values else None
+        row.update(
+            sampled_peak_process_tree_rss_bytes=metrics["sampled_peak_process_tree_rss_bytes"],
+            sampled_peak_process_tree_pss_bytes=metrics["sampled_peak_process_tree_pss_bytes"],
+            sampled_peak_gpu_device_used_bytes=metrics["sampled_peak_gpu_device_used_bytes"],
+            process_tree_read_bytes=metrics["process_tree_read_bytes"],
+            process_tree_write_bytes=metrics["process_tree_write_bytes"],
+        )
         phases = defaultdict(list)
         for record in good:
             for name, value in (record.get("result") or {}).get("phases", {}).items():
@@ -124,11 +135,11 @@ def main() -> None:
         timing = f"{fmt(row['wall_median'])} [{fmt(row['wall_min'])}, {fmt(row['wall_max'])}]"
         phases = ", ".join(f"{key}={value:.3f}" for key, value in row["phase_medians"].items())
         resource = [
-            fmt(row[key] / 2**30) if row[key] is not None else "—"
-            for key in (
-                "sampled_peak_gpu_device_used_bytes",
-                "sampled_peak_process_tree_rss_bytes",
-                "process_tree_write_bytes",
+            fmt(value / 2**30) if value is not None else "—"
+            for value in (
+                row["sampled_peak_gpu_device_used_bytes"],
+                row["sampled_peak_process_tree_rss_bytes"],
+                row["process_tree_write_bytes"],
             )
         ]
         lines.append(

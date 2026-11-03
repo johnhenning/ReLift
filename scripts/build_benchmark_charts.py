@@ -23,7 +23,16 @@ from collections import Counter, defaultdict
 from datetime import UTC, datetime
 from pathlib import Path
 from statistics import median
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from relift.records.reporting import (
+        BenchmarkChartRow,
+        DenseInventory,
+        Distribution,
+        WorkloadComparison,
+        WorkloadSignature,
+    )
 from urllib.parse import quote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -90,7 +99,7 @@ NAMES = {
 }
 
 
-def inventory_output(path: str | Path) -> Any:
+def inventory_output(path: str | Path) -> DenseInventory:
     """Stat canonical dense output only; never extract archives or count reader caches."""
     root = Path(path)
     manifest = root / "tracks.store/manifest.json"
@@ -128,7 +137,7 @@ def inventory_output(path: str | Path) -> Any:
     )
 
 
-def collect(roots: Any) -> Any:
+def collect(roots: list[str | Path]) -> list[WorkloadComparison]:
     """Split workloads and implementation versions; retain failures as outcomes."""
     records = load_trials(roots)
     if not records:
@@ -151,7 +160,7 @@ def collect(roots: Any) -> Any:
         environment_lock = lookup(data, "environment.environment_lockfile_sha256") or data.get(
             "lockfile_sha256"
         )
-        signature = dict(
+        signature: WorkloadSignature = dict(
             workload=settings,
             lockfile=environment_lock,
             runtime=runtime,
@@ -169,10 +178,10 @@ def collect(roots: Any) -> Any:
             )
         )
         buckets[key][variant].append(record)
-    result: list[dict[str, Any]] = []
-    for signature, variants in buckets.items():
-        spec = json.loads(signature)
-        rows: list[dict[str, Any]] = []
+    result: list[WorkloadComparison] = []
+    for signature_json, variants in buckets.items():
+        spec = json.loads(signature_json)
+        rows: list[BenchmarkChartRow] = []
         for members in variants.values():
             first = members[0]["data"]
             valid = [
@@ -182,7 +191,7 @@ def collect(roots: Any) -> Any:
                 and number(r["data"].get("wall_seconds"))
                 and r["data"]["wall_seconds"] > 0
             ]
-            stats = {}
+            stats: dict[str, Distribution] = {}
             for key, _, _, field, divisor in METRICS:
                 values = [
                     lookup(r["data"], field) / divisor
@@ -235,7 +244,7 @@ def collect(roots: Any) -> Any:
         slug = re.sub(r"[^a-zA-Z0-9-]+", "-", str(scene)).strip("-") or "workload"
         result.append(
             dict(
-                id=slug + "-" + hashlib.sha256(signature.encode()).hexdigest()[:8],
+                id=slug + "-" + hashlib.sha256(signature_json.encode()).hexdigest()[:8],
                 settings=spec,
                 rows=rows,
             )

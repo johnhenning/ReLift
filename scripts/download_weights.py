@@ -18,7 +18,10 @@ import os
 import sys
 import urllib.request
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from relift.records.configuration import WeightsEntry
 
 import yaml
 
@@ -39,7 +42,7 @@ def md5(path: str | Path, chunk: int = 1 << 24) -> Any:
     return h.hexdigest()
 
 
-def fetch(name: str, w: dict[str, Any], root: str | Path) -> Any:
+def fetch(name: str, w: WeightsEntry, root: str | Path) -> tuple[str | None, str]:
     from huggingface_hub import hf_hub_download, snapshot_download
 
     dst_dir = os.path.join(root, w.get("dir", ""))

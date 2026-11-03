@@ -10,6 +10,8 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
+from ..records.model import VGGTGeometry
+
 
 class VGGTOmegaProvider:
     def __init__(
@@ -25,7 +27,7 @@ class VGGTOmegaProvider:
         self.model = VGGTOmega().to(self.device).eval()
         self.model.load_state_dict(torch.load(weights, map_location="cpu"))
 
-    def run(self, frames: np.ndarray[Any, Any], H: int, W: int) -> dict[str, Any]:
+    def run(self, frames: np.ndarray[Any, Any], H: int, W: int) -> VGGTGeometry:
         """frames (T,h0,w0,3) uint8 RGB, (H, W) the DA3 grid -> dict(depth (T,H,W) f32, poses (T,4,4) f32
         camera-from-world, intrinsics (T,3,3) f32, depth_conf (T,H,W) f32)."""
         from PIL import Image

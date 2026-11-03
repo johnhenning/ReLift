@@ -18,6 +18,15 @@ from typing import Any, BinaryIO
 
 import numpy as np
 
+from .records.runtime import (
+    FileReference,
+    FrameManifest,
+    MappedArchiveManifest,
+    ShardArrays,
+    ShardRecord,
+    TrajectoryManifest,
+)
+
 FORMAT = "relift.trajectory-store"
 VERSION = 1
 FIELDS = {"xyz": np.dtype("float32"), "lift": np.dtype("float16"), "observed": np.dtype("bool")}
@@ -112,7 +121,8 @@ def mapped_archive(
     previous = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
     if previous.get("source_sha256") not in (None, digest):
         raise ValueError(f"Mapped archive cache belongs to different source bytes: {root}")
-    members, member_records = {}, {}
+    members: dict[str, np.ndarray[Any, Any]] = {}
+    member_records: dict[str, FileReference] = {}
     with zipfile.ZipFile(source) as archive:
         for info in archive.infolist():
             # NPZ names are flat array names; reject nested or traversal members.
@@ -136,7 +146,7 @@ def mapped_archive(
                 temp.replace(target)
             members[name[:-4]] = np.load(target, mmap_mode="r", allow_pickle=False)
             member_records[name[:-4]] = dict(file=name, sha256=file_sha256(target))
-    atomic_json(manifest_path, dict(source_sha256=digest, members=member_records))
+    atomic_json(manifest_path, MappedArchiveManifest(source_sha256=digest, members=member_records))
     return members
 
 
@@ -222,7 +232,7 @@ def read_frames_mapped(source: str | Path, num_frames: int, cache_dir: str | Pat
         assert frame_shape is not None
         shape = (count,) + frame_shape
         temporary.replace(spool)
-        manifest = dict(
+        manifest: FrameManifest = dict(
             format="relift.mapped-frames",
             version=1,
             source_sha256=source_hash,
@@ -244,12 +254,13 @@ class TrajectoryStore:
     """Read a completed mapped store or legacy ``tracks.npz`` without API drift."""
 
     def __init__(self, path: str | Path, *, allow_incomplete: bool = False) -> None:
+        self.metadata: dict[str, Any]
         self._hash_writes = False
         self._packer: Callable[..., Any] | None = None
         self._payload_writer: Callable[..., str | None] | None = None
         path = Path(path)
         self._legacy: dict[str, np.ndarray[Any, Any]] | None = None
-        self.manifest: dict[str, Any] | None
+        self.manifest: TrajectoryManifest | None
         if path.name == "manifest.json" and path.is_file():
             path = path.parent
         if path.is_dir() and (path / "tracks.store/manifest.json").exists():
@@ -291,7 +302,7 @@ class TrajectoryStore:
         return cls(path, **kwargs)
 
     @property
-    def _mapped_manifest(self) -> dict[str, Any]:
+    def _mapped_manifest(self) -> TrajectoryManifest:
         if self.manifest is None:
             raise ValueError("Legacy stores do not have mapped manifests")
         return self.manifest
@@ -336,13 +347,13 @@ class TrajectoryStore:
             return store
         atomic_npy(root / "pixel_ids.npy", order)
         (root / "shards").mkdir(exist_ok=True)
-        saved = {}
+        saved: dict[str, FileReference] = {}
         for name, array in arrays.items():
             if name not in {"images", "poses", "intrinsics"}:
                 raise ValueError(f"Unexpected shared array {name}")
             atomic_npy(root / f"{name}.npy", array)
             saved[name] = dict(file=f"{name}.npy", sha256=file_sha256(root / f"{name}.npy"))
-        manifest = dict(
+        manifest: TrajectoryManifest = dict(
             format=FORMAT,
             version=VERSION,
             state="writing",
@@ -381,7 +392,7 @@ class TrajectoryStore:
         for shard in self._mapped_manifest["shards"]:
             if max(start, shard["start"]) < min(stop, shard["stop"]):
                 raise ValueError("Shard overlaps committed data")
-        files = {}
+        files: ShardArrays = {}
         for name, array in dict(xyz=xyz, lift=lift, observed=observed).items():
             value = np.asarray(array, dtype=FIELDS[name])
             expected = (count, self.shape[0]) + (() if name == "observed" else (3,))
@@ -407,7 +418,7 @@ class TrajectoryStore:
             files[name] = dict(
                 file=relative, sha256=digest if digest is not None else file_sha256(target)
             )
-        self._mapped_manifest["shards"].append(dict(start=start, stop=stop, arrays=files))
+        self._mapped_manifest["shards"].append(ShardRecord(start=start, stop=stop, arrays=files))
         self._mapped_manifest["shards"].sort(key=lambda s: s["start"])
         atomic_json(self.root / "manifest.json", self.manifest)
 

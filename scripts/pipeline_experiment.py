@@ -9,12 +9,16 @@ import sys
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
+    from relift.records.benchmark import ExperimentOptions, ExperimentResult
+
+
+if TYPE_CHECKING:
     from relift.configuration import ConfigurationSelection
 
 
 def run(
-    args: Any, options: dict[str, Any], configuration: ConfigurationSelection | None = None
-) -> Any:
+    args: Any, options: ExperimentOptions, configuration: ConfigurationSelection | None = None
+) -> ExperimentResult:
     from relift.storage import TrajectoryStore
 
     video = (args.root / options.pop("video")).resolve()

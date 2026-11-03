@@ -15,17 +15,29 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Any
 
 import numpy as np
+from numpy.typing import ArrayLike
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
+from relift.records.comparison import (
+    ArrayComparison,
+    ChunkedArrayComparison,
+    ComparisonReport,
+    ErrorGroups,
+    ErrorReport,
+    PixelGrouping,
+    PixelPolicy,
+    PreparedComparison,
+    SharedArrays,
+    TrajectoryComparison,
+)
 from relift.storage import TrajectoryStore, file_sha256, mapped_archive
 
 
 class ErrorStats:
-    def __init__(self, scale: float | None) -> None:
+    def __init__(self, scale: float) -> None:
         self.scale = scale
         self.edges = np.concatenate(([0.0], np.geomspace(1e-12, 1e3, 256), [np.inf]))
         self.histogram = np.zeros(len(self.edges) - 1, np.int64)
@@ -33,7 +45,7 @@ class ErrorStats:
         self.maximum = self.total = 0.0
         self.bitwise_equal = True
 
-    def add(self, reference: Any, candidate: Any) -> None:
+    def add(self, reference: ArrayLike, candidate: ArrayLike) -> None:
         reference, candidate = np.asarray(reference), np.asarray(candidate)
         self.bitwise_equal &= reference.dtype == candidate.dtype and np.array_equal(
             np.ascontiguousarray(reference).view(np.uint8),
@@ -53,7 +65,7 @@ class ErrorStats:
             self.total += float(error.sum())
             self.histogram += np.histogram(error, self.edges)[0]
 
-    def percentile_bound(self, fraction: Any) -> Any:
+    def percentile_bound(self, fraction: float) -> float | None:
         if not self.count:
             return None
         if self.zeros >= np.ceil(self.count * fraction):
@@ -62,7 +74,7 @@ class ErrorStats:
         result = self.edges[min(index + 1, len(self.edges) - 1)]
         return float(result) if np.isfinite(result) else None
 
-    def report(self) -> Any:
+    def report(self) -> ErrorReport:
         return dict(
             vector_count=self.count,
             nonfinite_vectors=self.nonfinite,
@@ -75,13 +87,15 @@ class ErrorStats:
         )
 
 
-def small_array_comparison(reference: Any, candidate: Any) -> Any:
+def small_array_comparison(reference: ArrayLike, candidate: ArrayLike) -> ArrayComparison:
     reference, candidate = np.asarray(reference), np.asarray(candidate)
-    result: dict[str, Any] = dict(
+    result: ArrayComparison = dict(
         reference_shape=list(reference.shape),
         candidate_shape=list(candidate.shape),
         reference_dtype=str(reference.dtype),
         candidate_dtype=str(candidate.dtype),
+        equal=False,
+        max_absolute_error=None,
     )
     if reference.shape != candidate.shape:
         result.update(equal=False, max_absolute_error=None)
@@ -95,8 +109,8 @@ def small_array_comparison(reference: Any, candidate: Any) -> Any:
     return result
 
 
-def compare_prepared(reference: Any, candidate: Any) -> Any:
-    reports: dict[str, Any] = {}
+def compare_prepared(reference: Path, candidate: Path) -> dict[str, PreparedComparison]:
+    reports: dict[str, PreparedComparison] = {}
     for filename, fields in (
         ("da3_depth_data.npz", ("depth", "poses", "intrinsics")),
         ("alltracker_tracks.npz", ("tracks_2d", "visibility", "confidence")),
@@ -108,12 +122,13 @@ def compare_prepared(reference: Any, candidate: Any) -> Any:
             )
             continue
         a, b = mapped_archive(left), mapped_archive(right)
-        result = {}
+        result: dict[str, ArrayComparison | ChunkedArrayComparison] = {}
         for field in fields:
             if a[field].shape != b[field].shape:
                 result[field] = small_array_comparison(a[field], b[field])
                 continue
-            equal, maximum = True, 0.0
+            equal = True
+            maximum: float | None = 0.0
             for start in range(0, len(a[field]), 8):
                 row = small_array_comparison(
                     a[field][start : start + 8], b[field][start : start + 8]
@@ -134,14 +149,14 @@ def compare_prepared(reference: Any, candidate: Any) -> Any:
 
 
 def compare(
-    reference_path: Any,
-    candidate_path: Any,
+    reference_path: str | Path,
+    candidate_path: str | Path,
     *,
     chunk_points: int = 2048,
     tolerance: float = 1e-4,
     prepared: bool = True,
-    pixel_policy_from: Any = None,
-) -> Any:
+    pixel_policy_from: str | Path | None = None,
+) -> ComparisonReport:
     reference, candidate = (
         TrajectoryStore.open(reference_path),
         TrajectoryStore.open(candidate_path),
@@ -196,41 +211,66 @@ def compare(
             stats["repeated_xyz"].add(a["xyz"][:, ~ordinary], b["xyz"][:, ~ordinary])
         stats["raw_lift"].add(a["lift"], b["lift"])
         changed_observations += int((a["observed"] != b["observed"]).sum())
-    arrays = {}
-    for field in ("poses", "intrinsics"):
-        arrays[field] = small_array_comparison(reference.array(field), candidate.array(field))
+    poses = small_array_comparison(reference.array("poses"), candidate.array("poses"))
+    intrinsics = small_array_comparison(
+        reference.array("intrinsics"), candidate.array("intrinsics")
+    )
     images_a, images_b = reference.array("images"), candidate.array("images")
     image_equal = images_a.shape == images_b.shape and images_a.dtype == images_b.dtype
     if image_equal:
         for start in range(0, total, 8):
             image_equal &= np.array_equal(images_a[start : start + 8], images_b[start : start + 8])
-    arrays["images"] = dict(
-        equal=bool(image_equal),
-        reference_shape=list(images_a.shape),
-        candidate_shape=list(images_b.shape),
+    arrays: SharedArrays = dict(
+        poses=poses,
+        intrinsics=intrinsics,
+        images=dict(
+            equal=bool(image_equal),
+            reference_shape=list(images_a.shape),
+            candidate_shape=list(images_b.shape),
+        ),
     )
-    outputs = {key: value.report() for key, value in stats.items()}
+    outputs: ErrorGroups = dict(
+        ordinary_xyz=stats["ordinary_xyz"].report(),
+        repeated_xyz=stats["repeated_xyz"].report(),
+        raw_lift=stats["raw_lift"].report(),
+    )
     geometry_ok = all(
         row["reference_dtype"] == row["candidate_dtype"]
         and row["max_absolute_error"] is not None
         and row["max_absolute_error"] <= tolerance
-        for field, row in arrays.items()
-        if field != "images"
+        for row in (poses, intrinsics)
     )
     ordinary = outputs["ordinary_xyz"]
     raw = outputs["raw_lift"]
     passed = (
         ordinary["nonfinite_vectors"] == 0
+        and ordinary["max_normalized_vector_error"] is not None
         and ordinary["max_normalized_vector_error"] <= tolerance
         and raw["nonfinite_vectors"] == 0
+        and raw["max_normalized_vector_error"] is not None
         and raw["max_normalized_vector_error"] <= tolerance
         and changed_observations == 0
         and not changed_dtypes
         and image_equal
         and geometry_ok
     )
-    report = dict(
-        passed=bool(passed),
+    grouping: PixelGrouping = {}
+    if "seed" in policy.metadata:
+        grouping["seed"] = int(policy.metadata["seed"])
+    if "group" in policy.metadata:
+        grouping["group"] = int(policy.metadata["group"])
+    if "batch" in policy.metadata:
+        grouping["batch"] = int(policy.metadata["batch"])
+    manifest = policy.root / "manifest.json"
+    pixel_policy: PixelPolicy = dict(
+        source=str(pixel_policy_from) if pixel_policy_from is not None else str(candidate_path),
+        explicit=pixel_policy_from is not None,
+        shape=list(policy.shape),
+        manifest_sha256=file_sha256(manifest) if policy.manifest is not None else None,
+        grouping=grouping,
+    )
+    report: TrajectoryComparison = dict(
+        passed=passed,
         reference=str(reference_path),
         candidate=str(candidate_path),
         shape=list(reference.shape),
@@ -246,19 +286,8 @@ def compare(
         changed_observation_cells=changed_observations,
         shared_arrays=arrays,
         changed_dtypes=sorted(changed_dtypes),
+        pixel_policy=pixel_policy,
         policy="All frames and original pixel IDs compared; padded duplicate coordinates are reported separately, not included in ordinary XYZ parity gate. No fitted alignment.",
-    )
-    manifest = policy.root / "manifest.json"
-    report["pixel_policy"] = dict(
-        source=str(pixel_policy_from) if pixel_policy_from is not None else str(candidate_path),
-        explicit=pixel_policy_from is not None,
-        shape=list(policy.shape),
-        manifest_sha256=file_sha256(manifest) if policy.manifest is not None else None,
-        grouping={
-            key: policy.metadata[key]
-            for key in ("seed", "group", "batch")
-            if key in policy.metadata
-        },
     )
     if prepared:
         report["prepared_outputs"] = compare_prepared(Path(reference_path), Path(candidate_path))

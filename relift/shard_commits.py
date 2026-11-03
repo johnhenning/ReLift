@@ -10,6 +10,8 @@ from typing import Protocol, Self
 import numpy as np
 from numpy.typing import NDArray
 
+from .records.runtime import ShardCommitMetrics
+
 
 class ShardSink(Protocol):
     def write_shard(
@@ -40,7 +42,7 @@ class ShardCommitter(Protocol):
 
     def drain(self) -> None: ...
     @property
-    def metrics(self) -> dict[str, str | int | float]: ...
+    def metrics(self) -> ShardCommitMetrics: ...
     def __enter__(self) -> Self: ...
     def __exit__(
         self,
@@ -136,7 +138,7 @@ class BoundedShardCommitter:
             self.wait_seconds += time.perf_counter() - started
 
     @property
-    def metrics(self) -> dict[str, str | int | float]:
+    def metrics(self) -> ShardCommitMetrics:
         return dict(
             backend=self.backend,
             shards_submitted=self.submitted,

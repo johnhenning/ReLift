@@ -12,9 +12,11 @@ from typing import Any
 
 import torch
 
+from .records.model import MachineInfo
 
-def machine(device: str | torch.device = "cuda") -> dict[str, Any]:
-    info: dict[str, Any] = dict(host=platform.node(), date=time.strftime("%Y-%m-%dT%H:%M:%S"))
+
+def machine(device: str | torch.device = "cuda") -> MachineInfo:
+    info: MachineInfo = dict(host=platform.node(), date=time.strftime("%Y-%m-%dT%H:%M:%S"))
     try:
         import torch
 

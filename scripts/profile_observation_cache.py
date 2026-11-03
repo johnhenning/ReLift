@@ -14,7 +14,14 @@ import sys
 import time
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from relift.records.artifacts import (
+        ObservationConstruction,
+        ObservationOptions,
+        ObservationProfileReport,
+    )
 
 import numpy as np
 import torch
@@ -43,7 +50,7 @@ def main() -> None:
     components = InferenceComponents()
     if args.build:
         components = components.with_native_build(str(args.build.resolve()))
-    settings: dict[str, dict[str, Any]] = {
+    settings: dict[str, ObservationOptions] = {
         "control": {},
         "observations": dict(observation_cache_mb=args.budget_mb),
         "depth": dict(depth_cache_mb=256),
@@ -58,7 +65,7 @@ def main() -> None:
             observation_cache_mb=args.budget_mb, depth_cache_mb=256, ray_backend="cuda_timeline"
         )
     sources = {}
-    construction = {}
+    construction: dict[str, ObservationConstruction] = {}
     try:
         for name, options in settings.items():
             torch.cuda.synchronize()
@@ -100,7 +107,7 @@ def main() -> None:
                     differences[name][key] += int(
                         torch.count_nonzero(a.view(torch.int32) != b.view(torch.int32))
                     )
-        report = dict(
+        report: ObservationProfileReport = dict(
             created_at=datetime.now(UTC).isoformat(),
             shape=[T, H, W],
             points=T * H * W,

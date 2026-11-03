@@ -29,11 +29,13 @@ import numpy as np
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 from relift.config import paths
+from relift.records.artifacts import ViewerMetadata
+from relift.records.reporting import GalleryState, GalleryVideo, InferenceAttempt, VideoSource
 from relift.storage import TrajectoryStore
 from scripts.download_demo_inputs import catalog, fetch_input, sha256
 
 
-def now() -> Any:
+def now() -> str:
     return datetime.now(UTC).isoformat()
 
 
@@ -44,8 +46,8 @@ def save_json(path: Path, data: Any) -> None:
 
 
 def complete_result(
-    output: Any, source: dict[str, Any], process_resolution: Any = None
-) -> dict[str, Any] | None:
+    output: Any, source: VideoSource, process_resolution: Any = None
+) -> ViewerMetadata | None:
     """Never reuse a short window or an HTML export of different trajectory data."""
     output = Path(output)
     arrays, manifest, page = (
@@ -102,7 +104,7 @@ def complete_result(
     return metadata
 
 
-def dense_result_ready(output: Any, source: dict[str, Any], process_resolution: int = 504) -> bool:
+def dense_result_ready(output: Any, source: VideoSource, process_resolution: int = 504) -> bool:
     """Check complete dense data even when a viewer still needs to be exported."""
     try:
         store = TrajectoryStore.open(output)
@@ -148,12 +150,14 @@ def run_logged(script: Any, arguments: Any, log: Path) -> None:
         raise RuntimeError(f"{script} exited {result}; see {log.name}")
 
 
-def infer_with_memory_retries(video: Any, output: Any, record: dict[str, Any]) -> None:
+def infer_with_memory_retries(video: Any, output: Any, record: GalleryVideo) -> None:
     """Explicit legacy opt-in only: reduce spatial grids after CUDA OOM."""
     record["inference_attempts"] = []
     for resolution, batch in ((504, 8), (392, 4), (336, 4), (280, 2)):
         log = output / f"inference_res{resolution}.log"
-        attempt = dict(resolution=resolution, corrector_batch=batch, log=log.name, started_at=now())
+        attempt: InferenceAttempt = dict(
+            resolution=resolution, corrector_batch=batch, log=log.name, started_at=now()
+        )
         record["inference_attempts"].append(attempt)
         try:
             run_logged(
@@ -193,10 +197,10 @@ def infer_with_memory_retries(video: Any, output: Any, record: dict[str, Any]) -
     )
 
 
-def infer_full_resolution(video: Any, output: Any, record: dict[str, Any], args: Any) -> None:
+def infer_full_resolution(video: Any, output: Any, record: GalleryVideo, args: Any) -> None:
     """Offload storage/placement, retaining the full source timeline and 504 grid."""
     log = output / f"inference_{args.offload}_res504.log"
-    attempt = dict(
+    attempt: InferenceAttempt = dict(
         resolution=504, corrector_batch=8, offload=args.offload, log=log.name, started_at=now()
     )
     record["inference_attempts"] = [attempt]
@@ -236,7 +240,7 @@ def infer_full_resolution(video: Any, output: Any, record: dict[str, Any], args:
             (output / "inference.log").write_text(log.read_text())
 
 
-def write_index(root: Path, state: Any) -> None:
+def write_index(root: Path, state: GalleryState) -> None:
     rows = []
     for name, entry in catalog().items():
         record = state["videos"].get(name, {})
@@ -290,7 +294,7 @@ th,td{text-align:left;padding:12px;border-bottom:1px solid #dce2ea;vertical-alig
     save_json(root / "batch.json", state)
 
 
-def prepare_input(name: str, output: Any) -> Any:
+def prepare_input(name: str, output: Path) -> tuple[Path, VideoSource]:
     path = fetch_input(name)
     source = json.loads((paths()["cache_root"] / "demo_inputs" / f"{name}.json").read_text())
     if source["frames"] < 2 or source["fps"] <= 0:
@@ -341,7 +345,7 @@ def main() -> None:
     root.mkdir(parents=True, exist_ok=True)
     names = args.videos or list(catalog())
     manifest = root / "batch.json"
-    state = (
+    state: GalleryState = (
         json.loads(manifest.read_text()) if manifest.exists() else dict(started_at=now(), videos={})
     )
     if args.status:

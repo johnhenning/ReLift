@@ -7,6 +7,11 @@ import os
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
+    from relift.records.benchmark import ExperimentOptions, ExperimentResult, PhaseRecorder
+    from relift.records.model import DA3Geometry
+
+
+if TYPE_CHECKING:
     from relift.configuration import ConfigurationSelection
 
 import numpy as np
@@ -16,10 +21,10 @@ from provider_reuse_experiment import frames, reset_seed
 
 def run(
     args: Any,
-    options: dict[str, Any],
-    phases: Any,
+    options: ExperimentOptions,
+    phases: PhaseRecorder,
     configuration: ConfigurationSelection | None = None,
-) -> Any:
+) -> ExperimentResult:
     from relift.optimization import InferenceSession, OptimizationConfig
     from relift.storage import file_sha256
 
@@ -56,12 +61,20 @@ def run(
             try:
                 reset_seed()
                 with phases.stage(f"clip_{index}_forward"):
-                    geometry = provider.run(images)
+                    geometry: DA3Geometry = provider.run(images)
                 with phases.stage(f"clip_{index}_serialize"):
                     name = f"clip-{index}.npz"
                     np.savez(args.output / name, **geometry)
                 artifacts[name] = file_sha256(args.output / name)
-                shapes[name] = {key: list(value.shape) for key, value in geometry.items()}
+                shapes[name] = {
+                    key: list(value.shape)
+                    for key, value in (
+                        ("depth", geometry["depth"]),
+                        ("poses", geometry["poses"]),
+                        ("intrinsics", geometry["intrinsics"]),
+                        ("images", geometry["images"]),
+                    )
+                }
                 counters.append(
                     dict(
                         cold_bytes_written=provider.pager.storage.bytes_written,

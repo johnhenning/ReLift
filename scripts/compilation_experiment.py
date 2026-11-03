@@ -2,12 +2,23 @@
 
 from __future__ import annotations
 
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
+
+if TYPE_CHECKING:
+    from relift.records.benchmark import (
+        CompilationPass,
+        ExperimentOptions,
+        ExperimentResult,
+        PhaseRecorder,
+    )
+
 
 import torch
 
 
-def run(args: Any, options: dict[str, Any], phases: Any, model: torch.nn.Module, info: Any) -> Any:
+def run(
+    args: Any, options: ExperimentOptions, phases: PhaseRecorder, model: torch.nn.Module, info: Any
+) -> ExperimentResult:
     from torch._dynamo.utils import counters
 
     from relift.storage import file_sha256
@@ -26,7 +37,7 @@ def run(args: Any, options: dict[str, Any], phases: Any, model: torch.nn.Module,
         checkpoint_step=info["step"],
         compiled=enabled,
     )
-    runs = []
+    runs: list[CompilationPass] = []
     for index in range(passes):
         name = "correction_cold" if index == 0 else f"correction_warm_{index}"
         destination = args.output / f"pass-{index:02}"

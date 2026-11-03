@@ -47,6 +47,7 @@ from relift.features import interp_init  # noqa: E402
 from relift.infer import VIS_GATE, observations, predict_dense  # noqa: E402
 from relift.provenance import note  # noqa: E402
 from relift.providers import depth_file, tracks_file  # noqa: E402
+from relift.records.runtime import InferenceSettings
 from relift.telemetry import Metrics  # noqa: E402
 
 IMAGE_EXT = {".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".webp"}
@@ -476,20 +477,18 @@ def main(argv: Any = None, session: Any = None) -> None:
     name = os.path.splitext(os.path.basename(os.path.normpath(a.video)))[0]
     out = a.out or str(P["outputs_root"] / "demo" / name)
     os.makedirs(out, exist_ok=True)
-    metrics = Metrics(
-        out,
-        dict(
-            offload_requested=a.offload,
-            process_resolution=pc["da3"]["process_res"],
-            corrector_batch=cfg["corrector"]["batch"],
-            ram_budget_gb=a.ram_budget_gb,
-            vram_budget_gb=a.vram_budget_gb,
-            scratch_budget_gb=a.scratch_budget_gb,
-            optimizations=settings.as_dict(),
-            configuration=resolved_configuration,
-            components=session.components.describe(),
-        ),
+    metrics_settings: InferenceSettings = dict(
+        offload_requested=a.offload,
+        process_resolution=pc["da3"]["process_res"],
+        corrector_batch=cfg["corrector"]["batch"],
+        ram_budget_gb=a.ram_budget_gb,
+        vram_budget_gb=a.vram_budget_gb,
+        scratch_budget_gb=a.scratch_budget_gb,
+        optimizations=settings.as_dict(),
+        configuration=resolved_configuration,
+        components=session.components.describe(),
     )
+    metrics = Metrics(out, metrics_settings)
     with metrics.stage("decode", cuda=False):
         if a.offload == "none":
             frames = read_frames(a.video, a.num_frames)

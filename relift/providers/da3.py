@@ -9,6 +9,7 @@ import numpy as np
 import torch
 
 from ..optimization import InferenceComponents, OptimizationConfig
+from ..records.model import DA3Geometry
 
 
 class DepthAnything3Provider:
@@ -73,7 +74,7 @@ class DepthAnything3Provider:
             ref_view_strategy=ref_view_strategy,
         )
 
-    def run(self, frames: Any) -> dict[str, np.ndarray[Any, Any]]:
+    def run(self, frames: Any) -> DA3Geometry:
         """frames (T,H,W,3) uint8 RGB -> dict(depth (T,h,w) f32, poses (T,4,4) f32, intrinsics (T,3,3) f32,
         images (T,h,w,3) uint8: the frames as DA3 processed them, which the tracker runs on)."""
         # Autocast's weight cache would retain paged blocks on CUDA until the

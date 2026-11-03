@@ -12,7 +12,15 @@ import hashlib
 import json
 import sys
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from relift.records.artifacts import (
+        MappedRayAudit,
+        NearestMismatch,
+        RayAuditReport,
+        RayAuditTotals,
+    )
 
 import numpy as np
 import torch
@@ -42,7 +50,7 @@ def main() -> None:
     source = MappedObservations(args.window, "cuda")
     H, W = source.H, source.W
     code = torch.arange(H * W, device="cuda", dtype=torch.float32).reshape(H, W)
-    totals = dict(
+    totals: RayAuditTotals = dict(
         points=0,
         nearest_mismatches=0,
         direction_components_different=0,
@@ -50,8 +58,8 @@ def main() -> None:
         max_range_absolute_error=0.0,
         range_values_different=0,
     )
-    examples = []
-    decomposition = {}
+    examples: list[NearestMismatch] = []
+    decomposition: dict[str, int] = {}
     # Scan every original pixel and temporal frame, using the input's fp16
     # tracker coordinates, rather than only easy ties near the origin.
     for start in range(0, source.T, 16):
@@ -129,7 +137,7 @@ def main() -> None:
                     actual_pixel=int(actual[t, p]),
                 )
             )
-    mapped = {}
+    mapped: dict[str, MappedRayAudit] = {}
     if args.mapped_backend:
         from relift.optimization import InferenceComponents
 
@@ -158,7 +166,7 @@ def main() -> None:
                 passed=not any(differences.values()),
             )
             del candidate, reference
-    record = dict(
+    record: RayAuditReport = dict(
         source=str(args.source.resolve()),
         build=json.loads((args.build / "build.json").read_text()),
         shape=[source.T, H, W],

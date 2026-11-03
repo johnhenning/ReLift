@@ -8,15 +8,16 @@ import time
 from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any
 
 import torch
 
+from .records.runtime import MetricsDocument, StageMetrics
 
-class Metrics:
-    def __init__(self, output: str | Path, settings: dict[str, Any]) -> None:
+
+class Metrics[S]:
+    def __init__(self, output: str | Path, settings: S) -> None:
         self.path = Path(output) / "metrics.json"
-        self.data: dict[str, Any] = dict(settings=settings, stages={})
+        self.data: MetricsDocument[S] = dict(settings=settings, stages={})
         self.started = time.perf_counter()
         self.save()
 
@@ -26,13 +27,13 @@ class Metrics:
         temporary.replace(self.path)
 
     @contextmanager
-    def stage(self, name: str, cuda: bool = True) -> Generator[dict[str, Any]]:
+    def stage(self, name: str, cuda: bool = True) -> Generator[StageMetrics]:
         active = cuda and torch.cuda.is_available()
         if active:
             torch.cuda.synchronize()
             torch.cuda.reset_peak_memory_stats()
         start = time.perf_counter()
-        record: dict[str, Any] = dict(status="running")
+        record: StageMetrics = dict(status="running")
         self.data["stages"][name] = record
         self.save()
         try:

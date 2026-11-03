@@ -26,17 +26,30 @@ import subprocess
 import sys
 import time
 from collections import defaultdict
+from collections.abc import Callable
 from datetime import UTC, datetime
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from relift.records.benchmark import (
+        GPUProcess,
+        GPUSample,
+        OffloadSummary,
+        OffloadTrialRecord,
+        ProcessSnapshot,
+        SwapCounters,
+        TelemetrySample,
+        TelemetrySummary,
+    )
 
 REPO = Path(__file__).resolve().parents[1]
 BASELINE = REPO / "outputs/benchmarks/baseline-source"
 MODES = ("existing", "none", "streamed", "ram", "disk", "auto")
 
 
-def sha256(path: str | Path) -> Any:
+def sha256(path: str | Path) -> str:
     digest = hashlib.sha256()
     with Path(path).open("rb") as stream:
         for block in iter(lambda: stream.read(1 << 20), b""):
@@ -86,7 +99,7 @@ class NvidiaSampler:
             ("computeInstanceId", ctypes.c_uint),
         ]
 
-    def compute_processes(self) -> list[dict[str, int]]:
+    def compute_processes(self) -> list[GPUProcess]:
         if self.library is None or self.handle is None:
             raise RuntimeError(f"Cannot verify GPU exclusivity: {self.error}")
         capacity = 32
@@ -107,11 +120,11 @@ class NvidiaSampler:
             ]
         raise RuntimeError("GPU process list kept changing during the exclusivity query")
 
-    def sample(self) -> Any:
+    def sample(self) -> GPUSample:
         if self.library is None:
             return {}
         memory, utilization = self.Memory(), self.Utilization()
-        out = {}
+        out: GPUSample = {}
         if self.library.nvmlDeviceGetMemoryInfo(self.handle, ctypes.byref(memory)) == 0:
             out.update(gpu_device_used_bytes=memory.used, gpu_device_total_bytes=memory.total)
         if self.library.nvmlDeviceGetUtilizationRates(self.handle, ctypes.byref(utilization)) == 0:
@@ -125,13 +138,13 @@ class NvidiaSampler:
         return out
 
 
-def process_stats(pid: Any) -> Any:
+def process_stats(pid: int) -> ProcessSnapshot:
     """Read one process without importing psutil or initializing CUDA."""
     root = Path("/proc") / str(pid)
     stat = (root / "stat").read_text()
     fields = stat[stat.rfind(")") + 2 :].split()
-    values = dict(
-        pid=int(pid),
+    values: ProcessSnapshot = dict(
+        pid=pid,
         ppid=int(fields[1]),
         started_ticks=int(fields[19]),
         rss_bytes=int(fields[21]) * os.sysconf("SC_PAGE_SIZE"),
@@ -154,14 +167,18 @@ def process_stats(pid: Any) -> Any:
         values["pss_unavailable"] = True
     try:
         counters = dict(line.split(": ", 1) for line in (root / "io").read_text().splitlines())
-        for key in ("read_bytes", "write_bytes", "rchar", "wchar"):
-            values[key] = int(counters[key])
+        values.update(
+            read_bytes=int(counters["read_bytes"]),
+            write_bytes=int(counters["write_bytes"]),
+            rchar=int(counters["rchar"]),
+            wchar=int(counters["wchar"]),
+        )
     except (OSError, ValueError, KeyError):
         values["io_unavailable"] = True
     return values
 
 
-def process_tree(root_pid: Any) -> Any:
+def process_tree(root_pid: int) -> list[ProcessSnapshot]:
     stats = {}
     for directory in Path("/proc").iterdir():
         if directory.name.isdigit():
@@ -186,20 +203,23 @@ def process_tree(root_pid: Any) -> Any:
     return results
 
 
-def swap_counters() -> Any:
+def swap_counters() -> SwapCounters:
     counters = dict(line.split() for line in Path("/proc/vmstat").read_text().splitlines())
     size = os.sysconf("SC_PAGE_SIZE")
-    return {key + "_bytes": int(counters[key]) * size for key in ("pswpin", "pswpout")}
+    return dict(
+        pswpin_bytes=int(counters["pswpin"]) * size, pswpout_bytes=int(counters["pswpout"]) * size
+    )
 
 
 class Telemetry:
     def __init__(self, gpu: Any, require_exclusive_gpu: bool = False) -> None:
         self.gpu = gpu
         self.require_exclusive_gpu = require_exclusive_gpu
-        self.interference: list[dict[str, int]] = []
-        self.samples, self.counters = [], {}
+        self.interference: list[GPUProcess] = []
+        self.samples: list[TelemetrySample] = []
+        self.counters: dict[tuple[int, int], dict[str, int | float]] = {}
 
-    def capture(self, root_pid: Any, elapsed: Any) -> None:
+    def capture(self, root_pid: int, elapsed: float) -> None:
         processes = process_tree(root_pid)
         for proc in processes:
             key = (proc["pid"], proc["started_ticks"])
@@ -213,12 +233,19 @@ class Telemetry:
                 "major_faults",
                 "cpu_seconds",
             ):
-                previous[counter] = max(previous.get(counter, 0), proc.get(counter, 0))
-        row = dict(elapsed_seconds=elapsed, process_count=len(processes))
-        for key in ("rss_bytes", "pss_bytes", "anonymous_bytes", "swap_bytes"):
-            row["process_tree_" + key] = sum(proc.get(key, 0) for proc in processes)
-        row["process_detail_unavailable"] = any(
-            p.get("pss_unavailable") or p.get("io_unavailable") for p in processes
+                value = proc.get(counter, 0)
+                assert isinstance(value, (int, float))
+                previous[counter] = max(previous.get(counter, 0), value)
+        row: TelemetrySample = dict(
+            elapsed_seconds=elapsed,
+            process_count=len(processes),
+            process_tree_rss_bytes=sum(proc.get("rss_bytes", 0) for proc in processes),
+            process_tree_pss_bytes=sum(proc.get("pss_bytes", 0) for proc in processes),
+            process_tree_anonymous_bytes=sum(proc.get("anonymous_bytes", 0) for proc in processes),
+            process_tree_swap_bytes=sum(proc.get("swap_bytes", 0) for proc in processes),
+            process_detail_unavailable=any(
+                p.get("pss_unavailable") or p.get("io_unavailable") for p in processes
+            ),
         )
         row.update(self.gpu.sample())
         if self.require_exclusive_gpu:
@@ -229,37 +256,35 @@ class Telemetry:
             row.update(gpu_compute_processes=compute, other_gpu_compute_processes=other)
         self.samples.append(row)
 
-    def summary(self) -> Any:
-        peaks = {}
-        for key in (
-            "process_tree_rss_bytes",
-            "process_tree_pss_bytes",
-            "process_tree_anonymous_bytes",
-            "process_tree_swap_bytes",
-            "gpu_device_used_bytes",
-        ):
-            values = [row[key] for row in self.samples if key in row]
-            peaks["sampled_peak_" + key] = max(values) if values else None
-        for counter in (
-            "read_bytes",
-            "write_bytes",
-            "rchar",
-            "wchar",
-            "minor_faults",
-            "major_faults",
-            "cpu_seconds",
-        ):
-            peaks["process_tree_" + counter] = sum(
-                proc.get(counter, 0) for proc in self.counters.values()
-            )
-        peaks["sample_count"] = len(self.samples)
-        peaks["gpu_exclusivity_monitored"] = self.require_exclusive_gpu
-        peaks["other_gpu_compute_processes"] = self.interference
-        peaks["gpu_sampling_error"] = self.gpu.error
-        peaks["sampling_limits"] = (
-            "RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process."
+    def summary(self) -> TelemetrySummary:
+        def peak(getter: Callable[[TelemetrySample], int | None]) -> int | None:
+            values = [value for row in self.samples if (value := getter(row)) is not None]
+            return max(values) if values else None
+
+        def counter(name: str) -> int | float:
+            return sum(proc.get(name, 0) for proc in self.counters.values())
+
+        return dict(
+            sampled_peak_process_tree_rss_bytes=peak(lambda r: r.get("process_tree_rss_bytes")),
+            sampled_peak_process_tree_pss_bytes=peak(lambda r: r.get("process_tree_pss_bytes")),
+            sampled_peak_process_tree_anonymous_bytes=peak(
+                lambda r: r.get("process_tree_anonymous_bytes")
+            ),
+            sampled_peak_process_tree_swap_bytes=peak(lambda r: r.get("process_tree_swap_bytes")),
+            sampled_peak_gpu_device_used_bytes=peak(lambda r: r.get("gpu_device_used_bytes")),
+            process_tree_read_bytes=int(counter("read_bytes")),
+            process_tree_write_bytes=int(counter("write_bytes")),
+            process_tree_rchar=int(counter("rchar")),
+            process_tree_wchar=int(counter("wchar")),
+            process_tree_minor_faults=int(counter("minor_faults")),
+            process_tree_major_faults=int(counter("major_faults")),
+            process_tree_cpu_seconds=float(counter("cpu_seconds")),
+            sample_count=len(self.samples),
+            gpu_exclusivity_monitored=self.require_exclusive_gpu,
+            other_gpu_compute_processes=self.interference,
+            gpu_sampling_error=self.gpu.error,
+            sampling_limits="RSS/PSS/device memory are sampled; short peaks and exited-before-sampling children can be missed. GPU totals include desktop/other processes. I/O counters retain last sampled values per process.",
         )
-        return peaks
 
 
 def resolve_video(scene: Any) -> Any:
@@ -308,7 +333,9 @@ def build_command(mode: str, video: Any, output: Any, args: Any) -> Any:
     return command
 
 
-def benchmark_trial(mode: str, scene: Any, repeat: Any, args: Any, gpu: Any) -> Any:
+def benchmark_trial(
+    mode: str, scene: str, repeat: int, args: Any, gpu: NvidiaSampler
+) -> OffloadTrialRecord:
     directory = args.output_root / scene / mode / f"trial-{repeat:02}"
     result_file = directory / "trial.json"
     if result_file.exists() and args.resume:
@@ -392,7 +419,7 @@ def benchmark_trial(mode: str, scene: Any, repeat: Any, args: Any, gpu: Any) -> 
         if "CUDA out of memory" in text or "OutOfMemoryError" in text
         else "failed"
     )
-    result = dict(
+    result: OffloadTrialRecord = dict(
         scene=scene,
         mode=mode,
         repeat=repeat,
@@ -418,10 +445,16 @@ def benchmark_trial(mode: str, scene: Any, repeat: Any, args: Any, gpu: Any) -> 
         baseline_snapshot=str(args.baseline / "snapshot.json"),
     )
     after_swap = swap_counters()
-    result["system_swap_deltas"] = {key: after_swap[key] - before_swap[key] for key in before_swap}
+    result["system_swap_deltas"] = dict(
+        pswpin_bytes=after_swap["pswpin_bytes"] - before_swap["pswpin_bytes"],
+        pswpout_bytes=after_swap["pswpout_bytes"] - before_swap["pswpout_bytes"],
+    )
     for file in (output / "metrics.json", output / "offload.json"):
         if file.exists():
-            result[file.stem] = json.loads(file.read_text())
+            if file.stem == "metrics":
+                result["metrics"] = json.loads(file.read_text())
+            else:
+                result["offload"] = json.loads(file.read_text())
     result["code_hashes"] = code_hashes
     result["lockfile_sha256"] = sha256(fingerprint_root / "uv.lock")
     (directory / "telemetry.jsonl").write_text(
@@ -432,7 +465,7 @@ def benchmark_trial(mode: str, scene: Any, repeat: Any, args: Any, gpu: Any) -> 
     return result
 
 
-def write_summary(root: Path) -> Any:
+def write_summary(root: Path) -> list[OffloadSummary]:
     records = [json.loads(p.read_text()) for p in sorted(root.glob("*/*/trial-*/trial.json"))]
     groups = defaultdict(list)
     for record in records:
@@ -440,7 +473,7 @@ def write_summary(root: Path) -> Any:
     summaries = []
     for (scene, mode, scenario), trials in sorted(groups.items()):
         valid = [r for r in trials if r["status"] == "complete"]
-        row = dict(
+        row: OffloadSummary = dict(
             scene=scene,
             mode=mode,
             scenario=scenario,
@@ -448,6 +481,7 @@ def write_summary(root: Path) -> Any:
             completed=len(valid),
             failures=";".join(r["status"] for r in trials if r["status"] != "complete"),
         )
+        measured: dict[str, float | None] = {}
         for key, getter in (
             ("wall_seconds", lambda r: r["wall_seconds"]),
             (
@@ -468,10 +502,18 @@ def write_summary(root: Path) -> Any:
             values = [getter(r) for r in valid if getter(r) is not None]
             if key != "wall_seconds":
                 values = [v / 2**20 for v in values]
-            row["median_" + key] = statistics.median(values) if values else None
+            measured["median_" + key] = statistics.median(values) if values else None
             if key == "wall_seconds":
                 row["min_wall_seconds"] = min(values) if values else None
                 row["max_wall_seconds"] = max(values) if values else None
+        row.update(
+            median_wall_seconds=measured["median_wall_seconds"],
+            median_sampled_peak_gpu_device_mib=measured["median_sampled_peak_gpu_device_mib"],
+            median_sampled_peak_tree_rss_mib=measured["median_sampled_peak_tree_rss_mib"],
+            median_sampled_peak_tree_pss_mib=measured["median_sampled_peak_tree_pss_mib"],
+            median_physical_read_mib=measured["median_physical_read_mib"],
+            median_physical_write_mib=measured["median_physical_write_mib"],
+        )
         summaries.append(row)
     # Only completed, matching scenario/resolution/frame-limit/batch comparisons get ratios.
     for row in summaries:
@@ -483,11 +525,13 @@ def write_summary(root: Path) -> Any:
             and b["mode"] == "existing"
         ]
         row["existing_over_candidate_speed_ratio"] = None
-        if baselines and row["median_wall_seconds"] and baselines[0]["median_wall_seconds"]:
+        candidate_wall = row["median_wall_seconds"]
+        baseline_wall = baselines[0]["median_wall_seconds"] if baselines else None
+        if candidate_wall and baseline_wall:
             candidate = groups[(row["scene"], row["mode"], row["scenario"])]
             reference = groups[(row["scene"], "existing", row["scenario"])]
 
-            def settings(r: dict[str, Any]) -> tuple[Any, ...]:
+            def settings(r: OffloadTrialRecord) -> tuple[str, int, int, int, int]:
                 return (
                     r["input_sha256"],
                     r["process_res"],
@@ -497,9 +541,7 @@ def write_summary(root: Path) -> Any:
                 )
 
             if len({settings(r) for r in candidate + reference}) == 1:
-                row["existing_over_candidate_speed_ratio"] = (
-                    baselines[0]["median_wall_seconds"] / row["median_wall_seconds"]
-                )
+                row["existing_over_candidate_speed_ratio"] = baseline_wall / candidate_wall
     write_json(
         root / "summary.json",
         dict(

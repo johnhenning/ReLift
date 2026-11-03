@@ -10,6 +10,8 @@ from typing import Any
 import numpy as np
 import torch
 
+from .records.runtime import FeatureManifest, FeatureRecord
+
 
 def pack_tensors(
     tensors: list[torch.Tensor], backend: str = "python", native: ModuleType | None = None
@@ -63,7 +65,7 @@ class FeatureArchive:
             raise ValueError(
                 "Feature archives require a fresh owner; implicit reuse is unsupported"
             )
-        self.records = []
+        self.records: list[FeatureRecord] = []
 
     def put(self, tensor: torch.Tensor) -> torch.Tensor:
         cpu = tensor.detach().cpu().contiguous()
@@ -92,7 +94,7 @@ class FeatureArchive:
                     for start in range(0, size, 1 << 20):
                         stream.write(view[start : start + (1 << 20)])
                     digest = hashlib.sha256(view).hexdigest()
-            record = dict(
+            record: FeatureRecord = dict(
                 offset=offset,
                 bytes=size,
                 shape=list(cpu.shape),
@@ -103,7 +105,8 @@ class FeatureArchive:
             temporary = self.index_path.with_suffix(".json.tmp")
             temporary.write_text(
                 json.dumps(
-                    dict(format="relift.da3-features", version=1, records=self.records), indent=2
+                    FeatureManifest(format="relift.da3-features", version=1, records=self.records),
+                    indent=2,
                 )
                 + "\n"
             )
@@ -118,7 +121,7 @@ class FeatureArchive:
         self.owner.bytes_written += needed + self.index_path.stat().st_size
         return self.map(record)
 
-    def map(self, record: dict[str, Any]) -> torch.Tensor:
+    def map(self, record: FeatureRecord) -> torch.Tensor:
         dtype = getattr(torch, record["dtype"], None)
         if not isinstance(dtype, torch.dtype):
             raise ValueError("Invalid feature dtype")

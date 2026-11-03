@@ -13,25 +13,35 @@ import json
 import statistics
 import sys
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from relift.records.artifacts import (
+        OperatorProfile,
+        RayProfileReport,
+        TimingDistribution,
+        TimingSample,
+    )
 
 import numpy as np
 import torch
 
 
-def digest(path: str | Path) -> Any:
+def digest(path: str | Path) -> str:
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def measure_many(functions: Any, repeats: Any, iterations: Any) -> Any:
+def measure_many(
+    functions: Mapping[str, Callable[[], object]], repeats: int, iterations: int
+) -> dict[str, TimingDistribution]:
     for _ in range(3):
         for function in functions.values():
             function()
     torch.cuda.synchronize()
-    samples = {name: [] for name in functions}
+    samples: dict[str, list[TimingSample]] = {name: [] for name in functions}
     names = list(functions)
     for repeat in range(repeats):
         offset = repeat % len(names)
@@ -61,7 +71,7 @@ def measure_many(functions: Any, repeats: Any, iterations: Any) -> Any:
     }
 
 
-def trace(function: Callable[..., Any], destination: str | Path) -> Any:
+def trace(function: Callable[..., object], destination: str | Path) -> list[OperatorProfile]:
     with torch.profiler.profile(
         activities=[torch.profiler.ProfilerActivity.CPU, torch.profiler.ProfilerActivity.CUDA],
         record_shapes=True,
@@ -70,7 +80,7 @@ def trace(function: Callable[..., Any], destination: str | Path) -> Any:
             function()
         torch.cuda.synchronize()
     profiler.export_chrome_trace(str(destination))
-    rows = [
+    rows: list[OperatorProfile] = [
         dict(
             name=e.key,
             calls=e.count,
@@ -194,7 +204,7 @@ def main() -> None:
             results[label]["profile"] = trace(function, args.out / f"{label}.json")
             print(label, results[label]["median_wall_ms"], flush=True)
         del sources, functions
-    record = dict(
+    record: RayProfileReport = dict(
         created_at=datetime.now(UTC).isoformat(),
         arguments={k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()},
         torch=torch.__version__,
