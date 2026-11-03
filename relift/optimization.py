@@ -12,6 +12,7 @@ from typing import Callable
 class OptimizationConfig:
     gather: str = "current"
     shards: str = "current"
+    shard_writer: str | None = None
     rays: str = "current"
     da3_weights: str = "current"
     da3_features: str = "current"
@@ -27,6 +28,7 @@ class OptimizationConfig:
 
     def __post_init__(self):
         for key, choices in dict(gather=("current","python","cpp"), shards=("current","python","cpp"),
+                                 shard_writer=(None,"current","cpp"),
                                  rays=("current","python","cuda"), da3_weights=("current","python","cpp"),
                                  da3_features=("current","python","cpp")).items():
             if getattr(self,key) not in choices:
@@ -63,6 +65,21 @@ class OptimizationConfig:
     def as_dict(self):
         return asdict(self)
 
+    def validate_mode(self,mode):
+        if mode not in ("none","streamed","ram","disk"):
+            raise ValueError("Resolve the offload mode before validating optimizations")
+        if self.da3_weights != "current" and mode not in ("ram","disk"):
+            raise ValueError("Packed DA3 weights require RAM or disk offload")
+        if self.da3_features != "current" and mode != "disk":
+            raise ValueError("Feature archives require disk offload")
+        if mode == "none":
+            default=OptimizationConfig().as_dict()
+            stream_fields=("gather","shards","rays","hash_writes","depth_cache_mb","prefetch","padding_batch","compile_corrector")
+            selected=[key for key in stream_fields if getattr(self,key)!=default[key]]
+            if self.shard_writer == "cpp": selected.append("shard_writer")
+            if selected:
+                raise ValueError(f"Streaming optimizations require streamed/RAM/disk mode: {selected}")
+
 
 @dataclass(frozen=True)
 class InferenceComponents:
@@ -76,6 +93,9 @@ class InferenceComponents:
     shard_packer: Callable | None = None
     npy_writer: Callable | None = None
     pager_factory: Callable | None = None
+    cold_storage_factory: Callable | None = None
+    feature_archive_factory: Callable | None = None
+    block_packer: Callable | None = None
     depth_provider_factory: Callable | None = None
     tracker_factory: Callable | None = None
     corrector_loader: Callable | None = None

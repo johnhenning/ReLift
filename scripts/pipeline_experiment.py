@@ -19,7 +19,7 @@ def run(args, options):
     script = args.source.resolve() / "scripts/demo_video.py"
     previous = sys.argv
     sys.argv = [str(script), str(video), "--num_frames", "0", "--process-res", "504",
-                "--corrector-batch", "8", "--checkpoints_root", str(args.root / "checkpoints"),
+                "--corrector-batch", str((optimizations or {}).get("corrector_batch",8)), "--checkpoints_root", str(args.root / "checkpoints"),
                 "--out", str(output), "--offload", offload, "--scratch-dir", str(output / "scratch"), "--no_video"]
     if optimizations is not None:
         for key, value in optimizations.items():

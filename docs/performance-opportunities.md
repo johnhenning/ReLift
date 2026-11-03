@@ -2,7 +2,7 @@
 
 Status: The individual screening experiments below have been measured. See the [experiment log](optimization-experiment-log.md) for results, failed numerical gates and keep/discard decisions. Combined full-pipeline confirmation is recorded separately from isolated stage measurements.
 
-The next proposed campaign tests [four potential C++/CUDA optimizations](native-optimization-experiments/README.md), each with its own design, Python comparison, correctness gate and benchmark plan. These proposals are separate from the completed experiments below.
+The [native optimization campaign](native-optimization-experiments/README.md) implements four optional C++/CUDA experiments with shared configuration and dependency injection. Its results include corrected CUDA arithmetic/validation bugs, repeated RAM measurements and a separate disk pilot. These measurements remain separate from the earlier experiments below.
 
 The original plan below investigates streamed-path overhead, redundant setup, transfer overlap and model reuse. Offloading addresses capacity and can make a run slower. Each optimization is measured separately from the [offload comparison](offload-benchmark-analysis.md) so its effect is identifiable.
 

@@ -21,6 +21,8 @@ class ShardPacker:
         return value, name == "observed" or bool(np.isfinite(value).all())
 
     def write(self, stream, array, hash_write):
+        if not (array.flags.c_contiguous or array.flags.f_contiguous):
+            array = np.ascontiguousarray(array)
         header = io.BytesIO()
         np.lib.format.write_array_header_1_0(header, np.lib.format.header_data_from_array_1_0(array))
         digest = self.native.write_payload(stream.fileno(), header.getvalue(), array, hash_write)

@@ -27,6 +27,10 @@ def test_packing_and_npy_bytes_match_current(tmp_path,packer,dtype):
         writer = packer.write if packer.backend == "cpp" else None
         digest = atomic_npy(candidate,packed,hash_write=True,payload_writer=writer)
         assert digest == file_sha256(candidate) == file_sha256(control)
+        if packer.backend == "cpp":
+            # Writer-only selection also accepts the original strided source.
+            digest=atomic_npy(candidate,value,hash_write=True,payload_writer=packer.write)
+            assert digest == file_sha256(control)
 
 
 def test_nonfinite_rejected_and_fsync_failure_never_commits(tmp_path,packer,monkeypatch):
@@ -59,3 +63,13 @@ def test_native_write_error_is_propagated():
     fd = os.open(os.devnull,os.O_WRONLY); os.close(fd)
     with pytest.raises(RuntimeError,match="native NPY write"):
         load_cpu().write_payload(fd,b"header",np.arange(10,dtype=np.float32),True)
+
+
+@pytest.mark.parametrize("change",["dtype","shape"])
+def test_injected_packer_cannot_commit_an_invalid_array(tmp_path,change):
+    def bad(name,value):
+        return (value.astype(np.float16) if change == "dtype" else value[:0]),True
+    store=TrajectoryStore.create(tmp_path,(1,1,1,3),{},np.arange(1),{},packer=bad)
+    with pytest.raises(ValueError,match="packer changed"):
+        store.write_shard(0,xyz=np.ones((1,1,3),np.float32),lift=np.ones((1,1,3),np.float16),observed=np.ones((1,1),bool))
+    assert not store.manifest["shards"]

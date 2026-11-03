@@ -126,17 +126,37 @@ def _paged_intermediates(self, x, n=1, export_feat_layers=None, **kwargs):
 
 class DA3Pager:
     """Page transformer blocks; stage only the head's existing eight-frame slices."""
-    def __init__(self, model, mode="ram", device="cuda", scratch_dir="cache/offload", ram_budget_gb=18, scratch_budget_gb=64):
+    def __init__(self, model, mode="ram", device="cuda", scratch_dir="cache/offload", ram_budget_gb=18, scratch_budget_gb=64,
+                 weight_backend="current", feature_backend="current", native=None,
+                 storage_factory=None, feature_archive_factory=None, block_packer=None):
         self.device = torch.device(device)
-        self.storage = ColdStorage(mode, scratch_dir, ram_budget_gb, scratch_budget_gb)
+        self.storage = (storage_factory or ColdStorage)(mode, scratch_dir, ram_budget_gb, scratch_budget_gb)
+        self.block_packer = block_packer
+        self.weight_backend,self.native = weight_backend,native
+        self.features = self.storage
+        if feature_backend != "current":
+            from .da3_packing import FeatureArchive
+            try:
+                self.features = (feature_archive_factory or FeatureArchive)(self.storage,feature_backend,native)
+            except BaseException:
+                self.storage.close()
+                raise
         self.handles, self.originals, self.weights = [], [], []
         self.buffer_owners = set()
         self.transferred_weight_bytes = 0
-        model.to(device)
+        self.transferred_buffer_bytes,self.transfer_calls = 0,0
+        try:
+            self._install(model)
+        except BaseException:
+            self.close()
+            raise
+
+    def _install(self,model):
+        model.to(self.device)
         model.device = self.device
         for module in model.modules():
             if module.__class__.__name__ == "DinoVisionTransformer":
-                module._relift_cold_storage = self.storage
+                module._relift_cold_storage = self.features
                 self.originals.append((module, "get_intermediate_layers", module.__dict__.get("get_intermediate_layers")))
                 module.get_intermediate_layers = MethodType(_paged_intermediates, module)
                 for block in module.blocks:
@@ -153,6 +173,8 @@ class DA3Pager:
 
     def page_block(self, block):
         block.to("cpu")
+        if self.weight_backend != "current":
+            return self.page_packed_block(block)
         weights = []
         for parameter in block.parameters():
             cpu = self.storage.put(parameter.data)
@@ -171,8 +193,11 @@ class DA3Pager:
             for parameter, cpu in weights:
                 parameter.data = cpu.to(self.device)
                 self.transferred_weight_bytes += cpu.numel() * cpu.element_size()
+                self.transfer_calls += 1
             for owner, name, cpu in buffers:
                 owner._buffers[name] = cpu.to(self.device)
+                self.transferred_buffer_bytes += cpu.numel()*cpu.element_size()
+                self.transfer_calls += 1
         def after(module, inputs, output):
             for parameter, cpu in weights:
                 parameter.data = cpu
@@ -181,6 +206,47 @@ class DA3Pager:
             return output
         self.handles.append(block.register_forward_pre_hook(before))
         self.handles.append(block.register_forward_hook(after, always_call=True))
+
+    def page_packed_block(self,block):
+        from .da3_packing import pack_tensors
+        parameters = list(block.parameters())
+        buffer_items = [(owner,name,value) for owner in block.modules() for name,value in owner._buffers.items() if value is not None]
+        tensors = [p.data for p in parameters]+[value for _,_,value in buffer_items]
+        groups,weights,buffers = [],[],[]
+        for packed,bindings in (self.block_packer or pack_tensors)(tensors,self.weight_backend,self.native):
+            cold = self.storage.put(packed)
+            groups.append((cold,bindings))
+            for index,offset,count,shape in bindings:
+                value = cold[offset:offset+count].reshape(shape)
+                if index < len(parameters):
+                    parameter = parameters[index]
+                    parameter.data = value
+                    weights.append((parameter,value))
+                else:
+                    owner,name,_ = buffer_items[index-len(parameters)]
+                    owner._buffers[name] = value
+                    self.buffer_owners.add((id(owner),name))
+                    buffers.append((owner,name,value))
+        self.weights.append(weights)
+        def before(module,inputs):
+            for cold,bindings in groups:
+                active = cold.to(self.device)
+                self.transfer_calls += 1
+                for index,offset,count,shape in bindings:
+                    value = active[offset:offset+count].reshape(shape)
+                    if index < len(parameters):
+                        parameters[index].data = value
+                        self.transferred_weight_bytes += count*value.element_size()
+                    else:
+                        owner,name,_ = buffer_items[index-len(parameters)]
+                        owner._buffers[name] = value
+                        self.transferred_buffer_bytes += count*value.element_size()
+        def after(module,inputs,output):
+            for parameter,cpu in weights: parameter.data = cpu
+            for owner,name,cpu in buffers: owner._buffers[name] = cpu
+            return output
+        self.handles.append(block.register_forward_pre_hook(before))
+        self.handles.append(block.register_forward_hook(after,always_call=True))
 
     def close(self):
         for handle in self.handles:

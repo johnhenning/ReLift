@@ -1,5 +1,110 @@
 [
   {
+    "experiment": "combined-native-validation",
+    "variant": "all-native",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "validation",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/combined-native-validation/all-native/trial-01/trial.json"
+    ],
+    "options": {
+      "video": "cache/demo_inputs/swing-tire.mp4",
+      "optimizations": {
+        "gather": "cpp",
+        "shards": "cpp",
+        "shard_writer": "cpp",
+        "rays": "cuda",
+        "da3_weights": "cpp",
+        "depth_cache_mb": 256,
+        "prefetch": true
+      },
+      "native_build": "outputs/native/da3-final"
+    },
+    "source_fingerprint": "31d1cddf92900ebeb4e630ef63d75e18323557594e10cc5a8da8f7e471cdfcb3",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 56.98418792900338,
+    "wall_min": 56.98418792900338,
+    "wall_max": 56.98418792900338,
+    "sampled_peak_process_tree_rss_bytes": 11524427776,
+    "sampled_peak_process_tree_pss_bytes": 12840541184,
+    "sampled_peak_gpu_device_used_bytes": 13504479232,
+    "process_tree_read_bytes": 495616,
+    "process_tree_write_bytes": 628903936,
+    "phase_medians": {
+      "decode": 0.9099940999876708,
+      "da3": 33.739886604002095,
+      "alltracker": 4.37700674199732,
+      "corrector_load": 0.20705959100450855,
+      "corrector_stream": 15.061660676001338
+    },
+    "process_rss_highwater_bytes": 14550134784,
+    "sampled_output_peak_allocated_bytes": 628514816
+  },
+  {
+    "experiment": "combined-native-validation",
+    "variant": "control",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "validation",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/combined-native-validation/control/trial-01/trial.json"
+    ],
+    "options": {
+      "video": "cache/demo_inputs/swing-tire.mp4",
+      "optimizations": {}
+    },
+    "source_fingerprint": "8f47051ecb861759ab4290906b90ca666ba32e00a833b7de779267026e40e5a4",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": null,
+    "wall_median": 58.740089908998925,
+    "wall_min": 58.740089908998925,
+    "wall_max": 58.740089908998925,
+    "sampled_peak_process_tree_rss_bytes": 14291513344,
+    "sampled_peak_process_tree_pss_bytes": 14539653120,
+    "sampled_peak_gpu_device_used_bytes": 13317832704,
+    "process_tree_read_bytes": 185982976,
+    "process_tree_write_bytes": 629055488,
+    "phase_medians": {
+      "decode": 0.9456114110071212,
+      "da3": 35.678068585009896,
+      "alltracker": 4.870585354001378,
+      "corrector_load": 0.2477488439908484,
+      "corrector_stream": 13.867739239009097
+    },
+    "process_rss_highwater_bytes": 14549987328,
+    "sampled_output_peak_allocated_bytes": 628514816
+  },
+  {
     "experiment": "composable-gather",
     "variant": "control",
     "n": 5,
@@ -633,6 +738,455 @@
     },
     "process_rss_highwater_bytes": 1701728256,
     "sampled_output_peak_allocated_bytes": 570445824
+  },
+  {
+    "experiment": "da3-feature-archive-disk-pilot",
+    "variant": "control",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "screening",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/da3-feature-archive-disk-pilot/control/trial-01/trial.json"
+    ],
+    "options": {
+      "clips": [
+        "cache/demo_inputs/swing-tire.mp4"
+      ],
+      "offload": "disk",
+      "optimizations": {}
+    },
+    "source_fingerprint": "2291695c4442b9dc251252a620f474e7dfd7ce627084fdffc05f01863e7f9af7",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 147.70023917300568,
+    "wall_min": 147.70023917300568,
+    "wall_max": 147.70023917300568,
+    "sampled_peak_process_tree_rss_bytes": 13998129152,
+    "sampled_peak_process_tree_pss_bytes": 14593514496,
+    "sampled_peak_gpu_device_used_bytes": 13317832704,
+    "process_tree_read_bytes": 6598656,
+    "process_tree_write_bytes": 13762560000,
+    "phase_medians": {
+      "clip_0_decode": 0.14439401900744997,
+      "clip_0_provider_load": 25.115190058000735,
+      "clip_0_forward": 116.90218812100647,
+      "clip_0_serialize": 0.11510470499342773,
+      "clip_0_release": 2.844079680988216
+    },
+    "process_rss_highwater_bytes": 14603681792,
+    "sampled_output_peak_allocated_bytes": 13762498560
+  },
+  {
+    "experiment": "da3-feature-archive-disk-pilot",
+    "variant": "cpp",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "screening",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/da3-feature-archive-disk-pilot/cpp/trial-01/trial.json"
+    ],
+    "options": {
+      "clips": [
+        "cache/demo_inputs/swing-tire.mp4"
+      ],
+      "offload": "disk",
+      "optimizations": {
+        "da3_features": "cpp"
+      },
+      "native_build": "outputs/native/da3-final"
+    },
+    "source_fingerprint": "a3addcb8b091191a34a178fd20ca492e2c6d104a82f7881c387ff8007b64ed6e",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 132.17184438899858,
+    "wall_min": 132.17184438899858,
+    "wall_max": 132.17184438899858,
+    "sampled_peak_process_tree_rss_bytes": 14377803776,
+    "sampled_peak_process_tree_pss_bytes": 11223665664,
+    "sampled_peak_gpu_device_used_bytes": 13317832704,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 13762478080,
+    "phase_medians": {
+      "clip_0_decode": 0.154928538002423,
+      "clip_0_provider_load": 26.080716333002783,
+      "clip_0_forward": 100.96968976300559,
+      "clip_0_serialize": 0.6375340689992299,
+      "clip_0_release": 1.9814707600016845
+    },
+    "process_rss_highwater_bytes": 14602067968,
+    "sampled_output_peak_allocated_bytes": 13762408448
+  },
+  {
+    "experiment": "da3-feature-archive-disk-pilot",
+    "variant": "python",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "screening",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/da3-feature-archive-disk-pilot/python/trial-01/trial.json"
+    ],
+    "options": {
+      "clips": [
+        "cache/demo_inputs/swing-tire.mp4"
+      ],
+      "offload": "disk",
+      "optimizations": {
+        "da3_features": "python"
+      }
+    },
+    "source_fingerprint": "7a95c26f486cec50d29b9e3e4d71e55f719ca636daedb71bcbb121081da0cc66",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 131.7298238430085,
+    "wall_min": 131.7298238430085,
+    "wall_max": 131.7298238430085,
+    "sampled_peak_process_tree_rss_bytes": 14340042752,
+    "sampled_peak_process_tree_pss_bytes": 11278127104,
+    "sampled_peak_gpu_device_used_bytes": 13317832704,
+    "process_tree_read_bytes": 72822784,
+    "process_tree_write_bytes": 13762486272,
+    "phase_medians": {
+      "clip_0_decode": 0.14247293899825308,
+      "clip_0_provider_load": 26.028653064990067,
+      "clip_0_forward": 99.99508665098983,
+      "clip_0_serialize": 0.63674210300087,
+      "clip_0_release": 1.5030460959969787
+    },
+    "process_rss_highwater_bytes": 14601990144,
+    "sampled_output_peak_allocated_bytes": 13762408448
+  },
+  {
+    "experiment": "da3-packed-weights-ram",
+    "variant": "control",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/control/trial-01/trial.json",
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/control/trial-02/trial.json",
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/control/trial-03/trial.json",
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/control/trial-04/trial.json",
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/control/trial-05/trial.json"
+    ],
+    "options": {
+      "clips": [
+        "cache/demo_inputs/swing-tire.mp4"
+      ],
+      "offload": "ram",
+      "optimizations": {}
+    },
+    "source_fingerprint": "c1c978845839b2ffb44bee72f9a12af7acb5c9d554261df1be4317d38870f139",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 38.28801514201041,
+    "wall_min": 38.052801079000346,
+    "wall_max": 107.03066875399963,
+    "sampled_peak_process_tree_rss_bytes": 13870395392,
+    "sampled_peak_process_tree_pss_bytes": 14592471040,
+    "sampled_peak_gpu_device_used_bytes": 13317832704,
+    "process_tree_read_bytes": 897024,
+    "process_tree_write_bytes": 82997248,
+    "phase_medians": {
+      "clip_0_decode": 0.15509036999719683,
+      "clip_0_provider_load": 17.701007013005437,
+      "clip_0_forward": 17.34234091899998,
+      "clip_0_serialize": 0.09622144099557772,
+      "clip_0_release": 0.5009336590010207
+    },
+    "process_rss_highwater_bytes": 14603546624,
+    "sampled_output_peak_allocated_bytes": 82993152
+  },
+  {
+    "experiment": "da3-packed-weights-ram",
+    "variant": "cpp",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/cpp/trial-01/trial.json",
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/cpp/trial-02/trial.json",
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/cpp/trial-03/trial.json",
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/cpp/trial-04/trial.json",
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/cpp/trial-05/trial.json"
+    ],
+    "options": {
+      "clips": [
+        "cache/demo_inputs/swing-tire.mp4"
+      ],
+      "offload": "ram",
+      "optimizations": {
+        "da3_weights": "cpp"
+      },
+      "native_build": "outputs/native/da3-final"
+    },
+    "source_fingerprint": "b7be393451c0a3714ea8e0aaf62e4a1e088f1ded1ec74c46ae97faee619e70d6",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 36.51305467900238,
+    "wall_min": 35.44741722299659,
+    "wall_max": 37.0441324699932,
+    "sampled_peak_process_tree_rss_bytes": 13192134656,
+    "sampled_peak_process_tree_pss_bytes": 12149234688,
+    "sampled_peak_gpu_device_used_bytes": 13504479232,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 82997248,
+    "phase_medians": {
+      "clip_0_decode": 0.15085968299536034,
+      "clip_0_provider_load": 16.81833840299805,
+      "clip_0_forward": 16.83117031599977,
+      "clip_0_serialize": 0.0960232899960829,
+      "clip_0_release": 0.33469295100076124
+    },
+    "process_rss_highwater_bytes": 14603042816,
+    "sampled_output_peak_allocated_bytes": 82993152
+  },
+  {
+    "experiment": "da3-packed-weights-ram",
+    "variant": "python",
+    "n": 5,
+    "attempts": 5,
+    "measurement_role": "benchmark",
+    "statuses": {
+      "complete": 5
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/python/trial-01/trial.json",
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/python/trial-02/trial.json",
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/python/trial-03/trial.json",
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/python/trial-04/trial.json",
+      "outputs/experiments/native-optimizations/da3-packed-weights-ram/python/trial-05/trial.json"
+    ],
+    "options": {
+      "clips": [
+        "cache/demo_inputs/swing-tire.mp4"
+      ],
+      "offload": "ram",
+      "optimizations": {
+        "da3_weights": "python"
+      }
+    },
+    "source_fingerprint": "32398a79df43ddf073d51b69e9beec528587df3ad052bcf9072bfb9d7dd42821",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 37.594204298002296,
+    "wall_min": 37.182828151999274,
+    "wall_max": 38.882397409004625,
+    "sampled_peak_process_tree_rss_bytes": 11645825024,
+    "sampled_peak_process_tree_pss_bytes": 12305290240,
+    "sampled_peak_gpu_device_used_bytes": 13504479232,
+    "process_tree_read_bytes": 876544,
+    "process_tree_write_bytes": 82997248,
+    "phase_medians": {
+      "clip_0_decode": 0.15238416100328322,
+      "clip_0_provider_load": 16.86179929600621,
+      "clip_0_forward": 17.43686525800149,
+      "clip_0_serialize": 0.09531223399972077,
+      "clip_0_release": 0.7103604049916612
+    },
+    "process_rss_highwater_bytes": 14603239424,
+    "sampled_output_peak_allocated_bytes": 82993152
+  },
+  {
+    "experiment": "da3-session-reuse-validation",
+    "variant": "control",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "validation",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/da3-session-reuse-validation/control/trial-01/trial.json"
+    ],
+    "options": {
+      "clips": [
+        "cache/demo_inputs/swing-tire.mp4",
+        "cache/demo_inputs/swing.mp4"
+      ],
+      "offload": "ram",
+      "optimizations": {
+        "da3_weights": "cpp"
+      },
+      "native_build": "outputs/native/da3-final"
+    },
+    "source_fingerprint": "3279a61e1da6c631b162b7fdfa678b34b3d7419b056cbc54b2285ae9bdda8f6a",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 62.56881251100276,
+    "wall_min": 62.56881251100276,
+    "wall_max": 62.56881251100276,
+    "sampled_peak_process_tree_rss_bytes": 14865752064,
+    "sampled_peak_process_tree_pss_bytes": 15995625472,
+    "sampled_peak_gpu_device_used_bytes": 13504479232,
+    "process_tree_read_bytes": 6676480,
+    "process_tree_write_bytes": 142282752,
+    "phase_medians": {
+      "clip_0_decode": 0.15318646300875116,
+      "clip_0_provider_load": 16.90496216499014,
+      "clip_0_forward": 16.7501164060086,
+      "clip_0_serialize": 0.0949725450045662,
+      "clip_0_release": 0.3398337230028119,
+      "clip_1_decode": 0.12464575699414127,
+      "clip_1_provider_load": 14.102175963998889,
+      "clip_1_forward": 10.974788956009434,
+      "clip_1_serialize": 0.05854935199022293,
+      "clip_1_release": 0.42276678400230594
+    },
+    "process_rss_highwater_bytes": 16007061504,
+    "sampled_output_peak_allocated_bytes": 142278656
+  },
+  {
+    "experiment": "da3-session-reuse-validation",
+    "variant": "reuse",
+    "n": 1,
+    "attempts": 1,
+    "measurement_role": "validation",
+    "statuses": {
+      "complete": 1
+    },
+    "diagnostic": false,
+    "trial_records": [
+      "outputs/experiments/native-optimizations/da3-session-reuse-validation/reuse/trial-01/trial.json"
+    ],
+    "options": {
+      "clips": [
+        "cache/demo_inputs/swing-tire.mp4",
+        "cache/demo_inputs/swing.mp4"
+      ],
+      "offload": "ram",
+      "optimizations": {
+        "da3_weights": "cpp",
+        "reuse_da3": true
+      },
+      "native_build": "outputs/native/da3-final"
+    },
+    "source_fingerprint": "af76b01f89864bb0504b96554e10c7a93971d55b381fdc1b0971fa548753a8d0",
+    "environment": {
+      "python": "3.13.16 (main, Oct 14 2026, 01:04:01) [Clang 23.1.3 ]",
+      "executable": ".venv/bin/python",
+      "packages": {
+        "torch": "2.11.0+cu128",
+        "numpy": "2.2.5",
+        "matplotlib": "3.10.8",
+        "relift-frontends": "0.1.0"
+      },
+      "environment_lockfile_sha256": "58b46e4c455b90935e534d056d60220e03b51f5d3ef5fe42901d5b978a404648"
+    },
+    "quality": "pass",
+    "wall_median": 49.3366318569897,
+    "wall_min": 49.3366318569897,
+    "wall_max": 49.3366318569897,
+    "sampled_peak_process_tree_rss_bytes": 11827634176,
+    "sampled_peak_process_tree_pss_bytes": 13340639232,
+    "sampled_peak_gpu_device_used_bytes": 13504479232,
+    "process_tree_read_bytes": 0,
+    "process_tree_write_bytes": 142282752,
+    "phase_medians": {
+      "clip_0_decode": 0.14003034699999262,
+      "clip_0_provider_load": 16.779584695992526,
+      "clip_0_forward": 16.83751849300461,
+      "clip_0_serialize": 0.09429383899259847,
+      "clip_0_release": 0.9643598499969812,
+      "clip_1_decode": 0.10357647099590395,
+      "clip_1_provider_load": 0.2164059070055373,
+      "clip_1_forward": 10.868309366007452,
+      "clip_1_serialize": 0.05834718300320674,
+      "clip_1_release": 0.7438151110109175
+    },
+    "process_rss_highwater_bytes": 14602559488,
+    "sampled_output_peak_allocated_bytes": 142278656
   },
   {
     "experiment": "shard-writer",

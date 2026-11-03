@@ -10,6 +10,8 @@ the second experiment without changing the original proposal.
 The [ray construction result](03-cuda-ray-construction-results.md) includes the
 initial failed CUDA gate; the [bug audit](cuda-ray-audit.md) records the fixes and
 passing corrected comparison. The new backend remains disabled by default.
+The [DA3 packing/archive result](04-da3-archive-and-block-loading-results.md)
+records the repeated RAM comparison, disk pilot and composition/reuse checks.
 The proposals below remain the original review plans; result documents record
 actual implementation and measurements separately.
 
@@ -31,3 +33,40 @@ The older diagnostic profile measured roughly 0.82 seconds inside rays and 3.15 
 Rewriting the complete models, SHA256 alone or `fsync` alone is outside these experiments. The models already dispatch heavy work to PyTorch/CUDA; hashing already uses a native implementation. The question is whether we can eliminate redundant passes, allocations and calls around that work. [Python 3.13 hashing documentation](https://docs.python.org/3.13/library/hashlib.html)
 
 Viewer-only gathering/export could be a later experiment if a fresh exporter profile identifies a bottleneck. It must use an export benchmark and must not be reported as faster inference.
+
+## Reproduce from the final stack checkout
+
+Provision the pinned weights and demo videos using the setup/download instructions.
+The measured working snapshots remain immutable locally. In a fresh checkout,
+reconstruct the supported source variants from published Git history:
+
+```bash
+uv run python scripts/prepare_optimization_sources.py \
+  --revisions configs/experiments/native-source-revisions.json
+```
+
+This preserves the algorithms under comparison, not every byte of the original
+uncommitted snapshots. `HEAD` denotes the final stack checkout, including the DA3
+experiment. Existing destinations cause an error. New runs record their own hashes
+and environment; they are not relabeled as the earlier measurements. The original
+fully fused ray source is intentionally retained for reproducing its failed gate.
+
+Compile the selected source's native files explicitly before timing, for example:
+
+```bash
+uv run python scripts/build_native.py --source outputs/experiments/native-composable-source \
+  --out outputs/native/current --cuda --cxx g++-13
+```
+
+Create a fresh prepared window with the demo or the updated-baseline-pipeline task.
+Pass that window to `optimization_matrix.py --prepared-window ...` for correction
+experiments. The recorded campaign spec refers to the original local fixture;
+replace its preparation/output paths for a fresh campaign. Configuration flags
+must match the selected source's schema; use the current source for new matrices.
+Use the matching older sources/configurations only to reproduce historical arms.
+
+The [configuration guide](../optimization-configuration.md) covers one-at-a-time
+variants, Cartesian combinations, provider-only tasks and multi-clip reuse. Raw
+technical records generate the standalone charts; analysis stays in these Markdown
+documents. Functional validation groups are omitted from performance charts, and
+exploratory groups are labeled separately through the role configuration.

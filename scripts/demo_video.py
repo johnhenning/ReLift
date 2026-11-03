@@ -220,6 +220,8 @@ def main(argv=None, session=None):
     if (a.optimizations or a.opt) and session.config != settings:
         raise ValueError("Session settings differ from CLI optimization settings")
     settings = session.config
+    if a.offload != "auto":
+        settings.validate_mode(a.offload)
     if not all(np.isfinite(x) and x > 0 for x in (a.ram_budget_gb, a.vram_budget_gb, a.scratch_budget_gb)):
         ap.error("memory and scratch budgets must be positive and finite")
     if a.num_frames < 0:
@@ -277,6 +279,7 @@ def main(argv=None, session=None):
         metrics.data["settings"]["estimated_da3_vram_gb"] = estimated_gb
         metrics.data["settings"]["estimated_da3_cold_gb"] = estimated_cold_gb
     metrics.data["settings"]["offload_resolved"] = resolved
+    settings.validate_mode(resolved)
     metrics.save()
     window = a.prepared_window or os.path.join(out, "window" if resolution == 504 else f"window_res{resolution}")
     images = prepare_window(frames, window, a.geometry, wpath, pc, a.device,

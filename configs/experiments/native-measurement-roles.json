@@ -1,5 +1,8 @@
 {
   "composable-pipeline": "validation",
   "cpu-gather": "screening",
-  "composable-gather": "screening"
+  "composable-gather": "screening",
+  "da3-feature-archive-disk-pilot": "screening",
+  "da3-session-reuse-validation": "validation",
+  "combined-native-validation": "validation"
 }

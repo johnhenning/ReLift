@@ -75,7 +75,8 @@ def main():
                         if plus is not None:
                             axis.errorbar(value, j, xerr=[[minus[j]], [plus[j]]], color="#172b42", capsize=4)
                 axis.invert_yaxis()
-                axis.set_xlim(0, max((value for value in values if value is not None), default=1) * 1.3 or 1)
+                extent=max((value+(plus[j] if plus is not None else 0) for j,value in enumerate(values) if value is not None),default=1)
+                axis.set_xlim(0,extent*1.3 or 1)
                 axis.grid(axis="x", alpha=.2)
             figure.supxlabel("Medians; runtime whiskers show observed min–max. Labels show completed/attempted trials.\nTree/device/output peaks are sampled; main-process RSS high water is OS-reported. Output allocation includes fixtures.", fontsize=10)
             figure.savefig(args.out_dir / f"{identity}.png", dpi=150)

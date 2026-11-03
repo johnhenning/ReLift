@@ -223,13 +223,17 @@ def stream_correct(window_dir, output_dir, model, metadata, group=1024, batch=8,
         provenance["implementation_hashes"] = {str(p.relative_to(Path(__file__).parent)): file_sha256(p)
             for p in sorted(Path(__file__).parent.rglob("*.py"))}
     packer, payload_writer = components.shard_packer, components.npy_writer
-    if optimizations and optimizations.shards != "current":
+    if optimizations:
         from .shard_packing import ShardPacker
-        native = components.native_loader() if optimizations.shards == "cpp" and components.native_loader else None
-        selected_packer = ShardPacker(optimizations.shards, native=native)
-        packer = packer or selected_packer
-        if optimizations.shards == "cpp":
-            payload_writer = payload_writer or selected_packer.write
+        writer_backend = optimizations.shard_writer or ("cpp" if optimizations.shards == "cpp" else "current")
+        native = None
+        if ((optimizations.shards == "cpp" and packer is None) or (writer_backend == "cpp" and payload_writer is None)):
+            from .native_backend import load_cpu
+            native = components.native_loader() if components.native_loader else load_cpu()
+        if optimizations.shards != "current" and packer is None:
+            packer = ShardPacker(optimizations.shards,native=native)
+        if writer_backend == "cpp" and payload_writer is None:
+            payload_writer = ShardPacker("cpp",native=native).write
     store = TrajectoryStore.create(output_dir, (T, H, W, 3), provenance, order,
                                    dict(images=images, poses=poses, intrinsics=np.asarray(obs_source.intrinsics_cpu)), repeated_ids,
                                    hash_writes=hash_writes, packer=packer, payload_writer=payload_writer)

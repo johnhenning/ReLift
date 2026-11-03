@@ -58,6 +58,7 @@ def run_variant(spec, name, definition, variant, repeat, resume):
     command = [sys.executable, str(ROOT / "scripts/experiment_worker.py"), "--source", str(source),
                "--root", str(ROOT), "--output", str(output), "--task", definition["task"], "--options", json.dumps(options)]
     wrapper_hash = sha256(ROOT / "scripts/experiment_worker.py")
+    driver_hashes = {str(p.relative_to(ROOT)): sha256(p) for p in sorted((ROOT / "scripts").glob("*.py"))}
     runtime = dict(python=sys.version, executable=sys.executable,
                    packages={name: version(name) for name in ("torch", "numpy", "matplotlib", "relift-frontends")},
                    environment_lockfile_sha256=sha256(ROOT / "uv.lock"))
@@ -109,8 +110,8 @@ def run_variant(spec, name, definition, variant, repeat, resume):
         diagnostic=bool(options.get("profile")), repeat=repeat, status=status, started_at=started_at,
         wall_seconds=wall, command=command, output=str(output), log=str(log), returncode=returncode,
         scenario=f"{name}_{definition['task']}_process", scene=spec["scene"], input_sha256=sha256(ROOT / spec["input"]),
-        num_frames=0, process_res=spec["process_res"], corrector_batch=options.get("batch", 8), seed=0,
-        code_hashes=hashes, native_build=build_record, lockfile_sha256=sha256(source / "uv.lock"), wrapper_sha256=wrapper_hash, environment=runtime,
+        num_frames=0, process_res=spec["process_res"], corrector_batch=options.get("optimizations",{}).get("corrector_batch",options.get("batch", 8)), seed=0,
+        code_hashes=hashes, native_build=build_record, driver_hashes=driver_hashes, lockfile_sha256=sha256(source / "uv.lock"), wrapper_sha256=wrapper_hash, environment=runtime,
         telemetry=telemetry.summary(), telemetry_interval_seconds=.1, sampled_output_peak=peaks,
         final_output_size=tree_size(output), system_swap_deltas={key: value - swap_before[key] for key, value in swap_counters().items()}, result=result,
         metrics=dict(settings=options, stages=result["phases"]) if result else None)

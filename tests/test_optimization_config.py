@@ -8,7 +8,7 @@ import torch
 from relift.optimization import InferenceComponents, InferenceSession, OptimizationConfig
 from relift.streaming import MappedObservations
 from test_streaming import prepared_window
-from scripts.optimization_matrix import expand
+from scripts.optimization_matrix import expand,isolate
 
 
 def test_strict_settings_and_independent_combinations(tmp_path):
@@ -24,6 +24,9 @@ def test_strict_settings_and_independent_combinations(tmp_path):
     assert len(matrix) == 4 and len({(row["hash_writes"],row["gather"]) for row in matrix}) == 4
     with pytest.raises(ValueError):
         expand({}, {"gather":[]})
+    isolated=isolate({}, {"hash_writes":[True,False],"gather":["current","python"]})
+    assert len(isolated) == 3
+    assert all(sum(row[key] != OptimizationConfig().as_dict()[key] for key in row) <= 1 for row in isolated)
 
 
 def test_injected_gather_is_used_and_fingerprinted(tmp_path):
@@ -41,6 +44,16 @@ def test_injected_gather_is_used_and_fingerprinted(tmp_path):
         torch.testing.assert_close(a,b,rtol=0,atol=0)
     with pytest.raises(ValueError,match="fingerprints"):
         InferenceComponents(gather_factory=lambda:gather)
+
+
+def test_inapplicable_optimizations_fail_instead_of_silently_running_control():
+    OptimizationConfig().validate_mode("none")
+    OptimizationConfig(tracker_copy_outputs=True,corrector_batch=4).validate_mode("none")
+    with pytest.raises(ValueError,match="Streaming"):
+        OptimizationConfig(prefetch=True).validate_mode("none")
+    with pytest.raises(ValueError,match="disk"):
+        OptimizationConfig(da3_features="cpp").validate_mode("ram")
+    OptimizationConfig(gather="cpp",da3_weights="cpp",da3_features="cpp").validate_mode("disk")
 
 
 def test_session_reuses_only_matching_provider_and_closes_on_exception(tmp_path):

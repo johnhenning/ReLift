@@ -207,6 +207,163 @@
           }
         }
       ]
+    },
+    "da3-packed-weights-ram": {
+      "task": "da3-configured",
+      "repeats": 5,
+      "variants": [
+        {
+          "name": "control",
+          "source": "outputs/experiments/native-da3-source",
+          "options": {
+            "clips": [
+              "cache/demo_inputs/swing-tire.mp4"
+            ],
+            "offload": "ram",
+            "optimizations": {}
+          }
+        },
+        {
+          "name": "python",
+          "source": "outputs/experiments/native-da3-source",
+          "options": {
+            "clips": [
+              "cache/demo_inputs/swing-tire.mp4"
+            ],
+            "offload": "ram",
+            "optimizations": {
+              "da3_weights": "python"
+            }
+          }
+        },
+        {
+          "name": "cpp",
+          "source": "outputs/experiments/native-da3-source",
+          "options": {
+            "clips": [
+              "cache/demo_inputs/swing-tire.mp4"
+            ],
+            "offload": "ram",
+            "optimizations": {
+              "da3_weights": "cpp"
+            },
+            "native_build": "outputs/native/da3-final"
+          }
+        }
+      ]
+    },
+    "da3-feature-archive-disk-pilot": {
+      "task": "da3-configured",
+      "repeats": 1,
+      "timeout_seconds": 900,
+      "variants": [
+        {
+          "name": "control",
+          "source": "outputs/experiments/native-composable-source",
+          "options": {
+            "clips": [
+              "cache/demo_inputs/swing-tire.mp4"
+            ],
+            "offload": "disk",
+            "optimizations": {}
+          }
+        },
+        {
+          "name": "python",
+          "source": "outputs/experiments/native-composable-source",
+          "options": {
+            "clips": [
+              "cache/demo_inputs/swing-tire.mp4"
+            ],
+            "offload": "disk",
+            "optimizations": {
+              "da3_features": "python"
+            }
+          }
+        },
+        {
+          "name": "cpp",
+          "source": "outputs/experiments/native-composable-source",
+          "options": {
+            "clips": [
+              "cache/demo_inputs/swing-tire.mp4"
+            ],
+            "offload": "disk",
+            "optimizations": {
+              "da3_features": "cpp"
+            },
+            "native_build": "outputs/native/da3-final"
+          }
+        }
+      ]
+    },
+    "combined-native-validation": {
+      "task": "pipeline",
+      "repeats": 1,
+      "variants": [
+        {
+          "name": "control",
+          "source": "outputs/experiments/native-final-source",
+          "options": {
+            "video": "cache/demo_inputs/swing-tire.mp4",
+            "optimizations": {}
+          }
+        },
+        {
+          "name": "all-native",
+          "source": "outputs/experiments/native-final-source",
+          "options": {
+            "video": "cache/demo_inputs/swing-tire.mp4",
+            "optimizations": {
+              "gather": "cpp",
+              "shards": "cpp",
+              "shard_writer": "cpp",
+              "rays": "cuda",
+              "da3_weights": "cpp",
+              "depth_cache_mb": 256,
+              "prefetch": true
+            },
+            "native_build": "outputs/native/da3-final"
+          }
+        }
+      ]
+    },
+    "da3-session-reuse-validation": {
+      "task": "da3-configured",
+      "repeats": 1,
+      "variants": [
+        {
+          "name": "control",
+          "source": "outputs/experiments/native-final-source",
+          "options": {
+            "clips": [
+              "cache/demo_inputs/swing-tire.mp4",
+              "cache/demo_inputs/swing.mp4"
+            ],
+            "offload": "ram",
+            "optimizations": {
+              "da3_weights": "cpp"
+            },
+            "native_build": "outputs/native/da3-final"
+          }
+        },
+        {
+          "name": "reuse",
+          "source": "outputs/experiments/native-final-source",
+          "options": {
+            "clips": [
+              "cache/demo_inputs/swing-tire.mp4",
+              "cache/demo_inputs/swing.mp4"
+            ],
+            "offload": "ram",
+            "optimizations": {
+              "da3_weights": "cpp",
+              "reuse_da3": true
+            },
+            "native_build": "outputs/native/da3-final"
+          }
+        }
+      ]
     }
   }
 }

@@ -147,6 +147,12 @@ def main():
         save(output / "result.json", result)
         print(json.dumps(result["totals"]), flush=True)
         return
+    if args.task == "da3-configured":
+        from configured_depth_experiment import run
+        result = run(args, options, phases)
+        save(output / "result.json", result)
+        print(json.dumps(result["counters"]),flush=True)
+        return
     if args.task == "alltracker":
         from relift.providers.alltracker import AllTrackerProvider
         from relift.storage import file_sha256

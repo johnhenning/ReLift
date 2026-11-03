@@ -118,11 +118,33 @@ std::string write_payload(int fd, const std::string& header, py::array value, bo
     return result;
 }
 
+void pack_bytes(py::list sources, py::array_t<uint8_t,py::array::c_style> destination) {
+    auto output = destination.request(true);
+    if (output.ndim != 1) throw py::value_error("byte destination must be a vector");
+    std::vector<py::buffer_info> arrays;
+    ssize_t total=0;
+    for (auto item:sources) {
+        auto array = py::cast<py::array>(item);
+        if (array.dtype().kind()!='u' || array.itemsize()!=1 || !(array.flags()&py::array::c_style))
+            throw py::value_error("packed byte sources must be contiguous uint8 arrays");
+        auto info=array.request(); total+=info.size;
+        arrays.push_back(std::move(info));
+    }
+    if (total!=output.size) throw py::value_error("packed byte lengths differ");
+    py::gil_scoped_release unlock;
+    char* dst=static_cast<char*>(output.ptr);
+    for (const auto& info:arrays) {
+        if (info.size) std::memcpy(dst,info.ptr,info.size);
+        dst+=info.size;
+    }
+}
+
 PYBIND11_MODULE(_relift_cpu, module) {
     module.def("gather", &gather, py::arg("tracks").noconvert(), py::arg("visibility").noconvert(),
                py::arg("ids").noconvert(), py::arg("coords").noconvert(), py::arg("vis").noconvert());
     module.def("pack_finite", &pack_finite, py::arg("array").noconvert());
     module.def("write_payload", &write_payload, py::arg("fd"), py::arg("header"), py::arg("array").noconvert(), py::arg("hash"));
+    module.def("pack_bytes",&pack_bytes,py::arg("sources"),py::arg("destination").noconvert());
 #ifdef RELIFT_WITH_CUDA
     module.def("launch_rays", &launch_rays);
     module.def("launch_camera_rays", &launch_camera_rays);

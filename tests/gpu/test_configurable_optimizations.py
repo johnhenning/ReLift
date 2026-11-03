@@ -46,3 +46,18 @@ def test_combinations_preserve_outputs_and_restore_no_globals(tmp_path,gather,pr
     # Resume must be safe even with an explicitly selected lookahead source.
     resumed = stream_correct(tmp_path/"window",tmp_path/"candidate",model,{},group=4,optimizations=settings)
     assert resumed.manifest["state"] == "complete"
+
+
+@pytest.mark.parametrize("writer",["current","cpp"])
+@pytest.mark.parametrize("packing",["current","cpp"])
+def test_native_components_compose_with_independent_writer(tmp_path,writer,packing):
+    if not os.environ.get("RELIFT_NATIVE_BUILD"): pytest.skip("explicit native build required")
+    count=window(tmp_path/"window")
+    torch.manual_seed(7)
+    model=Corrector(dim=16,depth=1,heads=2,chunk=4).eval().cuda()
+    reference=stream_correct(tmp_path/"window",tmp_path/"reference",model,{},group=4,batch=2)
+    settings=OptimizationConfig(gather="cpp",shards=packing,shard_writer=writer,rays="cuda",prefetch=True,
+                                depth_cache_mb=0 if writer == "cpp" else 1,hash_writes=False,corrector_batch=2)
+    actual=stream_correct(tmp_path/"window",tmp_path/"candidate",model,{},group=4,optimizations=settings)
+    for key,value in reference.sample(np.arange(count)).items():
+        np.testing.assert_array_equal(actual.sample(np.arange(count))[key],value)

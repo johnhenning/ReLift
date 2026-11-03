@@ -1,4 +1,399 @@
 {
+  "combined-native-validation/quality.json": {
+    "passed": true,
+    "reports": [
+      {
+        "passed": true,
+        "reference": "outputs/experiments/native-optimizations/combined-native-validation/control/trial-01/output",
+        "candidate": "outputs/experiments/native-optimizations/combined-native-validation/all-native/trial-01/output",
+        "shape": [
+          84,
+          280,
+          504,
+          3
+        ],
+        "frames": 84,
+        "pixels": 141120,
+        "compared_cells": 11854080,
+        "repeated_pixel_count": 192,
+        "repeated_pixel_ids": [
+          576,
+          911,
+          2335,
+          2558,
+          3275,
+          3425,
+          5235,
+          5339,
+          5510,
+          5679,
+          5889,
+          8687,
+          9000,
+          9021,
+          9412,
+          11661,
+          11773,
+          12284,
+          13635,
+          15942,
+          16299,
+          16570,
+          17729,
+          18264,
+          19430,
+          20513,
+          21872,
+          22452,
+          22576,
+          23134,
+          23199,
+          23502,
+          24762,
+          26556,
+          26978,
+          27191,
+          27268,
+          27887,
+          27926,
+          28040,
+          28954,
+          29993,
+          30221,
+          30763,
+          30803,
+          31221,
+          33422,
+          34842,
+          35689,
+          37104,
+          37268,
+          37324,
+          38592,
+          38842,
+          39593,
+          39635,
+          40412,
+          40732,
+          41530,
+          42617,
+          43037,
+          43450,
+          43887,
+          45951,
+          47800,
+          47970,
+          48867,
+          49215,
+          50062,
+          50205,
+          50987,
+          51271,
+          51887,
+          52119,
+          52154,
+          52744,
+          53391,
+          54820,
+          55099,
+          55364,
+          56872,
+          57522,
+          58161,
+          59388,
+          59623,
+          60991,
+          61804,
+          61854,
+          61883,
+          62020,
+          62724,
+          64211,
+          65024,
+          65652,
+          66392,
+          66800,
+          66861,
+          67087,
+          67348,
+          67460,
+          67973,
+          68137,
+          69034,
+          71126,
+          71575,
+          71614,
+          72471,
+          73888,
+          75553,
+          75684,
+          75730,
+          75880,
+          76044,
+          76534,
+          77307,
+          77311,
+          77694,
+          77866,
+          78110,
+          79671,
+          79746,
+          81404,
+          83160,
+          84454,
+          84926,
+          85526,
+          85584,
+          87007,
+          88345,
+          89930,
+          90052,
+          90243,
+          90649,
+          92210,
+          92257,
+          92470,
+          93946,
+          94035,
+          94953,
+          96129,
+          97001,
+          97515,
+          98791,
+          99042,
+          99786,
+          100526,
+          101715,
+          101768,
+          102442,
+          102720,
+          103566,
+          106104,
+          106252,
+          106993,
+          107717,
+          107867,
+          108765,
+          109016,
+          109609,
+          110898,
+          111089,
+          111803,
+          112055,
+          113476,
+          113676,
+          113788,
+          114268,
+          115259,
+          115900,
+          120006,
+          120098,
+          120849,
+          122676,
+          123732,
+          123798,
+          124916,
+          125559,
+          127207,
+          127267,
+          127304,
+          127591,
+          128257,
+          132214,
+          132376,
+          133661,
+          134223,
+          135936,
+          137022,
+          138085,
+          138682,
+          139185,
+          140090
+        ],
+        "normalization_scale": 3.646483898162842,
+        "normalization_source": "candidate stored baseline normalization scale",
+        "tolerance": 0.0001,
+        "errors": {
+          "ordinary_xyz": {
+            "vector_count": 11837952,
+            "nonfinite_vectors": 0,
+            "bitwise_equal": true,
+            "max_normalized_vector_error": 0.0,
+            "mean_normalized_vector_error": 0.0,
+            "median_normalized_error_upper_bound": 0.0,
+            "p99_normalized_error_upper_bound": 0.0,
+            "quantile_method": "fixed logarithmic histogram upper bounds; maximum is exact"
+          },
+          "repeated_xyz": {
+            "vector_count": 16128,
+            "nonfinite_vectors": 0,
+            "bitwise_equal": true,
+            "max_normalized_vector_error": 0.0,
+            "mean_normalized_vector_error": 0.0,
+            "median_normalized_error_upper_bound": 0.0,
+            "p99_normalized_error_upper_bound": 0.0,
+            "quantile_method": "fixed logarithmic histogram upper bounds; maximum is exact"
+          },
+          "raw_lift": {
+            "vector_count": 11854080,
+            "nonfinite_vectors": 0,
+            "bitwise_equal": true,
+            "max_normalized_vector_error": 0.0,
+            "mean_normalized_vector_error": 0.0,
+            "median_normalized_error_upper_bound": 0.0,
+            "p99_normalized_error_upper_bound": 0.0,
+            "quantile_method": "fixed logarithmic histogram upper bounds; maximum is exact"
+          }
+        },
+        "changed_observation_cells": 0,
+        "shared_arrays": {
+          "poses": {
+            "reference_shape": [
+              84,
+              4,
+              4
+            ],
+            "candidate_shape": [
+              84,
+              4,
+              4
+            ],
+            "reference_dtype": "float32",
+            "candidate_dtype": "float32",
+            "equal": true,
+            "max_absolute_error": 0.0
+          },
+          "intrinsics": {
+            "reference_shape": [
+              84,
+              3,
+              3
+            ],
+            "candidate_shape": [
+              84,
+              3,
+              3
+            ],
+            "reference_dtype": "float32",
+            "candidate_dtype": "float32",
+            "equal": true,
+            "max_absolute_error": 0.0
+          },
+          "images": {
+            "equal": true,
+            "reference_shape": [
+              84,
+              280,
+              504,
+              3
+            ],
+            "candidate_shape": [
+              84,
+              280,
+              504,
+              3
+            ]
+          }
+        },
+        "changed_dtypes": [],
+        "policy": "All frames and original pixel IDs compared; padded duplicate coordinates are reported separately, not included in ordinary XYZ parity gate. No fitted alignment.",
+        "pixel_policy": {
+          "source": "outputs/experiments/native-optimizations/combined-native-validation/all-native/trial-01/output",
+          "explicit": false,
+          "shape": [
+            84,
+            280,
+            504,
+            3
+          ],
+          "manifest_sha256": "111b1c57659d59834612a2be8baa6e936871e9a88b0d10cedf2f3caa77d54fc3",
+          "grouping": {
+            "seed": 0,
+            "group": 1024,
+            "batch": 8
+          }
+        },
+        "prepared_outputs": {
+          "da3_depth_data.npz": {
+            "compared": true,
+            "arrays": {
+              "depth": {
+                "equal": true,
+                "max_absolute_error": 0.0,
+                "shape": [
+                  84,
+                  280,
+                  504
+                ],
+                "dtype": "float16"
+              },
+              "poses": {
+                "equal": true,
+                "max_absolute_error": 0.0,
+                "shape": [
+                  84,
+                  4,
+                  4
+                ],
+                "dtype": "float32"
+              },
+              "intrinsics": {
+                "equal": true,
+                "max_absolute_error": 0.0,
+                "shape": [
+                  84,
+                  3,
+                  3
+                ],
+                "dtype": "float32"
+              }
+            }
+          },
+          "alltracker_tracks.npz": {
+            "compared": true,
+            "arrays": {
+              "tracks_2d": {
+                "equal": true,
+                "max_absolute_error": 0.0,
+                "shape": [
+                  84,
+                  280,
+                  504,
+                  2
+                ],
+                "dtype": "float16"
+              },
+              "visibility": {
+                "equal": true,
+                "max_absolute_error": 0.0,
+                "shape": [
+                  84,
+                  280,
+                  504
+                ],
+                "dtype": "float16"
+              },
+              "confidence": {
+                "equal": true,
+                "max_absolute_error": 0.0,
+                "shape": [
+                  84,
+                  280,
+                  504
+                ],
+                "dtype": "float16"
+              }
+            }
+          }
+        },
+        "variant": "all-native",
+        "trial": "outputs/experiments/native-optimizations/combined-native-validation/all-native/trial-01/trial.json",
+        "trial_sha256": "fe00c7de542d1ef0320f4922964615a3bad6b67522098df7acfe67d6bfe399d4",
+        "control_trial": "outputs/experiments/native-optimizations/combined-native-validation/control/trial-01/trial.json",
+        "checker_sha256": "0ce0e0f3e7172ed9f863fbc082d980e90e5f91ea036365acc846045685645ac0"
+      }
+    ]
+  },
   "composable-gather/quality.json": {
     "passed": true,
     "reports": [
@@ -20301,6 +20696,221 @@
         "trial_sha256": "e640f2537729fb7f16ae6e6ba3c1ae0a800e99997655d9276ea118eb59b59425",
         "control_trial": "outputs/experiments/native-optimizations/cuda-rays-corrected/control/trial-01/trial.json",
         "checker_sha256": "0ce0e0f3e7172ed9f863fbc082d980e90e5f91ea036365acc846045685645ac0"
+      }
+    ]
+  },
+  "da3-feature-archive-disk-pilot/quality.json": {
+    "passed": true,
+    "reports": [
+      {
+        "variant": "control",
+        "trial": "outputs/experiments/native-optimizations/da3-feature-archive-disk-pilot/control/trial-01/trial.json",
+        "trial_sha256": "deafab600707371fed7f7991fb40267ed1e6453d89b919665ffb18f00fd2e9a3",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "cpp",
+        "trial": "outputs/experiments/native-optimizations/da3-feature-archive-disk-pilot/cpp/trial-01/trial.json",
+        "trial_sha256": "fc3c11e1f9e7ea97fb3cbfc487fb89c923b7f8da753a147f2f09a56957a99666",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "python",
+        "trial": "outputs/experiments/native-optimizations/da3-feature-archive-disk-pilot/python/trial-01/trial.json",
+        "trial_sha256": "23728338b9f6d24445f1faf4cec0305e07becdedd667e59585e599f11e728c18",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      }
+    ]
+  },
+  "da3-packed-weights-ram/quality.json": {
+    "passed": true,
+    "reports": [
+      {
+        "variant": "control",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/control/trial-01/trial.json",
+        "trial_sha256": "bd5426863c71ce91146dcc4c295b51cb55ed8e924b4434d0c5f9474ffe4961cf",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "control",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/control/trial-02/trial.json",
+        "trial_sha256": "30e106c99f07d61c6e86609b8348b58fb1b755be7d2038f05201c54c8d4682c4",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "control",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/control/trial-03/trial.json",
+        "trial_sha256": "25118e0b3e406fa1c6dce2058ae424de05849ac58bc8b2e575469ae1a4c6295a",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "control",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/control/trial-04/trial.json",
+        "trial_sha256": "26a38e9623fe42f85775692fe2cd76c666dbe3d0092740d029e200af6941ee87",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "control",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/control/trial-05/trial.json",
+        "trial_sha256": "436ec92473f5795363d9b66ba3af2ea9166d930b78d147678ead9f7557423fa1",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "cpp",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/cpp/trial-01/trial.json",
+        "trial_sha256": "97831e37516ac2d1fe501e6dd513d3d8a7016fe0d34c5573231713458282ad43",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "cpp",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/cpp/trial-02/trial.json",
+        "trial_sha256": "982706aa7e31f00715f4020091944aaf33792147b9f160d4be8b235ab44a02d3",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "cpp",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/cpp/trial-03/trial.json",
+        "trial_sha256": "3af46f833e8d40c439d37dbd11fc60bec130d38dd42946ba09aaa90d8f42f865",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "cpp",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/cpp/trial-04/trial.json",
+        "trial_sha256": "4d4c908e88700a18c5de192b3dc6ef0374dd11ef0f90a3cb430c09dcee20bb3a",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "cpp",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/cpp/trial-05/trial.json",
+        "trial_sha256": "337c638cec984bb21fd615f8d626452a0af09f0f7ff14486cf3d73e1c1a5b16e",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "python",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/python/trial-01/trial.json",
+        "trial_sha256": "6981bf89428570b47b23ee9130ea5c688b6923c1f19f3e643c60d70fe27e0778",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "python",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/python/trial-02/trial.json",
+        "trial_sha256": "bc760f31058ee3aa99f7c489407c1c01041d8c501da02b3b218a987f868c3da8",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "python",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/python/trial-03/trial.json",
+        "trial_sha256": "c982500571b978d698e8f405679eb69de31680b7b23f7fe8b103c5c6e4d1ea4c",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "python",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/python/trial-04/trial.json",
+        "trial_sha256": "b33c8d64c1c107a928b080c41fc87d68eb7b0267557e8c5761d19b2dacc152f9",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "python",
+        "trial": "outputs/experiments/native-optimizations/da3-packed-weights-ram/python/trial-05/trial.json",
+        "trial_sha256": "0f177a69c77d9b33afb96a5445beb03d3d1f4cf660843a9027c5be75fae111fc",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      }
+    ]
+  },
+  "da3-session-reuse-validation/quality.json": {
+    "passed": true,
+    "reports": [
+      {
+        "variant": "control",
+        "trial": "outputs/experiments/native-optimizations/da3-session-reuse-validation/control/trial-01/trial.json",
+        "trial_sha256": "cb2236ccc8a704870a19c107a2d8fca00d1b678e973eb264453954319749ddf4",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
+      },
+      {
+        "variant": "reuse",
+        "trial": "outputs/experiments/native-optimizations/da3-session-reuse-validation/reuse/trial-01/trial.json",
+        "trial_sha256": "1c31b2dec65991095ed0e2143ee4407ecb538555cd0e7dc6348973509943e368",
+        "state_equal": null,
+        "inputs_equal": true,
+        "artifacts_verified": true,
+        "artifacts_equal": true,
+        "passed": true
       }
     ]
   },

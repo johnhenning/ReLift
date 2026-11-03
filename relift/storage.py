@@ -305,6 +305,8 @@ class TrajectoryStore:
                 raise ValueError(f"{name}: expected {expected}, got {value.shape}")
             if self._packer:
                 value, finite = self._packer(name, value)
+                if not isinstance(value,np.ndarray) or value.shape != expected or value.dtype != FIELDS[name]:
+                    raise ValueError(f"Injected packer changed {name} shape or dtype")
             else:
                 finite = name == "observed" or np.isfinite(value).all()
             if not finite:

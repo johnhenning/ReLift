@@ -10,9 +10,10 @@ and trajectory-store provenance; changed settings invalidate resume.
 |---|---|---|
 | `gather` | `current` | `current`, reusable-buffer `python`, native `cpp` gathering |
 | `shards` | `current` | `current`, `python`, `cpp` shard packing and optional native writing |
+| `shard_writer` | `null` | Inherit `shards`; explicit `current`/`cpp` isolates packing from payload writing |
 | `rays` | `current` | `current`, blocked `python`, CUDA preparation with PyTorch rotation |
-| `da3_weights` | `current` | `current`, packed `python`, packed `cpp`; later stack layer |
-| `da3_features` | `current` | `current`, archived `python`, archived `cpp`; later stack layer |
+| `da3_weights` | `current` | `current`, packed `python`, packed `cpp` |
+| `da3_features` | `current` | `current`, archived `python`, archived `cpp`; disk mode only |
 | `tracker_init_weights` | `false` | Skip discarded pretrained initialization; `true` restores old initialization |
 | `tracker_copy_outputs` | `false` | Return float32 views; `true` restores copies |
 | `hash_writes` | `true` | Hash NPY bytes during writes; `false` uses the subsequent initial read |
@@ -27,7 +28,8 @@ The earlier depth-cache/prefetch trials did not improve runtime. Compilation and
 batches 1/2 failed the strict numerical gate. They remain selectable experiments,
 not accepted defaults. Batch and precision effects must pass quality checks for
 each combination. New backends are optional and cannot silently fall back when a
-build is absent. A backend from a later stack layer fails explicitly until installed.
+build is absent. Streaming-only settings are rejected in legacy dense mode;
+packed DA3 weights require RAM/disk placement and feature archives require disk.
 
 The original fully fused CUDA ray prototype failed the full-output gate. The
 corrected preparation path retains PyTorch rotation and passes the recorded full
@@ -65,11 +67,16 @@ pipeline task accepts `options.offload` so RAM/disk comparisons can remain separ
 Use these dictionaries to enumerate a combination matrix; this does not require
 a separate code patch for every combination. Three-arm runs rotate execution order.
 
+Packing and writing can be selected independently: `shards-packing-only.json`
+uses native packing with the current writer; `shards-writer-only.json` selects the
+native writer with current packing/validation. The existing `shards="cpp"`
+shortcut keeps its combined behavior when `shard_writer` is null.
+
 Generate a full Cartesian matrix without starting inference:
 
 ```bash
 uv run python scripts/optimization_matrix.py \
-  --source outputs/experiments/native-composable-gather-source \
+  --source outputs/experiments/native-composable-source \
   --grid configs/optimizations/example-grid.json \
   --out outputs/combination-matrix.json \
   --output-root outputs/experiments/combination-matrix
@@ -80,12 +87,23 @@ uv run python scripts/run_optimization_experiments.py \
 The grid's keys are optimization settings and its lists are values to combine.
 The example expands to eight variants and five repeats each; inspect the generated
 spec before running it. Supply `--native-build` when the selected grid needs it.
+Use `--mode one-at-a-time` to generate the control and one changed setting per
+variant; the default `cartesian` mode generates combinations. Freeze the current
+source with `freeze_benchmark_baseline.py` before generating a new matrix so its
+configuration schema matches the engine being tested.
+
+Choose the task to match the component: `correction` reuses prepared geometry and
+does not measure tracker/DA3 switches; `pipeline` runs full single-clip inference;
+`da3-configured` isolates geometry and accepts `--offload` and multiple `--clips`.
+Use multiple clips to test reuse. Set `padding_batch=8` when varying execution batch
+size while keeping the reference padding groups fixed. Trials report their scope.
 
 ## Dependency injection
 
 Python callers can inject `InferenceComponents` into `stream_correct` or an
 `InferenceSession`. Available overrides are gather construction, ray construction,
-shard packing, pager construction, depth/tracker provider construction, corrector
+shard packing/writing, pager/cold storage/feature archive construction, block
+packing, depth/tracker provider construction, corrector
 loading and native module loading. Overrides take precedence over the corresponding
 configured backend. Each supplied override requires a stable fingerprint identifying
 its implementation and relevant settings. There is no module-wide registry mutation.
@@ -108,9 +126,14 @@ with InferenceSession(settings, components) as session:
 A gather factory returns a callable `(tracks, visibility, pixel_ids)` producing
 float32 `(T,N,2)` coordinates and `(T,N)` visibility in the original order. Provider
 factories use the normal provider constructor contract. Pager factories accept the
-same arguments as `DA3Pager`. Later layers document ray and packer contracts when
-their implementation is introduced. Prefer injected fakes for lifecycle tests and
-real outputs for numerical comparisons.
+same arguments as `DA3Pager`. A ray builder takes `(coords, depth_block, K, rotation)`
+and returns `(direction, distance)` in original frame/point order. A shard packer
+takes `(field_name, array)` and returns `(packed_array, finite_bool)` with unchanged
+shape/dtype. The NPY writer takes `(stream, array, hash_write)` and returns a digest
+or None without closing the stream. Storage, archive and block-packer overrides
+use the contracts in `da3_offload.py` and `da3_packing.py`, with the cold-storage
+owner controlling cleanup. Prefer injected fakes for lifecycle tests and real outputs
+for numerical comparisons.
 
 ## Explicit multi-clip lifetime
 
