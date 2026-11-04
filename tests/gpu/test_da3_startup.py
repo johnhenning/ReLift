@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from copy import deepcopy
 from pathlib import Path
 
@@ -24,6 +25,8 @@ def test_cpu_first_cuda_residency_outputs_and_reactivation(
 ) -> None:
     from relift.native_backend import load_cpu
 
+    if packing == "cpp" and not os.environ.get("RELIFT_NATIVE_BUILD"):
+        pytest.skip("explicit native build required")
     torch.manual_seed(23)
     original = tiny_backbone()
     candidate = deepcopy(original)
@@ -35,6 +38,7 @@ def test_cpu_first_cuda_residency_outputs_and_reactivation(
         scratch_dir=tmp_path / "control",
         weight_backend=packing,
         native=native,
+        feature_backend=packing if mode == "disk" else "current",
     )
     owner = DA3Pager(
         candidate,
@@ -44,6 +48,7 @@ def test_cpu_first_cuda_residency_outputs_and_reactivation(
         weight_backend=packing,
         native=native,
         startup="cpu-first",
+        feature_backend=packing if mode == "disk" else "current",
     )
     images = torch.randn(1, 5, 3, 28, 28, device="cuda")
     try:

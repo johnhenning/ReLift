@@ -1,0 +1,358 @@
+[
+  {
+    "experiment": "composition",
+    "mode": "control",
+    "repeat": 1,
+    "startup": []
+  },
+  {
+    "experiment": "composition",
+    "mode": "cpu-first",
+    "repeat": 1,
+    "startup": []
+  },
+  {
+    "experiment": "da3",
+    "mode": "control",
+    "repeat": 1,
+    "startup": [
+      {
+        "strategy": "current",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 11486648320
+      }
+    ]
+  },
+  {
+    "experiment": "da3",
+    "mode": "control",
+    "repeat": 2,
+    "startup": [
+      {
+        "strategy": "current",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 11486648320
+      }
+    ]
+  },
+  {
+    "experiment": "da3",
+    "mode": "control",
+    "repeat": 3,
+    "startup": [
+      {
+        "strategy": "current",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 11486648320
+      }
+    ]
+  },
+  {
+    "experiment": "da3",
+    "mode": "control",
+    "repeat": 4,
+    "startup": [
+      {
+        "strategy": "current",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 11486648320
+      }
+    ]
+  },
+  {
+    "experiment": "da3",
+    "mode": "control",
+    "repeat": 5,
+    "startup": [
+      {
+        "strategy": "current",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 11486648320
+      }
+    ]
+  },
+  {
+    "experiment": "da3",
+    "mode": "cpu-first",
+    "repeat": 1,
+    "startup": [
+      {
+        "strategy": "cpu-first",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 0
+      }
+    ]
+  },
+  {
+    "experiment": "da3",
+    "mode": "cpu-first",
+    "repeat": 2,
+    "startup": [
+      {
+        "strategy": "cpu-first",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 0
+      }
+    ]
+  },
+  {
+    "experiment": "da3",
+    "mode": "cpu-first",
+    "repeat": 3,
+    "startup": [
+      {
+        "strategy": "cpu-first",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 0
+      }
+    ]
+  },
+  {
+    "experiment": "da3",
+    "mode": "cpu-first",
+    "repeat": 4,
+    "startup": [
+      {
+        "strategy": "cpu-first",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 0
+      }
+    ]
+  },
+  {
+    "experiment": "da3",
+    "mode": "cpu-first",
+    "repeat": 5,
+    "startup": [
+      {
+        "strategy": "cpu-first",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 0
+      }
+    ]
+  },
+  {
+    "experiment": "disk",
+    "mode": "control",
+    "repeat": 1,
+    "startup": [
+      {
+        "strategy": "current",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 11486648320
+      }
+    ]
+  },
+  {
+    "experiment": "disk",
+    "mode": "cpu-first",
+    "repeat": 1,
+    "startup": [
+      {
+        "strategy": "cpu-first",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 0
+      }
+    ]
+  },
+  {
+    "experiment": "forest",
+    "mode": "control",
+    "repeat": 1,
+    "startup": [
+      {
+        "strategy": "current",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 11486648320
+      }
+    ]
+  },
+  {
+    "experiment": "forest",
+    "mode": "cpu-first",
+    "repeat": 1,
+    "startup": [
+      {
+        "strategy": "cpu-first",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 0
+      }
+    ]
+  },
+  {
+    "experiment": "pipeline",
+    "mode": "control",
+    "repeat": 1,
+    "startup": []
+  },
+  {
+    "experiment": "pipeline",
+    "mode": "control",
+    "repeat": 2,
+    "startup": []
+  },
+  {
+    "experiment": "pipeline",
+    "mode": "control",
+    "repeat": 3,
+    "startup": []
+  },
+  {
+    "experiment": "pipeline",
+    "mode": "control",
+    "repeat": 4,
+    "startup": []
+  },
+  {
+    "experiment": "pipeline",
+    "mode": "control",
+    "repeat": 5,
+    "startup": []
+  },
+  {
+    "experiment": "pipeline",
+    "mode": "cpu-first",
+    "repeat": 1,
+    "startup": []
+  },
+  {
+    "experiment": "pipeline",
+    "mode": "cpu-first",
+    "repeat": 2,
+    "startup": []
+  },
+  {
+    "experiment": "pipeline",
+    "mode": "cpu-first",
+    "repeat": 3,
+    "startup": []
+  },
+  {
+    "experiment": "pipeline",
+    "mode": "cpu-first",
+    "repeat": 4,
+    "startup": []
+  },
+  {
+    "experiment": "pipeline",
+    "mode": "cpu-first",
+    "repeat": 5,
+    "startup": []
+  },
+  {
+    "experiment": "reuse",
+    "mode": "control",
+    "repeat": 1,
+    "startup": [
+      {
+        "strategy": "current",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 11486648320
+      },
+      {
+        "strategy": "current",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 11486648320
+      }
+    ]
+  },
+  {
+    "experiment": "reuse",
+    "mode": "cpu-first",
+    "repeat": 1,
+    "startup": [
+      {
+        "strategy": "cpu-first",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 0
+      },
+      {
+        "strategy": "cpu-first",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 0
+      }
+    ]
+  },
+  {
+    "experiment": "running",
+    "mode": "control",
+    "repeat": 1,
+    "startup": [
+      {
+        "strategy": "current",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 11486648320
+      }
+    ]
+  },
+  {
+    "experiment": "running",
+    "mode": "cpu-first",
+    "repeat": 1,
+    "startup": [
+      {
+        "strategy": "cpu-first",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 0
+      }
+    ]
+  },
+  {
+    "experiment": "screening",
+    "mode": "control",
+    "repeat": 1,
+    "startup": [
+      {
+        "strategy": "current",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 11486648320
+      }
+    ]
+  },
+  {
+    "experiment": "screening",
+    "mode": "cpu-first",
+    "repeat": 1,
+    "startup": [
+      {
+        "strategy": "cpu-first",
+        "cold_parameter_bytes": 5743324160,
+        "cold_buffer_bytes": 0,
+        "initial_cold_roundtrip_tensor_bytes": 0
+      }
+    ]
+  },
+  {
+    "experiment": "baseline-da3",
+    "mode": "control",
+    "repeat": 1,
+    "startup": []
+  },
+  {
+    "experiment": "baseline-pipeline",
+    "mode": "control",
+    "repeat": 1,
+    "startup": []
+  }
+]

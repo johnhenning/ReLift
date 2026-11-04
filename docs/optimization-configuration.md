@@ -14,6 +14,7 @@ and trajectory-store provenance; changed settings invalidate resume.
 | `rays` | `current` | `current`, blocked `python`, `cuda` per-block rotation, `cuda_timeline` full-timeline rotation |
 | `da3_weights` | `current` | `current`, packed `python`, packed `cpp` |
 | `da3_features` | `current` | `current`, archived `python`, archived `cpp`; disk mode only |
+| `da3_startup` | `current` | `cpu-first` establishes cold owners before CUDA placement; RAM/disk only |
 | `tracker_init_weights` | `false` | Skip discarded pretrained initialization; `true` restores old initialization |
 | `tracker_copy_outputs` | `false` | Return float32 views; `true` restores copies |
 | `hash_writes` | `true` | Hash NPY bytes during writes; `false` uses the subsequent initial read |
@@ -101,7 +102,7 @@ A changed source file invalidates store resume even if its effective values matc
 | `rays` | `backend` |
 | `correction` | `batch`, `padding_batch`, `compile` |
 | `storage` | `packing`, `writer`, `hash_writes`, `commits` |
-| `da3` | `weights`, `features`, `reuse` |
+| `da3` | `weights`, `features`, `reuse`, `startup` |
 | `tracker` | `init_weights`, `copy_outputs` |
 | `runtime` | `native_build` |
 
@@ -226,3 +227,18 @@ an owner implementing `submit(start, xyz=..., lift=..., observed=...)`, `drain()
 `metrics`, `__enter__` and `__exit__`. Submission transfers CPU buffer ownership
 until the next drain; at most one submitted shard may remain pending. The factory
 requires its own stable fingerprint. See the [experiment design and results](native-optimization-experiments/06-background-commits.md).
+
+## DA3 startup placement
+
+Select `cpu-first-da3`, or add `[da3] startup = "cpu-first"` to an inherited
+RAM/disk profile. This keeps transformer blocks on CPU while installing their
+pager and moves only unpaged state to CUDA. It avoids the initial CUDA upload
+and CPU return of weights that will be paged during forward. The checkpoint,
+inference arithmetic and full clip remain the same.
+
+`cpu-first-combined` adds the option to observation caching and background commits;
+`cpu-first-disk` and `cpu-first-reuse` exercise disk placement and session reuse.
+The field is independent of `weights`/`features` packing. Existing fingerprinted
+pager factories receive `startup` along with the other pager arguments. Defaults
+retain the prior placement path. See the [startup experiment](native-optimization-experiments/07-da3-startup-placement.md)
+for measurements and limits.

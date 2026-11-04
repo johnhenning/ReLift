@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from copy import deepcopy
 from pathlib import Path
 from typing import Any
@@ -13,6 +14,35 @@ from test_da3_offload import assert_nested_equal, tiny_backbone
 from relift.configuration import InferenceConfig, Memory, load_configuration
 from relift.da3_offload import DA3Pager
 from relift.optimization import OptimizationConfig
+from relift.records.artifacts import DA3StartupProfile
+from relift.records.runtime import ProfileFunction
+from scripts.publish_da3_startup import profile_excerpt
+
+
+def test_profile_publication_selects_leading_functions_without_changing_raw_evidence(
+    tmp_path: Path,
+) -> None:
+    slow: ProfileFunction = dict(
+        file="sample.py", line=1, function="slow", calls=1, self_seconds=3.0, inclusive_seconds=4.0
+    )
+    fast: ProfileFunction = {**slow, "function": "fast", "inclusive_seconds": 0.5}
+    profile: DA3StartupProfile = dict(
+        source="snapshot",
+        source_manifest_sha256="source-sha",
+        configuration=load_configuration(profile="cpu-first-da3").as_dict(),
+        startup_seconds=8.0,
+        cuda_allocated_peak_bytes=100,
+        cuda_reserved_peak_bytes=200,
+        functions=[fast, slow],
+        caveat="diagnostic",
+    )
+    path = tmp_path / "profile.json"
+    path.write_text(json.dumps(profile))
+    original = path.read_bytes()
+    excerpt = profile_excerpt(path, 1)
+    assert excerpt["functions"] == [slow]
+    assert excerpt["function_count_full"] == 2 and excerpt["functions_limit"] == 1
+    assert path.read_bytes() == original
 
 
 @pytest.mark.parametrize("mode", ["ram", "disk"])
@@ -27,7 +57,12 @@ def test_cpu_first_matches_current_state_and_repeated_backbone_outputs(
     candidate = deepcopy(original)
     images = torch.randn(1, 5, 3, 28, 28)
     control = DA3Pager(
-        original, mode=mode, device="cpu", scratch_dir=tmp_path / "control", weight_backend=packing
+        original,
+        mode=mode,
+        device="cpu",
+        scratch_dir=tmp_path / "control",
+        weight_backend=packing,
+        feature_backend=packing if mode == "disk" else "current",
     )
     owner = DA3Pager(
         candidate,
@@ -36,6 +71,7 @@ def test_cpu_first_matches_current_state_and_repeated_backbone_outputs(
         scratch_dir=tmp_path / "candidate",
         weight_backend=packing,
         startup="cpu-first",
+        feature_backend=packing if mode == "disk" else "current",
     )
     try:
         for key, value in original.state_dict().items():

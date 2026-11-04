@@ -17,6 +17,11 @@ class DA3StartupProfile(TypedDict):
     caveat: str
 
 
+class DA3StartupProfileExcerpt(DA3StartupProfile):
+    function_count_full: int
+    functions_limit: int
+
+
 class ViewerPayload(TypedDict):
     frames: int
     points: int

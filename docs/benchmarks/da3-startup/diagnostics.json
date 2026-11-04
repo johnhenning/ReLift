@@ -1,0 +1,1731 @@
+{
+  "outputs/experiments/da3-startup-profile-control/profile.json": {
+    "source": "/home/johnhenning/projects/relift/outputs/experiments/da3-startup-baseline-source",
+    "source_manifest_sha256": "23d833edb14b73f596fe9fde9c9d5405f65d97f30d1f334f803e6048d22cd896",
+    "configuration": {
+      "resolved": {
+        "memory": {
+          "offload": "ram",
+          "ram_gb": 18,
+          "vram_gb": 20,
+          "scratch_gb": 64,
+          "scratch_dir": null
+        },
+        "observations": {
+          "gather": "current",
+          "cache_mb": 0,
+          "depth_cache_mb": 0,
+          "prefetch": false
+        },
+        "rays": {
+          "backend": "current"
+        },
+        "correction": {
+          "batch": 8,
+          "padding_batch": null,
+          "compile": false
+        },
+        "storage": {
+          "packing": "current",
+          "writer": null,
+          "hash_writes": true,
+          "commits": "sync"
+        },
+        "da3": {
+          "weights": "current",
+          "features": "current",
+          "reuse": false
+        },
+        "tracker": {
+          "init_weights": false,
+          "copy_outputs": false
+        },
+        "runtime": {
+          "native_build": null
+        },
+        "schema_version": 1
+      },
+      "sources": [
+        {
+          "path": "/home/johnhenning/projects/relift/outputs/experiments/da3-startup-baseline-source/configs/inference/ram.toml",
+          "sha256": "18981b00539eaa06e4aa3e4ba2c04062621c71a1b4504d8cdae37c7c2b47595d"
+        }
+      ]
+    },
+    "startup_seconds": 20.417602293979144,
+    "cuda_allocated_peak_bytes": 6827321344,
+    "cuda_reserved_peak_bytes": 6847201280,
+    "functions": [
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_ops.py",
+        "line": 368,
+        "function": "fallthrough",
+        "calls": 38,
+        "self_seconds": 0.000339627,
+        "inclusive_seconds": 20.806725850000003
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py",
+        "line": 77,
+        "function": "_inner_fn",
+        "calls": 1,
+        "self_seconds": 1.9313e-05,
+        "inclusive_seconds": 11.929518752
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/huggingface_hub/hub_mixin.py",
+        "line": 462,
+        "function": "from_pretrained",
+        "calls": 1,
+        "self_seconds": 4.0386e-05,
+        "inclusive_seconds": 11.929496186000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/huggingface_hub/hub_mixin.py",
+        "line": 760,
+        "function": "_from_pretrained",
+        "calls": 1,
+        "self_seconds": 1.741e-05,
+        "inclusive_seconds": 11.929312999
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/api.py",
+        "line": 75,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 3.1106e-05,
+        "inclusive_seconds": 10.829251595
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/cfg.py",
+        "line": 108,
+        "function": "create_object",
+        "calls": 11,
+        "self_seconds": 0.000175462,
+        "inclusive_seconds": 10.729064242000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/da3.py",
+        "line": 324,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 1.1743000000000001e-05,
+        "inclusive_seconds": 10.716676324
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/da3.py",
+        "line": 66,
+        "function": "__init__",
+        "calls": 2,
+        "self_seconds": 7.1365e-05,
+        "inclusive_seconds": 10.702881819
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/init.py",
+        "line": 513,
+        "function": "kaiming_uniform_",
+        "calls": 428,
+        "self_seconds": 0.004419852,
+        "inclusive_seconds": 10.499581009
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'uniform_' of 'torch._C.TensorBase' objects>",
+        "calls": 844,
+        "self_seconds": 10.496424538000001,
+        "inclusive_seconds": 10.496424538000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/linear.py",
+        "line": 96,
+        "function": "__init__",
+        "calls": 279,
+        "self_seconds": 0.0028448030000000003,
+        "inclusive_seconds": 9.872766452
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/linear.py",
+        "line": 117,
+        "function": "reset_parameters",
+        "calls": 279,
+        "self_seconds": 0.002884305,
+        "inclusive_seconds": 9.844212789
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/dinov2.py",
+        "line": 23,
+        "function": "__init__",
+        "calls": 2,
+        "self_seconds": 3.1212e-05,
+        "inclusive_seconds": 9.156772465000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/vision_transformer.py",
+        "line": 84,
+        "function": "__init__",
+        "calls": 2,
+        "self_seconds": 0.000487939,
+        "inclusive_seconds": 9.1565656
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/layers/block.py",
+        "line": 27,
+        "function": "__init__",
+        "calls": 64,
+        "self_seconds": 0.002063363,
+        "inclusive_seconds": 9.145425511000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/vision_transformer.py",
+        "line": 443,
+        "function": "vit_giant2",
+        "calls": 1,
+        "self_seconds": 8.921e-06,
+        "inclusive_seconds": 7.343126413
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/layers/swiglu_ffn.py",
+        "line": 45,
+        "function": "__init__",
+        "calls": 40,
+        "self_seconds": 0.000195467,
+        "inclusive_seconds": 4.848954515
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/layers/swiglu_ffn.py",
+        "line": 13,
+        "function": "__init__",
+        "calls": 40,
+        "self_seconds": 0.000561769,
+        "inclusive_seconds": 4.848759048000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py",
+        "line": 1255,
+        "function": "to",
+        "calls": 66,
+        "self_seconds": 0.000323243,
+        "inclusive_seconds": 4.360282393
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py",
+        "line": 931,
+        "function": "_apply",
+        "calls": 4431,
+        "self_seconds": 0.392034582,
+        "inclusive_seconds": 4.3596630130000005
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/outputs/experiments/da3-startup-baseline-source/relift/da3_offload.py",
+        "line": 175,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 1.6837e-05,
+        "inclusive_seconds": 3.988540588
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/outputs/experiments/da3-startup-baseline-source/relift/da3_offload.py",
+        "line": 217,
+        "function": "_install",
+        "calls": 1,
+        "self_seconds": 0.000716888,
+        "inclusive_seconds": 3.9881921140000003
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/outputs/experiments/da3-startup-baseline-source/relift/da3_offload.py",
+        "line": 255,
+        "function": "page_block",
+        "calls": 64,
+        "self_seconds": 0.012455893,
+        "inclusive_seconds": 3.9582726040000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py",
+        "line": 1361,
+        "function": "convert",
+        "calls": 3772,
+        "self_seconds": 0.003181844,
+        "inclusive_seconds": 3.9157563700000004
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'to' of 'torch._C.TensorBase' objects>",
+        "calls": 4776,
+        "self_seconds": 3.9127869800000004,
+        "inclusive_seconds": 3.9127869800000004
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/layers/attention.py",
+        "line": 19,
+        "function": "__init__",
+        "calls": 64,
+        "self_seconds": 0.0016656330000000001,
+        "inclusive_seconds": 3.074150269
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_ops.py",
+        "line": 311,
+        "function": "py_impl",
+        "calls": 22,
+        "self_seconds": 0.000123519,
+        "inclusive_seconds": 2.9060759440000004
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 994,
+        "function": "build_UnaryOp",
+        "calls": 3,
+        "self_seconds": 7.935800000000001e-05,
+        "inclusive_seconds": 1.950128421
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_ops.py",
+        "line": 166,
+        "function": "py_functionalize_impl",
+        "calls": 3,
+        "self_seconds": 4.8957000000000006e-05,
+        "inclusive_seconds": 1.9194163180000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/vision_transformer.py",
+        "line": 429,
+        "function": "vit_large",
+        "calls": 1,
+        "self_seconds": 9.253000000000001e-06,
+        "inclusive_seconds": 1.8134573610000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/library.py",
+        "line": 285,
+        "function": "impl",
+        "calls": 115,
+        "self_seconds": 0.0028296750000000002,
+        "inclusive_seconds": 1.499848754
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1407,
+        "function": "_handle_fromlist",
+        "calls": 10049,
+        "self_seconds": 0.008399953,
+        "inclusive_seconds": 1.380841991
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 410,
+        "function": "__call__",
+        "calls": 43,
+        "self_seconds": 0.00012017700000000001,
+        "inclusive_seconds": 1.3585029080000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/utils/geometry.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 3.6196000000000004e-05,
+        "inclusive_seconds": 1.3408253860000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/_script.py",
+        "line": 1273,
+        "function": "script",
+        "calls": 1,
+        "self_seconds": 2.9098e-05,
+        "inclusive_seconds": 1.340714881
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/_script.py",
+        "line": 1134,
+        "function": "_script_impl",
+        "calls": 1,
+        "self_seconds": 2.4524e-05,
+        "inclusive_seconds": 1.3406617600000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 324,
+        "function": "get_jit_def",
+        "calls": 1,
+        "self_seconds": 2.971e-06,
+        "inclusive_seconds": 1.334914929
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 426,
+        "function": "build_def",
+        "calls": 1,
+        "self_seconds": 6.9960000000000004e-06,
+        "inclusive_seconds": 1.3348921280000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 190,
+        "function": "build_stmts",
+        "calls": 1,
+        "self_seconds": 1.895e-06,
+        "inclusive_seconds": 1.3347069440000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 745,
+        "function": "build_Return",
+        "calls": 1,
+        "self_seconds": 3.0641e-05,
+        "inclusive_seconds": 1.3347024230000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/layers/mlp.py",
+        "line": 17,
+        "function": "__init__",
+        "calls": 24,
+        "self_seconds": 0.00047375700000000005,
+        "inclusive_seconds": 1.182361792
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_dynamo/variables/functions.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.4332000000000001e-05,
+        "inclusive_seconds": 1.129454883
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/huggingface_hub/hub_mixin.py",
+        "line": 811,
+        "function": "_load_as_safetensor",
+        "calls": 1,
+        "self_seconds": 0.150649514,
+        "inclusive_seconds": 1.099692515
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_ops.py",
+        "line": 283,
+        "function": "__init__",
+        "calls": 3,
+        "self_seconds": 8.598000000000001e-06,
+        "inclusive_seconds": 0.9892651960000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_higher_order_ops/triton_kernel_wrap.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 7.146000000000001e-06,
+        "inclusive_seconds": 0.986299173
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 912,
+        "function": "build_Call",
+        "calls": 2,
+        "self_seconds": 1.942516442,
+        "inclusive_seconds": 0.971777455
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 1157,
+        "function": "build_List",
+        "calls": 2,
+        "self_seconds": 1.2402000000000001e-05,
+        "inclusive_seconds": 0.97128066
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/moviepy/editor.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 8.7682e-05,
+        "inclusive_seconds": 0.9621712680000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/safetensors/torch.py",
+        "line": 194,
+        "function": "load_model",
+        "calls": 1,
+        "self_seconds": 0.000118864,
+        "inclusive_seconds": 0.9334591560000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_higher_order_ops/triton_kernel_wrap.py",
+        "line": 1077,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 1.956e-06,
+        "inclusive_seconds": 0.9300262440000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/distributed/fsdp/__init__.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.7369000000000003e-05,
+        "inclusive_seconds": 0.9251604210000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/distributed/fsdp/_fully_shard/__init__.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 6.1230000000000005e-06,
+        "inclusive_seconds": 0.9032936500000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/outputs/experiments/da3-startup-baseline-source/relift/da3_offload.py",
+        "line": 45,
+        "function": "put",
+        "calls": 1004,
+        "self_seconds": 0.47348945600000003,
+        "inclusive_seconds": 0.8973733810000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py",
+        "line": 2531,
+        "function": "load_state_dict",
+        "calls": 1,
+        "self_seconds": 0.000213212,
+        "inclusive_seconds": 0.873575948
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py",
+        "line": 2585,
+        "function": "load",
+        "calls": 1634,
+        "self_seconds": 0.021608879,
+        "inclusive_seconds": 0.873355514
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py",
+        "line": 2346,
+        "function": "_load_from_state_dict",
+        "calls": 1634,
+        "self_seconds": 0.026148349,
+        "inclusive_seconds": 0.839675622
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.__import__>",
+        "calls": 2391,
+        "self_seconds": 0.00468558,
+        "inclusive_seconds": 0.806833412
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'copy_' of 'torch._C.TensorBase' objects>",
+        "calls": 1377,
+        "self_seconds": 0.792939244,
+        "inclusive_seconds": 0.792939244
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.__build_class__>",
+        "calls": 5331,
+        "self_seconds": 0.062858594,
+        "inclusive_seconds": 0.760359541
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/conv.py",
+        "line": 87,
+        "function": "__init__",
+        "calls": 149,
+        "self_seconds": 0.002306154,
+        "inclusive_seconds": 0.7034249690000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/conv.py",
+        "line": 182,
+        "function": "reset_parameters",
+        "calls": 149,
+        "self_seconds": 0.0007657460000000001,
+        "inclusive_seconds": 0.6824713560000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/cam_enc.py",
+        "line": 30,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 2.9407e-05,
+        "inclusive_seconds": 0.67958931
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/utils/block.py",
+        "line": 23,
+        "function": "__init__",
+        "calls": 4,
+        "self_seconds": 0.000104071,
+        "inclusive_seconds": 0.673373404
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/conv.py",
+        "line": 500,
+        "function": "__init__",
+        "calls": 143,
+        "self_seconds": 0.0007560430000000001,
+        "inclusive_seconds": 0.668462145
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_dynamo/exc.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 0.000308902,
+        "inclusive_seconds": 0.612057076
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_dynamo/utils.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 0.000376096,
+        "inclusive_seconds": 0.609265795
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/importlib/__init__.py",
+        "line": 71,
+        "function": "import_module",
+        "calls": 3323,
+        "self_seconds": 0.0018797540000000002,
+        "inclusive_seconds": 0.574855069
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1392,
+        "function": "_gcd_import",
+        "calls": 3352,
+        "self_seconds": 0.001999696,
+        "inclusive_seconds": 0.57470297
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/library.py",
+        "line": 129,
+        "function": "define",
+        "calls": 27,
+        "self_seconds": 0.0014478490000000002,
+        "inclusive_seconds": 0.563904011
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/moviepy/video/io/sliders.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 7.048e-06,
+        "inclusive_seconds": 0.532229574
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.hasattr>",
+        "calls": 91154,
+        "self_seconds": 0.028231669,
+        "inclusive_seconds": 0.524142032
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 1094,
+        "function": "get_code",
+        "calls": 2447,
+        "self_seconds": 0.016416715000000002,
+        "inclusive_seconds": 0.503959469
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/fx/experimental/symbolic_shapes.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 0.00039094000000000005,
+        "inclusive_seconds": 0.48227495600000003
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/utils/attention.py",
+        "line": 86,
+        "function": "__init__",
+        "calls": 5,
+        "self_seconds": 0.000104957,
+        "inclusive_seconds": 0.461003659
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/sympy/__init__.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 0.00020656600000000001,
+        "inclusive_seconds": 0.443582299
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/matplotlib/pyplot.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 0.00036518900000000003,
+        "inclusive_seconds": 0.426663526
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dpt.py",
+        "line": 42,
+        "function": "__init__",
+        "calls": 2,
+        "self_seconds": 0.000182365,
+        "inclusive_seconds": 0.384632758
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/utils/export/colmap.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.7901e-05,
+        "inclusive_seconds": 0.377963154
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dualdpt.py",
+        "line": 44,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 0.000195593,
+        "inclusive_seconds": 0.32104685800000005
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 779,
+        "function": "_compile_bytecode",
+        "calls": 2447,
+        "self_seconds": 0.077811821,
+        "inclusive_seconds": 0.310438349
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/huggingface_hub/__init__.py",
+        "line": 1210,
+        "function": "__getattr__",
+        "calls": 7,
+        "self_seconds": 1.5772e-05,
+        "inclusive_seconds": 0.309572485
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/huggingface_hub/hub_mixin.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 8.2162e-05,
+        "inclusive_seconds": 0.30919169300000005
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/utils/export/glb.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.7538e-05,
+        "inclusive_seconds": 0.306579213
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/trimesh/__init__.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 2.1636e-05,
+        "inclusive_seconds": 0.306005526
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/moviepy/video/fx/all/__init__.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 5.5979e-05,
+        "inclusive_seconds": 0.29991854
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/distributed/fsdp/_fully_shard/_fully_shard.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.9873e-05,
+        "inclusive_seconds": 0.28550478300000004
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/matplotlib/artist.py",
+        "line": 158,
+        "function": "_update_set_signature_and_docstring",
+        "calls": 106,
+        "self_seconds": 0.003075945,
+        "inclusive_seconds": 0.26395412100000004
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/matplotlib/artist.py",
+        "line": 125,
+        "function": "__init_subclass__",
+        "calls": 105,
+        "self_seconds": 0.000362375,
+        "inclusive_seconds": 0.259387672
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/dataclasses.py",
+        "line": 1343,
+        "function": "wrap",
+        "calls": 478,
+        "self_seconds": 0.001086106,
+        "inclusive_seconds": 0.25846630000000004
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/dataclasses.py",
+        "line": 929,
+        "function": "_process_class",
+        "calls": 478,
+        "self_seconds": 0.018617152,
+        "inclusive_seconds": 0.257380194
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method marshal.loads>",
+        "calls": 2447,
+        "self_seconds": 0.230881731,
+        "inclusive_seconds": 0.230881731
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/matplotlib/figure.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 3.6214e-05,
+        "inclusive_seconds": 0.22467118200000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/moviepy/video/fx/painting.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.5693e-05,
+        "inclusive_seconds": 0.221483954
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dpt.py",
+        "line": 342,
+        "function": "_make_fusion_block",
+        "calls": 16,
+        "self_seconds": 0.000108213,
+        "inclusive_seconds": 0.22086981400000003
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dpt.py",
+        "line": 410,
+        "function": "__init__",
+        "calls": 16,
+        "self_seconds": 0.00021528200000000002,
+        "inclusive_seconds": 0.22043129500000003
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/distributed/fsdp/_fully_shard/_fsdp_init.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.826e-05,
+        "inclusive_seconds": 0.216697563
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/utils/attention.py",
+        "line": 24,
+        "function": "__init__",
+        "calls": 4,
+        "self_seconds": 0.000112442,
+        "inclusive_seconds": 0.216231435
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/distributed/fsdp/_fully_shard/_fsdp_state.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.8781000000000002e-05,
+        "inclusive_seconds": 0.216181632
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/matplotlib/projections/__init__.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 3.1906e-05,
+        "inclusive_seconds": 0.21155647100000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/gsdpt.py",
+        "line": 26,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 1.7058e-05,
+        "inclusive_seconds": 0.210152991
+      }
+    ],
+    "caveat": "cProfile diagnostic; inclusive spans overlap. Not an unprofiled latency sample.",
+    "function_count_full": 11404,
+    "functions_limit": 100
+  },
+  "outputs/experiments/da3-startup-profile-candidate/profile.json": {
+    "source": "/home/johnhenning/projects/relift/outputs/experiments/da3-startup-source",
+    "source_manifest_sha256": "20001dba2eaed9c5c9d52603c320802e4832f9442fe7ec235a74e98c7fd4134f",
+    "configuration": {
+      "resolved": {
+        "memory": {
+          "offload": "ram",
+          "ram_gb": 18,
+          "vram_gb": 20,
+          "scratch_gb": 64,
+          "scratch_dir": null
+        },
+        "observations": {
+          "gather": "current",
+          "cache_mb": 0,
+          "depth_cache_mb": 0,
+          "prefetch": false
+        },
+        "rays": {
+          "backend": "current"
+        },
+        "correction": {
+          "batch": 8,
+          "padding_batch": null,
+          "compile": false
+        },
+        "storage": {
+          "packing": "current",
+          "writer": null,
+          "hash_writes": true,
+          "commits": "sync"
+        },
+        "da3": {
+          "weights": "current",
+          "features": "current",
+          "reuse": false,
+          "startup": "cpu-first"
+        },
+        "tracker": {
+          "init_weights": false,
+          "copy_outputs": false
+        },
+        "runtime": {
+          "native_build": null
+        },
+        "schema_version": 1
+      },
+      "sources": [
+        {
+          "path": "/home/johnhenning/projects/relift/outputs/experiments/da3-startup-source/configs/inference/ram.toml",
+          "sha256": "18981b00539eaa06e4aa3e4ba2c04062621c71a1b4504d8cdae37c7c2b47595d"
+        },
+        {
+          "path": "/home/johnhenning/projects/relift/outputs/experiments/da3-startup-source/configs/inference/cpu-first-da3.toml",
+          "sha256": "936682f14b3a1e5343b1b35e456d7b4c08bde72f2a1dd36eda0512d70caf5d54"
+        }
+      ]
+    },
+    "startup_seconds": 13.171580957015976,
+    "cuda_allocated_peak_bytes": 1027764224,
+    "cuda_reserved_peak_bytes": 1052770304,
+    "functions": [
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_ops.py",
+        "line": 368,
+        "function": "fallthrough",
+        "calls": 38,
+        "self_seconds": 0.000328328,
+        "inclusive_seconds": 17.295196599
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/huggingface_hub/utils/_validators.py",
+        "line": 77,
+        "function": "_inner_fn",
+        "calls": 1,
+        "self_seconds": 1.8914000000000002e-05,
+        "inclusive_seconds": 9.485565673
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/huggingface_hub/hub_mixin.py",
+        "line": 462,
+        "function": "from_pretrained",
+        "calls": 1,
+        "self_seconds": 3.655e-05,
+        "inclusive_seconds": 9.485543835000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/huggingface_hub/hub_mixin.py",
+        "line": 760,
+        "function": "_from_pretrained",
+        "calls": 1,
+        "self_seconds": 1.5335e-05,
+        "inclusive_seconds": 9.485360883
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/api.py",
+        "line": 75,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 2.8013e-05,
+        "inclusive_seconds": 8.445211098
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/cfg.py",
+        "line": 108,
+        "function": "create_object",
+        "calls": 11,
+        "self_seconds": 0.00015162200000000002,
+        "inclusive_seconds": 8.358123187
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/da3.py",
+        "line": 324,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 1.0666000000000001e-05,
+        "inclusive_seconds": 8.345955647
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/da3.py",
+        "line": 66,
+        "function": "__init__",
+        "calls": 2,
+        "self_seconds": 5.8316e-05,
+        "inclusive_seconds": 8.332162517
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/init.py",
+        "line": 513,
+        "function": "kaiming_uniform_",
+        "calls": 428,
+        "self_seconds": 0.0037808850000000003,
+        "inclusive_seconds": 8.163231478
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'uniform_' of 'torch._C.TensorBase' objects>",
+        "calls": 844,
+        "self_seconds": 8.159194801,
+        "inclusive_seconds": 8.159194801
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/linear.py",
+        "line": 96,
+        "function": "__init__",
+        "calls": 279,
+        "self_seconds": 0.0024536510000000003,
+        "inclusive_seconds": 7.639056946
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/linear.py",
+        "line": 117,
+        "function": "reset_parameters",
+        "calls": 279,
+        "self_seconds": 0.002543076,
+        "inclusive_seconds": 7.614467619000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/dinov2.py",
+        "line": 23,
+        "function": "__init__",
+        "calls": 2,
+        "self_seconds": 2.4418000000000002e-05,
+        "inclusive_seconds": 7.061311000000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/vision_transformer.py",
+        "line": 84,
+        "function": "__init__",
+        "calls": 2,
+        "self_seconds": 0.00048397500000000004,
+        "inclusive_seconds": 7.0611633000000005
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/layers/block.py",
+        "line": 27,
+        "function": "__init__",
+        "calls": 64,
+        "self_seconds": 0.0019789070000000002,
+        "inclusive_seconds": 7.050165387000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/vision_transformer.py",
+        "line": 443,
+        "function": "vit_giant2",
+        "calls": 1,
+        "self_seconds": 7.78e-06,
+        "inclusive_seconds": 5.567313127
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/layers/swiglu_ffn.py",
+        "line": 45,
+        "function": "__init__",
+        "calls": 40,
+        "self_seconds": 0.000194489,
+        "inclusive_seconds": 3.679692595
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/layers/swiglu_ffn.py",
+        "line": 13,
+        "function": "__init__",
+        "calls": 40,
+        "self_seconds": 0.000484259,
+        "inclusive_seconds": 3.679498106
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_ops.py",
+        "line": 311,
+        "function": "py_impl",
+        "calls": 22,
+        "self_seconds": 0.00010824000000000001,
+        "inclusive_seconds": 2.4196705240000003
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/layers/attention.py",
+        "line": 19,
+        "function": "__init__",
+        "calls": 64,
+        "self_seconds": 0.001456582,
+        "inclusive_seconds": 2.3553408
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 994,
+        "function": "build_UnaryOp",
+        "calls": 3,
+        "self_seconds": 7.4455e-05,
+        "inclusive_seconds": 1.6059485050000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_ops.py",
+        "line": 166,
+        "function": "py_functionalize_impl",
+        "calls": 3,
+        "self_seconds": 3.9723000000000006e-05,
+        "inclusive_seconds": 1.596802027
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/vision_transformer.py",
+        "line": 429,
+        "function": "vit_large",
+        "calls": 1,
+        "self_seconds": 9.293e-06,
+        "inclusive_seconds": 1.4938672460000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/library.py",
+        "line": 285,
+        "function": "impl",
+        "calls": 115,
+        "self_seconds": 0.002405281,
+        "inclusive_seconds": 1.3241601470000002
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1407,
+        "function": "_handle_fromlist",
+        "calls": 10050,
+        "self_seconds": 0.007371662,
+        "inclusive_seconds": 1.1515373530000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 410,
+        "function": "__call__",
+        "calls": 43,
+        "self_seconds": 0.000113874,
+        "inclusive_seconds": 1.1291560680000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/utils/geometry.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 2.7504000000000003e-05,
+        "inclusive_seconds": 1.1147677420000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/_script.py",
+        "line": 1273,
+        "function": "script",
+        "calls": 1,
+        "self_seconds": 1.8206e-05,
+        "inclusive_seconds": 1.114697075
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/_script.py",
+        "line": 1134,
+        "function": "_script_impl",
+        "calls": 1,
+        "self_seconds": 2.4075000000000002e-05,
+        "inclusive_seconds": 1.114657746
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 324,
+        "function": "get_jit_def",
+        "calls": 1,
+        "self_seconds": 3.5850000000000004e-06,
+        "inclusive_seconds": 1.111022989
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 426,
+        "function": "build_def",
+        "calls": 1,
+        "self_seconds": 1.0901000000000001e-05,
+        "inclusive_seconds": 1.111001037
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 190,
+        "function": "build_stmts",
+        "calls": 1,
+        "self_seconds": 2.7940000000000003e-06,
+        "inclusive_seconds": 1.110840075
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 745,
+        "function": "build_Return",
+        "calls": 1,
+        "self_seconds": 2.6451e-05,
+        "inclusive_seconds": 1.110834447
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/huggingface_hub/hub_mixin.py",
+        "line": 811,
+        "function": "_load_as_safetensor",
+        "calls": 1,
+        "self_seconds": 0.144518384,
+        "inclusive_seconds": 1.0397882310000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/outputs/experiments/da3-startup-source/relift/da3_offload.py",
+        "line": 177,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 1.5395e-05,
+        "inclusive_seconds": 1.029056337
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/outputs/experiments/da3-startup-source/relift/da3_offload.py",
+        "line": 226,
+        "function": "_install",
+        "calls": 1,
+        "self_seconds": 0.0006031490000000001,
+        "inclusive_seconds": 1.0287830770000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dinov2/layers/mlp.py",
+        "line": 17,
+        "function": "__init__",
+        "calls": 24,
+        "self_seconds": 0.00047407400000000006,
+        "inclusive_seconds": 0.9801562130000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_dynamo/variables/functions.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.4465000000000001e-05,
+        "inclusive_seconds": 0.9430795670000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/safetensors/torch.py",
+        "line": 194,
+        "function": "load_model",
+        "calls": 1,
+        "self_seconds": 9.2553e-05,
+        "inclusive_seconds": 0.883126143
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/outputs/experiments/da3-startup-source/relift/da3_offload.py",
+        "line": 294,
+        "function": "page_block",
+        "calls": 64,
+        "self_seconds": 0.009517858,
+        "inclusive_seconds": 0.8323302
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py",
+        "line": 2531,
+        "function": "load_state_dict",
+        "calls": 1,
+        "self_seconds": 0.000198466,
+        "inclusive_seconds": 0.8309227720000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py",
+        "line": 2585,
+        "function": "load",
+        "calls": 1634,
+        "self_seconds": 0.015831926,
+        "inclusive_seconds": 0.8307189420000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_ops.py",
+        "line": 283,
+        "function": "__init__",
+        "calls": 3,
+        "self_seconds": 7.671e-06,
+        "inclusive_seconds": 0.8254803740000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_higher_order_ops/triton_kernel_wrap.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 6.95e-06,
+        "inclusive_seconds": 0.8207196170000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py",
+        "line": 2346,
+        "function": "_load_from_state_dict",
+        "calls": 1634,
+        "self_seconds": 0.019814652000000002,
+        "inclusive_seconds": 0.805834197
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 912,
+        "function": "build_Call",
+        "calls": 2,
+        "self_seconds": 1.600111877,
+        "inclusive_seconds": 0.8004221410000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/jit/frontend.py",
+        "line": 1157,
+        "function": "build_List",
+        "calls": 2,
+        "self_seconds": 1.1174e-05,
+        "inclusive_seconds": 0.800073299
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/outputs/experiments/da3-startup-source/relift/da3_offload.py",
+        "line": 47,
+        "function": "put",
+        "calls": 1004,
+        "self_seconds": 0.435022238,
+        "inclusive_seconds": 0.794069578
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/moviepy/editor.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 8.434000000000001e-05,
+        "inclusive_seconds": 0.793092612
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_higher_order_ops/triton_kernel_wrap.py",
+        "line": 1077,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 1.7610000000000002e-06,
+        "inclusive_seconds": 0.771824556
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'copy_' of 'torch._C.TensorBase' objects>",
+        "calls": 1377,
+        "self_seconds": 0.770428167,
+        "inclusive_seconds": 0.770428167
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/distributed/fsdp/__init__.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.6910000000000002e-05,
+        "inclusive_seconds": 0.7671378860000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/distributed/fsdp/_fully_shard/__init__.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 4.492e-06,
+        "inclusive_seconds": 0.7479815310000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.__import__>",
+        "calls": 2391,
+        "self_seconds": 0.00411185,
+        "inclusive_seconds": 0.684585706
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.__build_class__>",
+        "calls": 5350,
+        "self_seconds": 0.057784411,
+        "inclusive_seconds": 0.674536684
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/conv.py",
+        "line": 87,
+        "function": "__init__",
+        "calls": 149,
+        "self_seconds": 0.0018868060000000002,
+        "inclusive_seconds": 0.587617026
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/conv.py",
+        "line": 182,
+        "function": "reset_parameters",
+        "calls": 149,
+        "self_seconds": 0.000646532,
+        "inclusive_seconds": 0.5700428350000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/nn/modules/conv.py",
+        "line": 500,
+        "function": "__init__",
+        "calls": 143,
+        "self_seconds": 0.000612529,
+        "inclusive_seconds": 0.5582918060000001
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/cam_enc.py",
+        "line": 30,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 3.1661e-05,
+        "inclusive_seconds": 0.557779445
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/utils/block.py",
+        "line": 23,
+        "function": "__init__",
+        "calls": 4,
+        "self_seconds": 0.00010005300000000001,
+        "inclusive_seconds": 0.551409279
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_dynamo/exc.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 5.7065e-05,
+        "inclusive_seconds": 0.512032102
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/_dynamo/utils.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 0.00033921900000000003,
+        "inclusive_seconds": 0.509601121
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/library.py",
+        "line": 129,
+        "function": "define",
+        "calls": 27,
+        "self_seconds": 0.00131273,
+        "inclusive_seconds": 0.49767093100000004
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/moviepy/video/io/sliders.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 5.369000000000001e-06,
+        "inclusive_seconds": 0.458720897
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/importlib/__init__.py",
+        "line": 71,
+        "function": "import_module",
+        "calls": 3307,
+        "self_seconds": 0.001623008,
+        "inclusive_seconds": 0.454556457
+      },
+      {
+        "file": "<frozen importlib._bootstrap>",
+        "line": 1392,
+        "function": "_gcd_import",
+        "calls": 3336,
+        "self_seconds": 0.001696128,
+        "inclusive_seconds": 0.454420659
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.hasattr>",
+        "calls": 90794,
+        "self_seconds": 0.025153425,
+        "inclusive_seconds": 0.43971922700000005
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 1094,
+        "function": "get_code",
+        "calls": 2448,
+        "self_seconds": 0.014630247,
+        "inclusive_seconds": 0.42101413600000004
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/fx/experimental/symbolic_shapes.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 0.00022867000000000002,
+        "inclusive_seconds": 0.408292507
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/sympy/__init__.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 0.00016679000000000002,
+        "inclusive_seconds": 0.37620483400000004
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/matplotlib/pyplot.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 0.00027555600000000004,
+        "inclusive_seconds": 0.37457692600000003
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/utils/attention.py",
+        "line": 86,
+        "function": "__init__",
+        "calls": 5,
+        "self_seconds": 9.1617e-05,
+        "inclusive_seconds": 0.371575849
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dpt.py",
+        "line": 42,
+        "function": "__init__",
+        "calls": 2,
+        "self_seconds": 0.00016421300000000002,
+        "inclusive_seconds": 0.329510733
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/utils/export/colmap.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.6524e-05,
+        "inclusive_seconds": 0.294557575
+      },
+      {
+        "file": "<frozen importlib._bootstrap_external>",
+        "line": 779,
+        "function": "_compile_bytecode",
+        "calls": 2448,
+        "self_seconds": 0.069890855,
+        "inclusive_seconds": 0.27619956900000003
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/huggingface_hub/__init__.py",
+        "line": 1210,
+        "function": "__getattr__",
+        "calls": 7,
+        "self_seconds": 1.4468000000000001e-05,
+        "inclusive_seconds": 0.26699011300000003
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/huggingface_hub/hub_mixin.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 6.206500000000001e-05,
+        "inclusive_seconds": 0.266625583
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dualdpt.py",
+        "line": 44,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 0.00016208500000000002,
+        "inclusive_seconds": 0.258331935
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/utils/export/glb.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.581e-05,
+        "inclusive_seconds": 0.238704245
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/trimesh/__init__.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.9548e-05,
+        "inclusive_seconds": 0.238201187
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/matplotlib/artist.py",
+        "line": 158,
+        "function": "_update_set_signature_and_docstring",
+        "calls": 106,
+        "self_seconds": 0.002749361,
+        "inclusive_seconds": 0.23597588500000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/matplotlib/artist.py",
+        "line": 125,
+        "function": "__init_subclass__",
+        "calls": 105,
+        "self_seconds": 0.000322825,
+        "inclusive_seconds": 0.23229948700000003
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/distributed/fsdp/_fully_shard/_fully_shard.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.9287e-05,
+        "inclusive_seconds": 0.232163053
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/moviepy/video/fx/all/__init__.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 4.5430000000000004e-05,
+        "inclusive_seconds": 0.231177603
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/dataclasses.py",
+        "line": 1343,
+        "function": "wrap",
+        "calls": 478,
+        "self_seconds": 0.0009525520000000001,
+        "inclusive_seconds": 0.223361623
+      },
+      {
+        "file": "/home/johnhenning/.local/share/uv/python/cpython-3.13.16-linux-x86_64-gnu/lib/python3.13/dataclasses.py",
+        "line": 929,
+        "function": "_process_class",
+        "calls": 478,
+        "self_seconds": 0.016127506,
+        "inclusive_seconds": 0.222409071
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method marshal.loads>",
+        "calls": 2448,
+        "self_seconds": 0.20478952800000003,
+        "inclusive_seconds": 0.20478952800000003
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/matplotlib/figure.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 3.1116000000000005e-05,
+        "inclusive_seconds": 0.19986788000000003
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/outputs/experiments/da3-startup-source/relift/da3_offload.py",
+        "line": 269,
+        "function": "activate_unpaged",
+        "calls": 1,
+        "self_seconds": 0.04055661,
+        "inclusive_seconds": 0.19175249800000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/matplotlib/projections/__init__.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 2.4645000000000002e-05,
+        "inclusive_seconds": 0.18826536400000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/matplotlib/artist.py",
+        "line": 1832,
+        "function": "kwdoc",
+        "calls": 120,
+        "self_seconds": 0.000355006,
+        "inclusive_seconds": 0.18575960300000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/utils/attention.py",
+        "line": 24,
+        "function": "__init__",
+        "calls": 4,
+        "self_seconds": 9.884100000000001e-05,
+        "inclusive_seconds": 0.183937133
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dpt.py",
+        "line": 342,
+        "function": "_make_fusion_block",
+        "calls": 16,
+        "self_seconds": 9.529300000000001e-05,
+        "inclusive_seconds": 0.18101592600000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/distributed/fsdp/_fully_shard/_fsdp_init.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.9647e-05,
+        "inclusive_seconds": 0.18072194500000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dpt.py",
+        "line": 410,
+        "function": "__init__",
+        "calls": 16,
+        "self_seconds": 0.000170482,
+        "inclusive_seconds": 0.180627526
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torch/distributed/fsdp/_fully_shard/_fsdp_state.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.6598000000000003e-05,
+        "inclusive_seconds": 0.18028753900000002
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/moviepy/video/fx/painting.py",
+        "line": 1,
+        "function": "<module>",
+        "calls": 1,
+        "self_seconds": 1.1854e-05,
+        "inclusive_seconds": 0.180213551
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/gsdpt.py",
+        "line": 26,
+        "function": "__init__",
+        "calls": 1,
+        "self_seconds": 1.9172000000000002e-05,
+        "inclusive_seconds": 0.179752884
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/torchvision/_meta_registrations.py",
+        "line": 17,
+        "function": "wrapper",
+        "calls": 10,
+        "self_seconds": 5.6664000000000005e-05,
+        "inclusive_seconds": 0.175616305
+      },
+      {
+        "file": "/home/johnhenning/projects/relift/.venv/lib/python3.13/site-packages/depth_anything_3/model/dpt.py",
+        "line": 382,
+        "function": "__init__",
+        "calls": 28,
+        "self_seconds": 0.000291974,
+        "inclusive_seconds": 0.17169963600000002
+      }
+    ],
+    "caveat": "cProfile diagnostic; inclusive spans overlap. Not an unprofiled latency sample.",
+    "function_count_full": 11426,
+    "functions_limit": 100
+  }
+}

@@ -5,3 +5,5 @@ docs/benchmarks/cuda-ray-profile/** linguist-generated
 docs/benchmarks/observation-cache/** linguist-generated
 docs/benchmarks/background-commits/** linguist-generated
 docs/benchmarks/background-commits/index.html -whitespace
+docs/benchmarks/da3-startup/** linguist-generated
+docs/benchmarks/da3-startup/index.html -whitespace

@@ -2,7 +2,7 @@
   "scene": "swing-tire",
   "input": "cache/demo_inputs/swing-tire.mp4",
   "process_res": 504,
-  "output_root": "outputs/experiments/da3-startup",
+  "output_root": "outputs/experiments/da3-startup-final",
   "experiments": {
     "baseline-da3": {
       "task": "da3-configured",

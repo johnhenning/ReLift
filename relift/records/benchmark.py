@@ -172,6 +172,13 @@ class ExperimentResult(TypedDict):
     compiler_counters: NotRequired[dict[str, dict[str, int]]]
 
 
+class DA3StartupExport(TypedDict):
+    experiment: str
+    mode: str
+    repeat: int
+    startup: list[DA3StartupMetrics]
+
+
 class RuntimeEnvironment(TypedDict):
     python: str
     executable: str
@@ -195,7 +202,7 @@ class ExperimentVariant(TypedDict):
 class ExperimentSpec(TypedDict):
     scene: str
     input: str
-    prepared_window: str
+    prepared_window: NotRequired[str]
     process_res: int
     output_root: str
     experiments: dict[str, ExperimentDefinition]

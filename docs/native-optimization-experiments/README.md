@@ -20,6 +20,9 @@ and combination checks.
 The [bounded background-commit experiment](06-background-commits.md) tests
 overlapping one CPU shard commit with the following GPU batch, using typed
 component profiles and an independently injectable owner.
+The [CPU-first DA3 startup experiment](07-da3-startup-placement.md) follows with
+selective initial placement of unpaged state, avoiding the cold blocks' initial
+CUDA-to-CPU round trip while retaining their forward-time paging.
 The proposals below remain the original review plans; result documents record
 actual implementation and measurements separately.
 
