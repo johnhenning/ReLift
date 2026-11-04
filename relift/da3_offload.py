@@ -22,6 +22,8 @@ from typing import Any
 
 import torch
 
+from .records.runtime import DA3StartupMetrics
+
 
 class ColdStorage:
     def __init__(
@@ -186,7 +188,13 @@ class DA3Pager:
         storage_factory: Callable[..., Any] | None = None,
         feature_archive_factory: Callable[..., Any] | None = None,
         block_packer: Callable[..., Any] | None = None,
+        startup: str = "current",
     ) -> None:
+        if startup not in ("current", "cpu-first"):
+            raise ValueError("Invalid DA3 startup placement")
+        if startup == "cpu-first" and mode not in ("ram", "disk"):
+            raise ValueError("CPU-first DA3 startup requires RAM or disk offload")
+        self.startup = startup
         self.device = torch.device(device)
         self.storage = (storage_factory or ColdStorage)(
             mode, scratch_dir, ram_budget_gb, scratch_budget_gb
@@ -206,6 +214,7 @@ class DA3Pager:
                 raise
         self.handles, self.originals, self.weights = [], [], []
         self.buffer_owners = set()
+        self.cold_buffer_bytes = 0
         self.transferred_weight_bytes = 0
         self.transferred_buffer_bytes, self.transfer_calls = 0, 0
         try:
@@ -215,7 +224,8 @@ class DA3Pager:
             raise
 
     def _install(self, model: Any) -> None:
-        model.to(self.device)
+        if self.startup == "current":
+            model.to(self.device)
         model.device = self.device
         for module in model.modules():
             if module.__class__.__name__ == "DinoVisionTransformer":
@@ -251,6 +261,35 @@ class DA3Pager:
                         )
                     )
                 )
+        if self.startup == "cpu-first":
+            # Establish all cold owners before placing the unpaged state. Calling
+            # model.to here would upload the cold blocks and break their ownership.
+            self.activate_unpaged(model)
+
+    def activate_unpaged(self, model: torch.nn.Module) -> None:
+        cold = {id(parameter) for weights in self.weights for parameter, _ in weights}
+        for parameter in model.parameters():
+            if id(parameter) not in cold:
+                parameter.data = parameter.data.to(self.device)
+        for module in model.modules():
+            for name, value in module._buffers.items():
+                if value is not None and (id(module), name) not in self.buffer_owners:
+                    module._buffers[name] = value.to(self.device)
+
+    @property
+    def startup_metrics(self) -> DA3StartupMetrics:
+        parameters = sum(
+            value.numel() * value.element_size() for weights in self.weights for _, value in weights
+        )
+        buffers = self.cold_buffer_bytes
+        return dict(
+            strategy=self.startup,
+            cold_parameter_bytes=parameters,
+            cold_buffer_bytes=buffers,
+            initial_cold_roundtrip_tensor_bytes=(2 * (parameters + buffers))
+            if self.startup == "current" and self.device.type == "cuda"
+            else 0,
+        )
 
     def page_block(self, block: torch.nn.Module) -> None:
         block.to("cpu")
@@ -269,6 +308,7 @@ class DA3Pager:
                     module._buffers[name] = cpu
                     buffers.append((module, name, cpu))
                     self.buffer_owners.add((id(module), name))
+                    self.cold_buffer_bytes += cpu.numel() * cpu.element_size()
         self.weights.append(weights)
 
         def before(module: torch.nn.Module, inputs: tuple[torch.Tensor, ...]) -> None:
@@ -318,6 +358,7 @@ class DA3Pager:
                     owner, name, _ = buffer_items[index - len(parameters)]
                     owner._buffers[name] = value
                     self.buffer_owners.add((id(owner), name))
+                    self.cold_buffer_bytes += value.numel() * value.element_size()
                     buffers.append((owner, name, value))
         self.weights.append(weights)
 

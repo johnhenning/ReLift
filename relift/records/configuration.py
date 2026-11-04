@@ -11,6 +11,7 @@ class OptimizationRecord(TypedDict):
     rays: str
     da3_weights: str
     da3_features: str
+    da3_startup: str
     tracker_init_weights: bool
     tracker_copy_outputs: bool
     hash_writes: bool
@@ -59,6 +60,7 @@ class DA3Record(TypedDict):
     weights: str
     features: str
     reuse: bool
+    startup: str
 
 
 class TrackerRecord(TypedDict):
@@ -78,6 +80,7 @@ class OptimizationOverrides(TypedDict, total=False):
     rays: str
     da3_weights: str
     da3_features: str
+    da3_startup: str
     tracker_init_weights: bool
     tracker_copy_outputs: bool
     hash_writes: bool

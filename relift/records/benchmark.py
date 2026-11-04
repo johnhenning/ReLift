@@ -14,6 +14,7 @@ from .configuration import (
     OptimizationRecord,
 )
 from .runtime import (
+    DA3StartupMetrics,
     MetricsDocument,
     ObservationCacheMetrics,
     PhaseMetrics,
@@ -148,6 +149,7 @@ class ExperimentOptions(TypedDict, total=False):
 class ExperimentResult(TypedDict):
     task: str
     phases: Mapping[str, PhaseMetrics | StageMetrics]
+    startup: NotRequired[list[DA3StartupMetrics]]
     shape: NotRequired[tuple[int, ...]]
     execution: NotRequired[ExecutionMetrics]
     configuration: NotRequired[ConfigurationSelectionRecord | None]
@@ -168,6 +170,13 @@ class ExperimentResult(TypedDict):
     runs: NotRequired[list[CompilationPass]]
     compiled: NotRequired[bool]
     compiler_counters: NotRequired[dict[str, dict[str, int]]]
+
+
+class DA3StartupExport(TypedDict):
+    experiment: str
+    mode: str
+    repeat: int
+    startup: list[DA3StartupMetrics]
 
 
 class RuntimeEnvironment(TypedDict):
@@ -193,7 +202,7 @@ class ExperimentVariant(TypedDict):
 class ExperimentSpec(TypedDict):
     scene: str
     input: str
-    prepared_window: str
+    prepared_window: NotRequired[str]
     process_res: int
     output_root: str
     experiments: dict[str, ExperimentDefinition]

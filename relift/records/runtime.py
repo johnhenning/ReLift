@@ -43,6 +43,14 @@ class ShardPayload(TypedDict):
     observed: NDArray[np.bool_]
 
 
+class DA3StartupMetrics(TypedDict):
+    strategy: str
+    cold_parameter_bytes: int
+    cold_buffer_bytes: int
+    # Size-based transfer accounting, not a profiler or PCIe traffic measurement.
+    initial_cold_roundtrip_tensor_bytes: int
+
+
 class PhaseMetrics(TypedDict):
     seconds: float
     process_rss_highwater_bytes: int

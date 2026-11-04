@@ -1,0 +1,4 @@
+extends = "ram"
+
+[da3]
+startup = "cpu-first"

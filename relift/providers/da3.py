@@ -29,6 +29,9 @@ class DepthAnything3Provider:
     ) -> None:
         from depth_anything_3.api import DepthAnything3
 
+        startup = optimizations.da3_startup if optimizations else "current"
+        if startup != "current" and offload not in ("ram", "disk"):
+            raise ValueError("CPU-first DA3 startup requires RAM or disk offload")
         if optimizations and (
             optimizations.da3_weights != "current" or optimizations.da3_features != "current"
         ):
@@ -36,7 +39,9 @@ class DepthAnything3Provider:
                 raise ValueError("Packed DA3 backends require RAM or disk offload")
             if optimizations.da3_features != "current" and offload != "disk":
                 raise ValueError("Packed feature archives require disk offload")
-        self.model: DepthAnything3 | None = DepthAnything3.from_pretrained(weights).to(device)
+        self.model: DepthAnything3 | None = DepthAnything3.from_pretrained(weights)
+        if startup == "current":
+            self.model.to(device)
         self.device = torch.device(device)
         self.pager = None
         if offload in ("ram", "disk"):
@@ -67,6 +72,7 @@ class DepthAnything3Provider:
                 storage_factory=components.cold_storage_factory if components else None,
                 feature_archive_factory=components.feature_archive_factory if components else None,
                 block_packer=components.block_packer if components else None,
+                startup=startup,
             )
         self.kw = dict(
             process_res=process_res,

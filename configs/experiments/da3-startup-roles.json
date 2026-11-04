@@ -1,0 +1,12 @@
+{
+  "baseline-da3": "validation",
+  "baseline-pipeline": "validation",
+  "screening": "validation",
+  "da3": "benchmark",
+  "pipeline": "benchmark",
+  "composition": "validation",
+  "disk": "validation",
+  "reuse": "validation",
+  "running": "validation",
+  "forest": "validation"
+}

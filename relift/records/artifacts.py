@@ -2,7 +2,24 @@
 
 from typing import NotRequired, TypedDict
 
-from .runtime import ObservationCacheMetrics
+from .configuration import ConfigurationSelectionRecord
+from .runtime import ObservationCacheMetrics, ProfileFunction
+
+
+class DA3StartupProfile(TypedDict):
+    source: str
+    source_manifest_sha256: str
+    configuration: ConfigurationSelectionRecord
+    startup_seconds: float
+    cuda_allocated_peak_bytes: int
+    cuda_reserved_peak_bytes: int
+    functions: list[ProfileFunction]
+    caveat: str
+
+
+class DA3StartupProfileExcerpt(DA3StartupProfile):
+    function_count_full: int
+    functions_limit: int
 
 
 class ViewerPayload(TypedDict):

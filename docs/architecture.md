@@ -183,6 +183,13 @@ TOML profiles. A [session](../relift/optimization.py) owns reusable providers an
 fingerprinted injected components. Effective settings and profile content hashes
 are recorded with each run, so configuration changes invalidate store resume.
 
+With `da3.startup = "cpu-first"`, the [DA3 pager](../relift/da3_offload.py)
+establishes cold block ownership on CPU before placing unpaged parameters and
+buffers on CUDA. This avoids initially uploading those blocks only to copy them
+back to CPU. Their forward hooks still stage the same weights for each block.
+The existing startup order remains the default; placement can be composed with
+packed storage, session reuse and the correction options.
+
 Storage can use a [bounded commit owner](../relift/shard_commits.py). With
 `storage.commits = "threaded"`, a single CPU worker validates and commits one
 shard while the main thread computes the next GPU batch. The main thread waits

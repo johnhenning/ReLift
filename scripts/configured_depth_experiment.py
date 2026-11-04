@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from relift.records.benchmark import ExperimentOptions, ExperimentResult, PhaseRecorder
     from relift.records.model import DA3Geometry
+    from relift.records.runtime import DA3StartupMetrics
 
 
 if TYPE_CHECKING:
@@ -38,6 +39,7 @@ def run(
     if options or mode not in ("ram", "disk") or not clips:
         raise ValueError("Expected clips, RAM/disk mode and optimization settings")
     artifacts, shapes, inputs, counters = {}, {}, {}, []
+    startup: list[DA3StartupMetrics] = []
     with InferenceSession(
         configuration or settings, native_build=os.environ.get("RELIFT_NATIVE_BUILD")
     ) as session:
@@ -59,6 +61,9 @@ def run(
                     else 64,
                 )
             try:
+                startup_record = getattr(provider.pager, "startup_metrics", None)
+                if startup_record is not None:
+                    startup.append(startup_record)
                 reset_seed()
                 with phases.stage(f"clip_{index}_forward"):
                     geometry: DA3Geometry = provider.run(images)
@@ -101,5 +106,6 @@ def run(
         optimizations=settings.as_dict(),
         configuration=configuration.as_dict() if configuration else None,
         counters=counters,
+        startup=startup,
         scope="Full-clip DA3 decode, construction, archive preparation, forward, serialization and cleanup; excludes tracking/correction.",
     )
